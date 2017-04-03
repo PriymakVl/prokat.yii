@@ -1,0 +1,150 @@
+.top-menu-active-link {
+    text-decoration: none !important;
+    color: green !important;
+    cursor: default;
+}
+
+/* info */
+.info-box {
+	padding:5px 0 5px 10px;
+	border:1px solid #B49A6A;
+	text-align: left;
+    margin-top: 15px;    
+}
+
+.info-box span {
+    color: #000; 
+    padding-right: 15px;   
+}
+
+/* top menu */
+.top-menu {
+	padding:5px 0 5px 10px;
+	border:1px solid #B49A6A;
+	text-align: left;
+}
+
+.top-menu a {
+    margin-left: 20px;
+    color: #000;
+    text-decoration: underline;
+}
+.top-menu a:hover {
+    color: #000;
+    text-decoration: none;
+}
+.top-menu a:first-child {
+    margin-left: 0;
+}
+
+.top-menu-margin {
+    margin-top: 15px !important;
+}
+
+/* table */
+.content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 15px 0 0; 
+}
+.content table th {
+    text-align: center;
+}
+.content table th {
+    background:#D9CCB4;
+}
+.content table td, table th {
+	border: 1px solid #B49A6A;
+    height: 30px;
+}
+.content table td {
+    padding-left: 5px;
+}
+.content table td.text-center {
+    text-align: center !important;    
+}
+table input[type="radio"] {
+    margin: 8px;   
+}
+table input[type="checkbox"] {
+    margin: 5px 0 0 3px;   
+}
+.content table a {
+    text-decoration: underline;
+}
+.content table a:hover {
+    text-decoration: none;
+}
+.content table td.not-content {
+    text-align: center; 
+    color: red;
+}
+/* title box */
+.content .title-box {
+	border:1px solid #B49A6A;
+	text-align: center; 
+    font-size: 18px;    
+}
+/* form */
+.content .form-wrp {
+    padding:5px 20px 5px 20px;
+	border:1px solid #B49A6A;   
+    width: 725px;
+    margin-top: 15px; 
+}
+.content .form-wrp label {
+    margin-bottom: 0;
+    font-weight: normal;
+}
+.content .form-wrp input[type="text"] {
+    height: 30px;
+}
+
+.content .form-wrp select {
+    height: 30px;
+    width: 250px;
+}
+.content .form-wrp input[type="submit"], .content .form-wrp input[type="button"] {
+    margin: 5px 40px 0 0;
+    padding: 0 5px;
+}
+/* note */
+.note-cut{
+    color: #000;
+    text-decoration: underline;
+}
+.note-cut:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+.note-full {
+    border:1px solid #B49A6A; 
+    width: 725px; 
+    position: relative; 
+    margin-top: 15px;
+}
+.note-full h4 {
+    font-size: 14px;
+    color: #000;
+    margin: 5px;
+}
+.note-full p {
+    font-size: 14px;
+    margin: 0 5px;
+}
+.note-full a {
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    color: #000;
+    font-size: 14px;
+    text-decoration: underline;
+}
+/*pagination*/
+.pagination > li > a, .pagination > li > span {
+    border: 1px solid #B49A6A !important;    
+}
+.pagination > .active > a{
+    background:#D9CCB4 !important; 
+    color: #000 !important;   
+} 

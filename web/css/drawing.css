@@ -1,0 +1,37 @@
+#dwg-department-data td:nth-child(2){
+    color: #000;
+}
+.first-box {
+    margin-top: 0 !important;
+}
+.top-menu {
+    margin-top: 15px;
+}
+.top-menu select {
+    margin-right: 20px;
+}
+.top-menu label {
+    margin: 0 0 0 20px;
+}
+.dwg-folder {
+    text-align: left !important;
+}
+.dwg-folder span {
+    font-size: 14px !important;
+    margin: 0 5px 0 10px; 
+    font-weight: bold;   
+}
+
+/*note drawign works*/
+.note-dwg-works-wrp {  
+    margin-top: 15px;  
+}
+.note-dwg-works-wrp h3 {
+    font-size: 15px;
+    color: #000;
+    margin: 0 0 3px 0;
+}
+.note-dwg-works-wrp p {
+    border: 1px solid #B49A6A; 
+    padding: 5px;   
+}

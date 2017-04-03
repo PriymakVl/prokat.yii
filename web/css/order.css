@@ -1,0 +1,38 @@
+.active-order {
+    margin-top: 10px;
+    border: 1px solid #228B22;
+    background: #00FF00;
+    padding: 5px;
+}
+/** form content **/
+.form-wrp {
+    position: relative;
+}
+
+#order-content-item-material {
+    position: absolute;
+    top: 220px;
+    left: 360px;
+}
+
+#order-content-item-material select{
+    width: 150px;
+}
+
+.field-ordercontentform-count {
+    position: absolute;
+    top: 70px;
+    left: 185px;    
+}
+
+.field-ordercontentform-weight {
+    position: absolute;
+    top: 70px;
+    left: 350px;    
+}
+
+.field-orderform-date {
+    position: absolute;
+    top: 2px;
+    left: 220px;   
+}

@@ -1,0 +1,12 @@
+.note-wrp {  
+    margin-top: 15px;  
+}
+.note-wrp h3 {
+    font-size: 15px;
+    color: #000;
+    margin: 0 0 3px 0;
+}
+.note-wrp p {
+    border: 1px solid #B49A6A; 
+    padding: 5px;   
+}

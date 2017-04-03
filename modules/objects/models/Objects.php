@@ -1,0 +1,123 @@
+<?php
+
+namespace app\modules\objects\models;
+
+use Yii;
+use yii\helpers\StringHelper;
+use yii\helpers\ArrayHelper;
+use app\models\BaseModel;
+use app\modules\objects\logic\ObjectLogic;
+use app\logic\BaseLogic;
+
+class Objects extends BaseModel
+{
+    public $name;
+    public $parent;
+    public $drawings;
+    public $dwg;
+    public $child;
+    
+    const MAIN_PARENTS = 0;
+    
+    public function behaviors()
+    {
+        return ['object-logic' => ['class' => ObjectLogic::className()]];
+    }
+
+    public static function tableName()
+    {
+        return 'objects';
+    }
+    
+    public static function getMainParent()
+    {
+        $objects = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::MAIN_PARENTS])->all();
+        return self::executeMethods($objects, ['getName']);
+    }
+
+    public function getName()
+    {
+        $this->name = $this->rus ? $this->rus : $this->eng;
+        return $this;
+    }
+
+    public function getParent()
+    {
+        $this->parent = self::findOne(['id' => $this->parent_id, 'status' => self::STATUS_ACTIVE]);
+        if ($this->parent) $this->parent->getName();
+        return $this;
+    }
+
+    public static function getChildren($parent_id)
+    {
+        $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        return ObjectLogic::prepareChildren($children); 
+    }
+
+    public function checkChild()
+    {
+        $child = self::find()->select('id')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id])->one();
+        $this->child = $child ? true : false;
+        return $this;    
+    }
+    
+    public function checkDrawing()
+    {
+        $this->dwg = ObjectLogic::checkDrawing($this); 
+        return $this;      
+    }
+    
+    public function copy($parent_id) 
+    {
+        $this->id = null;
+        $this->parent_id = $parent_id;
+        $this->setIsNewRecord(true);
+        if (!$this->save(false)) throw new ForbiddenHttpException('error '.__METHOD__); 
+    }
+    
+    public static function searchCode($code)
+    {
+        $objects = self::find()->where(['status' => self::STATUS_ACTIVE])->andWhere(['like', 'code', $code])->all();
+        if (count($objects) > 1) self::executeMethods($objects, ['getName', 'getParent']);
+        return $objects;
+    }
+    
+    public static function deleteList($ids)
+    {
+        $ids = explode(',', trim($ids));
+        $objects = Objects::findAll($ids);
+        foreach ($objects as $obj) {
+            $obj->deleteOne();
+        }  
+    }
+    
+    public static function copyList($ids, $parent_id)
+    {
+        $ids = explode(',', trim($ids));
+        $objects = self::findAll($ids);
+        $children = self::find()->select('code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->column();
+        $objects = ObjectLogic::deleteExistingObjects($objects, $children);
+        if (!$objects) return;
+        foreach ($objects as $obj) {
+            $obj->copy($parent_id);
+        } 
+    }
+    
+    public static function changeParent($ids, $parent_id)
+    {
+        $ids = explode(',', trim($ids));
+        $objects = self::findAll($ids);
+        $children = self::find()->select('code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->column();
+        $objects = ObjectLogic::deleteExistingObjects($objects, $children);
+        if (!$objects) return;
+        return ObjectLogic::changeParentList($objects, $parent_id);    
+    }
+
+    
+
+}
+
+
+
+
+

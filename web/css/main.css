@@ -1,0 +1,66 @@
+.department-list-info {
+    padding:5px 0 5px 10px;
+	border:1px solid #B49A6A;
+    margin-bottom: 15px;
+    font-size: 16px;  
+    text-align: center; 
+    color: #000;
+}
+
+
+.department-list {
+    border:1px solid #B49A6A;
+    width: 722px; 
+    padding: 10px 10px 10px 40px;    
+}
+
+.department-list li {
+    list-style: square;
+}
+
+.department-list-item {
+    /*color: #337AB7;*/
+    font-size: 15px;
+}
+
+.department-list-item a {
+    text-decoration: none !important;
+    color: #0066cc;
+}
+
+.department-list-item a:hover {
+    cursor: pointer;
+    color: red !important;
+    text-decoration: none;
+}
+
+.department-list-item a:visited {
+    /*color: #339BD5;*/
+    color: #0066cc;
+    text-decoration: none;
+}
+
+.department-list-item ul {
+    margin-left: 50px;
+}
+
+.department-list-item a span {
+    color: #000 !important;
+}
+
+.current-item {
+  color: green !important;   
+}
+
+.department-code-link {
+    color: #000 !important;   
+}
+
+
+
+
+
+
+
+
+  

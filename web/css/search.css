@@ -1,0 +1,28 @@
+.title-search {
+    text-align: center; 
+    font-size: 20px; 
+    margin: 0 0 5px;
+    font-weight: bold;    
+}
+.info-box {
+    padding-left: 10px;
+}
+.info-box span {
+    margin-left: 15px;
+    color: green;
+}
+.not-result {
+    color: red; 
+    padding: 5px 10px; 
+    margin-top: 15px; 
+    border: 1px solid #B49A6A;
+    width: 937px;
+}
+.search-sidebar input[type="text"]{
+    margin: 10px 0 10px 23px;
+}
+
+.search-sidebar input[type="submit"]{
+    margin: 0 0 10px 63px;
+    padding: 1px 10px;
+}
