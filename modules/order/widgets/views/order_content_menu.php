@@ -3,6 +3,8 @@
 use \yii\helpers\Url;
 use \yii\web\JqueryAsset;
 
+$this->registerJsFile('js/order/item_list_delete.js', ['depends' => JqueryAsset::className()]);
+$this->registerJsFile('js/order/item_list_set_parent.js', ['depends' => JqueryAsset::className()]);
 ?>
 <div  class="sidebar-menu">
     <h5><?=$action == 'index' ? 'Элемент заказа' : 'Элементы заказа'?></h5>   
@@ -21,8 +23,16 @@ use \yii\web\JqueryAsset;
             <? endif; ?>
         <? else: ?>
             <li>
-                <a href="#" id="order-items-delete">Удалить элементы</a>
+                <a href="<?=Url::to(['/order/content/form', 'order_id' => $order_id])?>">Добавить элемент</a>
             </li>
+                <? if ($controller == 'order-content'): ?>
+                    <li>
+                        <a href="#" id="order-items-delete">Удалить элементы</a>
+                    </li>
+                    <li>
+                        <a href="#" id="order-items-set-parent">Создать сборочный</a>
+                    </li>
+                <? endif; ?>
         <? endif; ?>
     </ul>
 </div>

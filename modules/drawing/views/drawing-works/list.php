@@ -3,14 +3,14 @@
 use \yii\web\JqueryAsset;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
 use app\modules\drawing\widgets\DrawingListMenuWidget;
+use app\modules\drawing\widgets\DrawingMenuWidget;
 use app\modules\drawing\widgets\DrawingListTopMenuWidget;
 
 $this->registerCssFile('/css/drawing.css');
-$this->registerJsFile('js/drawing/list_update_parent.js',  ['depends' => [JqueryAsset::className()]]);
-
 ?>
 <div class="content list-all">
     <!-- title -->
@@ -59,6 +59,11 @@ $this->registerJsFile('js/drawing/list_update_parent.js',  ['depends' => [Jquery
     
     <!-- type drawing hidden -->
     <input type="hidden" value="<?=Yii::$app->controller->id?>" id="dwg-controller"/>
+	
+	<!-- pagination -->
+    <div class="pagination-wrp">
+        <?=LinkPager::widget(['pagination' => $pages])?>    
+    </div><!-- class pagination-wrp -->
 </div>
 
 <!-- menu -->
@@ -66,6 +71,8 @@ $this->registerJsFile('js/drawing/list_update_parent.js',  ['depends' => [Jquery
     <?=MainMenuWidget::widget()?>
     
     <?=DrawingListMenuWidget::widget()?>
+    
+    <?=DrawingMenuWidget::widget()?>
     
     <?=DrawingMainMenuWidget::widget()?>
 </div>

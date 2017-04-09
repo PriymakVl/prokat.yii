@@ -78,7 +78,7 @@ class DrawingWorks extends BaseModel
         return $dwg;    
     }
     
-    public function getSpecification($parent_id)
+    public static function getSpecification($parent_id)
     {
         $specification = DrawingWorks::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy('item')->all();
         return self::executeMethods($specification, ['checkChild']);

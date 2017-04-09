@@ -30,7 +30,7 @@ class OrderContentController extends BaseController
     { 
         $order = Order::findOne($order_id);
         $order->getNumber();
-        $content = OrderContent::getMain($order->id);
+        $content = OrderContent::getMainItem($order->id);
         $state = OrderLogic::checkState($order_id);
         return $this->render('list', compact('order', 'content', 'state'));
     }
@@ -66,8 +66,18 @@ class OrderContentController extends BaseController
     public function actionAddOne($obj_id)
     {
         $object = Objects::getOne($obj_id);
-        $item = (new OrderContent())->saveParamsFromObject($object);
+        $item = OrderLogic::saveParamsFromObject($object);
         $this->redirect(['/order/content/item', 'item_id' => $item->id]);
+    }
+    
+    public function actionAddList($ids)
+    {
+        $objects = Objects::getArrayObjects($ids);
+        foreach ($objects as $object) {
+            (new OrderContent())->saveParamsFromObject($object);
+        }
+        $order_id = OrderLogic::getActiveOrderId();
+        $this->redirect(['/order/content/list', 'order_id' => $order_id]);
     }
     
     public function actionAddFile($file, $cat_dwg, $obj_id)
@@ -78,18 +88,10 @@ class OrderContentController extends BaseController
         else throw new ForbiddenHttpException('error '.__METHOD__);
     }
     
-    public function actionSetParent($ids = null, $parent_id = null)
+    public function actionSetParent($ids, $parent_id, $order_id)
     {
-        if (!$ids || !(int)$parent_id) return 'error';
-        
-        $ids = explode(',', trim($ids));
-        $kit = DrawingStandard::findAll($ids);
-        
-        foreach ($kit as $dwg) {
-            $dwg->parent_id = trim($parent_id);
-            $dwg->update();
-        } 
-        return 'success';   
+        OrderContent::setParentForList($ids, $parent_id);
+        return $this->redirect(['/order/content/list', 'order_id' => $order_id]);   
     }
     
 }

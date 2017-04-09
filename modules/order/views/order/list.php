@@ -9,6 +9,7 @@ use app\widgets\MainMenuWidget;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderListMenuWidget;
+use app\modules\order\widgets\OrderTopListMenuWidget;
 
 $this->registerCssFile('/css/standard.css');
 
@@ -18,17 +19,17 @@ $this->registerCssFile('/css/standard.css');
     <div class="title-box">Перечень заказов сортопрокатного стана</div>
     
     <!-- top nenu -->
-    <?//=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderTopListMenuWidget::widget(['params' => $params])?>
     
     <!-- data of order -->
     <table id="standart-list">
         <tr>
             <th width="30">
-                <input type="checkbox" disabled="disabled" />
+                <input type="checkbox" name="order" id="checked-all" />
             </th>
             <th width="90">№ заказа</th>
-            <th width="470">Наименование</th>
-            <th width="130">Заказал</th>
+            <th width="440">Наименование</th>
+            <th width="160">Заказал</th>
         </tr>
         <? if ($list): ?>
             <? foreach ($list as $order): ?>

@@ -24,6 +24,7 @@ class OrderContentForm extends BaseForm
     public $cat_dwg;
     public $equipment;
     public $file;
+    public $sheet;
     //form
     public $item_id;
 
@@ -33,12 +34,11 @@ class OrderContentForm extends BaseForm
         return [
             [['name'], 'required', 'message' => 'Необходимо заполнить поле'],
             ['drawing', 'string'],
-            ['count', 'integer'],
+            ['count', 'default', 'value' => 0],
             ['weight', 'string'],
             ['note', 'string',],
-            ['item', 'integer'],
+            ['item', 'default', 'value' => 0],
             ['material', 'string'],
-            ['rating', 'integer'],
             ['rating', 'default', 'value' => 0],
             ['order_id', 'integer'],
             ['code', 'string'],
@@ -46,6 +46,7 @@ class OrderContentForm extends BaseForm
             ['equipment', 'string'],
             ['cat_dwg', 'string'],
             ['file', 'string'],
+            ['sheet', 'default', 'value' => 1],
         ];
 
     }
@@ -81,6 +82,7 @@ class OrderContentForm extends BaseForm
         $item->file = $this->file;
         if ($this->obj_id) $item->obj_id = $this->obj_id;
         if ($this->code) $item->code = $this->code;
+        $item->sheet = $this->sheet;
         return $item;
     }
 

@@ -16,13 +16,15 @@ class OrderListExcelCreateController extends BaseController
     public $orders;
     public $styleData;
     public $styleNameOrder;
+    public $page;
+    public $pages;
     
-    public function actionIndex() 
+    public function actionIndex($ids, $page = null, $pages = null) 
     { 
-        $this->orders = Order::getListForFile();
+        $this->orders = Order::getListForFile($ids);
         $this->objPHPExcel = new \PHPExcel();
         $this->setActiveSheet();
-        $this->setSetup();
+        $this->setSetup($page, $pages);
         $this->setTitles();
         $this->setStyleBorders();
         $this->setStyleData();
@@ -44,10 +46,10 @@ class OrderListExcelCreateController extends BaseController
         $this->activeSheet = $this->objPHPExcel->getActiveSheet();    
     }
     
-    private function setSetup()
+    private function setSetup($page, $pages)
     {
         $this->setPageSetup();
-        $this->setHeaderAndFooter();
+        $this->setHeaderAndFooter($page, $pages);
         $this->setFont();
         $this->setWidthOfColumn();   
     }
@@ -63,11 +65,13 @@ class OrderListExcelCreateController extends BaseController
         $this->activeSheet->getPageMargins()->setBottom(1);   
     }
     
-    private function setHeaderAndFooter()
+    private function setHeaderAndFooter($page, $pages)
     {
-        $this->activeSheet->setTitle("Лист 1");	
+        $page = $page ? $page : 1;
+        $pages = $pages ? $pages : 1;
+        $this->activeSheet->setTitle(" ");	
         //$this->activeSheet->getHeaderFooter()->setOddHeader("&CШапка нашего прайс листа");	
-        //$this->activeSheet->getHeaderFooter()->setOddFooter('&L&B'.$this->activeSheet->getTitle().'&RСтраница &P из &N');   
+        $this->activeSheet->getHeaderFooter()->setOddFooter($this->activeSheet->getTitle().'Страница '.$page.' из '.$pages);   
     }
     
     private function setFont()
@@ -80,9 +84,9 @@ class OrderListExcelCreateController extends BaseController
     {
         $this->activeSheet->getColumnDimension('A')->setWidth(10);
         $this->activeSheet->getColumnDimension('B')->setWidth(10);
-        $this->activeSheet->getColumnDimension('C')->setWidth(100);
+        $this->activeSheet->getColumnDimension('C')->setWidth(60);
         $this->activeSheet->getColumnDimension('D')->setWidth(15);    
-        $this->activeSheet->getColumnDimension('E')->setWidth(15);    
+        $this->activeSheet->getColumnDimension('E')->setWidth(25);    
         $this->activeSheet->getColumnDimension('F')->setWidth(15);    
     }
     

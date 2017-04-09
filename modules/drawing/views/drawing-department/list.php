@@ -12,7 +12,6 @@ use app\modules\drawing\widgets\DrawingMenuWidget;
 use app\modules\drawing\widgets\DrawingListTopMenuWidget;
 
 $this->registerCssFile('/css/drawing.css');
-$this->registerJsFile('js/drawing/list_update_parent.js',  ['depends' => [JqueryAsset::className()]]);
 
 ?>
 <div class="content list-all">

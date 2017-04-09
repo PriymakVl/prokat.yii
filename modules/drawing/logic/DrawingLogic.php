@@ -50,6 +50,15 @@ class DrawingLogic extends BaseLogic
         return $dwg; 
     }
     
+    public static function countOfNumberDrawingsObject($drawings)
+    {
+        if (!empty($drawings['vendor']))$number = count($drawings['vendor']);
+        if (!empty($drawings['works']))$number = count($drawings['works']);
+        if (!empty($drawings['department']))$number = count($drawings['department']);
+        if (!empty($drawings['standard']))$number = count($drawings['standard']);
+        return $number;
+    }
+    
 }
 
 

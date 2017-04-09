@@ -24,7 +24,8 @@ class DrawingWorksController extends BaseController
     {
         $params = DrawingLogic::getParamsWorks();
         $list = DrawingWorks::getListWorks($params);
-        return $this->render('list', compact('list', 'params'));
+		$pages = DrawingWorks::$pages;
+        return $this->render('list', compact('list', 'params', 'pages'));
     }
     
     public function actionForm($dwg_id = null) 
@@ -60,12 +61,10 @@ class DrawingWorksController extends BaseController
         return $this->redirect(['/drawing/works/list']);
     }
     
-    public function actionSetParent($ids = null, $parent_id = null)
+    public function actionSetParent($ids, $parent_id)
     {
-        if (!$ids || !(int)$parent_id) return 'error';
-        $ids = explode(',', trim($ids));
-        DrawingWorks::changeParent(DrawingWorks::findAll($ids), trim($parent_id), __METHOD__);
-        return 'success';  
+		DrawingWorks::setParentForList($ids, $parent_id);
+		return $this->redirect('/drawing/works/list');
     }
     
 }

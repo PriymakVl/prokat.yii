@@ -53,13 +53,14 @@ trait CommonStaticMethods
         }
         return $array;
     }
-    
-     public static function deleteList($ids)
-    {
-        $ids = explode(',', trim($ids));
+	
+	public static function setParentForList($ids, $parent_id)
+	{
+		$ids = explode(',', trim($ids));
         $objects = self::findAll($ids);
-        foreach ($objects as $obj) {
-            $obj->deleteOne();
-        }  
-    }
+		foreach ($objects as $object) {
+			$object->parent_id = $parent_id;
+			$object->save();
+		}
+	}
 }

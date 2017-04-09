@@ -16,6 +16,7 @@ $config = [
         'order' => ['class' => 'app\modules\order\Module',],
         'search' => ['class' => 'app\modules\search\Module',],
         'objects' => ['class' => 'app\modules\objects\Module',],
+        'employees' => ['class' => 'app\modules\employees\Module',],
     ],
     'components' => [
         'request' => [
@@ -60,6 +61,7 @@ $config = [
                 //search
                 'search/drawing/works' => 'search/search/drawing-works',
                 'search/drawing/department' => 'search/search/drawing-department',
+                'search/order' => 'search/search/order',
                 'search' => 'search/search/code',
                 //list
                 'lists/update' => 'lists/list/update-all',
@@ -75,7 +77,7 @@ $config = [
                 'drawing/department/form' => 'drawing/drawing-department/form',                
                 'drawing/department/delete' => 'drawing/drawing-department/delete',                
                 'drawing/department/folder' => 'drawing/drawing-department/folder',                
-                'drawing/department/setparent' => 'drawing/drawing-department/set-parent',                
+                'drawing/department/set/parent' => 'drawing/drawing-department/set-parent',                
                 'drawing/department' => 'drawing/drawing-department', 
                 //drawing works and file
                 'drawing/works/file/delete' => 'drawing/drawing-works-file/delete',
@@ -85,7 +87,7 @@ $config = [
                 'drawing/works/delete' => 'drawing/drawing-works/delete',                
                 'drawing/works/specification' => 'drawing/drawing-works/specification',                               
                 'drawing/works/files' => 'drawing/drawing-works/files',                
-                'drawing/works/setparent' => 'drawing/drawing-works/set-parent',                
+                'drawing/works/set/parent' => 'drawing/drawing-works/set-parent',                
                 'drawing/works' => 'drawing/drawing-works',
                 //drawing standard
                 'drawing/standard/danieli/form' => 'drawing/drawing-standard-danieli/form', 
@@ -104,7 +106,7 @@ $config = [
                 'order/drafts/list' => 'order/order/drafts-list',
                 'order/draft' => 'order/order/draft',                   
                 'order/delete' => 'order/order/delete',
-                'order/list/file/save' => 'order/order-excel-create', 
+                'order/list/file/save' => 'order/order-list-excel-create', 
                 'order/title/file/save' => 'order/order-title-sheet-create', 
                 'order/active/set' => 'order/order/set-active',
                 'order/active/get' => 'order/order/get-active',                
@@ -115,6 +117,8 @@ $config = [
                 'order/content/item' => 'order/order-content',
                 'order/content/item/delete' => 'order/order-content/delete-one',
                 'order/content/item/add' => 'order/order-content/add-one',
+                'order/content/list/add' => 'order/order-content/add-list',
+                'order/content/list/set/parent' => 'order/order-content/set-parent',
                 'order/content/delete/list' => 'order/order-content/delete-list',
                 'order/content/item/file/add' => 'order/order-content/add-file',
                 //object specification

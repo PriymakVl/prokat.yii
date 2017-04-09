@@ -7,6 +7,7 @@ $this->registerJsFile('js/object/object_list_copy.js', ['depends' => JqueryAsset
 $this->registerJsFile('js/object/object_list_delete.js', ['depends' => JqueryAsset::className()]);
 $this->registerJsFile('js/object/object_list_checked_all.js', ['depends' => JqueryAsset::className()]);
 $this->registerJsFile('js/object/object_list_change_parent.js', ['depends' => JqueryAsset::className()]);
+$this->registerJsFile('js/object/object_list_add_order.js', ['depends' => JqueryAsset::className()]);
 ?>
 
 <!-- data menu -->
@@ -15,6 +16,9 @@ $this->registerJsFile('js/object/object_list_change_parent.js', ['depends' => Jq
     <ul>
         <li>
             <a href="#" onclick="return false;" id="obj-list-copy">Скопировать объекты</a>
+        </li>
+        <li>
+            <a href="#" onclick="return false;" id="obj-list-add-order">Добавить в заказ</a>
         </li>
         <li>
             <a href="<?=Url::to(['/object/specification/danieli/file/form', 'obj_id' => $obj_id])?>">Добавить из файла</a>

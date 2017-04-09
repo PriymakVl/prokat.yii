@@ -13,6 +13,7 @@ class OrderContent extends BaseModel
     
     public $weightAll;
     public $pathDrawing;
+    public $children;
     
     public static function tableName()
     {
@@ -24,25 +25,17 @@ class OrderContent extends BaseModel
     	return ['order-logic' => ['class' => OrderLogic::className()]];
     }
     
-    public static function getMain($order_id)
+    public static function getMainItem($order_id)
     {
         $content = OrderContent::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 
                 'parent_id' => self::MAIN_PARENT])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $content = self::executeMethods($content, ['countWeightAll']);
+        $content = self::executeMethods($content, ['countWeightAll', 'getPathDrawing', 'getChildren']);
         return $content;
     }
     
     public function countWeightAll()
     {
         $this->weightAll = OrderLogic::countWeightOfAll($this->weight, $this->count);
-        return $this;
-    }
-    
-    public function saveParamsFromObject($object)
-    {
-        $order_id = OrderLogic::getActiveOrderId();
-        OrderLogic::setParamsFromObject($this, $object, $order_id);
-        $this->save();
         return $this;
     }
     
@@ -57,6 +50,13 @@ class OrderContent extends BaseModel
     public function getPathDrawing()
     {
         $this->pathDrawing = OrderLogic::getPathDrawing($this);
+        return $this;
+    }
+    
+    public function getChildren()
+    {
+        $children = self::findAll(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id]);
+        $this->children = self::executeMethods($children, ['countWeightAll', 'getPathDrawing']);
         return $this;
     }
     

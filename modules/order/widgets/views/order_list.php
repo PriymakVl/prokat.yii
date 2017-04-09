@@ -3,6 +3,7 @@
 use \yii\helpers\Url;
 use \yii\web\JqueryAsset;
 
+$this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsset::className()]]);
 ?>
 <div  class="sidebar-menu">
     <h5>Список заказов</h5>   
@@ -18,7 +19,7 @@ use \yii\web\JqueryAsset;
             <? endif; ?>
         </li> 
         <li>
-            <a href="<?=Url::to(['/order/list/file/save'])?>">Сохранить в файл</a>    
+            <a href="#" onclick="return false;" id="order-list-print">Распечатать список</a>    
         </li> 
     </ul>
 </div>

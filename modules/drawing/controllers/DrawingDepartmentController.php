@@ -53,12 +53,10 @@ class DrawingDepartmentController extends BaseController
         if ($dwg->deleteOne()) return $this->redirect(['/drawing/department/list']); 
     }
     
-    public function actionSetParent($ids = null, $parent_id = null)
+    public function actionSetParent($ids, $parent_id)
     {
-        if (!$ids || !(int)$parent_id) return 'error';
-        $ids = explode(',', trim($ids));
-        DrawingDepartment::changeParent(DrawingDepartment::findAll($ids), trim($parent_id));
-        return 'success';   
+		DrawingDepartment::setParentForList($ids, $parent_id);
+		return $this->redirect('/drawing/department/list');
     }
     
 }

@@ -6,6 +6,8 @@ use yii\web\ForbiddenHttpException;
 use yii\data\Pagination;
 use app\models\BaseModel;
 use app\modules\order\logic\OrderLogic;
+use app\modules\employees\logic\EmployeeLogic;
+use app\modules\employees\models\Employee;
 
 class Order extends BaseModel
 {
@@ -37,16 +39,19 @@ class Order extends BaseModel
         return $this;
     }
     
-    public static function getList($params)
+    public static function getOrderList($params)
     {
-        $list = parent::getList($params, self::PAGE_SIZE);
-        return self::executeMethods($list, ['getNumber']);
+        $query = self::find()->where($params)->orderBy(['number' => SORT_DESC]);
+        self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
+        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->all();
+        return self::executeMethods($list, ['getNumber', 'getShortCustomer']);
     }
     
-    public static function getListForFile()
+    public static function getListForFile($ids)
     {
-        $list = self::getAll();
-        return self::executeMethods($list, ['getNumber', 'convertServiceForFile', 'convertDateForFile']);
+        $ids = explode(',', trim($ids));
+        $list = self::findAll($ids);
+        return self::executeMethods($list, ['getNumber', 'convertServiceForFile', 'convertDateForFile', 'getCustomerForPrint']);
     }
     
     public function convertType()
@@ -80,6 +85,50 @@ class Order extends BaseModel
     public function countWeightOrder()
     {
         $this->weight = OrderLogic::countWeightOfOrder($this->id);
+        return $this;
+    }
+    
+    public static function searchByNumber($number)
+    {
+        $orders = self::findAll(['number' => trim($number)]);
+        if (count($orders) > 1) self::executeMethods($orders, ['getNumber']);
+        return $orders;
+    }
+    
+    public function getFullCustomer()
+    {
+        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer));
+        return $this;
+    }
+    
+    public function getShortCustomer()
+    {
+        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer));
+        return $this;
+    }
+    
+    public function getCustomerForPrint()
+    {
+        if ((int)$this->customer === 0) $this->customer = 'Не указан';
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer));
+        return $this;  
+    }
+    
+    
+    
+    public function getFullIssuer()
+    {
+        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
+        else if ((int)$this->customer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer));
+        return $this;
+    }
+    
+    public function getShortIssuer()
+    {
+        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
+        else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer));
         return $this;
     }
 

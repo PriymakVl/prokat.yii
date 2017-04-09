@@ -84,8 +84,7 @@ class Objects extends BaseModel
     
     public static function deleteList($ids)
     {
-        $ids = explode(',', trim($ids));
-        $objects = Objects::findAll($ids);
+        $objects = self::getArrayObjects($ids);
         foreach ($objects as $obj) {
             $obj->deleteOne();
         }  
@@ -93,14 +92,18 @@ class Objects extends BaseModel
     
     public static function copyList($ids, $parent_id)
     {
-        $ids = explode(',', trim($ids));
-        $objects = self::findAll($ids);
         $children = self::find()->select('code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->column();
         $objects = ObjectLogic::deleteExistingObjects($objects, $children);
         if (!$objects) return;
         foreach ($objects as $obj) {
             $obj->copy($parent_id);
         } 
+    }
+    
+    public static function getArrayObjects($ids)
+    {
+        $ids = explode(',', trim($ids));
+        return self::findAll($ids);    
     }
     
     public static function changeParent($ids, $parent_id)

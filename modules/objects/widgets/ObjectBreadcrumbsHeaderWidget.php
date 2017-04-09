@@ -38,7 +38,7 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
         foreach ($parents as $parent) {
             $breadcrumbs .= '<a href="/object?obj_id='.$parent->id.'">'.$parent->alias.'</a>';
         } 
-        return $breadcrumbs.'<span>'.$this->obj->alias.'</span>';   
+        return $breadcrumbs.'<a href="/object/specification?obj_id='.$this->obj->parent_id.'">'.$this->obj->alias.'</a>';   
     }
 
     private function getArrayParents()

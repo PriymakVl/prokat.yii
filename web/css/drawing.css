@@ -22,6 +22,10 @@
     font-weight: bold;   
 }
 
+.form-wrp {
+    position: relative;
+}
+
 /*note drawign works*/
 .note-dwg-works-wrp {  
     margin-top: 15px;  
@@ -34,4 +38,24 @@
 .note-dwg-works-wrp p {
     border: 1px solid #B49A6A; 
     padding: 5px;   
+}
+
+/* drawing works form */
+
+.field-drawingworksform-item {
+    position: absolute;
+    top: 70px;
+    left: 260px;
+}
+
+.field-drawingworksform-sheets {
+    position: absolute;
+    top: 70px;
+    left: 400px;
+}
+
+.field-drawingworksform-parent_id {
+    position: absolute;
+    top: 70px;
+    left: 540px;
 }

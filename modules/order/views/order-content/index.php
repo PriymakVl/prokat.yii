@@ -46,6 +46,13 @@ $this->registerCssFile('/css/order.css');
                 <? endif; ?>    
             </td>
         </tr>
+        <!-- number sheet -->
+        <tr>
+            <td class="text-center">Лист</td>
+            <td>
+                <?=$item->sheet?>
+            </td>
+        </tr>
         <!-- item -->
         <? if ($item->item): ?>
             <tr>
@@ -55,6 +62,7 @@ $this->registerCssFile('/css/order.css');
                 </td>
             </tr>
         <? endif; ?>
+        
         <!-- name -->
         <tr>
             <td class="text-center">Наименование</td>
@@ -133,7 +141,7 @@ $this->registerCssFile('/css/order.css');
             <tr>
                 <td class="text-center">Входит в состав</td>
                 <td>
-                    <a href="<?=Url::to(['/object', 'obj_id' => $object->parent->id])?>"><?=$object->parent->name?></a>
+                    <a href="<?=Url::to(['/object/specification', 'obj_id' => $object->parent->id])?>"><?=$object->parent->name?></a>
                 </td>
             </tr>
         <? endif; ?>

@@ -23,6 +23,7 @@ class OrderForm extends BaseForm
     public $note;
     public $work;
     public $description;
+    public $period = 10;
     //form
     public $order_id;
 
@@ -42,6 +43,7 @@ class OrderForm extends BaseForm
             ['work','string'],
             ['weight','string'],
             ['date','string'],
+            ['period', 'integer'],
         ];
 
     }
@@ -69,10 +71,8 @@ class OrderForm extends BaseForm
         $order->customer = $this->customer;
         $order->note = $this->note;
         $order->service = $this->service;
-        if ($this->date) $order->date = strtotime($this->date);
-        else $order->date = time();
-        if ($this->date) $order->year = date('Y', strtotime($this->date));
-        else $order->year = date('Y', time());
+        $order->date = strtotime($this->prepareDateForConvert($this->date));;
+        //$order->year = date('Y', $order->date);
         $order->work = $this->work;
         $order->weight = $this->weight;
         $order->unit = $this->unit;
@@ -86,6 +86,7 @@ class OrderForm extends BaseForm
             $order->number = 'черновик';
             $order->status = self::STATUS_DRAFT;
         }
+        $order->period = OrderLogic::getPeriod($order->date);
         return $order;
     }
 

@@ -17,14 +17,22 @@ class DrawingVendor extends BaseModel
     
     public static function getAllForObject($obj)
     {
-        $drawings = self::find()->where(['code' => $obj->code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE])
+		$code = self::getCodeWithoutDash($obj->code);
+        $drawings = self::find()->where(['code' => $code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE])
                 ->orderBy(['revision' => SORT_ASC, 'sheet' => SORT_ASC])->all(); 
         return DrawingLogic::cutNotes($drawings);  
     }
     
     public static function check($obj)
     {
-        return self::findOne(['code' => $obj->code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE]);   
+        $code = self::getCodeWithoutDash($obj->code);
+        return self::findOne(['code' => $code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE]);   
+    }
+    
+    public static function getCodeWithoutDash($code) 
+    {
+        if ( strpos($code, '-')) return substr(str_replace('-', '', $code), 6);//removes unwanted characters
+		else return $code;    
     }
 
 }

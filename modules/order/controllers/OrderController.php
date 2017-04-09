@@ -16,15 +16,16 @@ class OrderController extends BaseController
     public function actionIndex($order_id) 
     { 
         $order = Order::findOne($order_id);
-        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder();
+        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
+                ->getFullCustomer()->getFullIssuer();
         $state = OrderLogic::checkState($order_id);
         return $this->render('index', compact('order', 'state'));
     }
     
-    public function actionList()
+    public function actionList($period = null, $customer = null, $issuer = null)
     {
-        $params = OrderLogic::getParams();
-        $list = Order::getList($params);
+        $params = OrderLogic::getParams($period, $customer, $issuer);
+        $list = Order::getOrderList($params);
         $pages = Order::$pages;
         return $this->render('list', compact('list', 'params', 'pages'));
     }
@@ -32,6 +33,7 @@ class OrderController extends BaseController
     public function actionForm($order_id = null) 
     { 
         $order = (int)$order_id ? Order::findOne($order_id) : null;
+        if ($order) $order->convertDate($order, false);
         $form = new OrderForm();
         $form->getServices($form);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
@@ -51,7 +53,7 @@ class OrderController extends BaseController
     public function actionDraft($order_id)
     {
         $order = Order::getDraft($order_id);
-        $order->getNumber()->convertDate($order)->convertService($order)->convertType();
+        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->getFullCustomer()->getFullIssuer();
         $state = OrderLogic::checkState($order_id);
         return $this->render('index', compact('order', 'state'));    
     }

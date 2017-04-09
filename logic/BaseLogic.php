@@ -50,6 +50,13 @@ class BaseLogic  extends Behavior implements ConfigApp
         die('erorr '.$method);
     }
     
+    public function prepareDateForConvert($date)
+    {
+        if (!$date) return false;
+        $data = explode('.', $date);
+        return $data[2].'-'.$data[1].'-'.$data[0];
+    }
+    
     
 
 }

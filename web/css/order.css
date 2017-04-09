@@ -4,6 +4,10 @@
     background: #00FF00;
     padding: 5px;
 }
+/** list content **/
+.item-children {
+    background: #E8E8E8;
+}
 /** form content **/
 .form-wrp {
     position: relative;
@@ -35,4 +39,29 @@
     position: absolute;
     top: 2px;
     left: 220px;   
+}
+
+.field-ordercontentform-sheet {
+     position: absolute;
+    top: 5px;
+    left: 350px;     
+}
+
+/** form order **/
+
+.field-orderform-customer {
+    position: absolute;
+    top: 70px;
+    left: 350px;     
+}
+
+.field-orderform-period {
+    position: absolute;
+    top: 2px;
+    left: 420px;     
+}
+
+/** top menu list **/
+#order-period {
+    margin-right: 15px;
 }

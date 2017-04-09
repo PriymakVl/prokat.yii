@@ -8,6 +8,7 @@ use app\controllers\BaseController;
 use app\modules\objects\models\Objects;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
+use app\modules\order\models\Order;
 
 class SearchController extends BaseController 
 {
@@ -33,5 +34,12 @@ class SearchController extends BaseController
         if (count($result) == 1) return $this->redirect(['/drawing/works', 'dwg_id' => $result[0]->id]);
         
         return $this->render('drawing/works/search/result', ['drawings' => $result, 'number' => $number]);
+    }
+    
+    public function actionOrder($order_num)
+    {
+        $orders = Order::searchByNumber($order_num);
+        if (count($orders) == 1) return $this->redirect(['/order', 'order_id' => $orders[0]->id]);
+        else return $this->render('orders', ['orders' => $orders, 'number' => $order_num]);
     }
 }

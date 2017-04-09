@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
 
-$this->registerCssFile('/css/drawign.css');
+$this->registerCssFile('/css/drawing.css');
 
 ?>
 <div class="content">
@@ -24,10 +24,16 @@ $this->registerCssFile('/css/drawign.css');
             <?=$f->field($form, 'name')->textInput(['value' => $dwg->name])->label('Название чертежа:')?>
             
             <!-- number -->          
-            <?=$f->field($form, 'number')->textInput(['value' => $dwg->number])->label('Номер чертежа:')?>
+            <?=$f->field($form, 'number')->textInput(['value' => $dwg->number, 'maxlength'=>50, 'style' => 'width:200px'])->label('Номер чертежа:')?>
             
              <!-- item -->          
-            <?=$f->field($form, 'item')->textInput(['value' => $dwg->item ? $dwg->item : 1])->label('Позиция в спецификации:')?>
+            <?=$f->field($form, 'item')->textInput(['value' => $dwg->item ? $dwg->item : 1, 'maxlength'=>5, 'style' => 'width:100px'])->label('Позиция:')?>
+            
+             <!-- parent_id -->
+            <?= $f->field($form, 'parent_id')->textInput(['value' => $dwg->parent_id ? $dwg->parent_id : 0, 'maxlength'=>5, 'style' => 'width:100px'])->label('ID родителя:') ?>
+            
+            <!-- sheets -->
+            <?= $f->field($form, 'sheets')->textInput(['value' => $dwg->sheets ? $dwg->sheets : 1, 'maxlength'=>5, 'style' => 'width:100px'])->label('Кол-во листов:') ?>
             
             <!-- type -->
             <?php 
@@ -35,12 +41,7 @@ $this->registerCssFile('/css/drawign.css');
                 $types = ['drawing' => 'Чертеж', 'folder' => 'Папка', 'assembly' => 'Сборочный чертеж', 'specification' => 'Спецификация'];
                 echo $f->field($form, 'type')->dropDownList($types)->label('Тип:');
             ?>
-            <!-- parent_id -->
-            <?= $f->field($form, 'parent_id')->textInput(['value' => $dwg->parent_id ? $dwg->parent_id : 0])->label('ID родителя:') ?>
-            
-            <!-- sheets -->
-            <?= $f->field($form, 'sheets')->textInput(['value' => $dwg->sheets ? $dwg->sheets : 1])->label('Количество листов:') ?>
-            
+           
             <!-- note -->
             <?php
                 if ($dwg) $form->note = $dwg->note;

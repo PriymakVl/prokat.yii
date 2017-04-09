@@ -31,6 +31,8 @@ class HeaderWidget extends Widget {
             case 'object-drawing': return 'breadcrumbs'; break;
             case 'object-specification': return 'breadcrumbs'; break;
             case 'search': return $this->getTemplateForActionSearchController(); break;
+            case 'order': return 'search_order'; break;
+            case 'order-content': return 'search_order'; break;
             default: return 'empty';
         }       
     }
