@@ -1,10 +1,14 @@
+<?php
+use yii\jui\DatePicker;
+?>
+
 <div id="order-form-main">
     <!-- number -->          
     <?=$f->field($form, 'number')->textInput(['value' => $order->number, 'maxlength'=>3, 'style' => 'width:120px'])->label('Номер заказа:')?>
     
      <!-- date -->          
     <?=$f->field($form, 'date')->textInput(['value' => $order->date ? $order->date : date('d.m.y', time()), 'maxlength'=>30, 'style' => 'width:120px'])->label('Дата выдачи:')?>
-    
+    <?//= $f->field($form,'date')->widget(DatePicker::className(),['clientOptions' => []]) ?>
     <!-- name -->          
     <?=$f->field($form, 'name')->textInput(['value' => $order->name])->label('Название заказа:')?>
     

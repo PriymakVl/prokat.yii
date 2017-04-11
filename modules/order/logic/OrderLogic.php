@@ -5,6 +5,7 @@ namespace app\modules\order\logic;
 use Yii;
 use app\logic\BaseLogic;
 use yii\web\ForbiddenHttpException;
+use app\modules\order\models\Order;
 use app\modules\order\models\OrderContent;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
@@ -59,13 +60,14 @@ class OrderLogic extends BaseLogic
         return str_replace('.', ',', $weightAll);
     }
     
-    public static function saveParamsFromObject($object)
+    public static function saveParamsFromObject($object, $order_id = null)
     {
-        $order_id = self::getActiveOrderId();
+        if (!$order_id) $order_id = self::getActiveOrderId();
         $content = OrderContent::findAll(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id]);
         if ($content)  {
             $item = self::checkItemByCode($content, $object->code);
-            if ($item) $item = OrderLogic::setParamsFromObject($item, $object, $order_id);
+            if (!$item) $item = new OrderContent();
+            $item = OrderLogic::setParamsFromObject($item, $object, $order_id);
         }
         else {
             $item = new OrderContent();
@@ -82,8 +84,8 @@ class OrderLogic extends BaseLogic
         $item->obj_id = $object->id;
         $item->name = self::setItemNameFromObject($item, $object);
         $item->code = $object->code;
-        $item->weight = $object->weight;
-        $item->item = $object->item;
+        $item->weight = $item->weight ? $item->weight : $object->weight;
+        $item->item = $item->item ? $item->item : $object->item;
         $item->equipment = $object->equipment;
         return self::setDrawingFromObject($item, $object);
     }
@@ -207,6 +209,16 @@ class OrderLogic extends BaseLogic
 		else if ($date < 1487048400 && $date > 1420434000) return 3; //2015 - 2017
 		else if ($date < 1420434000 )return 2; return 2; //2010 - 2015
 	}
+    //by order_id 
+    public static function getArrayOrders($array)
+    {
+        $orders = [];
+        foreach ($array as $item) {
+            if ($item->order_id) $order = Order::getOne($item->order_id, null);
+            if ($order) $orders[] = $order; 
+        }
+        return $orders;
+    }
 
 }
 

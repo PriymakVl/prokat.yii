@@ -5,6 +5,9 @@ namespace app\modules\order\forms;
 use app\forms\BaseForm;
 use app\modules\order\logic\OrderLogic;
 use app\modules\order\models\OrderContent;
+use app\modules\objects\models\Objects;
+use app\modules\objects\logic\ObjectLogic;
+use app\modules\drawing\logic\DrawingLogic;
 
 class OrderContentForm extends BaseForm
 {   
@@ -32,7 +35,7 @@ class OrderContentForm extends BaseForm
     public function rules() 
     {
         return [
-            [['name'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['name'], 'string',],
             ['drawing', 'string'],
             ['count', 'default', 'value' => 0],
             ['weight', 'string'],
@@ -42,7 +45,7 @@ class OrderContentForm extends BaseForm
             ['rating', 'default', 'value' => 0],
             ['order_id', 'integer'],
             ['code', 'string'],
-            ['obj_id', 'integer'],
+            ['obj_id', 'default', 'value' => 0],
             ['equipment', 'string'],
             ['cat_dwg', 'string'],
             ['file', 'string'],
@@ -57,33 +60,35 @@ class OrderContentForm extends BaseForm
     }
 
 
-    public function save($item) 
+    public function save($item)
     {
-        if (!$item) $item = new OrderContent();
-        $order = $this->updateData($item);
-        if (!$item->save()) return false;
-        $this->item_id = $item->id;
-        return true;  
-    }
-    
-    private function updateData($item)
-    {
-        $item->name = $this->name;
-        $item->drawing = $this->drawing;
-        $item->item = $this->item;
+        $obj = $this->getObject();
+        if ($obj) $item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
+        else {
+            $item->name = $this->name ? $this->name : 'деталь';
+            $item->drawing = $this->drawing;  
+            $item->cat_dwg = $this->cat_dwg;
+            $item->file = $this->file; 
+            $item->sheet = $this->sheet;     
+        } 
         $item->note = $this->note;
         $item->count = $this->count;
-        $item->weight = $this->weight;
         $item->rating = $this->rating;
+        $item->order_id = $this->order_id; 
         $item->material = $this->material;
-        $item->order_id = $this->order_id;
-        $item->equipment = $this->equipment;
-        $item->cat_dwg = $this->cat_dwg;
-        $item->file = $this->file;
-        if ($this->obj_id) $item->obj_id = $this->obj_id;
-        if ($this->code) $item->code = $this->code;
-        $item->sheet = $this->sheet;
-        return $item;
+        if ($this->item) $item->item = $this->item;
+        $item->save();
+        $this->item_id = $item->id;
+        return true;
+    }
+
+    private function getObject() 
+    {
+        $obj = null;
+        if ($this->obj_id) $obj = Objects::getOne($obj_id);
+        else if ($this->drawing) $obj = Objects::findOne(['code' => $this->drawing, 'status' => self::STATUS_ACTIVE]); 
+        if ($obj) $obj->getName();  
+        return $obj; 
     }
 
 

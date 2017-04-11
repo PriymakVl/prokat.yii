@@ -1,16 +1,16 @@
 <div id="content-form-other" style="display:none;">
     <!-- category of drawing -->
     <?php 
-        $form->cat_dwg = $item ? $item->cat_dwg : 'vendor';
+        $params = ['prompt' => 'Невыбран'];
         $categories = ['vendor' => 'Производитель', 'works' => 'ПКО комбината', 'department' => 'Цех'];
-        echo $f->field($form, 'cat_dwg')->dropDownList($categories)->label('Кто разработал чертеж:');
+        echo $f->field($form, 'cat_dwg')->dropDownList($categories, $params)->label('Кто разработал чертеж:');
     ?>
     
     <!-- category of drawing -->
     <?php 
-        $form->equipment = $item ? $item->equipment : 'danieli';
-        $equipments = ['danieli' => 'Danieli', 'sundbirsta' => 'Sundbirsta', 'crane' => 'Краны'];
-        echo $f->field($form, 'equipment')->dropDownList($equipments)->label('Производитель оборудования:');
+        $params = ['prompt' => 'Невыбран'];
+        $equipments = ['danieli' => 'Danieli', 'sundbirsta' => 'Sundbirsta', 'crane' => 'Краны', 'gydro' => 'Гидравлика'];
+        echo $f->field($form, 'equipment')->dropDownList($equipments, $params)->label('Производитель оборудования:');
     ?>
     
      <!-- drawing file -->          

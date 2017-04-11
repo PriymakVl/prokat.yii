@@ -12,7 +12,7 @@ class ObjectSpecificationController extends BaseController
     public $layout = "@app/views/layouts/base";
     
     public function actionIndex($obj_id) 
-    {        
+    {    
         $parent = Objects::getOne($obj_id);
         $parent->getName();
         $children = Objects::getChildren($parent->id);

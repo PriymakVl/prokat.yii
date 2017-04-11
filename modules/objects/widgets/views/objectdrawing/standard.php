@@ -4,7 +4,7 @@
         <input type="radio" name="dwg" dwg_id="<?=$dwg->id?>" file="<?=$dwg->file?>" dwg_cat="<?=$dwg->category?>" obj_id="<?=$obj_id?>" />
     </td>
     <td class="text-center">
-        <a href="#" onclick="return false;" id="show-data"><?=$dwg->catName?></a>
+        <?=$dwg->catName?>
     </td>
     <td class="text-center">
         <?=$dwg->revision?>

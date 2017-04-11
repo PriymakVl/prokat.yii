@@ -30,5 +30,5 @@ use app\modules\order\widgets\OrderContentFormComponentWidget;
     <?=OrderContentFormComponentWidget::widget(['template' => 'material'])?>
     
     <!-- weight -->          
-    <?=$f->field($form, 'weight')->textInput(['value' => $item->weight ? $item->weight : '0,00', 'maxlength'=>10, 'style' => 'width:100px'])->label('Вес:(кг)')?>
+    <?=$f->field($form, 'weight')->textInput(['value' => $item->weight, 'maxlength'=>10, 'style' => 'width:100px'])->label('Вес:(кг)')?>
 </div><!-- main-content -->

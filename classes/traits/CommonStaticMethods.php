@@ -63,4 +63,14 @@ trait CommonStaticMethods
 			$object->save();
 		}
 	}
+    
+   	public static function deleteList($ids)
+	{
+		$ids = explode(',', trim($ids));
+        $objects = self::findAll($ids);
+		foreach ($objects as $object) {
+			$object->status = self::STATUS_INACTIVE;
+			$object->save();
+		}
+	}
 }

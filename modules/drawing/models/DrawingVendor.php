@@ -17,7 +17,8 @@ class DrawingVendor extends BaseModel
     
     public static function getAllForObject($obj)
     {
-		$code = self::getCodeWithoutDash($obj->code);
+		if ($obj->equipment == 'danieli') $code = self::getCodeWithoutDash($obj->code);
+		else $code = $obj->code;
         $drawings = self::find()->where(['code' => $code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE])
                 ->orderBy(['revision' => SORT_ASC, 'sheet' => SORT_ASC])->all(); 
         return DrawingLogic::cutNotes($drawings);  
@@ -25,7 +26,8 @@ class DrawingVendor extends BaseModel
     
     public static function check($obj)
     {
-        $code = self::getCodeWithoutDash($obj->code);
+        if ($obj->equipment == 'danieli') $code = self::getCodeWithoutDash($obj->code);
+		else $code = $obj->code;
         return self::findOne(['code' => $code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE]);   
     }
     

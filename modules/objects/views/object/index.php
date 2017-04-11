@@ -1,6 +1,7 @@
 <?php
 
 use yii\web\JqueryAsset;
+use yii\helpers\Url;
 use app\widgets\MainMenuWidget; 
 use app\modules\objects\widgets\ObjectMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
@@ -67,6 +68,18 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
                 <?=$obj->item ? $obj->item : 'Не указана'?>
             </td>
         </tr>
+        
+        <!-- orders -->
+        <? if ($obj->orders): ?>
+            <tr>
+                <td>Заказы</td>
+                <td>
+                    <? foreach ($obj->orders as $order): ?>
+                        <a style="color:<?=$order->type = 4 ? 'green' : 'yellow'?>" href="<?=Url::to(['/order', 'order_id' =>$order->id])?>" target="_blank"><?='№'.$order->number.', '?></a>
+                    <? endforeach; ?>
+                </td>
+            </tr>
+        <? endif; ?>
         
         <!-- id object -->
         <tr>

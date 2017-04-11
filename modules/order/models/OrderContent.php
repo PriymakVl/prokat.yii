@@ -60,7 +60,16 @@ class OrderContent extends BaseModel
         return $this;
     }
     
-
+    public static function searchByDrawing($dwg)
+    {
+        $result = self::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', 'drawing', $dwg])->all();
+        if (empty($result)) return [];
+        if (count($result) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
+        else $orders = OrderLogic::getArrayOrders($result);
+        self::executeMethods($orders, ['getNumber']);
+        return $orders;
+    }
+    
 }
 
 

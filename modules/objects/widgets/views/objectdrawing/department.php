@@ -1,3 +1,6 @@
+<?php
+use yii\helpers\Url;
+?>
 <!-- drawing vendor -->
 <? foreach ($drawings as $dwg): ?>
 <tr>
@@ -5,7 +8,7 @@
         <input type="radio" name="dwg" dwg_id="<?=$dwg->id?>" file="<?=$dwg->file?>" dwg_cat="<?=$dwg->category?>" obj_id="<?=$obj_id?>" />
     </td>
     <td class="text-center">
-        <a href="#" onclick="return false;" id="show-data"><?=$dwg->catName?></a>
+        <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>" target="_blank"><?=$dwg->catName?></a>
     </td>
     <td class="text-center">
         <?=$dwg->revision?>
@@ -16,12 +19,16 @@
     <td class="text-center">
         <?=$dwg->sheet ? $dwg->sheet : '1'?>
     </td>
-    <td class="text-center">              
-        <a target="_blank" href="<?=Yii::$app->urlManager->createUrl(['files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->file?></a>                 
+    <td class="text-center"> 
+        <? if ($dwg->file): ?>           
+            <a target="_blank" href="<?=Yii::$app->urlManager->createUrl(['files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->file?></a>                 
+        <? else: ?>
+            <span style="color:red;">–ù–µ—Ç —Ñ–∞–π–ª–∞</span>
+        <? endif; ?>
     </td>
     <td>
         <? if($dwg->cutNote): ?>
-            <span class="note-cut" note="<?=$dwg->note?>" title="ÔÓÍ‡Á‡Ú¸ ÔÓÎÌ˚È ÚÂÍÒÚ ÔËÏÂ˜‡ÌËˇ"><?=$dwg->cutNote?></span>
+            <span class="note-cut" note="<?=$dwg->note?>" title="–ø–æ–∫–∞–∑–∞—Ç—å –ø–æ–ª–Ω—ã–π —Ç–µ–∫—Å—Ç –ø—Ä–∏–º–µ—á–∞–Ω–∏—è"><?=$dwg->cutNote?></span>
         <? else: ?>
             <?=$dwg->note?> 
         <? endif; ?>   

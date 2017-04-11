@@ -1,11 +1,14 @@
+<?php
+use yii\helpers\Url;
+?>
 <? foreach ($drawings as $dwg): ?>
     <? foreach ($dwg->files as $file): ?>
         <tr>
             <td>
-                <input type="radio" name="dwg" dwg_id="<?=$dwg->id?>" file_id="<?=$file->id?>" file="<?=$dwg->file?>" dwg_cat="<?=$dwg->category?>" obj_id="<?=$obj_id?>" />
+                <input type="radio" name="dwg" dwg_id="<?=$dwg->id?>" file_id="<?=$file->id?>" file="<?=$file->file?>" dwg_cat="<?=$dwg->category?>" obj_id="<?=$obj_id?>" />
             </td>
             <td class="text-center">
-                <a href="#" onclick="return false;" id="show-data"><?=$dwg->catName?></a>
+                <a href="<?=Url::to(['/drawing/works', 'dwg_id' => $dwg->id])?>" target="_blank"><?=$dwg->catName?></a>
             </td>
             <td class="text-center">нет</td>
             <td class="text-center">

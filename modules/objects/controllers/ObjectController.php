@@ -14,7 +14,7 @@ class ObjectController extends BaseController
     public function actionIndex($obj_id) 
     { 
         $obj = Objects::getOne($obj_id);
-        $obj->getName()->getParent()->checkDrawing()->checkChild();
+        $obj->getName()->getParent()->checkDrawing()->checkChild()->getOrders();
         return $this->render('index', compact('obj'));
     }
     

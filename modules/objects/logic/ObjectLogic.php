@@ -18,9 +18,12 @@ class ObjectLogic extends BaseLogic
     {
         foreach ($children as $child) {
             $child->getName()->checkDrawing()->checkChild();
-            if ($child->item === 0) $sort['category'][] = $child;
-            else if ($child->item < 300) $sort['standard'][] = $child;
-            else $sort['unit'][] = $child; 
+			if ($child->equipment == 'danieli') {
+				if ($child->item === 0) $sort['category'][] = $child;
+				else if ($child->item < 300) $sort['standard'][] = $child;
+				else $sort['unit'][] = $child; 
+			}
+			else $sort['unit'][] = $child;
         }
         return $sort;
     }

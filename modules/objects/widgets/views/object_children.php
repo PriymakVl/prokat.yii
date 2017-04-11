@@ -14,7 +14,9 @@
                 </td>
                 <td class="text-center"><?=$obj->item?></td>
                 <td>
-                    <a style="color:<?=$color?>;" href="<?=Url::to(['/object', 'obj_id' => $obj->id])?>" title="<?=Html::encode($obj->eng)?>"><?=$obj->name?></a>    
+                    <a style="color:<?=$obj->orders ? 'green' : $color?>;" href="<?=Url::to(['/object', 'obj_id' => $obj->id])?>" title="<?=Html::encode($obj->eng)?>">
+                        <?=$obj->name?>
+                    </a>    
                 </td>
                 <td class="text-center">
                     <? if($obj->dwg): ?>

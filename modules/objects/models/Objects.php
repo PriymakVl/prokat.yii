@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\models\BaseModel;
 use app\modules\objects\logic\ObjectLogic;
 use app\logic\BaseLogic;
+use app\modules\order\models\OrderContent;
 
 class Objects extends BaseModel
 {
@@ -16,6 +17,7 @@ class Objects extends BaseModel
     public $drawings;
     public $dwg;
     public $child;
+    public $orders;
     
     const MAIN_PARENTS = 0;
     
@@ -51,6 +53,7 @@ class Objects extends BaseModel
     public static function getChildren($parent_id)
     {
         $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        $children = self::executeMethods($children, ['getOrders']);
         return ObjectLogic::prepareChildren($children); 
     }
 
@@ -114,6 +117,12 @@ class Objects extends BaseModel
         $objects = ObjectLogic::deleteExistingObjects($objects, $children);
         if (!$objects) return;
         return ObjectLogic::changeParentList($objects, $parent_id);    
+    }
+    
+    public function getOrders()
+    {
+        $this->orders = OrderContent::searchByDrawing($this->code);
+        return $this;
     }
 
     

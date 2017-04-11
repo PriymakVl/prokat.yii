@@ -56,11 +56,11 @@ class OrderListExcelCreateController extends BaseController
     
     private function setPageSetup() 
     {
-        $this->activeSheet->getPageSetup()->setOrientation(\PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT);//ORIENTATION_LANDSCAPE)
+        $this->activeSheet->getPageSetup()->setOrientation(\PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);//ORIENTATION_PORTRAIT
         $this->activeSheet->getPageSetup()->SetPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
 						
-        $this->activeSheet->getPageMargins()->setTop(0.4);
-        $this->activeSheet->getPageMargins()->setRight(0.2);
+        $this->activeSheet->getPageMargins()->setTop(1);
+        $this->activeSheet->getPageMargins()->setRight(0.25);
         $this->activeSheet->getPageMargins()->setLeft(0.75);
         $this->activeSheet->getPageMargins()->setBottom(1);   
     }
@@ -69,9 +69,9 @@ class OrderListExcelCreateController extends BaseController
     {
         $page = $page ? $page : 1;
         $pages = $pages ? $pages : 1;
-        //$this->activeSheet->setTitle(" ");	
-        //$this->activeSheet->getHeaderFooter()->setOddHeader("&CПеречень заказов");	
-        $this->activeSheet->getHeaderFooter()->setOddFooter('&C'.'Страница '.$page);   
+        $this->activeSheet->setTitle(" ");	
+        //$this->activeSheet->getHeaderFooter()->setOddHeader("&CШапка нашего прайс листа");	
+        $this->activeSheet->getHeaderFooter()->setOddFooter($this->activeSheet->getTitle().'Страница '.$page.' из '.$pages);   
     }
     
     private function setFont()
@@ -84,10 +84,10 @@ class OrderListExcelCreateController extends BaseController
     {
         $this->activeSheet->getColumnDimension('A')->setWidth(10);
         $this->activeSheet->getColumnDimension('B')->setWidth(10);
-        $this->activeSheet->getColumnDimension('C')->setWidth(55);
-        //$this->activeSheet->getColumnDimension('D')->setWidth(15);    
-        $this->activeSheet->getColumnDimension('D')->setWidth(20);    
-        //$this->activeSheet->getColumnDimension('F')->setWidth(15);    
+        $this->activeSheet->getColumnDimension('C')->setWidth(60);
+        $this->activeSheet->getColumnDimension('D')->setWidth(15);    
+        $this->activeSheet->getColumnDimension('E')->setWidth(25);    
+        $this->activeSheet->getColumnDimension('F')->setWidth(15);    
     }
     
     private function setTitles()
@@ -96,9 +96,9 @@ class OrderListExcelCreateController extends BaseController
         $this->activeSheet->setCellValue('A1','Дата');
         $this->activeSheet->setCellValue('B1','№заказа');
         $this->activeSheet->setCellValue('C1','Наименование заказа');
-        //$this->activeSheet->setCellValue('D1','Служба');    
-        $this->activeSheet->setCellValue('D1','Заказчик');    
-        //$this->activeSheet->setCellValue('F1','Примечание');    
+        $this->activeSheet->setCellValue('D1','Служба');    
+        $this->activeSheet->setCellValue('E1','Заказчик');    
+        $this->activeSheet->setCellValue('F1','Примечание');    
     }
     
     private function setDataOrders()
@@ -111,10 +111,10 @@ class OrderListExcelCreateController extends BaseController
         	$this->activeSheet->setCellValue('A'.$row_next,$order->date);
         	$this->activeSheet->setCellValue('B'.$row_next,$order->number);
         	$this->activeSheet->setCellValue('C'.$row_next,$order->name);
-        	//$this->activeSheet->setCellValue('D'.$row_next,$order->service);
-        	$this->activeSheet->setCellValue('D'.$row_next,$order->customer);
-            $this->activeSheet->getStyle('A1:D'.($i + 2))->applyFromArray($this->styleBorder);
-            $this->activeSheet->getStyle('A2:E'.($i + 2))->applyFromArray($this->styleData);
+        	$this->activeSheet->setCellValue('D'.$row_next,$order->service);
+        	$this->activeSheet->setCellValue('E'.$row_next,$order->customer);
+            $this->activeSheet->getStyle('A1:F'.($i + 2))->applyFromArray($this->styleBorder);
+            $this->activeSheet->getStyle('A2:F'.($i + 2))->applyFromArray($this->styleData);
             $this->activeSheet->getStyle('C1:C'.($i + 2))->applyFromArray($this->styleNameOrder);
         	$i++;
         }    

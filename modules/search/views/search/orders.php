@@ -6,7 +6,11 @@
 <div class="content">
     <h2 class="title-search">Результаты поиска</h2>
     <div class="info-box">
-        Поиск произведен по номеру:<span>&laquo; <?=$number?> &raquo;</span>
+        <? if ($number): ?>
+            Поиск произведен по номеру заказа:<span>&laquo; <?=$number?> &raquo;</span>
+        <? else: ?>
+            Поиск произведен по номеру чертежа:<span>&laquo; <?=$drawing?> &raquo;</span>
+        <? endif; ?>
     </div>
 <? if ($orders): ?>
     <table>

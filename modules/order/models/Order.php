@@ -41,9 +41,9 @@ class Order extends BaseModel
     
     public static function getOrderList($params)
     {
-        $query = self::find()->where($params)->orderBy(['number' => SORT_DESC]);
+        $query = self::find()->where($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
-        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->all();
+        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['number' => SORT_DESC])->all();
         return self::executeMethods($list, ['getNumber', 'getShortCustomer']);
     }
     
@@ -121,7 +121,7 @@ class Order extends BaseModel
     public function getFullIssuer()
     {
         if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer));
+        else if ((int)$this->issuer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer));
         return $this;
     }
     
