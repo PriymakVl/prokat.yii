@@ -7,11 +7,11 @@ use yii\base\Widget;
 
 class OrderItemChildrenWidget extends Widget 
 {
-    public $children;
+    public $parent;
 
     public function run()
     {
-        return $this->render('order_item_children', ['children' => $this->children]);
+        return $this->render('order_item_children', ['parent' => $this->parent]);
     }
 
 }

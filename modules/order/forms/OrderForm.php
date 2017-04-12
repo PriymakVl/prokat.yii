@@ -5,6 +5,7 @@ namespace app\modules\order\forms;
 use app\forms\BaseForm;
 use app\modules\order\logic\OrderLogic;
 use app\modules\order\models\Order;
+use app\models\Tag;
 
 class OrderForm extends BaseForm
 {   
@@ -23,10 +24,11 @@ class OrderForm extends BaseForm
     public $note;
     public $work;
     public $description;
-    public $period = 10;
+    public $period;
+    public $tag;
     //form
     public $order_id;
-
+    public $tags;
     
     public function rules() 
     {
@@ -44,6 +46,7 @@ class OrderForm extends BaseForm
             ['weight','string'],
             ['date','string'],
             ['period', 'integer'],
+            ['tag','string'],
         ];
 
     }
@@ -66,6 +69,7 @@ class OrderForm extends BaseForm
     private function updateData($order)
     {
         $order->type = $this->type;
+        $order->tag = $this->tag;
         $order->name = $this->name;
         $order->issuer = $this->issuer;
         $order->customer = $this->customer;
@@ -88,6 +92,11 @@ class OrderForm extends BaseForm
         }
         $order->period = OrderLogic::getPeriod($order->date);
         return $order;
+    }
+    
+    public function getTags()
+    {
+        $this->tags = Tag::get('order');
     }
 
 

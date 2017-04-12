@@ -17,7 +17,7 @@ use \yii\web\JqueryAsset;
             <a href="<?=Url::to(['/order/delete', 'order_id' => $order_id])?>">Удалить заказ</a>
         </li>
         <li>
-            <a href="<?=Url::to(['/order/title/file/save', 'order_id' => $order_id])?>">Создать титул</a>
+            <a href="<?=Url::to(['/order/title/sheet/print', 'order_id' => $order_id])?>">Напечатать титул. лист</a>
         </li>
     </ul>
 </div>

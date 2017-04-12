@@ -19,11 +19,12 @@ class OrderTitleSheetCreateController extends BaseController
     
     public function actionIndex($order_id) 
     { 
-        $this->order = Order::getOne($order_id);
+        $this->order = Order::findOne($order_id);
         $this->objPHPExcel = new \PHPExcel();
         $this->setActiveSheet();
         $this->setSetup();
         $this->setTitles();
+        $this->setInfoOrder();
         $this->setStyleBorders();
         //$this->setStyleData();
         //$this->setStyleNameOrder();
@@ -112,6 +113,24 @@ class OrderTitleSheetCreateController extends BaseController
         $this->activeSheet->setCellValue('G1','Заказчик'); 
         $this->activeSheet->setCellValue('H1','№ заказа'); 
         $this->activeSheet->setCellValue('A2','цех, отдел'); 
+        //merge field
+        $this->activeSheet->mergeCells('E1:E2');
+    }
+    
+    private function setInfoOrder()
+    {
+        //set height row 
+        $this->activeSheet->getRowDimension('3')->setRowHeight(50);
+        $this->activeSheet->getRowDimension('4')->setRowHeight(70);
+        //merge field
+        $this->activeSheet->mergeCells('A3:D3');
+        $this->activeSheet->mergeCells('A4:D4');
+        $this->activeSheet->mergeCells('F3:H3');
+        $this->activeSheet->mergeCells('F4:H4');  
+        //fill field
+        $this->activeSheet->setCellValue('A3','Агрегат, механизм');
+        $this->activeSheet->setCellValue('E3','Узел');
+        $this->activeSheet->setCellValue('F3','Принять к изготвлению');  
     }
     
     private function setDataOrders()

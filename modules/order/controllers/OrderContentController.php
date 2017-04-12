@@ -18,7 +18,6 @@ class OrderContentController extends BaseController
     public function actionIndex($item_id) 
     { 
         $item = OrderContent::getOne($item_id)->countWeightAll()->getPathDrawing();
-        //debug($item->pathDrawing);
         $order = Order::findOne($item->order_id);
         $order->getNumber();
         $object = Objects::getOne($item->obj_id, null);
@@ -30,7 +29,7 @@ class OrderContentController extends BaseController
     { 
         $order = Order::findOne($order_id);
         $order->getNumber();
-        $content = OrderContent::getMainItem($order->id);
+        $content = OrderContent::getItemsOfOrder($order->id);
         $state = OrderLogic::checkState($order_id);
         return $this->render('list', compact('order', 'content', 'state'));
     }

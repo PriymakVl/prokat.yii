@@ -11,6 +11,12 @@ $(document).ready(function() {
         location.href = 'http://' + location.host + '/order/list?' + gets;    
     });
     
+    $('#order-tag').change(function() {
+        var tag = $(this).find('option:selected').val();
+        var gets = buidGetString('tag', tag);
+        location.href = 'http://' + location.host + '/order/list?' + gets;    
+    });
+    
  
 });
 

@@ -39,7 +39,7 @@ $this->registerCssFile('/css/order.css');
         </tr>
         <? if ($content): ?>
             <? foreach ($content as $item): ?>
-                <tr>
+                <tr <? if ($item->children) echo 'class="item-parent"'; ?>>
                     <td>
                         <input type="checkbox" name="content" item_id="<?=$item->id?>" />
                     </td>
@@ -56,9 +56,7 @@ $this->registerCssFile('/css/order.css');
                     
                     <!-- item -->
                     <td class="text-center">
-                        <? if ($item->children && $item->item): ?>
-                            <span>СБ / </span><?=$item->item?>
-                        <? elseif ($item->children): ?>
+                        <? if ($item->children && !$item->item): ?>
                             <span>СБ</span>
                         <? else: ?>
                             <?=$item->item?>
@@ -81,7 +79,7 @@ $this->registerCssFile('/css/order.css');
                     </td>
                 </tr>
                 <? if ($item->children): ?>
-                    <?=OrderItemChildrenWidget::widget(['children' => $item->children])?>
+                    <?=OrderItemChildrenWidget::widget(['parent' => $item])?>
                 <? endif ?>
             <? endforeach; ?>
         <? else: ?>

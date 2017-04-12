@@ -27,4 +27,13 @@
         <option value="8" <? if ($params['customer'] == 8) echo 'selected'; ?>>Коваль А.П.</option>
         <option value="8" <? if ($params['customer'] == 9) echo 'selected'; ?>>Пасюк В.В.</option>
     </select>
+    
+    <!-- sort tags -->
+    <label>Участки:</label>
+    <select id="order-tag">
+        <option value="all">Все</option>
+        <? foreach ($tags as $key => $value): ?>
+            <option value="<?=$key?>" <? if ($params['tag'] == $key) echo 'selected'; ?>><?=$value?></option>   
+        <? endforeach; ?>
+    </select>
 </div>

@@ -37,7 +37,8 @@ class ListContentController extends BaseController
         $list_id = ListLogic::getActiveListId();
         $obj = Objects::getOne($obj_id, __METHOD__);
         $obj->getName();
-        Yii::createObject(ListContent::class)->saveItem($obj, $list_id);
+		$content = new ListContent();
+        $content->saveItem($obj, $list_id);
         return $this->redirect(['/list/active']);
     }
      

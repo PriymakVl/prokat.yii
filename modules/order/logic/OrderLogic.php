@@ -16,13 +16,13 @@ class OrderLogic extends BaseLogic
     const CURRENT_PERIOD = 4;
 	const UNDEFINED_PERIOD = 1;
 
-    public static function getParams($period, $customer, $issuer)
+    public static function getParams($period, $customer, $tag)
     {
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
         if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
         if ($customer && $customer != 'all') $params['customer'] = $customer;
-        if ($issuer && $issuer != 'all') $params['issuer'] = $issuer;
+        if ($tag && $tag != 'all') $params['tag'] = $tag;
         //if (self::in_get('year')) $params['year'] = Yii::$app->request->get('year', date('Y'));
         if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
         return $params;   

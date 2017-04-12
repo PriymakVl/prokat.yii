@@ -63,12 +63,18 @@ class OrderContentForm extends BaseForm
     public function save($item)
     {
         $obj = $this->getObject();
-        if ($obj) $item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
+        if ($obj) {
+			$item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
+			if ($this->drawing) $item->drawing = $this->drawing;
+			if ($this->weight) $item->weight = $this->weight;
+		}
         else {
+			if (!$item) $item = new OrderContent();
             $item->name = $this->name ? $this->name : 'деталь';
             $item->drawing = $this->drawing;  
             $item->cat_dwg = $this->cat_dwg;
             $item->file = $this->file; 
+			$item->weight = $this->weight;
             $item->sheet = $this->sheet;     
         } 
         $item->note = $this->note;
@@ -76,7 +82,7 @@ class OrderContentForm extends BaseForm
         $item->rating = $this->rating;
         $item->order_id = $this->order_id; 
         $item->material = $this->material;
-        if ($this->item) $item->item = $this->item;
+        if ($this->item || $this->item === '0') $item->item = $this->item;
         $item->save();
         $this->item_id = $item->id;
         return true;

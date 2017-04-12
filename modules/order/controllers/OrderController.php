@@ -22,9 +22,9 @@ class OrderController extends BaseController
         return $this->render('index', compact('order', 'state'));
     }
     
-    public function actionList($period = null, $customer = null, $issuer = null)
+    public function actionList($period = null, $customer = null, $tag = null)
     {
-        $params = OrderLogic::getParams($period, $customer, $issuer);
+        $params = OrderLogic::getParams($period, $customer, $tag);
         $list = Order::getOrderList($params);
         $pages = Order::$pages;
         return $this->render('list', compact('list', 'params', 'pages'));
@@ -35,7 +35,7 @@ class OrderController extends BaseController
         $order = (int)$order_id ? Order::findOne($order_id) : null;
         if ($order) $order->convertDate($order, false);
         $form = new OrderForm();
-        $form->getServices($form);
+        $form->getServices($form)->getTags();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             if ((int)$form->number) $this->redirect(['/order', 'order_id' => $form->order_id]);
             else $this->redirect(['/order/draft', 'order_id' => $form->order_id]);

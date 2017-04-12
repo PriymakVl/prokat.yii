@@ -5,7 +5,7 @@
     padding: 5px;
 }
 /** list content **/
-.item-children {
+.item-parent {
     background: #E8E8E8;
 }
 /** form content **/
@@ -47,6 +47,12 @@
     left: 350px;     
 }
 
+.field-orderform-tag {
+    position: absolute;
+    top: 2px;
+    left: 420px;   
+}
+
 /** form order **/
 
 .field-orderform-customer {
@@ -62,6 +68,7 @@
 }
 
 /** top menu list **/
-#order-period {
-    margin-right: 15px;
+#order-period, #order-customer {
+    margin-right: 25px;
 }
+

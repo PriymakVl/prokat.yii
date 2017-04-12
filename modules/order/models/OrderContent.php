@@ -25,10 +25,10 @@ class OrderContent extends BaseModel
     	return ['order-logic' => ['class' => OrderLogic::className()]];
     }
     
-    public static function getMainItem($order_id)
+    public static function getItemsOfOrder($order_id)
     {
-        $content = OrderContent::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 
-                'parent_id' => self::MAIN_PARENT])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        $content = OrderContent::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 'parent_id' => self::MAIN_PARENT])
+                    ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
         $content = self::executeMethods($content, ['countWeightAll', 'getPathDrawing', 'getChildren']);
         return $content;
     }
@@ -55,7 +55,7 @@ class OrderContent extends BaseModel
     
     public function getChildren()
     {
-        $children = self::findAll(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id]);
+        $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
         $this->children = self::executeMethods($children, ['countWeightAll', 'getPathDrawing']);
         return $this;
     }
