@@ -30,10 +30,10 @@
     
     <!-- sort tags -->
     <label>Участки:</label>
-    <select id="order-tag">
+    <select id="order-area">
         <option value="all">Все</option>
-        <? foreach ($tags as $key => $value): ?>
-            <option value="<?=$key?>" <? if ($params['tag'] == $key) echo 'selected'; ?>><?=$value?></option>   
+        <? foreach ($area as $item): ?>
+            <option value="<?=$item->alias?>" <? if ($params['area'] == $item->alias) echo 'selected'; ?>><?=$item->name?></option>   
         <? endforeach; ?>
     </select>
 </div>

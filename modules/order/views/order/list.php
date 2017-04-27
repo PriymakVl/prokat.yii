@@ -63,6 +63,6 @@ $this->registerCssFile('/css/standard.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?=OrderListMenuWidget::widget()?>
+    <?=OrderListMenuWidget::widget(['state' => $state])?>
     <?=OrderActiveMenuWidget::widget()?>
 </div>

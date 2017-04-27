@@ -3,6 +3,7 @@
 use \yii\web\JqueryAsset;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
@@ -38,9 +39,9 @@ $this->registerCssFile('/css/drawing.css');
                         <? if($dwg->type == 'folder'): ?>
                             <?= Html::a('папка №'.$dwg->id, ['/drawing/works/specification/', 'dwg_id' => $dwg->id]) ?>
                         <? elseif(count($dwg->files) > 1): ?>
-                            <?= Html::a($dwg->number, ['/drawing/works/files', 'dwg_id' => $dwg->id]) ?>
+							<a href="<?=Url::to(['/drawing/works/files', 'dwg_id' => $dwg->id])?>"><?=$dwg->number?></a>
                         <? elseif($dwg->files): ?>
-                            <?= Html::a($dwg->number, ['/files/works/'.$dwg->files[0]->file]) ?>
+							<a href="<?=Url::to(['/files/works/'.$dwg->files[0]->file])?>" target="_blank"><?=$dwg->number?></a>
                         <? else: ?>
                             <?=$dwg->number?>
                         <? endif; ?>

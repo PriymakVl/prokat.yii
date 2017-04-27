@@ -11,6 +11,6 @@ use \yii\web\JqueryAsset;
      <a href="<?=Url::to(['/order/content/list', 'order_id' => $order_id])?>" <? if ($action == 'content') echo 'class="top-menu-active-link"'; ?>>Содержимое</a>
      <a href="<?=Url::to(['/order/work', 'order_id' => $order_id])?>" <? if ($action == 'work') echo 'class="top-menu-active-link"'; ?>>Характер работы</a>
      <a href="<?=Url::to(['/order/list'])?>">Заказы</a>
-     <a href="<?=Url::to(['/order/drafts/list'])?>">Черновики</a>
+     <a href="<?=Url::to(['/order/list', 'state' => 1])?>">Черновики</a>
      <a href="javascript:history.back();">Назад</a>
 </div>

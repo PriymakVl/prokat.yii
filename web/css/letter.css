@@ -1,0 +1,37 @@
+#letter-text {
+    border: 1px solid #B49A6A;
+    width: 720px;
+    padding: 10px;
+    margin-top: 15px;    
+}
+
+#letter-text ul, #letter-text ol{
+    margin-left: 15px;    
+}
+
+#letter-whom-wrp {
+    margin: 10px 0;
+    padding: 10px 0;
+    border-top: 1px solid #B49A6A;
+    border-bottom: 1px solid #B49A6A;
+}
+
+.copy-position, .copy-name, .whom-position, .whom-name {
+    margin: 0 20px 0 10px;
+    width: 220px;
+    padding-left: 5px;
+}
+
+.copy-name, .whom-name {
+    margin: 0 0 0 10px;
+}
+
+.toggle-whom-copy {
+    margin: 0 5px 0 30px !important;
+}
+
+#delete-input-copy {
+    text-decoration: underline;
+    color: #000;
+    margin-left: 30px;
+}

@@ -52,8 +52,7 @@ class ObjectLogic extends BaseLogic
     {
         if (empty($children)) return $objects;
         foreach ($objects as $obj) {
-            if (ArrayHelper::isIn($obj->code, $children)) continue;
-            $remains[] = $obj;
+            if (!ArrayHelper::isIn($obj->code, $children)) $remains[] = $obj;
         }
         return $remains;
     }

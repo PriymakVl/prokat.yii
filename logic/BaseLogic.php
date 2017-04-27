@@ -57,6 +57,14 @@ class BaseLogic  extends Behavior implements ConfigApp
         return $data[2].'-'.$data[1].'-'.$data[0];
     }
     
+    public static function getArrayAliasAndName($array) 
+    {
+        $convert = [];
+        foreach ($array as $obj) {
+            $convert[$obj->alias] = $obj->name;
+        }
+        return $convert;
+    }
     
 
 }

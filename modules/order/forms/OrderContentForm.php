@@ -67,6 +67,7 @@ class OrderContentForm extends BaseForm
 			$item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
 			if ($this->drawing) $item->drawing = $this->drawing;
 			if ($this->weight) $item->weight = $this->weight;
+			if ($this->name) $item->name = $this->name;
 		}
         else {
 			if (!$item) $item = new OrderContent();

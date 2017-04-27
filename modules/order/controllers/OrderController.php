@@ -15,19 +15,18 @@ class OrderController extends BaseController
     
     public function actionIndex($order_id) 
     { 
-        $order = Order::findOne($order_id);
-        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
-                ->getFullCustomer()->getFullIssuer();
-        $state = OrderLogic::checkState($order_id);
-        return $this->render('index', compact('order', 'state'));
+        $order = Order::getOne($order_id);
+        $session = OrderLogic::checkStateSession($order_id); 
+        return $this->render('index', compact('order', 'session'));
     }
     
-    public function actionList($period = null, $customer = null, $tag = null)
+    public function actionList($period = null, $customer = null, $area = null)
     {
-        $params = OrderLogic::getParams($period, $customer, $tag);
+        $state = Yii::$app->request->get('state');
+        $params = OrderLogic::getParams($period, $customer, $area, $state);
         $list = Order::getOrderList($params);
         $pages = Order::$pages;
-        return $this->render('list', compact('list', 'params', 'pages'));
+        return $this->render('list', compact('list', 'params', 'pages', 'state'));
     }
     
     public function actionForm($order_id = null) 
@@ -35,7 +34,7 @@ class OrderController extends BaseController
         $order = (int)$order_id ? Order::findOne($order_id) : null;
         if ($order) $order->convertDate($order, false);
         $form = new OrderForm();
-        $form->getServices($form)->getTags();
+        $form->getServices($form)->getArea();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             if ((int)$form->number) $this->redirect(['/order', 'order_id' => $form->order_id]);
             else $this->redirect(['/order/draft', 'order_id' => $form->order_id]);
@@ -50,19 +49,19 @@ class OrderController extends BaseController
         return $this->render('work', compact('order'));   
     }
     
-    public function actionDraft($order_id)
-    {
-        $order = Order::getDraft($order_id);
-        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->getFullCustomer()->getFullIssuer();
-        $state = OrderLogic::checkState($order_id);
-        return $this->render('index', compact('order', 'state'));    
-    }
+//    public function actionDraft($order_id)
+//    {
+//        $order = Order::getDraft($order_id);
+//        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->getFullCustomer()->getFullIssuer();
+//        $state = OrderLogic::checkState($order_id);
+//        return $this->render('index', compact('order', 'state'));    
+//    }
     
-    public function actionDraftsList()
-    {
-        $drafts = Order::getDraftsList();
-        return $this->render('drafts', compact('drafts'));       
-    }
+//    public function actionDraftsList()
+//    {
+//        $drafts = Order::getDraftsList();
+//        return $this->render('drafts', compact('drafts'));       
+//    }
     
     public function actionDelete($order_id)
     {
@@ -91,6 +90,14 @@ class OrderController extends BaseController
     {
         $order_id = OrderLogic::getActiveOrderId();
         $this->redirect(['/order', 'order_id' => $order_id]);
+    }
+    
+    public function actionGetEquipmentForForm()
+    {
+        $area_id = Yii::$app->request->get('aree_id');
+        $equipment = Equipment::getEquipmentOfArea($area_id);
+        if (empty($equipment)) return 'error';
+        return json_encode($equipment);
     }
     
 }

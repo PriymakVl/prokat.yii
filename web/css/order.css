@@ -67,6 +67,32 @@
     left: 420px;     
 }
 
+#area-mechanism, #mechanism-unit, #area {
+    width: 200px;
+}
+
+#area-wrp {
+    position: relative;
+    margin: 35px 0 15px;
+}
+
+#area-mechanism-wrp {
+    left: 265px;
+    position: absolute;
+    top: 155px;    
+}
+
+#mechanism-unit-wrp {
+    left: 510px;
+    position: absolute;
+    top: 155px;    
+}
+
+#area-mechanism-wrp label,  #mechanism-unit-wrp label, #area-wrp label{
+    position: absolute;
+    top: -20px;       
+}
+
 /** top menu list **/
 #order-period, #order-customer {
     margin-right: 25px;

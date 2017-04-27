@@ -18,7 +18,7 @@ class DrawingDepartment extends BaseModel
     public $content;//for folder;
     public $services;
     
-    const PAGE_SIZE = 8;
+    const PAGE_SIZE = 30;
     
     public static function tableName()
     {

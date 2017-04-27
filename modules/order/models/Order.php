@@ -15,8 +15,12 @@ class Order extends BaseModel
     public $weight;
     
     const PAGE_SIZE = 15;
-    const STATUS_DRAFT = 2;
-    
+    const ORDER_STATE_DRAFT = 1;
+    const ORDER_STATE_ACTIVE = 2;
+    //const ORDER_STATE_NOT_ACCEPTED = 3;
+    //const ORDER_STATE_PART_MANUFACTURED = 4;
+    //const ORDER_STATE_MANUFACTURED = 5;
+    //const ORDER_STATE_CLOSED = 6;
     
     public static function tableName()
     {
@@ -26,6 +30,15 @@ class Order extends BaseModel
     public function behaviors()
     {
     	return ['order-logic' => ['class' => OrderLogic::className()]];
+    }
+    
+    
+    public static function getOne($order_id)
+    {
+        $order = parent::getOne($order_id);
+        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
+                ->getFullCustomer()->getFullIssuer();
+        return $order;   
     }
     
     public function getContent()
@@ -60,17 +73,17 @@ class Order extends BaseModel
         return $this;
     }
     
-    public static function getDraft($order_id)
-    {
-        $order = self::findOne(['id' => $order_id, 'status' => self::STATUS_DRAFT]);
-        if (!$order) throw new ForbiddenHttpException('error '.__METHOD__);
-        else return $order;
-    }
+//    public static function getDraft($order_id)
+//    {
+//        $order = self::findOne(['id' => $order_id, 'status' => self::STATUS_DRAFT]);
+//        if (!$order) throw new ForbiddenHttpException('error '.__METHOD__);
+//        else return $order;
+//    }
     
-    public static function getDraftsList()
-    {
-        return self::findAll(['status' => self::STATUS_DRAFT]);
-    }
+//    public static function getDraftsList()
+//    {
+//        return self::findAll(['status' => self::STATUS_DRAFT]);
+//    }
     
     public function convertServiceForFile()
     {

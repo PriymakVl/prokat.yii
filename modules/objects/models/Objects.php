@@ -96,6 +96,8 @@ class Objects extends BaseModel
     public static function copyList($ids, $parent_id)
     {
         $children = self::find()->select('code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->column();
+		$ids = explode(',', $ids);
+		$objects = Objects::findAll($ids);
         $objects = ObjectLogic::deleteExistingObjects($objects, $children);
         if (!$objects) return;
         foreach ($objects as $obj) {

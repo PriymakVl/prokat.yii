@@ -17,6 +17,8 @@ $config = [
         'search' => ['class' => 'app\modules\search\Module',],
         'objects' => ['class' => 'app\modules\objects\Module',],
         'employees' => ['class' => 'app\modules\employees\Module',],
+        'equipments' => ['class' => 'app\modules\equipments\Module',],
+         'letters' => ['class' => 'app\modules\letters\Module',],
     ],
     'components' => [
         'request' => [
@@ -103,8 +105,8 @@ $config = [
                 'order/list' => 'order/order/list',
                 'order/form' => 'order/order/form',                   
                 'order/work' => 'order/order/work',                   
-                'order/drafts/list' => 'order/order/drafts-list',
-                'order/draft' => 'order/order/draft',                   
+                //'order/drafts/list' => 'order/order/drafts-list',
+                'order/form/area/equipment' => 'order/order/get-equipment-for-form',                   
                 'order/delete' => 'order/order/delete',
                 'order/list/file/save' => 'order/order-list-excel-create', 
                 'order/title/sheet/print' => 'order/order-title-sheet-create', 
@@ -136,8 +138,13 @@ $config = [
                 'object' => 'objects/object',                                    
                 'object/form' => 'objects/object/form',                                    
                 'object/copy' => 'objects/object/copy',
-                'object/delete' => 'objects/object/delete-one', 
-                'object-danieli-update' => 'objects/object-danieli-update'                                                                      
+                'object/delete/one' => 'objects/object/delete-one', 
+                'object-danieli-update' => 'objects/object-danieli-update',   
+                //letter
+                'letter/list' => 'letters/letter/list',
+                'letter' => 'letters/letter',
+                'letter/form' => 'letters/letter/form',
+                'letter/delete' => 'letters/letter/delete',                                                                  
             ],
         ],  
     ],

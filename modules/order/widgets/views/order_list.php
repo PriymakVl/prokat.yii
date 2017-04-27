@@ -12,10 +12,10 @@ $this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsse
             <a href="<?=Url::to(['/order/form'])?>">Выдать заказ</a>
         </li>
         <li>
-            <? if ($action == 'list'): ?>
-                <a href="<?=Url::to(['/order/drafts/list'])?>">Черновики</a>
-            <? elseif ($action == 'drafts-list'): ?>
+            <? if ($state): ?>
                 <a href="<?=Url::to(['/order/list'])?>">Заказы</a>
+            <? else: ?>
+                <a href="<?=Url::to(['/order/list', 'state' => '1'])?>">Черновики</a>
             <? endif; ?>
         </li> 
         <li>

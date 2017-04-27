@@ -2,10 +2,11 @@
 
 namespace app\modules\order\forms;
 
+use Yii;
 use app\forms\BaseForm;
 use app\modules\order\logic\OrderLogic;
 use app\modules\order\models\Order;
-use app\models\Tag;
+use app\modules\equipments\models\Equipment;
 
 class OrderForm extends BaseForm
 {   
@@ -25,10 +26,9 @@ class OrderForm extends BaseForm
     public $work;
     public $description;
     public $period;
-    public $tag;
     //form
     public $order_id;
-    public $tags;
+    public $areaAll;
     
     public function rules() 
     {
@@ -46,7 +46,6 @@ class OrderForm extends BaseForm
             ['weight','string'],
             ['date','string'],
             ['period', 'integer'],
-            ['tag','string'],
         ];
 
     }
@@ -69,13 +68,13 @@ class OrderForm extends BaseForm
     private function updateData($order)
     {
         $order->type = $this->type;
-        $order->tag = $this->tag;
+        $order->area = Yii::$app->request->post('area');
         $order->name = $this->name;
         $order->issuer = $this->issuer;
         $order->customer = $this->customer;
         $order->note = $this->note;
         $order->service = $this->service;
-        $order->date = strtotime($this->prepareDateForConvert($this->date));;
+        $order->date = strtotime($this->prepareDateForConvert($this->date));
         //$order->year = date('Y', $order->date);
         $order->work = $this->work;
         $order->weight = $this->weight;
@@ -94,9 +93,9 @@ class OrderForm extends BaseForm
         return $order;
     }
     
-    public function getTags()
+    public function getArea()
     {
-        $this->tags = Tag::get('order');
+        $this->areaAll = Equipment::getArea();
     }
 
 

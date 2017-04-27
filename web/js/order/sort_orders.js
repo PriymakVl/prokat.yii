@@ -11,9 +11,9 @@ $(document).ready(function() {
         location.href = 'http://' + location.host + '/order/list?' + gets;    
     });
     
-    $('#order-tag').change(function() {
-        var tag = $(this).find('option:selected').val();
-        var gets = buidGetString('tag', tag);
+    $('#order-area').change(function() {
+        var area = $(this).find('option:selected').val();
+        var gets = buidGetString('area', area);
         location.href = 'http://' + location.host + '/order/list?' + gets;    
     });
     

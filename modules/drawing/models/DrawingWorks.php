@@ -14,7 +14,7 @@ class DrawingWorks extends BaseModel
     public $catName = 'ПКО';
     public $typeName;
     
-    const PAGE_SIZE = 8;
+    const PAGE_SIZE = 30;
  
     
     public static function tableName()

@@ -4,7 +4,7 @@ namespace app\modules\order\widgets;
 
 use Yii;
 use yii\base\Widget;
-use app\models\Tag;
+use app\modules\equipments\models\Equipment;
 
 class OrderTopListMenuWidget extends Widget 
 {
@@ -12,9 +12,8 @@ class OrderTopListMenuWidget extends Widget
 
     public function run()
     {
-        $tags = Tag::get('order');
-       
-        return $this->render('top_list', ['params' => $this->params, 'tags' => $tags]);
+        $area = Equipment::getArea();
+        return $this->render('top_list', ['params' => $this->params, 'area' => $area]);
     }
 
 }

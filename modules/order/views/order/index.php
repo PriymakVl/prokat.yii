@@ -14,7 +14,7 @@ $this->registerCssFile('/css/order.css');
     <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
     
     <!-- info state of order -->
-    <? if ($state == 'active'): ?>
+    <? if ($session == 'active'): ?>
         <div class="active-order">Активный заказ</div>
     <? endif; ?>
     

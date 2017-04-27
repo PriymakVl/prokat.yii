@@ -30,7 +30,7 @@ class OrderContentController extends BaseController
         $order = Order::findOne($order_id);
         $order->getNumber();
         $content = OrderContent::getItemsOfOrder($order->id);
-        $state = OrderLogic::checkState($order_id);
+        $state = OrderLogic::checkStateSession($order_id);
         return $this->render('list', compact('order', 'content', 'state'));
     }
     
