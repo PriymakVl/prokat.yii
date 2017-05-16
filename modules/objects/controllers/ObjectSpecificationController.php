@@ -4,6 +4,7 @@ namespace app\modules\objects\controllers;
 
 use app\controllers\BaseController;
 use app\modules\objects\models\Objects;
+use app\modules\objects\logic\ObjectLogic;
 use app\modules\objects\forms\ExcelDanieliFileForm;
 
 
@@ -49,5 +50,10 @@ class ObjectSpecificationController extends BaseController
         Objects::changeParent($ids, $parent_id);
         return $this->redirect(['/object/specification', 'obj_id' => $parent_id]);   
     }
+	
+	public function actionHighlightList($ids, $parent_id) {
+		ObjectLogic::highlightList($ids);
+		return $this->redirect(['/object/specification', 'obj_id' => $parent_id]);
+	}
     
 }

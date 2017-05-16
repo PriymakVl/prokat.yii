@@ -126,6 +126,8 @@ class Objects extends BaseModel
         $this->orders = OrderContent::searchByDrawing($this->code);
         return $this;
     }
+	
+
 
     
 

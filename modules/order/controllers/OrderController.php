@@ -16,6 +16,7 @@ class OrderController extends BaseController
     public function actionIndex($order_id) 
     { 
         $order = Order::getOne($order_id);
+        $order->getWeight()->convertArea();
         $session = OrderLogic::checkStateSession($order_id); 
         return $this->render('index', compact('order', 'session'));
     }
@@ -32,36 +33,23 @@ class OrderController extends BaseController
     public function actionForm($order_id = null) 
     { 
         $order = (int)$order_id ? Order::findOne($order_id) : null;
-        if ($order) $order->convertDate($order, false);
+        if ($order) $order->convertDate($order, false)->getWork();
+        
         $form = new OrderForm();
         $form->getServices($form)->getArea();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
-            if ((int)$form->number) $this->redirect(['/order', 'order_id' => $form->order_id]);
-            else $this->redirect(['/order/draft', 'order_id' => $form->order_id]);
+            $this->redirect(['/order', 'order_id' => $form->order_id]);
         }   
         return $this->render('form', compact('order', 'form'));
     }
     
+    //выводит страницу характер работы по заказу
     public function actionWork($order_id)
     {
         $order = Order::findOne($order_id);
-        $order->getNumber();
+        $order->getNumber()->getWork();
         return $this->render('work', compact('order'));   
     }
-    
-//    public function actionDraft($order_id)
-//    {
-//        $order = Order::getDraft($order_id);
-//        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->getFullCustomer()->getFullIssuer();
-//        $state = OrderLogic::checkState($order_id);
-//        return $this->render('index', compact('order', 'state'));    
-//    }
-    
-//    public function actionDraftsList()
-//    {
-//        $drafts = Order::getDraftsList();
-//        return $this->render('drafts', compact('drafts'));       
-//    }
     
     public function actionDelete($order_id)
     {

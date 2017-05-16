@@ -50,6 +50,7 @@ class HeaderWidget extends Widget {
     {
         switch(Yii::$app->controller->action->id) {
             case 'code': return 'search_code'; break;
+            case 'order': return 'search_order'; break;
             default: return 'empty';
         }    
     }

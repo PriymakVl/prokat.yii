@@ -17,10 +17,9 @@
         <tr>
             <th width="30"><input type="radio" disabled="disabled" /></th>
             <th width="130">Номер заказа</th>
-            <th width="395">Наименование</th>
+            <th width="565">Наименование</th>
             <th width="130">Период</th>
             <th width="130">Заказал</th>
-            <th width="130">Состояние</th>
         </tr>
         <? foreach ($orders as $order): ?>
             <tr>
@@ -33,14 +32,11 @@
                 <td>
                     <a href="<?=Url::to(['/order', 'order_id' => $order->id])?>"><?=$order->name?></a>
                 </td>
-                <td>
-                    <?=$order->year?>
+                <td class="text-center">
+                    <?=$order->period?>
                 </td>
                 <td class="text-center">
                     <?=$order->customer?>
-                </td>
-                <td class="text-center">
-                    <?=$order->status?>
                 </td>
             </tr>
         <? endforeach; ?>

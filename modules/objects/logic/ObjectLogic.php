@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use app\logic\BaseLogic;
+use app\modules\objects\models\Objects;
 use app\modules\drawing\models\DrawingVendor;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
@@ -65,7 +66,18 @@ class ObjectLogic extends BaseLogic
             $obj->save();
         }
         return $objects;    
-    }       
+    }  
+
+	public static function highlightList($ids)
+	{
+		$ids = explode(',', trim($ids));
+		$objects = Objects::findAll($ids);
+		foreach ($objects as $obj) {
+			if ($obj->color === 0) $obj->color = 1;
+			else $obj->color = 0;
+			$obj->save();
+		}
+	}
     
 
 

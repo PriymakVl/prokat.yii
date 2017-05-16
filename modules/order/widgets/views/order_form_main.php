@@ -23,11 +23,11 @@ $this->registerJsFile('js/order/form_order_get_equipment.js',  ['depends' => [Jq
         //echo $f->field($form, 'area')->dropDownList($form->areaAll, $params)->label('Участок:');
     ?>
     <div id="area-wrp">
-        <label>Участки:</label>
-        <select id="area" name="area">
-            <option>Не выбран</option>
+        <label>Участок:</label>
+        <select id="orderform-area" name="OrderForm[area]">
+            <option value="" selected="selected">Не выбран</option>
             <? foreach ($form->areaAll as $area): ?>
-                <option value="<?=$area->alias?>" <? if ($area->alias == $order->area); echo 'selected'; ?> area_id="<?=$area->id?>"><?=$area->name?></option>
+                <option value="<?=$area->alias?>" <? if ($area->alias == $order->area) echo 'selected'; ?> area_id="<?=$area->id?>"><?=$area->name?></option>
             <? endforeach; ?>
         </select>
     </div>

@@ -8,6 +8,11 @@
 .item-parent {
     background: #E8E8E8;
 }
+
+.order-work{
+    padding: 5px 5px 5px 30px !important;
+}
+
 /** form content **/
 .form-wrp {
     position: relative;
@@ -55,10 +60,8 @@
 
 /** form order **/
 
-.field-orderform-customer {
-    position: absolute;
-    top: 70px;
-    left: 350px;     
+#order-form-work form {
+    padding-left: 15px;
 }
 
 .field-orderform-period {
@@ -67,7 +70,7 @@
     left: 420px;     
 }
 
-#area-mechanism, #mechanism-unit, #area {
+#area-mechanism, #mechanism-unit, #orderform-area {
     width: 200px;
 }
 

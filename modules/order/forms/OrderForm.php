@@ -26,6 +26,8 @@ class OrderForm extends BaseForm
     public $work;
     public $description;
     public $period;
+    public $state;
+    public $area;
     //form
     public $order_id;
     public $areaAll;
@@ -41,11 +43,12 @@ class OrderForm extends BaseForm
             ['note', 'string',],
             ['issuer', 'string'],
             ['customer', 'string'],
-            ['number','string'],
+            ['number','integer'],
             ['work','string'],
             ['weight','string'],
             ['date','string'],
             ['period', 'integer'],
+            ['area', 'string'],
         ];
 
     }
@@ -68,7 +71,7 @@ class OrderForm extends BaseForm
     private function updateData($order)
     {
         $order->type = $this->type;
-        $order->area = Yii::$app->request->post('area');
+        $order->area = $this->area;
         $order->name = $this->name;
         $order->issuer = $this->issuer;
         $order->customer = $this->customer;
@@ -76,19 +79,13 @@ class OrderForm extends BaseForm
         $order->service = $this->service;
         $order->date = strtotime($this->prepareDateForConvert($this->date));
         //$order->year = date('Y', $order->date);
-        $order->work = $this->work;
+        $order->work = $this->setWork();
         $order->weight = $this->weight;
         $order->unit = $this->unit;
         $order->mechanism = $this->mechanism;
         $order->description = $this->description;
-        if ($this->number && $this->number != 'черновик') {
-            $order->number = $this->number; 
-            $order->status = self::STATUS_ACTIVE;   
-        }
-        else {
-            $order->number = 'черновик';
-            $order->status = self::STATUS_DRAFT;
-        }
+        $order->number = $this->number;
+        $order->state = $this->getState();
         $order->period = OrderLogic::getPeriod($order->date);
         return $order;
     }
@@ -96,6 +93,22 @@ class OrderForm extends BaseForm
     public function getArea()
     {
         $this->areaAll = Equipment::getArea();
+    }
+    
+    public function setWork()
+    {
+        if (!$this->work) return false;
+        $pattern = '#<li>(.+?)<\\/li>#is';//get value betwen tags li
+        preg_match_all($pattern, $this->work, $matches);
+        if (empty($matches[1])) return false;
+        else return serialize($matches[1]);
+    }
+    
+    public function getState()
+    {
+        if ($order->state) return $order->state;
+        if (!$this->number) return Order::STATE_DRAFT;
+        else return Order::STATE_ACTIVE;
     }
 
 

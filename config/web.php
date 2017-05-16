@@ -109,7 +109,8 @@ $config = [
                 'order/form/area/equipment' => 'order/order/get-equipment-for-form',                   
                 'order/delete' => 'order/order/delete',
                 'order/list/file/save' => 'order/order-list-excel-create', 
-                'order/title/sheet/print' => 'order/order-title-sheet-create', 
+                'order/title/sheet/print' => 'order/order-title-sheet-create',
+                'order/content/sheet/print' => 'order/order-content-sheet-create', 
                 'order/active/set' => 'order/order/set-active',
                 'order/active/get' => 'order/order/get-active',                
                 'order' => 'order/order', 
@@ -128,6 +129,7 @@ $config = [
                 'object/specification/copy/list' => 'objects/object-specification/copy-list',
                 'object/specification/change/parent' => 'objects/object-specification/change-parent',
                 'object/specification/danieli/file/form' => 'objects/object-specification/danieli-file-form',
+                'object/specification/highlight/list' => 'objects/object-specification/highlight-list',
                 'object/specification' => 'objects/object-specification',
                 //object drawing 
                 'object/drawing/note' => 'objects/object-drawing/note',

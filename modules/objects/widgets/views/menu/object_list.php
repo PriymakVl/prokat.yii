@@ -8,6 +8,7 @@ $this->registerJsFile('js/object/object_list_delete.js', ['depends' => JqueryAss
 $this->registerJsFile('js/object/object_list_checked_all.js', ['depends' => JqueryAsset::className()]);
 $this->registerJsFile('js/object/object_list_change_parent.js', ['depends' => JqueryAsset::className()]);
 $this->registerJsFile('js/object/object_list_add_order.js', ['depends' => JqueryAsset::className()]);
+$this->registerJsFile('js/object/object_list_highlight.js', ['depends' => JqueryAsset::className()]);
 ?>
 
 <!-- data menu -->
@@ -28,6 +29,9 @@ $this->registerJsFile('js/object/object_list_add_order.js', ['depends' => Jquery
         </li>
         <li>
             <a href="#" onclick="return false;" id="obj-list-change-parent">Изменить род. объект</a>
+        </li>
+		<li>
+            <a href="#" onclick="return false;" id="obj-list-highlight">Выделить позиции</a>
         </li>
     </ul>   
 </div>

@@ -15,8 +15,8 @@ class Order extends BaseModel
     public $weight;
     
     const PAGE_SIZE = 15;
-    const ORDER_STATE_DRAFT = 1;
-    const ORDER_STATE_ACTIVE = 2;
+    const STATE_DRAFT = 1;
+    const STATE_ACTIVE = 2;
     //const ORDER_STATE_NOT_ACCEPTED = 3;
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
@@ -48,7 +48,8 @@ class Order extends BaseModel
     
     public function getNumber()
     {
-        if ($this->number != 'черновик') $this->number = '27.'.$this->number.'.'.$this->type;
+        if ($this->state == self::STATE_DRAFT) $this->number = 'черновик'; 
+        else $this->number = '27.'.$this->number.'.'.$this->type;
         return $this;
     }
     
@@ -62,8 +63,9 @@ class Order extends BaseModel
     
     public static function getListForFile($ids)
     {
-        $ids = explode(',', trim($ids));
-        $list = self::findAll($ids);
+        $ids = trim($ids);
+        $sql = 'SELECT * FROM `orders` WHERE `id` IN('.$ids.')  ORDER BY `number` DESC';
+        $list = self::findBySql($sql)->all();
         return self::executeMethods($list, ['getNumber', 'convertServiceForFile', 'convertDateForFile', 'getCustomerForPrint']);
     }
     
@@ -72,18 +74,6 @@ class Order extends BaseModel
         $this->type = OrderLogic::convertType($this->type);
         return $this;
     }
-    
-//    public static function getDraft($order_id)
-//    {
-//        $order = self::findOne(['id' => $order_id, 'status' => self::STATUS_DRAFT]);
-//        if (!$order) throw new ForbiddenHttpException('error '.__METHOD__);
-//        else return $order;
-//    }
-    
-//    public static function getDraftsList()
-//    {
-//        return self::findAll(['status' => self::STATUS_DRAFT]);
-//    }
     
     public function convertServiceForFile()
     {
@@ -97,14 +87,15 @@ class Order extends BaseModel
     
     public function countWeightOrder()
     {
-        $this->weight = OrderLogic::countWeightOfOrder($this->id);
+        $weight = OrderLogic::countWeightOfOrder($this->id);
+        $this->weight = OrderLogic::removeZerosFromWeight($weight);
         return $this;
     }
     
     public static function searchByNumber($number)
     {
         $orders = self::findAll(['number' => trim($number)]);
-        if (count($orders) > 1) self::executeMethods($orders, ['getNumber']);
+        if (count($orders) > 1) self::executeMethods($orders, ['getNumber', 'convertPeriod', 'getShortCustomer']);
         return $orders;
     }
     
@@ -129,8 +120,6 @@ class Order extends BaseModel
         return $this;  
     }
     
-    
-    
     public function getFullIssuer()
     {
         if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
@@ -142,6 +131,30 @@ class Order extends BaseModel
     {
         if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
         else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer));
+        return $this;
+    }
+    
+    public function getWork($html = true)
+    {
+        if ($this->work) $this->work = OrderLogic::convertWork($this->work, $html);
+        return $this;
+    }
+    
+    public function getWeight()
+    {
+        if ($this->weight) $this->weight = OrderLogic::removeZerosFromWeight($this->weight);
+        return $this;
+    }
+    
+    public function convertPeriod()
+    {
+        $this->period = OrderLogic::convertPeriod($this->period);
+        return $this;
+    }
+    
+    public function convertArea()
+    {
+        $this->area = OrderLogic::convertArea($this->area);
         return $this;
     }
 

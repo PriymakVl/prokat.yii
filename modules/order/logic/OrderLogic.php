@@ -21,7 +21,7 @@ class OrderLogic extends BaseLogic
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
         if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
-        if ($state != 'all') $params['state'] = $state ? $state : Order::ORDER_STATE_ACTIVE;
+        if ($state != 'all') $params['state'] = $state ? $state : Order::STATE_ACTIVE;
         if ($customer && $customer != 'all') $params['customer'] = $customer;
         if ($area && $area != 'all') $params['area'] = $area;
         //if (self::in_get('year')) $params['year'] = Yii::$app->request->get('year', date('Y'));
@@ -210,6 +210,17 @@ class OrderLogic extends BaseLogic
 		else if ($date < 1487048400 && $date > 1420434000) return 3; //2015 - 2017
 		else if ($date < 1420434000 )return 2; return 2; //2010 - 2015
 	}
+    
+    public static function convertPeriod($period)
+    {
+        switch ($period) {
+            case 1: return 'Не известно';
+            case 2: return '2011-2015';
+            case 3: return '2015-2017';
+            case 4: return 'Текущий';
+            default: return 'Не известно';
+        }   
+    }
     //by order_id 
     public static function getArrayOrders($array)
     {
@@ -220,6 +231,47 @@ class OrderLogic extends BaseLogic
         }
         return $orders;
     }
+    
+    public function convertWork($work, $html)
+    {
+        if (!$work) return false;
+        $work = unserialize($work);
+        if (!$html || !is_array($work)) return $work;
+        else {
+            $str = '<ol>';
+            foreach ($work as $item) {
+                $str .= '<li>'.$item.'</li>';
+            }
+            return $str .= '</ol>';
+        }  
+    }
+    
+    public function removeZerosFromWeight($weight)
+    {
+        $letter = substr($weight, -1);
+        if ($letter === '0') $weight = substr($weight, 0, -1);
+        $letter = substr($weight, -1);
+        if ($letter === '0') $weight = substr($weight, 0, -1);
+        $letter = substr($weight, -1);
+        if ($letter === ',') $weight = substr($weight, 0, -1);
+        return $weight;
+    }
+    
+    public function convertArea($area)
+    {
+        switch ($area) {
+            case 'storage': return 'Склад заготовок';
+            case 'befor-mill': return 'Перед станом';
+            case 'mill': return 'Стан';
+            case 'sort': return 'Сортовая линия';
+            case 'bunt': return 'Бунтовая линия';
+            case 'slit': return 'Слитинг';
+            case 'finish': return 'Участок отделки';
+            case 'sundbirsta': return 'Участок отделки';
+            default: return $area;
+        }
+    }
+    
 
 }
 

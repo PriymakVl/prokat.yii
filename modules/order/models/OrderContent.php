@@ -27,15 +27,16 @@ class OrderContent extends BaseModel
     
     public static function getItemsOfOrder($order_id)
     {
-        $content = OrderContent::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 'parent_id' => self::MAIN_PARENT])
+        $content = self::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 'parent_id' => self::MAIN_PARENT])
                     ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $content = self::executeMethods($content, ['countWeightAll', 'getPathDrawing', 'getChildren']);
+        $content = self::executeMethods($content, ['countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren']);
         return $content;
     }
     
     public function countWeightAll()
     {
-        $this->weightAll = OrderLogic::countWeightOfAll($this->weight, $this->count);
+        $weight_all = OrderLogic::countWeightOfAll($this->weight, $this->count);
+        $this->weightAll = OrderLogic::removeZerosFromWeight($weight_all);
         return $this;
     }
     
@@ -68,6 +69,12 @@ class OrderContent extends BaseModel
         else $orders = OrderLogic::getArrayOrders($result);
         self::executeMethods($orders, ['getNumber']);
         return $orders;
+    }
+    
+    public function getWeight()
+    {
+        if ($this->weight) $this->weight = OrderLogic::removeZerosFromWeight($this->weight);
+        return $this;
     }
     
 }

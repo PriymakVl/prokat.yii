@@ -2,6 +2,7 @@
 
 use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
+use app\modules\order\models\Order;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderTopMenuWidget;
@@ -27,11 +28,21 @@ $this->registerCssFile('/css/order.css');
         <!-- number -->
         <tr>
             <td class="text-center">Номер заказа</td>
-            <td <? if($order->number == 'черновик') echo 'style="color: red;"'; ?>>
+            <td>
                 <? if ($order->content): ?>
-                    <a href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>"><?=$order->number?></a>
+                    <a href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>">
+                        <? if($order->state == Order::STATE_DRAFT):?> 
+                            <span style="color: red;">черновик</span>
+                        <? else: ?>
+                            <?=$order->number?>
+                        <? endif; ?>
+                    </a>
                 <? else: ?>
-                    <?=$order->number?>
+                    <? if($order->state == Order::STATE_DRAFT):?> 
+                        <span style="color: red;">черновик</span>
+                    <? else: ?>
+                        <?=$order->number?>
+                    <? endif; ?>
                 <? endif; ?>    
             </td>
         </tr>
@@ -42,6 +53,13 @@ $this->registerCssFile('/css/order.css');
                 <?=$order->name?>
             </td>
         </tr>
+        <!-- area -->
+        <? if ($order->area): ?>
+            <tr>
+                <td class="text-center">Участок</td>
+                <td><?=$order->area?></td>
+            </tr>
+        <? endif; ?>
         <!-- mechanism -->
         <tr>
             <td class="text-center">Агрегат, механизм</td>

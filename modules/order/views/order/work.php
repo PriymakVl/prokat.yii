@@ -19,13 +19,13 @@ $this->registerCssFile('/css/order.css');
     </div>
     
     <!-- order work -->
-    <table>
+    <table class="order-work">
         <tr>
             <th width="725">Характер работы</th>
         </tr>
             <tr>
-                <td <? if (!$order->work) echo 'class="not-content"'; ?>>
-                   <?=$order->work ? $order->work : 'Не указан'?> 
+                <td <? if (!$order->work) echo 'class="not-content"'; ?> class="order-work">
+                    <?=$order->work ? $order->work : 'Не указан'?>
                 </td>
             </tr>
     </table>

@@ -17,7 +17,7 @@ class OrderContentController extends BaseController
     
     public function actionIndex($item_id) 
     { 
-        $item = OrderContent::getOne($item_id)->countWeightAll()->getPathDrawing();
+        $item = OrderContent::getOne($item_id)->countWeightAll()->getPathDrawing()->getWeight();
         $order = Order::findOne($item->order_id);
         $order->getNumber();
         $object = Objects::getOne($item->obj_id, null);

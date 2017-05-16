@@ -8,7 +8,7 @@
 <? if ($children): ?>
     <tbody class="obj-children">
         <? foreach ($children as $obj): ?>
-            <tr>
+            <tr <? if ($obj->color == 1) echo 'style="background: #FFFF00;"'; ?>>
                 <td>    
                     <input type="checkbox"  name="object" obj_id="<?=$obj->id?>" />
                 </td>
