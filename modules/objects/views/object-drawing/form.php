@@ -23,11 +23,20 @@ $this->registerCssFile('/css/drawing.css');
         <? $f = ActiveForm::begin(['id' => 'form-object-dwg']); ?>
             <!-- type -->
             <?php
-                $params = ['prompt' => 'Не выбран']; 
-                echo $f->field($form, 'category')->dropDownList($form->categories, $params)->label('Кто разработал чертеж:');
+                echo $f->field($form, 'category')->dropDownList($form->categories)->label('Кто разработал чертеж:');
             ?>
-            <!-- dwg id -->          
-            <?= $f->field($form, 'dwg_id')->textInput()->label('Id чертежа:') ?>
+            <!-- dwg id -->
+            <div id="dwg-id-wrp">
+                <?= $f->field($form, 'dwg_id')->textInput()->label('Id чертежа:') ?>
+            </div>
+            <!-- dwg data vendor -->
+            <div id="dwg-vendor-wrp" style="display:none">
+                <?= $f->field($form, 'file_vendor_name')->textInput()->label('Название файла:') ?>
+                <?= $f->field($form, 'file_vendor_sheet')->textInput()->label('Номер листа:') ?>
+                <?= $f->field($form, 'file_vendor_revision')->textInput()->label('Номер доработки:') ?>
+            </div>
+                      
+            
             
             <!-- button -->
             <input type="submit" value="Сохранить" />

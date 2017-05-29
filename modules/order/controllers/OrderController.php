@@ -17,7 +17,7 @@ class OrderController extends BaseController
     { 
         $order = Order::getOne($order_id);
         $order->getWeight()->convertArea();
-        $session = OrderLogic::checkStateSession($order_id); 
+        $session = OrderLogic::checkStateSession($order_id, 'order_id'); 
         return $this->render('index', compact('order', 'session'));
     }
     

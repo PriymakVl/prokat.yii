@@ -19,6 +19,7 @@ $config = [
         'employees' => ['class' => 'app\modules\employees\Module',],
         'equipments' => ['class' => 'app\modules\equipments\Module',],
          'letters' => ['class' => 'app\modules\letters\Module',],
+        'applications' => ['class' => 'app\modules\applications\Module',],
     ],
     'components' => [
         'request' => [
@@ -64,6 +65,7 @@ $config = [
                 'search/drawing/works' => 'search/search/drawing-works',
                 'search/drawing/department' => 'search/search/drawing-department',
                 'search/order' => 'search/search/order',
+                'search/application' => 'search/search/application',
                 'search' => 'search/search/code',
                 //list
                 'lists/update' => 'lists/list/update-all',
@@ -105,7 +107,6 @@ $config = [
                 'order/list' => 'order/order/list',
                 'order/form' => 'order/order/form',                   
                 'order/work' => 'order/order/work',                   
-                //'order/drafts/list' => 'order/order/drafts-list',
                 'order/form/area/equipment' => 'order/order/get-equipment-for-form',                   
                 'order/delete' => 'order/order/delete',
                 'order/list/file/save' => 'order/order-list-excel-create', 
@@ -146,7 +147,14 @@ $config = [
                 'letter/list' => 'letters/letter/list',
                 'letter' => 'letters/letter',
                 'letter/form' => 'letters/letter/form',
-                'letter/delete' => 'letters/letter/delete',                                                                  
+                'letter/delete' => 'letters/letter/delete', 
+                //application 
+                'application/list' => 'applications/application/list',
+                'application/form' => 'applications/application/form',  
+                'application' => 'applications/application', 
+                //application content   
+                'application/content/list' => 'applications/application-content/list', 
+                'application/content/item' => 'applications/application-content',                                                          
             ],
         ],  
     ],

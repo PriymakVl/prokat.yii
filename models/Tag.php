@@ -20,6 +20,11 @@ class Tag extends BaseModel
         return TagLogic::getArrayAliasAndName($tags);
     }
     
+    public static function getObjects($type)
+    {
+        return self::findAll(['status' => static::STATUS_ACTIVE, 'type' => $type]);
+    }
+    
     //    public static function getArrayAliasAndName($type) 
 //    {
 //        $array = Teg::find()->where(['status' => static::STATUS_ACTIVE, 'type' => $type])->all();

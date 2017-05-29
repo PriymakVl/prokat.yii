@@ -33,6 +33,7 @@ class HeaderWidget extends Widget {
             case 'search': return $this->getTemplateForActionSearchController(); break;
             case 'order': return 'search_order'; break;
             case 'order-content': return 'search_order'; break;
+            case 'application': return $this->getTemplateForActionApplicationController(); break;
             default: return 'empty';
         }       
     }
@@ -60,6 +61,15 @@ class HeaderWidget extends Widget {
         switch(Yii::$app->controller->action->id) {
             case 'list': return 'search_works_dwg'; break;
             case 'index': return 'search_works_dwg'; break;
+            default: return 'empty';
+        }    
+    }
+    
+    private function getTemplateForActionApplicationController() 
+    {
+        switch(Yii::$app->controller->action->id) {
+            case 'list': return 'search_app'; break;
+            case 'index': return 'search_app'; break;
             default: return 'empty';
         }    
     }

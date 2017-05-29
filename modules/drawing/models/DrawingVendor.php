@@ -36,6 +36,14 @@ class DrawingVendor extends BaseModel
         if ( strpos($code, '-')) return substr(str_replace('-', '', $code), 6);//removes unwanted characters
 		else return $code;    
     }
+    
+    public static function getDrawignByNameFile($filename) 
+    {
+        $res = explode('.', $filename);
+        $dwg = self::find()->filterWhere(['like', 'file', $res[0]])->one(); 
+        if (!$dwg) return new DrawingVendor();
+        else return $dwg; 
+    }
 
 }
 

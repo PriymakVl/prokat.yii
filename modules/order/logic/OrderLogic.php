@@ -45,13 +45,13 @@ class OrderLogic extends BaseLogic
         $session->set('order_id', $order_id);
     }
     
-    public static function checkStateSession($order_id)
-    {
-        $session = Yii::$app->session;
-        $active_id = $session->get('order_id');
-        if ($active_id == $order_id) return 'active';
-        else return false;    
-    }
+//    public static function checkStateSession($order_id)
+//    {
+//        $session = Yii::$app->session;
+//        $active_id = $session->get('order_id');
+//        if ($active_id == $order_id) return 'active';
+//        else return false;    
+//    }
     
     public static function countWeightOfAll($weight, $count)
     {

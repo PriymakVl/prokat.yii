@@ -33,9 +33,9 @@ class Order extends BaseModel
     }
     
     
-    public static function getOne($order_id)
+    public static function getOne($order_id, $default = false, $status = self::STATUS_ACTIVE)
     {
-        $order = parent::getOne($order_id);
+        $order = parent::getOne($order_id, $default, $status);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
                 ->getFullCustomer()->getFullIssuer();
         return $order;   
@@ -102,7 +102,7 @@ class Order extends BaseModel
     public function getFullCustomer()
     {
         if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer));
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer, false, self::STATE_ACTIVE));
         return $this;
     }
     

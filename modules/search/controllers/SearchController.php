@@ -4,12 +4,14 @@ namespace app\modules\search\controllers;
 
 use Yii;
 use yii\helpers\Url;
+use yii\web\ForbiddenHttpException;
 use app\controllers\BaseController;
 use app\modules\objects\models\Objects;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
 use app\modules\order\models\Order;
 use app\modules\order\models\OrderContent;
+use app\modules\applications\models\Application;
 
 class SearchController extends BaseController 
 {
@@ -43,5 +45,14 @@ class SearchController extends BaseController
         else $orders = OrderContent::searchByDrawing($dwg_num);
         if (count($orders) == 1) return $this->redirect(['/order', 'order_id' => $orders[0]->id]);
         else return $this->render('orders', ['orders' => $orders, 'number' => $order_num, 'drawing' => $dwg_num]);
+    }
+    
+    public function actionApplication($out = null, $ens = null)
+    {
+        if (!$out && !$ens) throw new ForbiddenHttpException('Not search number '.__METHOD__);
+        if ($out) $apps = Application::searchByOutNumber($out);
+        else $apps = Application::searchByEnsNumber($ens);
+        if (count($apps) == 1) return $this->redirect(['/application', 'app_id' => $apps[0]->id]);
+        else return $this->render('applications', ['apps' => $apps, 'out' => $out, 'ens' => $ens]);
     }
 }

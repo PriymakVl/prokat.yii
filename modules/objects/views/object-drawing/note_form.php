@@ -1,7 +1,7 @@
 <?php
 
 use yii\widgets\ActiveForm;
-use app\components\other\MainMenuWidget;
+use app\widgets\MainMenuWidget;
 use yii\helpers\Html;
 
 $this->registerCssFile('/css/drawing.css'); 
@@ -15,6 +15,7 @@ $this->registerCssFile('/css/drawing.css');
     
     <!-- info -->
     <div class="info-box">
+        <span>Деталь/узел:</span>&laquo;<?=$obj->name?>&raquo;<br />
         <span>Файл чертежа:</span>&laquo; <?= $dwg->category == 'works' ? $file->file : $dwg->file ?> &raquo;<br />
     </div>
         
@@ -23,8 +24,7 @@ $this->registerCssFile('/css/drawing.css');
         <? $f = ActiveForm::begin(['id' => 'form-note-dwg']); ?>
             <!-- object drawign note -->
             <?php
-                if ($dwg->category == 'works') $form->note = $file->note;
-                else $form->note = $dwg->note;
+                $form->note = $file ? $file->note : $dwg->note;
                 echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
             ?>
             <!-- button -->

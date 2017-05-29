@@ -10,8 +10,8 @@ $(document).ready(function() {
             alert('Вы не выбрали чертеж'); 
             return;     
         }    
-        if (dwg_cat == 'works')location.href = 'http://' + location.host + '/drawing/note?dwg_id=' + dwg_id + '&file_id=' + file_id + '&dwg_cat=' + dwg_cat + '&obj_id=' + obj_id;
-        else location.href = 'http://' + location.host + '/drawing/note?dwg_id=' + dwg_id + '&dwg_cat=' + dwg_cat + '&obj_id=' + obj_id;
+        if (dwg_cat == 'works')location.href = 'http://' + location.host + '/object/drawing/note?dwg_id=' + dwg_id + '&file_id=' + file_id + '&dwg_cat=' + dwg_cat + '&obj_id=' + obj_id;
+        else location.href = 'http://' + location.host + '/object/drawing/note?dwg_id=' + dwg_id + '&dwg_cat=' + dwg_cat + '&obj_id=' + obj_id;
     });
     
     /* show full note drawign */

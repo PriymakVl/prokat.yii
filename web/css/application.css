@@ -1,0 +1,47 @@
+#app-form-main {
+    position: relative;
+}
+
+.field-applicationform-out {
+    position: absolute;
+    left: 155px;
+    top: 0;
+}
+
+#applicationform-type_repair {
+    width: 135px;
+}
+
+#applicationform-period {
+    width: 135px;    
+}
+
+#applicationform-department {
+     width: 175px;    
+}
+
+#applicationform-year {
+    width: 135px;
+}
+
+#applicationform-state {
+    width: 135px;
+}
+
+.field-applicationform-period {
+    position: absolute;
+    left: 155px;
+    top: 130px;    
+}
+
+.field-applicationform-department {
+    position: absolute;
+    left: 310px;
+    top: 130px;   
+}
+
+.field-applicationform-year {
+    position: absolute;
+    left: 505px;
+    top: 130px;    
+}

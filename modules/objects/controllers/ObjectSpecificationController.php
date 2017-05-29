@@ -14,7 +14,7 @@ class ObjectSpecificationController extends BaseController
     
     public function actionIndex($obj_id) 
     {    
-        $parent = Objects::getOne($obj_id);
+        $parent = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $parent->getName();
         $children = Objects::getChildren($parent->id);
         return $this->render('index', ['parent' => $parent, 'children' => $children]);

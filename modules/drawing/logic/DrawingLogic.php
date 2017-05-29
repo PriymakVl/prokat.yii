@@ -13,6 +13,7 @@ class DrawingLogic extends BaseLogic
 {
     const TYPE_DEPARTMENT = 'department';
     const TYPE_WORKS = 'works';
+    const TYPE_VENDOR = 'vendor';
     
     //for drawing works;
     public static function getFiles($drawings)
@@ -44,9 +45,9 @@ class DrawingLogic extends BaseLogic
     
     public static function getDrawingObject($category, $dwg_id)
     {
-        if ($category == self::TYPE_DEPARTMENT) $dwg = DrawingDepartment::findOne($dwg_id);
-        else if ($category == self::TYPE_WORKS) $dwg = DrawingWorks::findOne($dwg_id); 
-        if (!$dwg) throw new ForbiddenHttpException('error '.__METHOD__); 
+        if ($category == self::TYPE_DEPARTMENT) $dwg = DrawingDepartment::findOne($dwg_id, false, self::STATUS_ACTIVE);
+        else if ($category == self::TYPE_WORKS) $dwg = DrawingWorks::findOne($dwg_id, false, self::STATUS_ACTIVE); 
+        else $dwg = DrawingVendor::getOne($dwg_id, false, self::STATUS_ACTIVE);
         return $dwg; 
     }
     

@@ -9,6 +9,7 @@ use app\modules\objects\forms\ObjectDrawingForm;
 use app\modules\drawing\forms\NoteDrawingForm;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
+use app\modules\drawing\models\DrawingWorksFile;
 
 class ObjectDrawingController extends BaseController 
 {
@@ -16,7 +17,7 @@ class ObjectDrawingController extends BaseController
     
     public function actionIndex($obj_id) 
     { 
-        $obj = Objects::getOne($obj_id);
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $obj->getName();
         $drawings = ObjectLogic::getDrawings($obj);
         return $this->render('index', compact('obj', 'drawings'));
@@ -24,7 +25,7 @@ class ObjectDrawingController extends BaseController
     
     public function actionForm($obj_id)
     {
-        $obj = Objects::getOne($obj_id);
+        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $obj->getName();
         $form = new ObjectDrawingForm();
         $form->getCategories();
@@ -43,20 +44,18 @@ class ObjectDrawingController extends BaseController
     }
         
     //add note 
-    public function actionNote($dwg_id = null, $dwg_cat = null, $obj_id = null, $file_id = null) 
+    public function actionNote($dwg_id, $dwg_cat, $obj_id, $file_id = null) 
     {
         $form = new NoteDrawingForm;
-        $dwg = $form::getDrawing($dwg_id, $dwg_cat);
-        if ($dwg_cat == 'works') $file = DrawingWorksFile::findOne($file_id);
-        else $file = null;
-        //debug($file);
-        if (!$dwg) exit('error modules Drawing controller Drawingobject, method actionNote');
-        
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->updateNote($dwg, $file)) {
+        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
+        $obj->getName();
+        $dwg = Drawinglogic::getDrawingObject($dwg_cat, $dwg_id);
+        if ($dwg->category == 'works') $file = DrawingWorksFile::getOne($file_id, null, self::STATUS_ACTIVE);
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->updateNote($dwg, $file_id)) {
             return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
         } 
         //debug($form, false);
-        return $this->render('note_form', ['dwg' => $dwg, 'form' => $form, 'file' => $file]);
+        return $this->render('note_form', compact('form', 'obj', 'dwg', 'file'));
     }
 
 }

@@ -1,11 +1,12 @@
 <?php
 
 
-namespace app\modules\drawing\models\forms;
+namespace app\modules\drawing\forms;
 
-use app\models\forms\ModelForm;
+use app\forms\BaseForm;
+use app\modules\drawing\models\DrawingWorksFile;
 
-class NoteDrawingForm extends ModelForm
+class NoteDrawingForm extends BaseForm
 {   
     public $note;
 
@@ -16,9 +17,10 @@ class NoteDrawingForm extends ModelForm
     }
     
     
-    public function updateNote($dwg, $file)
+    public function updateNote($dwg, $file_id)
     {
         if ($dwg->category == 'works') {
+            $file = DrawingWorksFile::getOne($file_id, __METHOD__, self::STATUS_ACTIVE);
             $file->note = $this->note;
             return $file->save();
         }

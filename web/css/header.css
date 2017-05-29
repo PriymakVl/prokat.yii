@@ -65,3 +65,8 @@
     width: 935px;
     color: red;
 }
+
+/** application **/
+.search-app input[type="radio"] {
+    margin-right: 80px;
+}

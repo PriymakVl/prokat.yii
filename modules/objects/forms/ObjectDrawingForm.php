@@ -22,10 +22,13 @@ class ObjectDrawingForm extends BaseForm
 
     public function save($obj) 
     {
-        $dwg = DrawingLogic::getDrawingObject($this->category, $this->dwg_id);
-        $dwg->obj_id = $obj->id;
-        $dwg->equipment = $obj->equipment;
-        if ($obj->code) $dwg->code = $obj->code;
+        if ($dwg->category == 'vendor') $dwg = $this->updateDataVendor();
+        else {
+            $dwg = DrawingLogic::getDrawingObject($this->category, $this->dwg_id);
+            $dwg->obj_id = $obj->id;
+            $dwg->equipment = $obj->equipment;
+            if ($obj->code) $dwg->code = $obj->code;    
+        }
         return $dwg->save();
     }
     
@@ -33,6 +36,15 @@ class ObjectDrawingForm extends BaseForm
     {
         $this->categories = Tag::get('drawing');
         return $this;
+    }
+    
+    private function updateDataVendor()
+    {
+        $dwg = DrawingVendor::getDrawignByNameFile($this->file_vendor_name);
+        if (!$dwg->code) $dwg->code = $obj->code;
+        $dwg->revision = $this->file_vendor_revision;
+        $dwg->sheet = $this->file_vendor_sheet;
+        return $dwg;
     }
 
 }
