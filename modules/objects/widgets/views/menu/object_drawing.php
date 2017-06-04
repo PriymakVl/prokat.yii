@@ -2,6 +2,10 @@
     use \yii\web\JqueryAsset;
     
     $this->registerJsFile('js/drawing/dwg_add_order.js', ['depends' => JqueryAsset::className()]);
+    $this->registerJsFile('js/drawing/dwg_add_object.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('js/drawing/dwg_delete_object.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('js/drawing/dwg_note_object.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('/js/drawing/dwg_venodor_obj_update.js', ['depends' => JqueryAsset::className()]);
 ?>
 
 <div  class="sidebar-menu" id="dwg-list-menu">
@@ -12,6 +16,9 @@
             </li>
             <li>
                 <a href="#" onclick="return false;" id="dwg-delete-obj">Удалить чертеж</a>
+            </li>
+            <li>
+                <a href="#" onclick="return false;" id="dwg-vendor-update">Редакт черт. производ</a>
             </li>
             <li>
                 <a href="#" onclick="return false;" id="dwg-add-order-item">Добавить в заказ</a>

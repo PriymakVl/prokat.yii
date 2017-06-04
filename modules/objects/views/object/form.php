@@ -3,7 +3,7 @@
 use yii\widgets\ActiveForm;
 use app\widgets\MainMenuWidget;
 use yii\helpers\Html;
-
+$this->registerCssFile('/css/object.css');
 ?>
 
 <div class="content">
@@ -19,30 +19,38 @@ use yii\helpers\Html;
     <!-- form -->
     <div class="form-wrp">
         <? $f = ActiveForm::begin(['id' => 'form-object']); ?>
-            <!-- eng and id of object-->
-            <?
-                if ($obj) {
-                    echo $f->field($form, 'eng')->textInput(['value' => $obj->eng, 'readonly' => 'readonly'])->label('Name object:');
-                    echo $f->field($form, 'id')->textInput(['value' => $obj->id, 'readonly' => 'readonly'])->label('ID object:');    
-                }
-            ?>
-            <!-- code -->          
-            <? if (!$obj->code) echo $f->field($form, 'code')->textInput()->label('Код объекта:'); ?>
-            <!-- rus -->          
+            <!-- engish name object-->
+            <? if ($obj->eng) echo $f->field($form, 'eng')->textInput(['value' => $obj->eng, 'readonly' => 'readonly'])->label('Name object:'); ?>
+			
+			<!-- rusian name object -->          
             <?= $f->field($form, 'rus')->textInput(['value' => $obj ? $obj->rus : ''])->label('Название объекта:') ?>
-            <!-- alias -->          
-            <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias])->label('Короткое название объекта:')->hint('Указывается в хлебных крошках') ?>
-            <!-- item -->          
-            <?= $f->field($form, 'item')->textInput(['value' => $obj ? $obj->item : ''])->label('Позиция объекта в спецификации:') ?>
-            <!-- rating -->          
-            <?= $f->field($form, 'rating')->textInput(['value' => $obj ? $obj->rating : ''])->label('Рейтинг объекта:') ?>
-            <!-- type -->
+			
+			<!-- alias -->          
+            <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias, 'style' => 'width:250px'])->label('Короткое название объекта:')?>
+			
+			<!-- id object -->
+			<?=$f->field($form, 'id')->textInput(['value' => $obj->id, 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>
+			
+            <!-- code -->          
+            <?=$f->field($form, 'code')->textInput(['value' => $obj->code, 'readonly' => 'readonly', 'style' => 'width:200px'])->label('Код объекта:'); ?>
+            
+			<!-- item -->          
+            <?= $f->field($form, 'item')->textInput(['value' => $obj ? $obj->item : '', 'style' => 'width:100px'])->label('Позиция:') ?>
+            
+			<!-- rating -->          
+            <?= $f->field($form, 'rating')->textInput(['value' => $obj ? $obj->rating : '', 'style' => 'width:100px'])->label('Рейтинг:') ?>
+			
+			<!-- parent -->          
+            <?= $f->field($form, 'parent_id')->textInput(['value' => $obj ? $obj->parent_id : null, 'style' => 'width:100px'])->label('ID parent:') ?>
+            
+			<!-- type -->
             <?php
                 $params = ['prompt' => 'Не выбран']; 
                 if ($obj) $form->type = $obj->type;
                 echo $f->field($form, 'type')->dropDownList($form->types, $params)->label('Тип объекта:');
             ?>
-            <!-- equipment -->
+            
+			<!-- equipment -->
             <?php
                 $params = ['prompt' => 'Не выбран']; 
                 if ($obj) $form->equipment = $obj->equipment;
@@ -53,8 +61,7 @@ use yii\helpers\Html;
                 if ($obj) $form->note = $obj->note;
                 echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
             ?>
-            <!-- parent -->          
-            <?= $f->field($form, 'parent_id')->textInput(['value' => $obj ? $obj->parent_id : null])->label('ID parent:') ?>
+            
             <!-- button -->
             <input type="submit" value="Сохранить" />
             <input type="button" value="Отменить" onclick="javascript:history.back();" />

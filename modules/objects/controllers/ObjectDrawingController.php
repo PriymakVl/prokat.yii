@@ -6,10 +6,12 @@ use Yii;
 use app\controllers\BaseController;
 use app\modules\objects\models\Objects;
 use app\modules\objects\forms\ObjectDrawingForm;
+use app\modules\objects\forms\ObjectDrawingVendorForm;
 use app\modules\drawing\forms\NoteDrawingForm;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
 use app\modules\drawing\models\DrawingWorksFile;
+use app\modules\drawing\models\DrawingVendor;
 
 class ObjectDrawingController extends BaseController 
 {
@@ -28,19 +30,31 @@ class ObjectDrawingController extends BaseController
         $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $obj->getName();
         $form = new ObjectDrawingForm();
-        $form->getCategories();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) { 
             return $this->redirect(['/object/drawing', 'obj_id' => $obj->id]);
         }
         return $this->render('form', compact('obj', 'form'));       
     }
     
-    public function actionDelete($dwg_id = null, $dwg_cat = null, $obj_id = null) 
+    public function actionUpdateVendor($dwg_id, $obj_id) 
     {
-        $dwg = DrawingLogic::getDrawingObject($dwg_cat, $dwg_id);
-        $dwg->obj_id = 0;
-        $dwg->code = '';
-        if ($dwg->save()) $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+        $dwg = DrawingVendor::getOne($dwg_id, __METHOD__, self::STATUS_ACTIVE);
+        $form = new ObjectDrawingVendorForm(); 
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
+            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+        } 
+        return $this->render('update_vendor', compact('obj', 'form', 'dwg'));  
+    }
+    
+    public function actionDelete($dwg_id, $dwg_cat, $obj_id) 
+    {
+        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
+        $dwg = DrawingLogic::getDrawingObjectByCode($dwg_cat, $dwg_id, $obj);
+        if ($dwg) {
+            $dwg->status = self::STATUS_INACTIVE;
+            $dwg->save(); 
+        }
+        $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
     }
         
     //add note 

@@ -8,6 +8,7 @@ use app\modules\objects\widgets\ObjectSearchMenuWidget;
 use app\modules\objects\widgets\ObjectListMenuWidget;
 use app\modules\objects\widgets\ObjectTopMenuWidget;
 use app\modules\objects\widgets\ObjectListChildrenWidget;
+use app\modules\objects\widgets\ObjectListSortMenuWidget;
 
 $this->registerCssFile('css/specification.css');
     
@@ -37,13 +38,13 @@ $this->registerCssFile('css/specification.css');
         </tr>
         <? if ($children['standard'] || $children['unit'] || $children['category']): ?>      
             <!-- standart --> 
-            <?=ObjectListChildrenWidget::widget(['children' => $children['standard'], 'color' => 'grey'])?>    
+            <?=ObjectListChildrenWidget::widget(['children' => $children['standard'], 'color' => 'grey', 'type' => 'standard'])?>    
                  
             <!-- unit -->
-            <?=ObjectListChildrenWidget::widget(['children' => $children['unit']])?> 
+            <?=ObjectListChildrenWidget::widget(['children' => $children['unit'], 'type' => 'unit'])?> 
              
             <!-- category -->
-            <?=ObjectListChildrenWidget::widget(['children' => $children['category']])?> 
+            <?=ObjectListChildrenWidget::widget(['children' => $children['category'], 'type' => 'category'])?> 
             
         <!-- not specification -->  
         <? else: ?>
@@ -57,6 +58,7 @@ $this->registerCssFile('css/specification.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
+    <?=ObjectListSortMenuWidget::widget(['sort' => $sort])?>
     <?=ObjectSearchMenuWidget::widget()?>
     <?=ObjectListMenuWidget::widget(['obj_id' => $parent->id])?>
 </div> 

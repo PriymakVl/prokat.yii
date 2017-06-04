@@ -3,49 +3,43 @@
 namespace app\modules\objects\forms;
 
 use app\forms\BaseForm;
-use app\modules\drawing\logic\DrawingLogic;
-use app\models\Tag;
+//use app\modules\drawing\logic\DrawingLogic;
+use app\modules\objects\models\ObjectDrawing; 
 
 class ObjectDrawingForm extends BaseForm
 {   
     public $category;
     public $dwg_id;
-    //form
-    public $categories;
+    public $code;
     
     public function rules() {
         return [
-            [['dwg_id'], 'required', 'message' => 'Íåîáõîäèìî óêàçàòü ID ÷åðòåæà'],
-            [['category'], 'required', 'message' => 'Íåîáõîäèìî óêàçàòü  êòî ðàçðàáîòàë ÷åðòåæ'],
+            [['dwg_id'], 'required', 'message' => 'ÐÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ ÑƒÐºÐ°Ð·Ð°Ñ‚ÑŒ ID Ñ‡ÐµÑ€Ñ‚ÐµÐ¶Ð°'],
+            [['dwg_id'], 'integer'],
+            [['code'], 'required', 'message' => 'ÐÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼ ÐºÐ¾Ð´ Ð´ÐµÑ‚Ð°Ð»Ð¸'],
+            [['category'], 'required', 'message' => 'ÐÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ ÑƒÐºÐ°Ð·Ð°Ñ‚ÑŒ  ÐºÑ‚Ð¾ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚Ð°Ð» Ñ‡ÐµÑ€Ñ‚ÐµÐ¶'],
         ];
     }
 
     public function save($obj) 
     {
-        if ($dwg->category == 'vendor') $dwg = $this->updateDataVendor();
-        else {
-            $dwg = DrawingLogic::getDrawingObject($this->category, $this->dwg_id);
-            $dwg->obj_id = $obj->id;
-            $dwg->equipment = $obj->equipment;
-            if ($obj->code) $dwg->code = $obj->code;    
+        if (strpos($obj->code, '/')) $code = explode('/', $code)[0];
+        else $code = $obj->code;   
+        $item = ObjectDrawing::find()->where(['code' => $item->code, 'category' => $this->category, 'dwg_id' => $this->dwg_id])->one();
+        if ($item) {
+            $item->status = self::STATUS_ACTIVE;//if ealy remove
+            return true;
         }
-        return $dwg->save();
+        else {
+            $item = new ObjectDrawing();
+            $item->category = $this->category;
+            $item->dwg_id = $this->dwg_id;
+            $item->code = $code;
+            return $item->save();    
+        }
     }
     
-    public function getCategories()
-    {
-        $this->categories = Tag::get('drawing');
-        return $this;
-    }
     
-    private function updateDataVendor()
-    {
-        $dwg = DrawingVendor::getDrawignByNameFile($this->file_vendor_name);
-        if (!$dwg->code) $dwg->code = $obj->code;
-        $dwg->revision = $this->file_vendor_revision;
-        $dwg->sheet = $this->file_vendor_sheet;
-        return $dwg;
-    }
 
 }
 

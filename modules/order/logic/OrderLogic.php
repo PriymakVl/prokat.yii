@@ -208,7 +208,7 @@ class OrderLogic extends BaseLogic
 		if (!$date) return self::UNDEFINED_PERIOD;
 		if ($date > 1487048400) return self::CURRENT_PERIOD;
 		else if ($date < 1487048400 && $date > 1420434000) return 3; //2015 - 2017
-		else if ($date < 1420434000 )return 2; return 2; //2010 - 2015
+		else if ($date < 1420434000 )return 2;//2010 - 2015
 	}
     
     public static function convertPeriod($period)
@@ -226,13 +226,13 @@ class OrderLogic extends BaseLogic
     {
         $orders = [];
         foreach ($array as $item) {
-            if ($item->order_id) $order = Order::getOne($item->order_id, null);
+            if ($item->order_id) $order = Order::getOne($item->order_id, null, self::STATUS_ACTIVE);
             if ($order) $orders[] = $order; 
         }
         return $orders;
     }
     
-    public function convertWork($work, $html)
+    public static function convertWork($work, $html)
     {
         if (!$work) return false;
         $work = unserialize($work);
@@ -246,7 +246,7 @@ class OrderLogic extends BaseLogic
         }  
     }
     
-    public function removeZerosFromWeight($weight)
+    public static function removeZerosFromWeight($weight)
     {
         $letter = substr($weight, -1);
         if ($letter === '0') $weight = substr($weight, 0, -1);
@@ -257,7 +257,7 @@ class OrderLogic extends BaseLogic
         return $weight;
     }
     
-    public function convertArea($area)
+    public static function convertArea($area)
     {
         switch ($area) {
             case 'storage': return 'Склад заготовок';

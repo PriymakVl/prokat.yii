@@ -42,6 +42,9 @@
 }
 
 /* table */
+.row-hide {
+    display: none;
+}
 .content table {
 	width: 100%;
 	border-collapse: collapse;

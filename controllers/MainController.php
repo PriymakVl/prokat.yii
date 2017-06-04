@@ -22,7 +22,7 @@ class MainController extends BaseController
     public function actionSublist()
     {
         $obj_id = trim(Yii::$app->request->get('obj_id'));
-        $this->children = Objects::find()->select('rus, eng, item, id, code')->where(['status' => Objects::STATUS_ACTIVE, 'parent_id' => $obj_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->asArray()->all();
+        $this->children = Objects::getChildrenForMainPage($obj_id);
         if (empty($this->children)) return $obj_id;
         $this->getName();
         $this->cutName();

@@ -12,12 +12,12 @@ class ObjectSpecificationController extends BaseController
 {
     public $layout = "@app/views/layouts/base";
     
-    public function actionIndex($obj_id) 
+    public function actionIndex($obj_id, $sort = null) 
     {    
-        $parent = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
+        $parent = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $parent->getName();
-        $children = Objects::getChildren($parent->id);
-        return $this->render('index', ['parent' => $parent, 'children' => $children]);
+        $children = Objects::getChildren($parent->id, $sort);
+        return $this->render('index', ['parent' => $parent, 'children' => $children, 'sort' => $sort]);
     }
     
     public function actionCopyList($ids, $parent_id)

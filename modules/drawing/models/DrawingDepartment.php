@@ -5,6 +5,7 @@ namespace app\modules\drawing\models;
 use yii\web\ForbiddenHttpException;
 use app\models\BaseModel;
 use app\modules\drawing\logic\DrawingLogic;
+use app\modules\objects\models\ObjectDrawing;
 
 class DrawingDepartment extends BaseModel
 {
@@ -64,16 +65,17 @@ class DrawingDepartment extends BaseModel
     
     public static function getAllForObject($obj)
     {
-        if ($obj->code) $drawings = self::findAll(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
-        else $drawings = self::findAll(['obj_id' => $obj->id, 'status' => self::STATUS_ACTIVE]);
-        return $drawings;   
+        $code = $obj->getCodeWithoutVariant($obj->code);
+        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'department', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        if ($ids) return self::findAll($ids);
+        return [];   
     }
     
     public static function check($obj)
     {
-        if ($obj->code) $dwg = self::findOne(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
-        else $dwg = self::findOne(['obj_id' => $obj->id, 'status' => self::STATUS_ACTIVE]);
-        return $dwg;     
+        $code = $obj->getCodeWithoutVariant($obj->code);
+        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'department', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        return self::findAll($ids);      
     }
     
 

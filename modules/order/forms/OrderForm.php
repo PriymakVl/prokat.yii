@@ -25,7 +25,6 @@ class OrderForm extends BaseForm
     public $note;
     public $work;
     public $description;
-    public $period;
     public $state;
     public $area;
     //form
@@ -36,29 +35,31 @@ class OrderForm extends BaseForm
     {
         return [
             [['name', 'type', 'mechanism', 'unit', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
-            [['issuer', 'customer'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['issuer', 'customer', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
             ['name', 'string'],
             ['type', 'integer'],
             ['service', 'string'],
             ['note', 'string',],
             ['issuer', 'string'],
             ['customer', 'string'],
-            ['number','integer'],
+            ['number','checkNumber'],
             ['work','string'],
             ['weight','string'],
-            ['date','string'],
-            ['period', 'integer'],
+            [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
             ['area', 'string'],
+            ['state', 'integer'],
+            ['description', 'string']
         ];
 
     }
+    
+    
     
     public function behaviors()
     {
     	return ['order-logic' => ['class' => OrderLogic::className()]];
     }
-
-
+    
     public function save($order) 
     {
         if (!$order) $order = new Order();
@@ -85,7 +86,7 @@ class OrderForm extends BaseForm
         $order->mechanism = $this->mechanism;
         $order->description = $this->description;
         $order->number = $this->number;
-        $order->state = $this->getState();
+        $order->state = $this->number ? $this->state : Order::STATE_DRAFT;
         $order->period = OrderLogic::getPeriod($order->date);
         return $order;
     }
@@ -104,14 +105,12 @@ class OrderForm extends BaseForm
         else return serialize($matches[1]);
     }
     
-    public function getState()
+    public function checkNumber($attribute, $params, $validator)
     {
-        if ($order->state) return $order->state;
-        if (!$this->number) return Order::STATE_DRAFT;
-        else return Order::STATE_ACTIVE;
+        if (!preg_match('/[1-90-90-9]/', $attribute)) {
+            $this->addError($attribute, 'Неверный формат номера заказа, пример 150');
+        }
     }
-
-
-
+    
 }
 

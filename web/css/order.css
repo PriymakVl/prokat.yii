@@ -64,14 +64,36 @@
     padding-left: 15px;
 }
 
-.field-orderform-period {
+#state-wrp {
     position: absolute;
-    top: 2px;
-    left: 420px;     
+    top: 22px;
+    left: 405px;     
 }
 
-#area-mechanism, #mechanism-unit, #orderform-area {
+#state-wrp label {
+    position: absolute;
+    top: -18px;
+    left: 0;
+}
+
+#state {
+    width: 100px;
+}
+
+#area-mechanism, #mechanism-unit, #orderform-area, #orderform-type, #orderform-customer, #orderform-issuer{
     width: 200px;
+}
+
+.field-orderform-issuer{
+        position: absolute;
+    left: 265px;
+    top: 330px;    
+}
+
+.field-orderform-customer{
+    position: absolute;
+    left: 495px;
+    top: 330px;    
 }
 
 #area-wrp {

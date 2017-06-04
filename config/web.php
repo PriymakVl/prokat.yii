@@ -137,6 +137,7 @@ $config = [
                 'object/drawing/delete' => 'objects/object-drawing/delete',              
                 'object/drawing/form' => 'objects/object-drawing/form',
                 'object/drawing' => 'objects/object-drawing',
+                'object/drawing/vendor/update' => 'objects/object-drawing/update-vendor',
                 //object
                 'object' => 'objects/object',                                    
                 'object/form' => 'objects/object/form',                                    

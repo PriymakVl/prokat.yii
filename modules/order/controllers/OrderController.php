@@ -15,8 +15,7 @@ class OrderController extends BaseController
     
     public function actionIndex($order_id) 
     { 
-        $order = Order::getOne($order_id);
-        $order->getWeight()->convertArea();
+        $order = Order::get($order_id);
         $session = OrderLogic::checkStateSession($order_id, 'order_id'); 
         return $this->render('index', compact('order', 'session'));
     }
@@ -34,7 +33,7 @@ class OrderController extends BaseController
     { 
         $order = (int)$order_id ? Order::findOne($order_id) : null;
         if ($order) $order->convertDate($order, false)->getWork();
-        
+        //debug($order->state);
         $form = new OrderForm();
         $form->getServices($form)->getArea();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 

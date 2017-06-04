@@ -17,10 +17,11 @@ class Order extends BaseModel
     const PAGE_SIZE = 15;
     const STATE_DRAFT = 1;
     const STATE_ACTIVE = 2;
-    //const ORDER_STATE_NOT_ACCEPTED = 3;
+    const STATE_CLOSED = 3;
+    const STATE_NOT_ACCEPTED = 4;
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
-    //const ORDER_STATE_CLOSED = 6;
+    
     
     public static function tableName()
     {
@@ -33,11 +34,11 @@ class Order extends BaseModel
     }
     
     
-    public static function getOne($order_id, $default = false, $status = self::STATUS_ACTIVE)
+    public static function get($order_id)
     {
-        $order = parent::getOne($order_id, $default, $status);
+        $order = self::getOne($order_id, __METHOD__, self::STATUS_ACTIVE);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
-                ->getFullCustomer()->getFullIssuer();
+                ->getFullCustomer()->getFullIssuer()->convertArea()->convertState();
         return $order;   
     }
     
@@ -48,8 +49,8 @@ class Order extends BaseModel
     
     public function getNumber()
     {
-        if ($this->state == self::STATE_DRAFT) $this->number = 'черновик'; 
-        else $this->number = '27.'.$this->number.'.'.$this->type;
+        if ($this->number) $this->number = '27.'.$this->number.'.'.$this->type;
+        else $this->number = '<span style="color:red;">Не указан</span>';
         return $this;
     }
     
@@ -102,35 +103,35 @@ class Order extends BaseModel
     public function getFullCustomer()
     {
         if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer, false, self::STATE_ACTIVE));
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer, null, self::STATE_ACTIVE));
         return $this;
     }
     
     public function getShortCustomer()
     {
         if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer));
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer, null, self::STATUS_ACTIVE));
         return $this;
     }
     
     public function getCustomerForPrint()
     {
         if ((int)$this->customer === 0) $this->customer = 'Не указан';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer));
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer, null, self::STATUS_ACTIVE));
         return $this;  
     }
     
     public function getFullIssuer()
     {
         if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->issuer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer));
+        else if ((int)$this->issuer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer, null, self::STATUS_ACTIVE));
         return $this;
     }
     
     public function getShortIssuer()
     {
         if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer));
+        else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer, null, self::STATUS_ACTIVE));
         return $this;
     }
     
@@ -140,11 +141,11 @@ class Order extends BaseModel
         return $this;
     }
     
-    public function getWeight()
-    {
-        if ($this->weight) $this->weight = OrderLogic::removeZerosFromWeight($this->weight);
-        return $this;
-    }
+//    public function getWeight()
+//    {
+//        if ($this->weight) $this->weight = OrderLogic::removeZerosFromWeight($this->weight);
+//        return $this;
+//    }
     
     public function convertPeriod()
     {
@@ -157,9 +158,21 @@ class Order extends BaseModel
         $this->area = OrderLogic::convertArea($this->area);
         return $this;
     }
+    
+    public function convertState()
+    {
+        $this->state = 1;
+        switch ($this->state) {
+            case Order::STATE_DRAFT: $this->state = '<span style="color:red;">Черновик</span>'; break;
+            case Order::STATE_ACTIVE: $this->state = 'Выдан'; break;
+            case Order::STATE_NOT_ACCEPTED: $this->state = '<span style="color:red;">Не принят</span>'; break;
+            case Order::STATE_CLOSED: $this->state = '<span style="color:red;">Закрыт</span>'; break;
+            default: $this->state = 'Выдан';
+        }
+        return $this;
+    }
 
 }
-
 
 
 

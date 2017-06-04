@@ -5,6 +5,7 @@ namespace app\modules\drawing\models;
 use app\models\BaseModel;
 use app\modules\drawing\models\DrawingWorksFile;
 use app\modules\drawing\logic\DrawingLogic;
+use app\modules\objects\models\ObjectDrawing;
 
 class DrawingWorks extends BaseModel
 {
@@ -64,18 +65,18 @@ class DrawingWorks extends BaseModel
     
     public static function getAllForObject($obj)
     {
-        if ($obj->code) $drawings = self::findAll(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
-        else $drawings = self::findAll(['obj_id' => $obj->id, 'status' => self::STATUS_ACTIVE]); 
-        if (empty($drawings)) return [];
-        $drawings = DrawingLogic::cutNotes($drawings);
+        $code = $obj->getCodeWithoutVariant($obj->code);
+        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'works', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        if (!$ids) return [];
+        $drawings = self::findAll($ids);
         return DrawingLogic::getFiles($drawings);   
     }
     
     public static function check($obj)
     {
-        if ($obj->code) $dwg = self::findOne(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
-        else $dwg = self::findOne(['obj_id' => $obj->id, 'status' => self::STATUS_ACTIVE]); 
-        return $dwg;    
+        $code = $obj->getCodeWithoutVariant($obj->code);
+        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'works', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        return self::findAll($ids);    
     }
     
     public static function getSpecification($parent_id)

@@ -16,24 +16,19 @@ $this->registerCssFile('/css/drawing.css');
     <div class="info-box">
         <span>Название детали/узла:</span>&laquo; <?=$obj->name?> &raquo;<br />
         <span>Код детали/узла:</span>&laquo; <?=$obj->code ? $obj->code : 'Не указан'?> &raquo;<br />
+        <span>Название файла:</span>&laquo; <?=$dwg->file?> &raquo;
     </div>
     
-    <!-- drawing form -->
+    <!-- update vendor form -->
     <div id="dwg-form-wrp" class="form-wrp">
-        <? $f = ActiveForm::begin(['id' => 'form-object-dwg']); ?>
-            <!-- type -->
-            <?php
-                $items = ['department' => 'Цех', 'works' => 'ПКО', 'standard' => 'Стандарт'];
-                echo $f->field($form, 'category')->dropDownList($items)->label('Кто разработал чертеж:');
-            ?>
-            <!-- code object -->
-            <div id="dwg-id-wrp">
-                <?= $f->field($form, 'code')->textInput(['readonly' => 'readonly', 'value' => $obj->code])->label('Код детали:') ?>
-            </div>
-            
-            <!-- dwg id -->
-            <div id="dwg-id-wrp">
-                <?= $f->field($form, 'dwg_id')->textInput()->label('Id чертежа:') ?>
+        <? $f = ActiveForm::begin(['id' => 'update-vendor-dwg']); ?>
+
+            <!-- dwg data vendor -->
+            <div id="dwg-vendor-wrp">
+                
+                <?= $f->field($form, 'sheet')->textInput(['value' => $dwg->sheet])->label('Номер листа:') ?>
+                
+                <?= $f->field($form, 'revision')->textInput(['value' => $dwg->revision])->label('Номер доработки:') ?>
             </div>
                       
             <!-- button -->

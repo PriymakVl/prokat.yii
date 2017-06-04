@@ -1,5 +1,5 @@
 <? foreach ($drawings as $dwg): ?>
-<tr>
+<tr <? if ($revision != $dwg->revision) echo 'class="row-hide dwg-revision-hide"'; ?>>
     <td>
         <input type="radio" name="dwg" dwg_id="<?=$dwg->id?>" file="<?=$dwg->file?>" dwg_cat="<?=$dwg->category?>" obj_id="<?=$obj_id?>" />
     </td>
@@ -27,3 +27,4 @@
     </td>
 </tr>
 <? endforeach; ?>
+

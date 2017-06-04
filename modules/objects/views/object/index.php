@@ -75,7 +75,7 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
                 <td>Заказы</td>
                 <td>
                     <? foreach ($obj->orders as $order): ?>
-                        <a style="color:<?=$order->type = 4 ? 'green' : 'yellow'?>" href="<?=Url::to(['/order', 'order_id' =>$order->id])?>" target="_blank"><?='№'.$order->number.', '?></a>
+                        <a style="color:<?=$order->type = 4 ? 'green' : 'yellow'?>" href="<?=Url::to(['/order/content/list', 'order_id' =>$order->id])?>" target="_blank"><?='№'.$order->number.', '?></a>
                     <? endforeach; ?>
                 </td>
             </tr>

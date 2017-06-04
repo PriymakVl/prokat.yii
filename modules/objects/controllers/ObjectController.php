@@ -13,7 +13,7 @@ class ObjectController extends BaseController
       
     public function actionIndex($obj_id) 
     { 
-        $obj = Objects::getOne($obj_id);
+        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $obj->getName()->getParent()->checkDrawing()->checkChild()->getOrders();
         return $this->render('index', compact('obj'));
     }

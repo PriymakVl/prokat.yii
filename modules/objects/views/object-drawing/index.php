@@ -8,9 +8,8 @@
     use app\modules\objects\widgets\ObjectDrawingMenuWidget;
     
     $this->registerCssFile('css/drawing.css');
-    $this->registerJsFile('js/drawing/dwg_add_object.js',  ['depends' => [JqueryAsset::className()]]);
-    $this->registerJsFile('js/drawing/dwg_delete_object.js',  ['depends' => [JqueryAsset::className()]]);
-    $this->registerJsFile('js/drawing/dwg_note_object.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('js/drawing/dwg_revision_toggle.js',  ['depends' => [JqueryAsset::className()]]);
+    
 ?>
 
 <div class="content">
@@ -54,6 +53,10 @@
                 
                 <!-- drawing standard -->
                 <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'standard', 'obj_id' => $obj->id])?>
+                <!-- revision toggle -->
+                <tr>
+                   <td colspan="7"><a href="#" onclick="return false;" id="dwg-revision-toggle">Показать все доработки Danieli</a></td> 
+                </div>
             <? else: ?>
                 <tr>
                     <td colspan="7" class="not-content">Чертежей нет</td>

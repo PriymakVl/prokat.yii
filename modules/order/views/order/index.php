@@ -30,21 +30,16 @@ $this->registerCssFile('/css/order.css');
             <td class="text-center">Номер заказа</td>
             <td>
                 <? if ($order->content): ?>
-                    <a href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>">
-                        <? if($order->state == Order::STATE_DRAFT):?> 
-                            <span style="color: red;">черновик</span>
-                        <? else: ?>
-                            <?=$order->number?>
-                        <? endif; ?>
-                    </a>
+                    <a href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>"><?=$order->number?></a>
                 <? else: ?>
-                    <? if($order->state == Order::STATE_DRAFT):?> 
-                        <span style="color: red;">черновик</span>
-                    <? else: ?>
-                        <?=$order->number?>
-                    <? endif; ?>
-                <? endif; ?>    
+                     <?=$order->number?>
+                <? endif; ?>   
             </td>
+        </tr>
+        <!-- state -->
+        <tr>
+            <td class="text-center">Состояние заказа</td>
+            <td><?=$order->state?></td>
         </tr>
         <!-- name -->
         <tr>

@@ -50,9 +50,14 @@ class Objects extends BaseModel
         return $this;
     }
 
-    public static function getChildren($parent_id)
+    public static function getChildren($parent_id, $sort)
     {
-        $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        if ($sort == 'standard') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['<', 'item', 300])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        else if ($sort == 'unit') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['>', 'item', 299])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        //else if ($sort == 'order')
+        //else if ($sort == 'app')
+        else if ($sort == 'highlight') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id, 'color' => 1])->orderBy(['item' => SORT_ASC])->all();
+        else $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
         $children = self::executeMethods($children, ['getOrders']);
         return ObjectLogic::prepareChildren($children); 
     }
@@ -123,8 +128,17 @@ class Objects extends BaseModel
     
     public function getOrders()
     {
-        $this->orders = OrderContent::searchByDrawing($this->code);
+        //sort standard danieli
+        if ($this->code && $this->code[0] != '0') $this->orders = OrderContent::searchByDrawing($this->code);
         return $this;
+    }
+    
+    public function getChildrenForMainPage($parent_id)
+    {
+        $children = Objects::find()->select('rus, eng, item, id, code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])
+        //->andWhere(['>', 'item', 299])->andWhere(['<', 'item', 99])
+        ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->asArray()->all();
+        return $children;
     }
 	
 

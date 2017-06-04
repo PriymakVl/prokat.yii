@@ -25,7 +25,7 @@
                 </td>
                 <td>
                     <? if($obj->parent): ?>
-                        <a href="/specification?obj_id=<?=$obj->parent->id?>"><?=$obj->parent->name?>
+                        <a href="/object/specification?obj_id=<?=$obj->parent->id?>"><?=$obj->parent->name?>
                     <? else: ?>
                         Отсутствует
                     <? endif; ?>

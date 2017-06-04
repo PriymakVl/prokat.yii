@@ -20,7 +20,7 @@ class DrawingVendor extends BaseModel
 		if ($obj->equipment == 'danieli') $code = self::getCodeWithoutDash($obj->code);
 		else $code = $obj->code;
         $drawings = self::find()->where(['code' => $code, 'equipment' => $obj->equipment, 'status' => self::STATUS_ACTIVE])
-                ->orderBy(['revision' => SORT_ASC, 'sheet' => SORT_ASC])->all(); 
+                ->orderBy(['revision' => SORT_DESC, 'sheet' => SORT_ASC])->all(); 
         return DrawingLogic::cutNotes($drawings);  
     }
     

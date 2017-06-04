@@ -8,6 +8,7 @@ use app\logic\BaseLogic;
 use app\modules\drawing\models\DrawingVendor;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
+use app\modules\objects\models\ObjectDrawing;
 
 class DrawingLogic extends BaseLogic
 {
@@ -49,6 +50,12 @@ class DrawingLogic extends BaseLogic
         else if ($category == self::TYPE_WORKS) $dwg = DrawingWorks::findOne($dwg_id, false, self::STATUS_ACTIVE); 
         else $dwg = DrawingVendor::getOne($dwg_id, false, self::STATUS_ACTIVE);
         return $dwg; 
+    }
+    
+    public static function getDrawingObjectByCode($category, $dwg_id, $obj)
+    {
+        $code = $obj->getCodeWithoutVariant($obj->code);
+        return ObjectDrawing::find()->where(['category' => $category, 'code' => $code, 'status' => self::STATUS_ACTIVE])->one();
     }
     
     public static function countOfNumberDrawingsObject($drawings)
