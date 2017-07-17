@@ -12,9 +12,10 @@ use app\modules\employees\models\Employee;
 class Application extends BaseModel
 {
     public $content;
-    public $number_out;
-    public $number_ens;
+    public $full_num_out;
+    public $full_num_ens;
     public $categories;
+    public $department_rus;
     
     const PAGE_SIZE = 15;
     const STATE_APP_DRAFT = 1;
@@ -26,7 +27,7 @@ class Application extends BaseModel
     
     public static function tableName()
     {
-        return 'applications';
+        return 'applications_test';
     }
     
     public function behaviors()
@@ -39,15 +40,23 @@ class Application extends BaseModel
         $this->content = OrderContent::findAll(['status' => self::STATUS_ACTIVE, 'app_id' => $this->id]);
     }
     
-    public function getOutNumber()
+    public function getDepartmentRus()
     {
-        $this->number_out = 245;
+        if ($this->department == 'supply') $this->department_rus = 'ОМТС';
+        else if ($this->department == 'equipment') $this->department_rus = 'ОО';
         return $this;
     }
     
-    public function getEnsNumber()
+    public function getFullOutNumber()
     {
-        $this->number_ens = $this->ens;
+        if ($this->out_num) $this->full_num_out = '048/27т-'.$this->out_num;
+        if ($this->full_num_out && $this->out_date) $this->full_num_out = $this->full_num_out.' от '.date('d.m.y', $this->out_date).'г.';
+        return $this;
+    }
+    
+    public function getFullEnsNumber()
+    {
+        if ($this->ens) $this->full_num_ens = '27/'.$this->ens;
         return $this;
     }
     
@@ -56,7 +65,7 @@ class Application extends BaseModel
         $query = self::find()->where($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['ens' => SORT_ASC])->all();
-        return self::executeMethods($list, ['getOutNumber', 'getEnsNumber']);
+        return self::executeMethods($list, ['getDepartmentRus']);
     }
     
     public static function getListForFile($ids)

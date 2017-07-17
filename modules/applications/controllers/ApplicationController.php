@@ -16,7 +16,7 @@ class ApplicationController extends BaseController
     public function actionIndex($app_id) 
     { 
         $app = Application::getOne($app_id, false, self::STATUS_ACTIVE);
-        $app->getEnsNumber();
+        $app->getFullEnsNumber()->getFullOutNumber();
         $session = ApplicationLogic::checkStateSession($app_id, 'app_id'); 
         return $this->render('index', compact('app', 'session'));
     }
@@ -25,7 +25,7 @@ class ApplicationController extends BaseController
     {
         $state = Yii::$app->request->get('state');
         $params = ApplicationLogic::getParams($year, $department, $category, $state);
-        $list = Application::getapplicationList($params);
+        $list = Application::getApplicationList($params);
         $pages = Application::$pages;
         return $this->render('list', compact('list', 'params', 'pages', 'state'));
     }

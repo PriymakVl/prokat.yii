@@ -14,14 +14,14 @@ $this->registerCssFile('/css/application.css');
     <!-- top nenu -->
     <?=AppTopMenuWidget::widget(['app_id' => $app->id])?>
     
-    <!-- info state of order -->
+    <!-- info state of  application -->
     <? if ($state == 'active'): ?>
-        <div class="active-order">Активный заказ</div>
+        <div class="active-order">Активная заявка</div>
     <? endif; ?>
     
     <!-- info -->
     <div class="info-box">
-        <span>Название заказа:</span>&laquo; <?=$app->title?> &raquo;<br />
+        <span>Название заявки:</span>&laquo; <?=$app->title.' '.$app->full_num_out?> &raquo;<br />
         <input type="hidden" id="order-id" value="<?=$app->id?>"/>
     </div>
     
@@ -29,9 +29,10 @@ $this->registerCssFile('/css/application.css');
     <table>
         <tr>
             <th width="30"><input type="checkbox" name="content" id="checked-all"/></th>
-            <th width="460">Наименование</th>
-            <th width="60">Кол-во</th>
-            <th width="170">Примечание</th>
+            <th width="425">Наименование</th>
+            <th width="80">Кол-во</th>
+            <th width="85">Цена</th>
+            <th width="100">Сумма</th>
         </tr>
         <? if ($content): ?>
             <? foreach ($content as $item): ?>
@@ -43,10 +44,13 @@ $this->registerCssFile('/css/application.css');
                         <a href="<?=Url::to(['/application/content/item', 'item_id' => $item->id])?>"><?=$item->product->name?></a>
                     </td>
                     <td class="text-center">
-                        <?=$item->need?>
+                        <?=$item->need.' '.$item->product->units?>
+                    </td >
+                    <td class="text-center">
+                       <?= (int)$item->price ? $item->price.' '.$item->currency : ''?> 
                     </td>
-                    <td>
-                       <?=$item->note?> 
+                    <td class="text-center">
+                       <?=$item->sum?> 
                     </td>
                 </tr>
             <? endforeach; ?>

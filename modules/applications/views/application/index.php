@@ -32,14 +32,14 @@ $this->registerCssFile('/css/application.css');
         <tr>
             <td class="text-center">Исходящий номер</td>
             <td>
-                <?=$app->number_out ? $app->number_out : '<span style="color:red;">Не указан</span>';?>
+                <?=$app->full_num_out ? $app->full_num_out : '<span style="color:red;">Не указан</span>';?>
             </td>
         </tr>
         <!-- number ens-->
         <tr>
             <td class="text-center">Номер в ЕНС</td>
             <td>
-                <?=$app->number_ens ? $app->number_ens : '<span style="color:red;">Не указан</span>';?>
+                <?=$app->full_num_ens ? $app->full_num_ens : '<span style="color:red;">Не указан</span>';?>
             </td>
         </tr>
         <!-- title -->
@@ -55,7 +55,7 @@ $this->registerCssFile('/css/application.css');
         </tr>
         <!-- type repair -->
         <tr>
-            <td class="text-center">Тип ремонта</td>
+            <td class="text-center">Вид ремонта</td>
             <td>
                 <?=$app->type_repair?>
             </td>

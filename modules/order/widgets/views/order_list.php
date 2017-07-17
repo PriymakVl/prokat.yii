@@ -2,6 +2,7 @@
 
 use \yii\helpers\Url;
 use \yii\web\JqueryAsset;
+use app\modules\order\models\Order;
 
 $this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsset::className()]]);
 ?>
@@ -12,10 +13,10 @@ $this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsse
             <a href="<?=Url::to(['/order/form'])?>">Выдать заказ</a>
         </li>
         <li>
-            <? if ($state): ?>
+            <? if ($state == Order::STATE_DRAFT): ?>
                 <a href="<?=Url::to(['/order/list'])?>">Заказы</a>
             <? else: ?>
-                <a href="<?=Url::to(['/order/list', 'state' => '1'])?>">Черновики</a>
+                <a href="<?=Url::to(['/order/list', 'state' => Order::STATE_DRAFT])?>">Черновики</a>
             <? endif; ?>
         </li> 
         <li>

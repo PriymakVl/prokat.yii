@@ -21,10 +21,9 @@ class OrderLogic extends BaseLogic
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
         if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
-        if ($state != 'all') $params['state'] = $state ? $state : Order::STATE_ACTIVE;
+        if ($state == Order::STATE_DRAFT) $params['state'] = $state;
         if ($customer && $customer != 'all') $params['customer'] = $customer;
         if ($area && $area != 'all') $params['area'] = $area;
-        //if (self::in_get('year')) $params['year'] = Yii::$app->request->get('year', date('Y'));
         if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
         return $params;   
     }
@@ -64,17 +63,8 @@ class OrderLogic extends BaseLogic
     public static function saveParamsFromObject($object, $order_id = null)
     {
         if (!$order_id) $order_id = self::getActiveOrderId();
-        $content = OrderContent::findAll(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id]);
-        if ($content)  {
-            $item = self::checkItemByCode($content, $object->code);
-            if (!$item) $item = new OrderContent();
-            $item = OrderLogic::setParamsFromObject($item, $object, $order_id);
-        }
-        else {
-            $item = new OrderContent();
-            $item = OrderLogic::setParamsFromObject($item, $object, $order_id);
-        }
-        //debug($item);
+        $item = new OrderContent();
+        $item = OrderLogic::setParamsFromObject($item, $object, $order_id);
         $item->save();
         return $item;
     }
@@ -88,7 +78,7 @@ class OrderLogic extends BaseLogic
         $item->weight = $item->weight ? $item->weight : $object->weight;
         $item->item = $item->item ? $item->item : $object->item;
         $item->equipment = $object->equipment;
-        return self::setDrawingFromObject($item, $object);
+        return self::setDrawingAndFileFromObject($item, $object);
     }
     
     private static function setItemNameFromObject($item, $object) 
@@ -99,7 +89,7 @@ class OrderLogic extends BaseLogic
         else return $object->eng;    
     }
     
-    private static function setDrawingFromObject($item, $object)
+    private static function setDrawingAndFileFromObject($item, $object)
     {
         $drawings = ObjectLogic::getDrawings($object);
         $number_dwg = DrawingLogic::countOfNumberDrawingsObject($drawings);
@@ -191,9 +181,13 @@ class OrderLogic extends BaseLogic
         $content = OrderContent::findAll(['order_id' => $order_id, 'status' => self::STATUS_ACTIVE]);
         foreach ($content as $item) {
             $item->countWeightAll();
-            if ($item->weightAll) $weight_order += $item->weightAll;
+			if ($item->weightAll) {
+				$weight_items = str_replace(',', '.', $item->weightAll);
+				$weight_order = $weight_order + $weight_items;
+			}
         }
-        return $weight_order;
+		if ($weight_order) return str_replace('.', ',', $weight_order);
+		else return $weight_order;
     }
     
     public static function checkItemByCode($items, $code)
@@ -271,6 +265,19 @@ class OrderLogic extends BaseLogic
             default: return $area;
         }
     }
+    
+    public static function getOrdersByCode($code)
+    {
+        $order_ids = OrderContent::find()->select('order_id')->where(['code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        if ($order_ids) {
+            $orders = Order::findAll($order_ids);
+            if (!$orders) return [];
+            $orders = self::executeMethodsOfObjects($orders, ['getNumber']); 
+            return $orders;  
+        }
+        return [];    
+    }
+
     
 
 }

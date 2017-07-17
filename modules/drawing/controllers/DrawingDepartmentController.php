@@ -15,7 +15,7 @@ class DrawingDepartmentController extends BaseController
     
     public function actionIndex($dwg_id = null) 
     { 
-        $dwg = DrawingDepartment::getOne($dwg_id, __METHOD__);
+        $dwg = DrawingDepartment::getOne($dwg_id, __METHOD__, self::STATUS_ACTIVE);
         $dwg->convertDate($dwg)->getNumber()->convertService()->checkChild();
         return $this->render('index', compact('dwg'));
     }

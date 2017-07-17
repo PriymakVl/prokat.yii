@@ -12,6 +12,7 @@ class DatabaseController extends BaseController
 {
     public function actionIndex()
     {
+        debug('dddddd');
         //$app_new = Application::findAll();
         $app_old = Applicationold::getAll();
         

@@ -34,7 +34,7 @@ class OrderForm extends BaseForm
     public function rules() 
     {
         return [
-            [['name', 'type', 'mechanism', 'unit', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['name', 'type','description'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['issuer', 'customer', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
             ['name', 'string'],
             ['type', 'integer'],
@@ -43,6 +43,8 @@ class OrderForm extends BaseForm
             ['issuer', 'string'],
             ['customer', 'string'],
             ['number','checkNumber'],
+            ['mechanism', 'default', 'value' => 'Не указан'],
+            ['unit', 'default', 'value' => 'Не указан'],
             ['work','string'],
             ['weight','string'],
             [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
@@ -74,8 +76,8 @@ class OrderForm extends BaseForm
         $order->type = $this->type;
         $order->area = $this->area;
         $order->name = $this->name;
-        $order->issuer = $this->issuer;
-        $order->customer = $this->customer;
+        $order->issuer = $this->getIssuer();
+        $order->customer = $this->getCustomer();
         $order->note = $this->note;
         $order->service = $this->service;
         $order->date = strtotime($this->prepareDateForConvert($this->date));
@@ -107,10 +109,35 @@ class OrderForm extends BaseForm
     
     public function checkNumber($attribute, $params, $validator)
     {
-        if (!preg_match('/[1-90-90-9]/', $attribute)) {
+        if (!preg_match('/[1-90-90-9]/', $this->number)) {
             $this->addError($attribute, 'Неверный формат номера заказа, пример 150');
+        }
+    }
+
+    private function getCustomer()
+    {
+        switch($this->customer) {
+            case 'Костырко В.Н.': return '1';
+            case 'Саенко А.И.': return '2';
+            case 'Волковский С.В.': return '4';
+            case 'Станиславский О.В.': return '7';
+            case 'Коваль А.П.': return '8';
+            case 'Пасюк В.В.': return '9';
+            case 'Лисецкий В.Р.': return '10';
+            default: return $this->customer;
+        }
+    }
+
+    private function getIssuer()
+    {
+        switch($this->issuer) {
+            case 'Приймак В.Н.': return '5';
+            case 'Немер А.Г.': return '6';
+            case 'Битюкова О.В': return '3';
+            default: return $this->issuer;
         }
     }
     
 }
+
 

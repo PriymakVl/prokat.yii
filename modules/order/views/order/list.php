@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use Yii\helpers\Url;
 use yii\widgets\LinkPager;
 use app\widgets\MainMenuWidget;
+use app\modules\order\models\Order;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderListMenuWidget;
@@ -38,10 +39,18 @@ $this->registerCssFile('/css/standard.css');
                         <input type="checkbox" name="order" order_id="<?=$order->id?>" />
                     </td>
                     <td class="text-center">
-                       <a href="<?=Url::to(['/order/content/list', 'order_id' =>$order->id])?>"><?=$order->number?></a>
+                       <? if ($order->content): ?>
+                            <a <? if ($order->number == 'Не указан') echo 'style="color:red;"'?> href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>">
+                                <?=$order->number?>
+                            </a>
+                        <? else: ?>
+                            <?=$order->number == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->number?>
+                        <? endif; ?>  
                     </td>
                     <td>
-                        <a href="<?=Url::to(['/order', 'order_id' =>$order->id])?>"><?=$order->name?></a>
+                        <a <? if ($order->state != Order::STATE_ACTIVE) echo 'style="color:red;"'?> href="<?=Url::to(['/order', 'order_id' =>$order->id])?>">
+                            <?=$order->name?>
+                        </a>
                     </td>
                     <td>
                         <?=$order->customer?>

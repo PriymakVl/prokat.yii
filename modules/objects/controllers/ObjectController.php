@@ -25,7 +25,7 @@ class ObjectController extends BaseController
         $form->getTypes()->getEquipments(); 
 
         if($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $obj_id = $form->save($form, $obj);
+            $obj_id = $form->save($obj);
             return $this->redirect(['/object', 'obj_id' => $obj_id]);
         }        
         return $this->render('form', compact('form', 'obj'));     
@@ -40,7 +40,7 @@ class ObjectController extends BaseController
     
     public function actionDeleteOne($obj_id)
     {
-        $obj = Objects::getOne($obj_id);
+        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $parent_id = $obj->parent_id;
         $obj->delete();
         if($parent_id == 0) $this->redirect(Yii::$app->getHomeUrl());

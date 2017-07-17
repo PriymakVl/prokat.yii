@@ -32,7 +32,7 @@ class OrderController extends BaseController
     public function actionForm($order_id = null) 
     { 
         $order = (int)$order_id ? Order::findOne($order_id) : null;
-        if ($order) $order->convertDate($order, false)->getWork();
+        if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer();
         //debug($order->state);
         $form = new OrderForm();
         $form->getServices($form)->getArea();

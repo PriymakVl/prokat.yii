@@ -17,17 +17,18 @@ class ApplicationContentController extends BaseController
     
     public function actionIndex($item_id) 
     { 
-        $item = ApplicationContent::getOne($item_id);
+        $item = ApplicationContent::getOne($item_id, false, self::STATUS_ACTIVE);
         $item->getProduct();
-        $app = Application::getOne($item->app_id);
-        if ($item->product->code) $object = Objects::getObjectByCode($item->producnt->code);
-        if ($object) $object->getParent()->getName();
+        $app = Application::getOne($item->app_id, false, self::STATUS_ACTIVE);
+        //if ($item->product->code) $object = Objects::getObjectByCode($item->producnt->code);
+        //if ($object) $object->getParent()->getName();
         return $this->render('index', compact('app', 'item', 'object'));
     }
     
     public function actionList($app_id) 
     { 
         $app = Application::getOne($app_id, false, self::STATUS_ACTIVE);
+        $app->getFullOutNumber();
         $content = ApplicationContent::getItemsOfApplication($app->id);
         //debug($content);
         $state = ApplicationLogic::checkStateSession($app_id, 'app_id');

@@ -8,6 +8,7 @@ $(document).ready(function() {
     $('#app-department').change(function() {
         var department = $(this).find('option:selected').val();
         var gets = buidGetString('department', department);
+        
         location.href = 'http://' + location.host + '/application/list?' + gets;    
     });
     
@@ -40,6 +41,7 @@ function buidGetString(add_key, add_value)
     if (params === false) return  add_key + '=' + add_value;
         
     for (key in params){
+        if (key == add_key && !add_value) continue;
         if (key == add_key) get_string += '&' + key + '=' + add_value;    
         else get_string += '&' + key + '=' + params[key];   
     }

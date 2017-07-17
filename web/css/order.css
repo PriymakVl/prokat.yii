@@ -40,12 +40,6 @@
     left: 350px;    
 }
 
-.field-orderform-date {
-    position: absolute;
-    top: 2px;
-    left: 220px;   
-}
-
 .field-ordercontentform-sheet {
      position: absolute;
     top: 5px;
@@ -64,58 +58,74 @@
     padding-left: 15px;
 }
 
-#state-wrp {
-    position: absolute;
-    top: 22px;
-    left: 405px;     
+.top-box {
+    position: relative;
 }
 
-#state-wrp label {
+.field-orderform-date {
     position: absolute;
-    top: -18px;
-    left: 0;
+    left: 150px;
+    top: 0;
+}
+
+/**
+ * .field-orderform-number {
+ *     position: absolute;
+ *     left: 300px;    
+ * }
+ */
+
+#state-wrp {
+    position: absolute;
+    left: 305px;  
+    top: 0;  
+}
+
+.field-orderform-type {
+  position: absolute;
+  left: 465px;  
+  top: 0;
 }
 
 #state {
-    width: 100px;
+    width: 120px;
 }
 
-#area-mechanism, #mechanism-unit, #orderform-area, #orderform-type, #orderform-customer, #orderform-issuer{
+#orderform-type {
+    width: 230px;
+}
+
+#area-mechanism, #mechanism-unit, #orderform-area{
     width: 200px;
 }
 
-.field-orderform-issuer{
-        position: absolute;
-    left: 265px;
-    top: 330px;    
+#orderform-issuer, #orderform-customer {
+    width: 300px;
 }
 
-.field-orderform-customer{
-    position: absolute;
-    left: 495px;
-    top: 330px;    
+.middle-box {
+    margin: 35px 0 20px;
 }
 
-#area-wrp {
+#area-wrp, #area-mechanism-wrp, #mechanism-unit-wrp {
     position: relative;
-    margin: 35px 0 15px;
-}
-
-#area-mechanism-wrp {
-    left: 265px;
-    position: absolute;
-    top: 155px;    
-}
-
-#mechanism-unit-wrp {
-    left: 510px;
-    position: absolute;
-    top: 155px;    
+    float: left;
+    margin-right: 25px;
 }
 
 #area-mechanism-wrp label,  #mechanism-unit-wrp label, #area-wrp label{
     position: absolute;
     top: -20px;       
+}
+
+.customer-box, .issuer-box {
+    position: relative;
+}
+
+.mech-issuer-wrp, .mech-customer-wrp{
+    position: absolute;
+    left: 350px;
+    top: 0;
 }
 
 /** top menu list **/

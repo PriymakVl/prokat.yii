@@ -30,9 +30,11 @@ $this->registerCssFile('/css/order.css');
             <td class="text-center">Номер заказа</td>
             <td>
                 <? if ($order->content): ?>
-                    <a href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>"><?=$order->number?></a>
+                    <a <? if ($order->number == 'Не указан') echo 'style="color:red;"'?> href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>">
+                        <?=$order->number?>
+                    </a>
                 <? else: ?>
-                     <?=$order->number?>
+                     <?=$order->number == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->number?>
                 <? endif; ?>   
             </td>
         </tr>
@@ -40,6 +42,11 @@ $this->registerCssFile('/css/order.css');
         <tr>
             <td class="text-center">Состояние заказа</td>
             <td><?=$order->state?></td>
+        </tr>
+        <!-- state -->
+        <tr>
+            <td class="text-center">Период выдачи</td>
+            <td><?=$order->period?></td>
         </tr>
         <!-- name -->
         <tr>
@@ -59,14 +66,14 @@ $this->registerCssFile('/css/order.css');
         <tr>
             <td class="text-center">Агрегат, механизм</td>
             <td>
-                <?=$order->mechanism?>
+                <?=$order->mechanism == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->mechanism?>
             </td>
         </tr>
         <!-- unit -->
         <tr>
             <td class="text-center">Узел</td>
             <td>
-                <?=$order->unit?>
+                <?=$order->unit == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->unit?>
             </td>
         </tr>
         <!-- type -->

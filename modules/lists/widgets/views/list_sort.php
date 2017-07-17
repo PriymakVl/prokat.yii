@@ -1,8 +1,6 @@
 <?php
 
-use \yii\web\JqueryAsset;
-
-$this->registerJsFile('js/list/list_sort_menu.js',  ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile('js/list/list_sort_menu.js');
 
 ?>
 

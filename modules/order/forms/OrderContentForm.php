@@ -59,44 +59,65 @@ class OrderContentForm extends BaseForm
     	return ['order-logic' => ['class' => OrderLogic::className()]];
     }
 
-
-    public function save($item)
+  public function save($item)
     {
-        $obj = $this->getObject();
-        if ($obj) {
-			$item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
-			if ($this->drawing) $item->drawing = $this->drawing;
-			if ($this->weight) $item->weight = $this->weight;
-			if ($this->name) $item->name = $this->name;
-		}
-        else {
-			if (!$item) $item = new OrderContent();
-            $item->name = $this->name ? $this->name : 'деталь';
-            $item->drawing = $this->drawing;  
-            $item->cat_dwg = $this->cat_dwg;
-            $item->file = $this->file; 
-			$item->weight = $this->weight;
-            $item->sheet = $this->sheet;     
-        } 
+        if (!$item) $item = new OrderContent();
+
+        $item->name = $this->name;
+        $item->drawing = $this->drawing;   
+		$item->weight = $this->weight;
+        $item->sheet = $this->sheet;     
         $item->note = $this->note;
         $item->count = $this->count;
         $item->rating = $this->rating;
         $item->order_id = $this->order_id; 
         $item->material = $this->material;
-        if ($this->item || $this->item === '0') $item->item = $this->item;
+        $item->item = $this->item;
+        //drawing
+        $item->cat_dwg = $this->cat_dwg;
+        $item->file = $this->file;
         $item->save();
+        
         $this->item_id = $item->id;
         return true;
     }
+  //  public function save($item)
+//    {
+//        $obj = $this->getObject();
+//        if ($obj) {
+//			$item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
+//			if ($this->drawing) $item->drawing = $this->drawing;
+//			if ($this->weight) $item->weight = $this->weight;
+//			if ($this->name) $item->name = $this->name;
+//		}
+//        else {
+//			if (!$item) $item = new OrderContent();
+//            $item->name = $this->name ? $this->name : 'деталь';
+//            $item->drawing = $this->drawing;  
+//            $item->cat_dwg = $this->cat_dwg;
+//            $item->file = $this->file; 
+//			$item->weight = $this->weight;
+//            $item->sheet = $this->sheet;     
+//        } 
+//        $item->note = $this->note;
+//        $item->count = $this->count;
+//        $item->rating = $this->rating;
+//        $item->order_id = $this->order_id; 
+//        $item->material = $this->material;
+//        if ($this->item || $this->item === '0') $item->item = $this->item;
+//        $item->save();
+//        $this->item_id = $item->id;
+//        return true;
+//    }
 
-    private function getObject() 
-    {
-        $obj = null;
-        if ($this->obj_id) $obj = Objects::getOne($obj_id);
-        else if ($this->drawing) $obj = Objects::findOne(['code' => $this->drawing, 'status' => self::STATUS_ACTIVE]); 
-        if ($obj) $obj->getName();  
-        return $obj; 
-    }
+//    private function getObject() 
+//    {
+//        $obj = null;
+//        if ($this->obj_id) $obj = Objects::getOne($obj_id);
+//        else if ($this->drawing) $obj = Objects::findOne(['code' => $this->drawing, 'status' => self::STATUS_ACTIVE]); 
+//        if ($obj) $obj->getName();  
+//        return $obj; 
+//    }
 
 
 

@@ -24,9 +24,9 @@ class HeaderWidget extends Widget {
             case 'main': return 'search_code'; break;
             case 'list': return 'search_code'; break;
             case 'default': return 'search_code'; break;
-            case 'drawingdepartment': return 'search_department_dwg'; break;
-            case 'drawingobject': return 'breadcrumbs'; break;
-            case 'drawingworks': return $this->getTemplateForActionDrawingworksController(); break;
+            case 'drawing-department': return 'search_department_dwg'; break;
+            case 'drawing-object': return 'breadcrumbs'; break;
+            case 'drawing-works': return $this->getTemplateForActionDrawingworksController(); break;
             case 'object': return $this->getTemplateForActionObjectController(); break;
             case 'object-drawing': return 'breadcrumbs'; break;
             case 'object-specification': return 'breadcrumbs'; break;

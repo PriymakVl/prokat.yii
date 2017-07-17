@@ -29,7 +29,7 @@ class ObjectSpecificationController extends BaseController
     //add objects from xml file
     public function actionDanieliFileForm($obj_id) 
     {
-        $parent = Objects::getOne($obj_id);
+        $parent = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $parent->getName();
         $form = new ExcelDanieliFileForm();
         if($form->validate() && $form->save($parent)) {

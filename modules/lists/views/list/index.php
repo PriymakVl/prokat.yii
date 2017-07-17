@@ -6,7 +6,8 @@
     use app\modules\lists\widgets\ListItemMenuWidget;
 
     $this->registerCssFile('/css/list.css');
-    $this->registerJsFile('js/list/list_description.js',  ['depends' => [JqueryAsset::className()]]);
+    //$this->registerJsFile('js/list/list_description.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('js/list/list_description.js');
     $this->registerJsFile('js/list/list_delete.js',  ['depends' => [JqueryAsset::className()]]);
 
 ?>

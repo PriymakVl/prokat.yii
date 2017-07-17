@@ -11,10 +11,11 @@ class ApplicationContent extends BaseModel
 {
 
     public $product;
+    public $sum;
     
     public static function tableName()
     {
-        return 'applications_content';
+        return 'applications_content_test';
     }
     
     public function behaviors()
@@ -26,7 +27,7 @@ class ApplicationContent extends BaseModel
     {
         $content = self::find()->where(['status' => self::STATUS_ACTIVE, 'app_id' => $app_id])
                     ->orderBy(['rating' => SORT_DESC])->all();
-        $content = self::executeMethods($content, ['getProduct']);
+        $content = self::executeMethods($content, ['getProduct', 'countSum']);
         return $content;
     }
     
@@ -34,6 +35,13 @@ class ApplicationContent extends BaseModel
     {
         $this->product = ApplicationProduct::getOne($this->product_id, false, self::STATUS_ACTIVE);
         return $this;
+    }
+    
+    public function countSum() {
+        if ((int)$this->price) {
+            $sum = bcmul($this->need, $this->price, 2);
+            $this->sum = $sum.' '.$this->currency;    
+        }    
     }
     
     public function copyItem($order_id)

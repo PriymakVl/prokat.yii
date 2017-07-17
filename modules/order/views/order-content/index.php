@@ -46,13 +46,6 @@ $this->registerCssFile('/css/order.css');
                 <? endif; ?>    
             </td>
         </tr>
-        <!-- number sheet -->
-        <tr>
-            <td class="text-center">Лист</td>
-            <td>
-                <?=$item->sheet?>
-            </td>
-        </tr>
         <!-- item -->
         <? if ($item->item): ?>
             <tr>

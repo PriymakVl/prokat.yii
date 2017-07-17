@@ -38,7 +38,7 @@ class Order extends BaseModel
     {
         $order = self::getOne($order_id, __METHOD__, self::STATUS_ACTIVE);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
-                ->getFullCustomer()->getFullIssuer()->convertArea()->convertState();
+                ->getFullCustomer()->getFullIssuer()->convertArea()->convertState()->convertPeriod();
         return $order;   
     }
     
@@ -50,16 +50,17 @@ class Order extends BaseModel
     public function getNumber()
     {
         if ($this->number) $this->number = '27.'.$this->number.'.'.$this->type;
-        else $this->number = '<span style="color:red;">Не указан</span>';
+        else $this->number = 'Не указан';
         return $this;
     }
     
     public static function getOrderList($params)
     {
-        $query = self::find()->where($params);
+        if ($params['state'] == self::STATE_DRAFT) $query = self::find()->where($params);
+        else $query = self::find()->where($params)->andWhere(['!=', 'state', self::STATE_DRAFT]);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['number' => SORT_DESC])->all();
-        return self::executeMethods($list, ['getNumber', 'getShortCustomer']);
+        return self::executeMethods($list, ['getNumber', 'getShortCustomer', 'getContent']);
     }
     
     public static function getListForFile($ids)
@@ -102,36 +103,36 @@ class Order extends BaseModel
     
     public function getFullCustomer()
     {
-        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer, null, self::STATE_ACTIVE));
+        //if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
+        if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName($this->customer);
         return $this;
     }
     
     public function getShortCustomer()
     {
-        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer, null, self::STATUS_ACTIVE));
+        //if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Не указан</span>';
+        if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName($this->customer);
         return $this;
     }
     
     public function getCustomerForPrint()
     {
-        if ((int)$this->customer === 0) $this->customer = 'Не указан';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer, null, self::STATUS_ACTIVE));
+        //if ((int)$this->customer === 0) $this->customer = 'Не указан';
+        if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName($this->customer);
         return $this;  
     }
     
     public function getFullIssuer()
     {
-        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->issuer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer, null, self::STATUS_ACTIVE));
+        //if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
+        if ((int)$this->issuer) $this->issuer = EmployeeLogic::getFullName($this->issuer);
         return $this;
     }
     
     public function getShortIssuer()
     {
-        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
-        else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer, null, self::STATUS_ACTIVE));
+        //if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
+        if ((int)$this->issuer) $this->issuer = EmployeeLogic::getShortName($this->issuer);
         return $this;
     }
     
@@ -161,7 +162,6 @@ class Order extends BaseModel
     
     public function convertState()
     {
-        $this->state = 1;
         switch ($this->state) {
             case Order::STATE_DRAFT: $this->state = '<span style="color:red;">Черновик</span>'; break;
             case Order::STATE_ACTIVE: $this->state = 'Выдан'; break;

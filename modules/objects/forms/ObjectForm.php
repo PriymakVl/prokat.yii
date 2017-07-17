@@ -50,24 +50,33 @@ class ObjectForm extends BaseForm
         return $this;
     }
     
-    public function save($form, $obj)
+    public function save($obj)
     {   
         if (!$obj) $obj = new Objects;
-        if (!$obj->code) $obj->code = $form->code;
-        $obj->parent_id = $form->parent_id;
-        $obj->rus = $form->rus;
-        $obj->alias = $form->alias;
-        $obj->note = $form->note;
-        $obj->type = $form->type;
-        $obj->equipment = $form->equipment;
-        $obj->item = $form->item;
-        $obj->rating = $form->rating;
+        if (!$obj->code) $obj->code = $this->code;
+        $obj->parent_id = $this->parent_id;
+        $this->setAliasAndRus($obj);
+        $obj->note = $this->note;
+        $obj->type = $this->type;
+        $obj->equipment = $this->equipment;
+        $obj->item = $this->item;
+        $obj->rating = $this->rating;
         $obj->save(); 
         if (!$obj->code) {
             $obj->code = $obj->id.'-code';
             $obj->save();    
         }  
         return $obj->id;           
+    }
+    
+    private function setAliasAndRus($obj)
+    {
+        $objects = Objects::findAll(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
+        foreach ($objects as $object) {
+            $object->alias = $this->alias;
+            $object->rus = $this->rus;
+            $object->save();
+        }      
     }
 
 }

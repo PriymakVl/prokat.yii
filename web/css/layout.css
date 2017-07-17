@@ -1,61 +1,33 @@
-* {
-	margin: 0;
-	padding: 0;
-}
-
-body
-{
-	font-family: "Century Gothic", Arial, Helvetica, Tahoma, sans-serif;
-	background-color:#999;
-	color:#494949;
-    font-size: 14px;
-}
-
-.wrapper
-{
-	margin: 10px auto;
-	padding: 5px 5px 5px 5px;
-	width: 950px;
-	height: 100%;
-	background-color: #fff;
-	border: solid 1px #666;
-}
-
-.content-wrp {
-    min-height: 510px;
-    margin-bottom: 15px;
-}
-
-.content-wrp:after {
-	content: "";
-	display: block;
-	clear: both;
-}
-
-.content
-{
-    float: right;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* {
+	margin: 0;
+	padding: 0;
+}
+body
+{
+	font-family: "Century Gothic", Arial, Helvetica, Tahoma, sans-serif;
+	background-color:#999;
+	color:#494949;
+    font-size: 14px;
+}
+.wrapper
+{
+	margin: 10px auto;
+	padding: 5px 5px 5px 5px;
+	width: 950px;
+	height: 100%;
+	background-color: #fff;
+	border: solid 1px #666;
+}
+.content-wrp {
+    min-height: 510px;
+    margin-bottom: 15px;
+}
+.content-wrp:after {
+	content: "";
+	display: block;
+	clear: both;
+}
+.content
+{
+    float: right;
+}

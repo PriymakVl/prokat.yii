@@ -76,6 +76,17 @@ class OrderContent extends BaseModel
         if ($this->weight) $this->weight = OrderLogic::removeZerosFromWeight($this->weight);
         return $this;
     }
+	
+	public static function checkOrderByCode($code) 
+	{
+		return self::find()->where(['code' => $code])->one();
+	}
+    
+    public function getDrawing()
+    {
+        if ($this->sheet > 1) $this->drawing = $this->drawing.' - лист '.$this->sheet;
+        return $this;
+    }
     
 }
 

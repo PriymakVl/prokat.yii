@@ -61,6 +61,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                //'app/read' => 'applications/read',
                 //search
                 'search/drawing/works' => 'search/search/drawing-works',
                 'search/drawing/department' => 'search/search/drawing-department',
@@ -125,6 +126,7 @@ $config = [
                 'order/content/list/set/parent' => 'order/order-content/set-parent',
                 'order/content/delete/list' => 'order/order-content/delete-list',
                 'order/content/item/file/add' => 'order/order-content/add-file',
+                'order/content/object/add' => 'order/order-content/add-object-form',
                 //object specification
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
                 'object/specification/copy/list' => 'objects/object-specification/copy-list',
@@ -153,6 +155,7 @@ $config = [
                 'application/list' => 'applications/application/list',
                 'application/form' => 'applications/application/form',  
                 'application' => 'applications/application', 
+                'app/read' => 'applications/read',
                 //application content   
                 'application/content/list' => 'applications/application-content/list', 
                 'application/content/item' => 'applications/application-content',                                                          

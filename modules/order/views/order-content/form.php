@@ -40,7 +40,7 @@ $this->registerCssFile('/css/order.css');
             <?=OrderFormTabWidget::widget(['nameTab' => 'other_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
             
             <!-- other tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'object_content', 'f' => $f, 'form' => $form, 'object' => $object])?>
+            <?//=OrderFormTabWidget::widget(['nameTab' => 'object_content', 'f' => $f, 'form' => $form, 'object' => $object])?>
             
             <!-- hidden order id -->
             <?=$f->field($form, 'order_id')->hiddenInput(['value' => $order ? $order->id : false])->label(false) ?>

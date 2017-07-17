@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
 use app\modules\order\widgets\OrderFormTopMenuWidget;
 use app\modules\order\widgets\OrderFormTabWidget;
+use app\modules\order\widgets\OrderFormAddEquipmentWidget;
 
 $this->registerCssFile('/css/order.css');
 
@@ -40,4 +41,5 @@ $this->registerCssFile('/css/order.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
+	<?=OrderFormAddEquipmentWidget::widget()?>
 </div>

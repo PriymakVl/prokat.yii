@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use app\models\BaseModel;
 use app\modules\objects\logic\ObjectLogic;
 use app\logic\BaseLogic;
-use app\modules\order\models\OrderContent;
+use app\modules\order\logic\OrderLogic;
 
 class Objects extends BaseModel
 {
@@ -54,11 +54,11 @@ class Objects extends BaseModel
     {
         if ($sort == 'standard') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['<', 'item', 300])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
         else if ($sort == 'unit') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['>', 'item', 299])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        //else if ($sort == 'order')
         //else if ($sort == 'app')
         else if ($sort == 'highlight') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id, 'color' => 1])->orderBy(['item' => SORT_ASC])->all();
         else $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
         $children = self::executeMethods($children, ['getOrders']);
+        if ($sort == 'order') $children = ObjectLogic::selectObjectsWithOrder($children);
         return ObjectLogic::prepareChildren($children); 
     }
 
@@ -129,15 +129,18 @@ class Objects extends BaseModel
     public function getOrders()
     {
         //sort standard danieli
-        if ($this->code && $this->code[0] != '0') $this->orders = OrderContent::searchByDrawing($this->code);
+        if ($this->code && $this->code[0] != '0') $this->orders = OrderLogic::getOrdersByCode($this->code);
         return $this;
     }
     
-    public function getChildrenForMainPage($parent_id)
+    public static function getChildrenForMainPage($parent_id)
     {
-        $children = Objects::find()->select('rus, eng, item, id, code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])
+        $data = Objects::find()->select('rus, eng, item, id, code, color')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])
         //->andWhere(['>', 'item', 299])->andWhere(['<', 'item', 99])
         ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->asArray()->all();
+        foreach ($data as $item) {
+            if ($item['item'] == 0 || $item['item'] > 299) $children[] = $item;
+        }
         return $children;
     }
 	

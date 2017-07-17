@@ -11,7 +11,7 @@ use app\modules\equipments\logic\EquipmentLogic;
 class EmployeeController extends BaseController 
 {
     public $layout = "@app/views/layouts/base";
-    
+    /**
     public function actionIndex($order_id) 
     { 
         $order = Order::findOne($order_id);
@@ -40,6 +40,16 @@ class EmployeeController extends BaseController
         }   
         return $this->render('form', compact('order', 'form'));
     }
+	**/
+	public function actionAdd($name, $parent_id, $type)
+	{
+		$equipnment = new Equipment();
+		$equipment->name = $name;
+		$eqipment->parent_id = $parent_id;
+		$equipment->type = $type;
+		return $equipment->save();
+		exit;
+	}
     
    
     

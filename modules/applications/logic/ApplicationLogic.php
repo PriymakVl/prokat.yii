@@ -17,11 +17,10 @@ class ApplicationLogic extends BaseLogic
     {
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
-        //$params['year'] = $year ? $year : date('Y');
-        $params['year'] = '2016';
+        $params['year'] = $year ? $year : date('Y');
         $state = 'all';
         if ($state != 'all') $params['state'] = $state ? $state : Application::STATE_APP_ACTIVE;
-        if ($department && $department != 'all') $params['department'] = $department;
+        if ($department) $params['department'] = $department;
         if ($category && $category != 'all') $params['category'] = $category;
         return $params;   
     }

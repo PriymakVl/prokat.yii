@@ -44,13 +44,13 @@ $this->registerCssFile('/css/application.css');
                         <?=$number?>
                     </td>
                     <td class="text-center">
-                        <a href="<?=Url::to(['/application', 'app_id' =>$app->id])?>"><?=$app->department ? $app->department : 'Не указан'?></a>
+                        <a href="<?=Url::to(['/application', 'app_id' =>$app->id])?>"><?=$app->department_rus ? $app->department_rus : 'Не указан'?></a>
                     </td>
                     <td class="text-center">
-                       <?=$app->number_out?>
+                       <?=$app->out_num?>
                     </td>
                     <td class="text-center">
-                        <?=$app->number_ens?>
+                        <?=$app->ens?>
                     </td>
                     <td>
                         <a href="<?=Url::to(['/application/content/list', 'app_id' =>$app->id])?>"><?=$app->title?></a>

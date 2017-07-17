@@ -79,6 +79,14 @@ class ObjectLogic extends BaseLogic
 		}
 	}
     
+    public static function selectObjectsWithOrder($objects)
+    {
+        if (empty($objects)) return $objects;
+        foreach ($objects as $object) {
+            if ($object->orders) $objs_order[] = $object;
+        }
+        return $objs_order;
+    }
 
 
 }

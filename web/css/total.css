@@ -4,6 +4,12 @@
     cursor: default;
 }
 
+.clear:after {
+   content: "";
+   display: table;
+   clear: both;
+}
+
 /* info */
 .info-box {
 	padding:5px 0 5px 10px;

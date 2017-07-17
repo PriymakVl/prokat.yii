@@ -11,7 +11,7 @@ class ApplicationProduct extends BaseModel
     
     public static function tableName()
     {
-        return 'application_products';
+        return 'application_products_test';
     }
     
     public function behaviors()
