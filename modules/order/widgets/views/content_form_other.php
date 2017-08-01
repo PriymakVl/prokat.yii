@@ -3,6 +3,7 @@
     <?php 
         $params = ['prompt' => 'Невыбран'];
         $categories = ['vendor' => 'Производитель', 'works' => 'ПКО комбината', 'department' => 'Цех'];
+        $form->cat_dwg = $item->cat_dwg;
         echo $f->field($form, 'cat_dwg')->dropDownList($categories, $params)->label('Кто разработал чертеж:');
     ?>
     
@@ -10,6 +11,7 @@
     <?php 
         $params = ['prompt' => 'Невыбран'];
         $equipments = ['danieli' => 'Danieli', 'sundbirsta' => 'Sundbirsta', 'crane' => 'Краны', 'gydro' => 'Гидравлика'];
+        $form->equipment = $item->equipment;
         echo $f->field($form, 'equipment')->dropDownList($equipments, $params)->label('Производитель оборудования:');
     ?>
     

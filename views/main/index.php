@@ -4,6 +4,7 @@ use \yii\web\JqueryAsset;
 use app\widgets\MainMenuWidget; 
 use app\widgets\SectionMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
+use yii\helpers\Url;
 
 $this->registerCssFile('/css/main.css');
 $this->registerJsFile('js/main/list_department_accordion.js',  ['depends' => [JqueryAsset::className()]]);
@@ -20,6 +21,7 @@ $this->registerJsFile('js/main/list_department_accordion.js',  ['depends' => [Jq
     <ul class="department-list">
         <? foreach ($objects as $obj): ?>
             <li class="department-list-item" obj_id="<?=$obj->id?>" >
+                <a href="<?=Url::to(['/object', 'obj_id' => $obj->id])?>"  target="_blank">***</a>
                 <a href="#" onclick="sublist(this);" li_content="" title="<?=$obj->id?>"><?=$obj->name?></a>
             </li>
         <? endforeach; ?>

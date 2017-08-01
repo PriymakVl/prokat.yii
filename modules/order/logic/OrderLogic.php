@@ -272,8 +272,8 @@ class OrderLogic extends BaseLogic
         if ($order_ids) {
             $orders = Order::findAll($order_ids);
             if (!$orders) return [];
-            $orders = self::executeMethodsOfObjects($orders, ['getNumber']); 
-            return $orders;  
+            $orders = self::executeMethodsOfObjects($orders, ['getNumber', 'convertState']); 
+            return array_reverse($orders);  
         }
         return [];    
     }

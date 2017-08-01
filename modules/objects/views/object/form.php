@@ -24,15 +24,23 @@ $this->registerCssFile('/css/object.css');
 			
 			<!-- rusian name object -->          
             <?= $f->field($form, 'rus')->textInput(['value' => $obj ? $obj->rus : ''])->label('Название объекта:') ?>
+			<input type="checkbox" name="ObjectForm[all_name]" value="yes" id="objectform-all_name" />
+			<label>Изменить название для всех</label>
 			
 			<!-- alias -->          
             <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias, 'style' => 'width:250px'])->label('Короткое название объекта:')?>
 			
 			<!-- id object -->
-			<?=$f->field($form, 'id')->textInput(['value' => $obj->id, 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>
+			<?=$f->field($form, 'id')->textInput(['value' => $obj ? $obj->id : '', 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>
 			
             <!-- code -->          
-            <?=$f->field($form, 'code')->textInput(['value' => $obj->code, 'readonly' => 'readonly', 'style' => 'width:200px'])->label('Код объекта:'); ?>
+            <?=$f->field($form, 'code')->textInput(['value' => $obj ? $obj->code : '', 'style' => 'width:200px'])->label('Код объекта:'); ?>
+			
+			<!-- weight -->          
+            <?=$f->field($form, 'weight')->textInput(['value' => $obj ? $obj->weight : '', 'style' => 'width:200px'])->label('Вес,кг'); ?>
+			
+			<!-- qty -->          
+            <?=$f->field($form, 'qty')->textInput(['value' => $obj ? $obj->qty : '1', 'style' => 'width:200px'])->label('Количество,шт'); ?>
             
 			<!-- item -->          
             <?= $f->field($form, 'item')->textInput(['value' => $obj ? $obj->item : '', 'style' => 'width:100px'])->label('Позиция:') ?>

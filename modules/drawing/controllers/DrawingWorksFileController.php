@@ -16,7 +16,7 @@ class DrawingWorksFileController extends BaseController
     public function actionForm($file_id = null, $dwg_id = null) 
     { 
         $file = (int)$file_id ? DrawingWorksFile::findOne($file_id) : null;
-        $dwg = DrawingWorks::getOne($dwg_id, __METHOD__);
+        $dwg = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $form = new DrawingWorksFileForm();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($file)) { 
@@ -27,7 +27,7 @@ class DrawingWorksFileController extends BaseController
     
     public function actionDelete($file_id = null) 
     {
-        $file = DrawingWorksFile::getOne($file_id, __METHOD__);
+        $file = DrawingWorksFile::getOne($file_id, false, self::STATUS_ACTIVE);
         $file->delete();
         return $this->redirect(['/drawing/works/files', 'dwg_id' => $file->dwg_id]);
     }

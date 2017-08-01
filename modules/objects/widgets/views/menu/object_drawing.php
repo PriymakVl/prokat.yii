@@ -17,6 +17,9 @@
             <li>
                 <a href="#" onclick="return false;" id="dwg-delete-obj">Удалить чертеж</a>
             </li>
+			<li>
+                <a href="<?=Yii::$app->urlManager->createUrl(['object/drawing/form/vendor', 'obj_id' => $obj_id])?>">Доб. черт. производ</a>
+            </li>
             <li>
                 <a href="#" onclick="return false;" id="dwg-vendor-update">Редакт черт. производ</a>
             </li>

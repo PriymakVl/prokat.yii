@@ -12,7 +12,7 @@ $this->registerCssFile('/css/drawing.css');
 ?>
 <div class="content">
     <!-- title -->
-    <div class="title-box">Перечень цеховых чертежей(эскизов)</div>
+    <div class="title-box">Перечень цеховых эскизов</div>
     
     <!-- top menu -->
     <?=DrawingDepartmentTopMenuWidget::widget()?>
@@ -29,7 +29,7 @@ $this->registerCssFile('/css/drawing.css');
                 <? if ($dwg->type == 'folder'): ?>
                     Название папки
                 <? else: ?>
-                    Назание чертежа(эскиза)
+                    Назание эскиза
                 <? endif; ?>
             </td>
             <td>
@@ -41,13 +41,23 @@ $this->registerCssFile('/css/drawing.css');
             </td>
         </tr>
         
+        <!-- alias -->
+        <tr>
+            <td class="text-center">
+                Короткое название
+            </td>
+            <td>
+                <?=$dwg->alias?>
+            </td>
+        </tr>
+        
         <!-- number -->
         <tr>
             <td class="text-center">
                 <? if ($dwg->type == 'folder'): ?>
                     Номер папки
                 <? else: ?>
-                    Номер чертежа(эскиза)
+                    Номер эскиза
                 <? endif; ?>
             </td>
             <td>

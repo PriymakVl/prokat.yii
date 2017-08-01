@@ -15,7 +15,7 @@ class DrawingWorksController extends BaseController
     
     public function actionIndex($dwg_id) 
     { 
-        $dwg = DrawingWorks::getOne($dwg_id, __METHOD__);
+        $dwg = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $dwg->convertDate($dwg)->checkChild()->getParent()->getTypeName()->getFiles();
         return $this->render('index', compact('dwg'));
     }
@@ -41,7 +41,7 @@ class DrawingWorksController extends BaseController
     
     public function actionSpecification($dwg_id = null) 
     { 
-        $parent = DrawingWorks::getOne($dwg_id, __METHOD__);
+        $parent = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $parent->checkChild();
         $specification = DrawingWorks::getSpecification($parent->id);
         return $this->render('specification', compact('specification', 'parent'));
@@ -49,14 +49,14 @@ class DrawingWorksController extends BaseController
     
     public function actionFiles($dwg_id = null) 
     { 
-        $dwg = DrawingWorks::getOne($dwg_id, __METHOD__);
+        $dwg = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $dwg->checkChild()->getFiles();
         return $this->render('files', compact('dwg'));
     }
     
     public function actionDelete($dwg_id = null) 
     {
-        $dwg = DrawingWorks::getOne($dwg_id, __METHOD__);
+        $dwg = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $dwg->deleteOne();
         return $this->redirect(['/drawing/works/list']);
     }

@@ -57,7 +57,7 @@ $this->registerCssFile('/css/application.css');
         <tr>
             <td class="text-center">Вид ремонта</td>
             <td>
-                <?=$app->type_repair?>
+                <?=$app->type?>
             </td>
         </tr>
         <!-- period -->
@@ -94,41 +94,41 @@ $this->registerCssFile('/css/application.css');
         <!-- category -->
         <tr>
             <td class="text-center">Категория</td>
-            <td><?=$a00->category?></td>
+            <td><?=$app->category?></td>
         </tr>
         <!-- customer -->
         <tr>
             <td class="text-center">Заказал</td>
             <td>
-                <?=$order->customer?>
+                <?=$app->customer?>
             </td>
         </tr>
         <!-- issuer -->
         <tr>
             <td class="text-center">Выдал</td>
             <td>
-                <?=$order->issuer?>
+                <?=$app->created?>
             </td>
         </tr>
         <!-- executor -->
         <tr>
             <td class="text-center">Исполнитель</td>
             <td>
-                <?=$order->executor?>
+                <?=$app->executor?>
             </td>
         </tr>
         <!-- date create -->
         <tr>
             <td class="text-center">Дата создания</td>
             <td>
-                <?=$order->date?>
+                <?=date('d.m.y', $app->date)?>
             </td>
         </tr>
         <!-- note -->
-        <? if ($order->note): ?>
+        <? if ($app->note): ?>
             <tr>
                 <td class="text-center">Примечание</td>
-                <td><?=$order->note?></td>
+                <td><?=$app->note?></td>
             </tr>
         <? endif; ?>
 

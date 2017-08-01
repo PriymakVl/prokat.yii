@@ -58,7 +58,7 @@ class ListController extends BaseController
     
     public function actionDelete($list_id = null) 
     {
-        $list = Lists::getOne($list_id, __METHOD__);
+        $list = Lists::getOne($list_id, false, self::STATUS_ACTIVE);
         ListContent::deleteListContent($list_id);
         ListLogic::deleteListFromSession();
         if ($list->deleteOne()) return $this->redirect(['/list/active']);

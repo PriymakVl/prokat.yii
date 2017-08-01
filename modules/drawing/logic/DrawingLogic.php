@@ -29,7 +29,10 @@ class DrawingLogic extends BaseLogic
     public static function getParamsDepartment()
     {
         $params = [];
-        if (self::in_get('year')) $params['year'] = Yii::$app->request->get('year');
+        if (self::in_get('year')) {
+            $params['year'] = Yii::$app->request->get('year');
+            $params['type'] = 'file';    
+        }
         $params['parent_id'] = 0;
         $params['status'] = self::STATUS_ACTIVE;
         return $params;

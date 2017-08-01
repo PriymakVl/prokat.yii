@@ -17,14 +17,14 @@ class ListContentController extends BaseController
     
     public function actionDelete($id = null) 
     {
-        $item = ListContent::getOne($id, __METHOD__); 
+        $item = ListContent::getOne($id, false, self::STATUS_ACTIVE); 
         $item->deleteOne();     
         return $this->redirect('/list/active');
     }
     
     public function actionForm($id = null) 
     {
-        $item = ListContent::getOne($id, __METHOD__); 
+        $item = ListContent::getOne($id, false, self::STATUS_ACTIVE); 
         $form = new ListContentForm();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->update($item)) {
             return $this->redirect(['/list/active']);
@@ -35,7 +35,7 @@ class ListContentController extends BaseController
     public function actionAdd($obj_id = null)
     {
         $list_id = ListLogic::getActiveListId();
-        $obj = Objects::getOne($obj_id, __METHOD__);
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $obj->getName();
 		$content = new ListContent();
         $content->saveItem($obj, $list_id);

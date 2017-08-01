@@ -13,9 +13,16 @@ class ObjectController extends BaseController
       
     public function actionIndex($obj_id) 
     { 
-        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $obj->getName()->getParent()->checkDrawing()->checkChild()->getOrders();
         return $this->render('index', compact('obj'));
+    }
+    
+    public function actionOrders($obj_id) 
+    { 
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
+        $obj->getName()->getOrders();
+        return $this->render('orders', compact('obj'));
     }
     
     public function actionForm($obj_id = null)
@@ -33,14 +40,14 @@ class ObjectController extends BaseController
     
     public function actionCopy($obj_id, $parent_id)
     {
-        $obj = Objects::getOne($obj_id);
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $obj->copy($parent_id);
         $this->redirect(['/object', 'obj_id' => $obj->id]);
     }
     
     public function actionDeleteOne($obj_id)
     {
-        $obj = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $parent_id = $obj->parent_id;
         $obj->delete();
         if($parent_id == 0) $this->redirect(Yii::$app->getHomeUrl());

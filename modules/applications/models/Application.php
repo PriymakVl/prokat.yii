@@ -19,7 +19,8 @@ class Application extends BaseModel
     
     const PAGE_SIZE = 15;
     const STATE_APP_DRAFT = 1;
-    const STATE_APP_ACTIVE = 2;
+    const STATE_APP_ACTIVE = 2;//принята к исполнению
+    const STATE_APP_CREATE = 3;//создана но неподписана и не принята
     //const ORDER_STATE_NOT_ACCEPTED = 3;
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
@@ -27,7 +28,7 @@ class Application extends BaseModel
     
     public static function tableName()
     {
-        return 'applications_test';
+        return 'applications';
     }
     
     public function behaviors()
@@ -40,12 +41,12 @@ class Application extends BaseModel
         $this->content = OrderContent::findAll(['status' => self::STATUS_ACTIVE, 'app_id' => $this->id]);
     }
     
-    public function getDepartmentRus()
-    {
-        if ($this->department == 'supply') $this->department_rus = 'ОМТС';
-        else if ($this->department == 'equipment') $this->department_rus = 'ОО';
-        return $this;
-    }
+//    public function getDepartmentRus()
+//    {
+//        if ($this->department == 'supply') $this->department_rus = 'ОМТС';
+//        else if ($this->department == 'equipment') $this->department_rus = 'ОО';
+//        return $this;
+//    }
     
     public function getFullOutNumber()
     {
@@ -65,59 +66,77 @@ class Application extends BaseModel
         $query = self::find()->where($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['ens' => SORT_ASC])->all();
-        return self::executeMethods($list, ['getDepartmentRus']);
+        return self::executeMethods($list, ['convertDepartment']);
     }
     
-    public static function getListForFile($ids)
-    {
-        $ids = trim($ids);
-        $sql = 'SELECT * FROM `orders` WHERE `id` IN('.$ids.')  ORDER BY `number` DESC';
-        $list = self::findBySql($sql)->all();
-        return self::executeMethods($list, ['getNumber', 'convertServiceForFile', 'convertDateForFile', 'getCustomerForPrint']);
-    }
+//    public static function getListForFile($ids)
+//    {
+//        $ids = trim($ids);
+//        $sql = 'SELECT * FROM `orders` WHERE `id` IN('.$ids.')  ORDER BY `number` DESC';
+//        $list = self::findBySql($sql)->all();
+//        return self::executeMethods($list, ['getNumber', 'convertServiceForFile', 'convertDateForFile', 'getCustomerForPrint']);
+//    }
     
     public function convertType()
     {
-        $this->type = OrderLogic::convertType($this->type);
+        $this->type = ApplicationLogic::convertType($this->type);
         return $this;
     }
     
-    public function convertDateForFile()
-    {
-        return parent::convertDate($this, false, 'd.m.y');
-    }
+//    public function convertDateForFile()
+//    {
+//        return parent::convertDate($this, false, 'd.m.y');
+//    }
     
-    public function convertArea()
+    public function convertPeriod()
     {
-        $this->area = ApplicationLogic::convertArea($this->area);
+        $this->period = ApplicationLogic::convertPeriod($this->period);
         return $this;
     }
     
-    public function convertServiceForFile()
+    public function convertDepartment($full = false)
     {
-        return parent::convertService($this);
+        $this->department = ApplicationLogic::convertDepartment($this->department, $full);
+        return $this;
     }
+    
+    public function convertState()
+    {
+        $this->state = ApplicationLogic::convertState($this->state);
+        return $this;
+    }
+    
+     public function convertCategory()
+    {
+        $this->category = ApplicationLogic::convertCategory($this->category);
+        return $this;
+    }
+    
+//    public function convertServiceForFile()
+//    {
+//        return parent::convertService($this);
+//    }
     
     public static function searchByOutNumber($out)
     {
-        $ids = OutNumbers::getIdsByNumber($out, 'application');
-        $apps = self::findAll($ids);
-        if (count($apps) > 1) self::executeMethods($orders, []);
+        //$ids = OutNumbers::getIdsByNumber($out, 'application');
+        $apps = self::findAll(['out_num' => $out]);
+        //if (count($apps) > 1) self::executeMethods($orders, []);
         return $apps;
     }
     
     public static function searchByEnsNumber($ens)
     {
         $apps = self::find()->where(['ens' => $ens, 'status' => self:: STATUS_ACTIVE])->all();
-        if (count($apps) > 1) self::executeMethods($apps, []);
+        //if (count($apps) > 1) self::executeMethods($apps, []);
         return $apps;
     }
     
-//    public function getCategories()
-//    {
-//        $this->categories = $this->getTagObjects('application');
-//        return $this;
-//    }
+    public static function getListCategory()
+    {
+        $categories = $this->getTagObjects('application');
+        debug($categories);
+    }
 
 }
 

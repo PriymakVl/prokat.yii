@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
+use app\modules\drawing\widgets\DrawingListMenuWidget;
 
 $this->registerCssFile('/css/drawign.css');
 
@@ -23,9 +24,14 @@ $this->registerCssFile('/css/drawign.css');
         <? $f = ActiveForm::begin(['id' => 'form-department-dwg', 'options' => ['enctype'=>'multipart/form-data']]); ?>
             <!-- name -->          
             <?php 
-                //$name = $dwg ? $dwg->name : ''; 
-                echo $f->field($form, 'name')->textInput(['value' => $dwg->name])->label('Название чертежа:'); 
+                echo $f->field($form, 'name')->textInput(['value' => $dwg ? $dwg->name : ''])->label('Название чертежа:'); 
             ?>
+			
+			<!-- alias -->
+			<?php 
+                echo $f->field($form, 'alias')->textInput(['value' => $dwg ? $dwg->alias : ''])->label('Короткое название чертежа:'); 
+            ?>
+			
             <!-- type -->
             <?php 
                 $form->type = $dwg ? $dwg->type : 'file';
@@ -68,4 +74,5 @@ $this->registerCssFile('/css/drawign.css');
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     <?=DrawingMainMenuWidget::widget()?>
+	<?=DrawingListMenuWidget::widget()?>
 </div>

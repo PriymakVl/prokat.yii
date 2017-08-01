@@ -8,6 +8,7 @@
 namespace app\assets;
 
 use yii\web\AssetBundle;
+use yii\web\View;
 
 /**
  * @author Qiang Xue <qiang.xue@gmail.com>
@@ -25,6 +26,7 @@ class AppAsset extends AssetBundle
         'css/footer.css',
         'css/total.css',
     ];
+    
     public $js = [
         //'js/vendor/jquery.cookie.js',
         //'js/vendor/jquery.accordion.js',
@@ -32,8 +34,12 @@ class AppAsset extends AssetBundle
         'js/total/menu_toggle.js',
         'js/total/table_checked_all.js'
     ];
+    
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapPluginAsset', //bootstrap.js
     ];
+    
+    public $jsOptions = ['position' => View::POS_HEAD];
 }

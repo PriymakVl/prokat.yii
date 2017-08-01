@@ -57,6 +57,7 @@ class AppexcelController extends BaseController {
         $app->state = '2';
         $app->title = 'Заявка';
         $app->department = 'supply';
+        $app->type = 'current';
         $app->executor = $row[23] ? $row[23] : '';
         return $app->save() ? $app->id : false;   
     }

@@ -10,7 +10,7 @@ $this->registerJsFile('js/order/form_set_customer_issuer.js',  ['depends' => [Jq
 <div id="order-form-main">
     <div class="top-box">
         <!-- number -->          
-        <?=$f->field($form, 'number')->textInput(['value' => $order->number, 'maxlength'=>3, 'style' => 'width:120px'])->label('Номер заказа:')?>
+        <?=$f->field($form, 'number')->textInput(['value' => $order ? $order->number : '', 'maxlength'=>3, 'style' => 'width:120px'])->label('Номер заказа:')?>
         
          <!-- date -->          
         <?=$f->field($form, 'date')->textInput(['value' => $order->date ? $order->date : date('d.m.y'), 'style' => 'width:120px'])->label('Дата выдачи:')?>

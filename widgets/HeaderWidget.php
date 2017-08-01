@@ -5,13 +5,15 @@ namespace app\widgets;
 use Yii;
 use yii\base\Widget;
 use app\modules\objects\widgets\ObjectBreadcrumbsHeaderWidget;
+use app\modules\drawing\widgets\DrawingBreadcrumbsHeaderWidget;
 
 class HeaderWidget extends Widget {
 
     public function run()
     {
         $template = $this->getTemplate();
-        if ($template == 'breadcrumbs') return ObjectBreadcrumbsHeaderWidget::widget();    
+        if ($template == 'obj_breadcrumbs') return ObjectBreadcrumbsHeaderWidget::widget();  
+        else if ($template == 'dwg_department_breadcrumbs')  return DrawingBreadcrumbsHeaderWidget::widget(['category' => 'department']);
         return $this->render("header/$template");
 
     }
@@ -24,12 +26,12 @@ class HeaderWidget extends Widget {
             case 'main': return 'search_code'; break;
             case 'list': return 'search_code'; break;
             case 'default': return 'search_code'; break;
-            case 'drawing-department': return 'search_department_dwg'; break;
+            case 'drawing-department': return $this->getTemplateForActionDrawingDepartmentController(); break;
             case 'drawing-object': return 'breadcrumbs'; break;
             case 'drawing-works': return $this->getTemplateForActionDrawingworksController(); break;
             case 'object': return $this->getTemplateForActionObjectController(); break;
-            case 'object-drawing': return 'breadcrumbs'; break;
-            case 'object-specification': return 'breadcrumbs'; break;
+            case 'object-drawing': return 'obj_breadcrumbs'; break;
+            case 'object-specification': return 'obj_breadcrumbs'; break;
             case 'search': return $this->getTemplateForActionSearchController(); break;
             case 'order': return 'search_order'; break;
             case 'order-content': return 'search_order'; break;
@@ -42,7 +44,8 @@ class HeaderWidget extends Widget {
     {
         switch(Yii::$app->controller->action->id) {
             case 'form': return 'search_code'; break;
-            case 'index': return 'breadcrumbs'; break;
+            case 'index': return 'obj_breadcrumbs'; break;
+            case 'orders': return 'obj_breadcrumbs'; break;
             default: return 'empty';
         }    
     }
@@ -61,6 +64,16 @@ class HeaderWidget extends Widget {
         switch(Yii::$app->controller->action->id) {
             case 'list': return 'search_works_dwg'; break;
             case 'index': return 'search_works_dwg'; break;
+            default: return 'empty';
+        }    
+    }
+    
+    private function getTemplateForActionDrawingDepartmentController() 
+    {
+        switch(Yii::$app->controller->action->id) {
+            case 'list': return 'search_department_dwg'; break;
+            case 'index': return 'dwg_department_breadcrumbs'; break;
+            case 'folder': return 'dwg_department_breadcrumbs'; break;
             default: return 'empty';
         }    
     }

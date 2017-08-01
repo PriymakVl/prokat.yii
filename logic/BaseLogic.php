@@ -39,7 +39,7 @@ class BaseLogic  extends Behavior implements ConfigApp
         return $obj;
     }
     
-    public function executeMethodsOfObjects($array, $methods)
+    public static function executeMethodsOfObjects($array, $methods)
     {
         return self::executeMethods($array, $methods);    
     }

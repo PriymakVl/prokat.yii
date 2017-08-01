@@ -35,17 +35,16 @@ class ApplicationContentController extends BaseController
         return $this->render('list', compact('app', 'content', 'state'));
     }
     
-    public function actionForm($order_id, $item_id = null) 
+    public function actionForm($app_id, $item_id = null) 
     { 
-        $order = Order::findOne($order_id);
-        $order->getNumber();
-        $item = OrderContent::getOne($item_id, null);
+        $app = Application::getOne($order_id, false, self::STATUS_ACTIVE);
+        $item = OrderContent::getOne($item_id, null, self::STATUS_ACTIVE);
         $form = new OrderContentForm();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($item)) { 
-            return $this->redirect(['/order/content/item', 'item_id' => $form->item_id]);
+            return $this->redirect(['/application/content/item', 'item_id' => $form->item_id]);
         }   
-        return $this->render('form', compact('item', 'form', 'order'));
+        return $this->render('form', compact('item', 'form', 'app'));
     }
     
     public function actionDeleteOne($item_id) 

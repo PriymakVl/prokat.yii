@@ -42,7 +42,7 @@ class DrawingDepartmentController extends BaseController
     
     public function actionFolder($dwg_id = null) 
     { 
-        $folder = DrawingDepartment::getOne($dwg_id, __METHOD__);
+        $folder = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $folder->getContentOfFolder();
         return $this->render('folder', compact('folder'));
     }

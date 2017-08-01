@@ -6,18 +6,19 @@ use Yii;
 use app\forms\BaseForm;
 use app\modules\applications\logic\ApplicationLogic;
 use app\modules\applications\models\Application;
-use app\modules\Tag;
+use app\models\Tag;
 
 
 class ApplicationForm extends BaseForm
 {   
     
     public $title;
-    public $issuer;
+    public $created;
     public $customer;
     public $executor;
     public $ens;
-    public $out;
+    public $out_num;
+    public $out_date;
     public $year;
     public $category;
     //public $service;
@@ -25,25 +26,26 @@ class ApplicationForm extends BaseForm
     public $period;
     public $department;
     public $note;
-    public $type_repair;
     public $state;
     //form
     public $app_id;
+    public $categories;
     
     public function rules() 
     {
         return [
             [['title', 'department'], 'required', 'message' => 'Необходимо заполнить поле'],
-            ['issuer', 'string'],
+            ['created', 'string'],
             ['customer', 'string'],
             ['category', 'string'],
             //['service', 'string'],
             ['note', 'string',],
             ['ens','integer'],
-            ['out','integer'],
+            ['out_num','integer'],
+            ['out_date','string'],
             ['year','integer'],
             ['state','integer'],
-            ['type_repair','string'],
+            ['type','string'],
             ['department','string'],
             ['period', 'string'],
         ];
@@ -60,8 +62,6 @@ class ApplicationForm extends BaseForm
     {
         if (!$app) $app = new Application();
         $app = $this->updateData($app);
-        debug($this);
-        debug($app);
         if (!$app->save()) return false;
         $this->app_id = $app->id;
         return true;  
@@ -69,14 +69,19 @@ class ApplicationForm extends BaseForm
     
     private function updateData($app)
     {
+        if ($this->out_num) $app->out_num = $this->out_num;
+        if ($this->out_date) $app->out_date = strtotime($this->out_date);
         $app->department = $this->department;
         $app->title = $this->title;
-        $app->customer = $this->customer;
-        $app->executor = $this->executor;
+        $app->category = $this->category;
+        if ($this->customer) $app->customer = $this->customer;
+        if ($this->executor) $app->executor = $this->executor;
+        if ($this->created) $app->created = $this->created;
         $app->year = $this->year;
-        $app->type_repair = $this->type_repair;
+        $app->type = $this->type;
         $app->period = $this->period;
-        $app->note = $this->note;
+        $app->state = $this->state;
+        if ($this->note) $app->note = $this->note;
         $app->service = 'mech';
         if (!$app->date) $app->date = time();
         return $app;
@@ -84,7 +89,8 @@ class ApplicationForm extends BaseForm
     
     public function getCategories()
     {
-        $this->categories = $this->getTagObjects('application');
+        $this->categories = Tag::getObjects('application');
+        return $this;
     }
 
 }

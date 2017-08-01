@@ -9,6 +9,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 
+//add objects sundbirsta from file excel
 class SiteController extends Controller
 {
     /**

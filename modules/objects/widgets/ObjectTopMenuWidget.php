@@ -13,7 +13,8 @@ class ObjectTopMenuWidget extends Widget
     {
         if (Yii::$app->controller->id == 'object-drawing') $page = 'drawing';
         else if (Yii::$app->controller->id == 'object-specification') $page = 'specification';
-        else $page = 'object';
+        else if (Yii::$app->controller->id == 'object' && Yii::$app->controller->action->id == 'index') $page = 'object';
+        else $page = '';
         
         return $this->render('menu/object_top', ['obj_id' => $this->obj_id, 'page' => $page]);
     }

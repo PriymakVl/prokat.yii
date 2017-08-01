@@ -17,12 +17,14 @@ class ObjectForm extends BaseForm
     public $type;
     public $equipment;
     public $weight;
+	public $qty; //count objects
     public $code;
     public $rating;
     public $item; //position object in specification
     //form
     public $types;
     public $equipments;
+	public $all_name;
     
     public function rules() {
         return [
@@ -31,10 +33,13 @@ class ObjectForm extends BaseForm
             [['equipment'], 'required', 'message' => 'Необходимо указать оборудование объекта'],
             ['alias', 'default', 'value' => ''],
             ['code', 'default', 'value' => ''],
+			['weight', 'default', 'value' => ''],
+			['qty', 'default', 'value' => ''],
             ['note', 'default', 'value' => ''],
             ['parent_id', 'default', 'value' => 0],
             ['item', 'default', 'value' => 0],
             ['rating', 'default', 'value' => 0],
+			['all_name', 'string'],
         ];
     }
     
@@ -53,11 +58,15 @@ class ObjectForm extends BaseForm
     public function save($obj)
     {   
         if (!$obj) $obj = new Objects;
-        if (!$obj->code) $obj->code = $this->code;
+        if (!$obj->code) $obj->code = trim($this->code);
         $obj->parent_id = $this->parent_id;
-        $this->setAliasAndRus($obj);
+        $obj->rus = $this->rus;
+		if ($this->all_name && $this->rus && $this->code != '') $this->changeNameAllObjects();
+        $obj->alias = $this->alias;
         $obj->note = $this->note;
         $obj->type = $this->type;
+		$obj->weight = $this->weight;
+		$obj->qty = $this->qty;
         $obj->equipment = $this->equipment;
         $obj->item = $this->item;
         $obj->rating = $this->rating;
@@ -68,15 +77,24 @@ class ObjectForm extends BaseForm
         }  
         return $obj->id;           
     }
-    
-    private function setAliasAndRus($obj)
-    {
-        $objects = Objects::findAll(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
-        foreach ($objects as $object) {
-            $object->alias = $this->alias;
-            $object->rus = $this->rus;
-            $object->save();
-        }      
-    }
+	
+	public function changeNameAllObjects() {
+		$objects = Objects::findAll(['code' => $this->code, 'status' => self::STATUS_ACTIVE]);
+		if (!$objects) return;
+		foreach ($objects as $obj) {
+			$obj->rus = $this->rus;
+			if ($this->alias) $obj->alias = $this->alias;
+			$obj->save();
+		}
+	}
 
 }
+
+
+
+
+
+
+
+
+

@@ -7,6 +7,7 @@ use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
 use app\modules\order\widgets\OrderItemChildrenWidget;
+use app\modules\order\widgets\OrderActiveMenuWidget;
 
 $this->registerCssFile('/css/order.css');
 
@@ -94,4 +95,5 @@ $this->registerCssFile('/css/order.css');
     <?=MainMenuWidget::widget()?>
     <?=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
     <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
 </div>

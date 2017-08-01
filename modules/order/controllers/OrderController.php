@@ -39,6 +39,7 @@ class OrderController extends BaseController
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             $this->redirect(['/order', 'order_id' => $form->order_id]);
         }   
+        //Debug($order);
         return $this->render('form', compact('order', 'form'));
     }
     

@@ -22,7 +22,7 @@ class DrawingWorksFileForm extends BaseForm
             ['sheet', 'default', 'value' => 1],
             ['dwg_id', 'default', 'value' => 0],
             ['note', 'default', 'value' => ''],
-            ['file', 'file', 'extensions' => ['pdf', 'tif']],
+            ['file', 'file', 'extensions' => ['pdf', 'tif', 'jpg', 'cdw']],
         ];
 
     }

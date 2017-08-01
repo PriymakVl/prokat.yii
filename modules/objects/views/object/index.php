@@ -69,32 +69,36 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
             </td>
         </tr>
         
+        <!-- count of objects -->
+        <tr>
+            <td>Количество</td>
+            <td>
+                <?=$obj->qty?>
+            </td>
+        </tr>
+        
         <!-- orders -->
         <? if ($obj->orders): ?>
             <tr>
-                <td>Заказы</td>
                 <td>
-                    <? foreach ($obj->orders as $order): ?>
-                        <a style="color:<?=$order->type = 4 ? 'green' : 'yellow'?>" href="<?=Url::to(['/order/content/list', 'order_id' =>$order->id])?>" target="_blank"><?='№'.$order->number.', '?></a>
-                    <? endforeach; ?>
+                    <a href="<?=Url::to(['/object/orders', 'obj_id' => $obj->id])?>">Заказы</a>
+                </td>
+                <td>
+                    <?
+                        $limit = 1;
+                        foreach ($obj->orders as $order) {
+                            if ($limit > 6) {
+                                echo '<a href="#">Все заказы</a>';
+                                break;
+                            }
+                            $color = $order->type == 4 ? 'green' : 'orange';
+                            echo '<a style="color:'.$color.'" href="'.Url::to(['/order/content/list', 'order_id' =>$order->id]).'" target="_blank">№'.$order->number.'</a>&nbsp;&nbsp;';
+                            $limit++;
+                        }
+                    ?>
                 </td>
             </tr>
         <? endif; ?>
-        
-        <!-- id object -->
-        <tr>
-            <td>ID объекта</td>
-            <td id="obj-id" data-id="<?=$obj->id?>">
-                <?=$obj->id?>
-            </td>
-        </tr>
-        <!-- rating -->
-        <tr>
-            <td>Рейтинг объекта</td>
-            <td>
-                <?=$obj->rating?>
-            </td>
-        </tr>
         </table>
         
         <!-- note -->
@@ -102,6 +106,24 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
             <h3>Примечание</h3>
             <p><?= $obj->note ? $obj->note : 'записей нет'?></p>
         </div>
+        
+        <!-- option data -->
+        <table>
+            <!-- id object -->
+            <tr>
+                <td width="150">ID объекта</td>
+                <td id="obj-id" data-id="<?=$obj->id?>">
+                    <?=$obj->id?>
+                </td>
+            </tr>
+            <!-- rating -->
+            <tr>
+                <td width="150">Рейтинг объекта</td>
+                <td>
+                    <?=$obj->rating?>
+                </td>
+            </tr>
+        </table>
 </div>
 
 <!-- menu -->

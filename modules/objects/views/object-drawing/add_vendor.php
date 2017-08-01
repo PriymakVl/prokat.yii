@@ -9,7 +9,7 @@ $this->registerCssFile('/css/drawing.css');
 <div class="content">
     <!-- title -->
     <div class="title-box">
-        Редактировать чертеж Danieli
+       Добавить чертеж производителя
     </div>
     
     <!-- info -->
@@ -26,11 +26,8 @@ $this->registerCssFile('/css/drawing.css');
             <!-- dwg data vendor -->
             <div id="dwg-vendor-wrp">
                 
-                <?= $f->field($form, 'sheet')->textInput(['value' => $dwg->sheet])->label('Номер листа:') ?>
+                <?= $f->field($form, 'file')->textInput())->label('Файл чертежа:') ?>
                 
-                <?= $f->field($form, 'sheets')->textInput(['value' => $dwg->sheets])->label('Количество листвов:') ?>
-                
-                <?= $f->field($form, 'revision')->textInput(['value' => $dwg->revision])->label('Номер доработки:') ?>
             </div>
                       
             <!-- button -->

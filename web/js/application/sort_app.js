@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    
     $('#app-year').change(function() {
         var year = $(this).find('option:selected').val();
         var gets = buidGetString('year', year);

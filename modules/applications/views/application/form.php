@@ -12,7 +12,7 @@ $this->registerCssFile('/css/application.css');
 <div class="content">
     <!-- title -->
     <div class="title-box">
-        <?=$app ? 'Редакирование заявки' : 'Добавление заявки'?>
+        <?=$app ? 'Редакирование заявки' : 'Создание заявки'?>
     </div>
     <!-- top menu -->
     <?=AppFormTopMenuWidget::widget()?>

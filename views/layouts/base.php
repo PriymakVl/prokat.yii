@@ -1,12 +1,14 @@
 <?php
 use yii\helpers\Html;
-use app\assets\BaseAsset;
+//use app\assets\BaseAsset;
+//use app\assets\AppAsset;
 use app\widgets\HeaderWidget;
 use app\widgets\Alert;
 
 $this->title = '';
 
-BaseAsset::register($this);
+//BaseAsset::register($this);
+\app\assets\AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>

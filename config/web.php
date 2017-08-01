@@ -61,7 +61,6 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                //'app/read' => 'applications/read',
                 //search
                 'search/drawing/works' => 'search/search/drawing-works',
                 'search/drawing/department' => 'search/search/drawing-department',
@@ -126,7 +125,6 @@ $config = [
                 'order/content/list/set/parent' => 'order/order-content/set-parent',
                 'order/content/delete/list' => 'order/order-content/delete-list',
                 'order/content/item/file/add' => 'order/order-content/add-file',
-                'order/content/object/add' => 'order/order-content/add-object-form',
                 //object specification
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
                 'object/specification/copy/list' => 'objects/object-specification/copy-list',
@@ -136,7 +134,8 @@ $config = [
                 'object/specification' => 'objects/object-specification',
                 //object drawing 
                 'object/drawing/note' => 'objects/object-drawing/note',
-                'object/drawing/delete' => 'objects/object-drawing/delete',              
+                'object/drawing/delete' => 'objects/object-drawing/delete', 
+				'object/drawing/form/vendor' => 'objects/object-drawing/form-vendor',				
                 'object/drawing/form' => 'objects/object-drawing/form',
                 'object/drawing' => 'objects/object-drawing',
                 'object/drawing/vendor/update' => 'objects/object-drawing/update-vendor',
@@ -145,7 +144,8 @@ $config = [
                 'object/form' => 'objects/object/form',                                    
                 'object/copy' => 'objects/object/copy',
                 'object/delete/one' => 'objects/object/delete-one', 
-                'object-danieli-update' => 'objects/object-danieli-update',   
+                'object-danieli-update' => 'objects/object-danieli-update', 
+                'object/orders' => 'objects/object/orders',  
                 //letter
                 'letter/list' => 'letters/letter/list',
                 'letter' => 'letters/letter',
@@ -153,12 +153,14 @@ $config = [
                 'letter/delete' => 'letters/letter/delete', 
                 //application 
                 'application/list' => 'applications/application/list',
-                'application/form' => 'applications/application/form',  
+                'application/form' => 'applications/application/form',
+                'application/print' => 'applications/application-sheet-create',  
                 'application' => 'applications/application', 
-                'app/read' => 'applications/read',
                 //application content   
                 'application/content/list' => 'applications/application-content/list', 
-                'application/content/item' => 'applications/application-content',                                                          
+				'application/content/form' => 'applications/application-content/form', 
+                'application/content/item' => 'applications/application-content',   
+								
             ],
         ],  
     ],

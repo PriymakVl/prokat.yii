@@ -21,7 +21,7 @@ $this->registerCssFile('/css/application.css');
     
     <!-- info -->
     <div class="info-box">
-        <span>Название заявки:</span>&laquo; <?=$app->title.' '.$app->full_num_out?> &raquo;<br />
+        <span>Заявка:</span>&laquo; <?=$app->title.' '.$app->full_num_out?> &raquo;<br />
         <input type="hidden" id="order-id" value="<?=$app->id?>"/>
     </div>
     
@@ -64,6 +64,6 @@ $this->registerCssFile('/css/application.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?//=AppContentMenuWidget::widget(['order_id' => $order->id])?>
+    <?=AppContentMenuWidget::widget(['app_id' => $app->id])?>
     <?//=AppMenuWidget::widget(['app_id' => $app->id])?>
 </div>

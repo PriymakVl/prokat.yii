@@ -17,7 +17,7 @@ use \yii\web\JqueryAsset;
             <a href="<?=Url::to(['/application/delete', 'app_id' => $app_id])?>">Удалить заявку</a>
         </li>
         <li>
-            <a href="<?=Url::to(['/application/title/sheet/print', 'app_id' => $app_id])?>">Создать файл заявки</a>
+            <a href="<?=Url::to(['/application/print', 'app_id' => $app_id])?>">Создать файл заявки</a>
         </li>
         <li>
             <a href="<?=Url::to(['/application/content/sheet/print', 'app_id' => $app_id])?>">Создать расчет обосн</a>

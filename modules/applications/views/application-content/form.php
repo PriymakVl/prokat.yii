@@ -3,44 +3,53 @@
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use app\widgets\MainMenuWidget;
-use app\modules\order\widgets\OrderFormTopMenuWidget;
-use app\modules\order\widgets\OrderContentFormComponentWidget;
-use app\modules\order\widgets\OrderFormTabWidget;
+u//se app\modules\applications\widgets\AppFormTopMenuWidget;
+use app\modules\applications\widgets\AppContentMenuWidget;
 
-$this->registerCssFile('/css/order.css');
+$this->registerCssFile('/css/application.css');
 
 ?>
 <div class="content">
     <!-- title -->
     <div class="title-box">
         <? if ($item): ?>
-            Редакирование элемента заказа    
+            Редакирование элемента заявки   
         <? else: ?>
-            Добавление элемента заказа  
+            Добавление элемента заявки  
         <? endif; ?>
     </div>
     
     <!-- top menu -->
-    <?=OrderFormTopMenuWidget::widget()?>
+    <?//=OrderFormTopMenuWidget::widget()?>
     
     <!-- info -->
     <div class="info-box">
-        <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
-        <span>Номер заказа:</span>&laquo; <?=$order->number?> &raquo;
+        <span>Заявка:</span>&laquo; <?=$app->title?> &raquo;<br />
+        <span>Номер заявки:</span>&laquo; <?=$app->out_num?> &raquo;
     </div>
     
     <!-- form -->
     <div class="form-wrp">
-        <? $f = ActiveForm::begin(['id' => 'form-order-item']);?>
+        <? $f = ActiveForm::begin(['id' => 'form-app-item']);?>
         
-            <!-- main tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'main_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
+            <!-- product id -->          
+            <?= $f->field($form, 'product_id')->textInput(['value' => $item ? $item->product_id : '', 'style' => 'width:250px'])->label('ID продукта:')?>
+			
+			<!-- count need -->          
+            <?= $f->field($form, 'need')->textInput(['value' => $item ? $item->need : '', 'style' => 'width:250px'])->label('Необходимое количество:')?>
+			
+			<!-- rest -->          
+            <?= $f->field($form, 'rest')->textInput(['value' => $item ? $item->rest : '', 'style' => 'width:250px'])->label('Остаток:')?>
+			
+			<!-- price -->          
+            <?= $f->field($form, 'price')->textInput(['value' => $item ? $item->price : '', 'style' => 'width:250px'])->label('Цена:')?>
             
-            <!-- other tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'other_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
-            
-            <!-- other tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'object_content', 'f' => $f, 'form' => $form, 'object' => $object])?>
+			<!-- currency -->
+            <?php
+                $params = ['prompt' => 'Не выбран']; 
+                if ($item) $form->currency = $item->currency;
+                echo $f->field($form, 'currency')->dropDownList($form->currency, $params)->label('Валюта:');
+            ?>
             
             <!-- hidden order id -->
             <?=$f->field($form, 'order_id')->hiddenInput(['value' => $order ? $order->id : false])->label(false) ?>

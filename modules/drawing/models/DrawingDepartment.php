@@ -78,6 +78,7 @@ class DrawingDepartment extends BaseModel
         return self::findAll($ids);      
     }
     
+    
 
 }
 

@@ -1,45 +1,46 @@
 <?php
 
-namespace app\modules\order\controllers;
+namespace app\modules\applications\controllers;
 
 use Yii;
 use app\controllers\BaseController;
-use app\modules\order\models\Order;
-use app\modules\order\models\OrderContent;
-use app\modules\order\logic\OrderLogic;
+use app\modules\applications\models\Application;
+use app\modules\applications\models\ApplicationContent;
+use app\modules\applications\logic\ApplicationLogic;
 
-class OrderContentSheetCreateController extends BaseController 
+class ApplicationSheetCreateController extends BaseController 
 {
     public $layout = "@app/views/layouts/base";
     public $activeSheet;
     public $objPHPExcel;
     public $styleBorder;
-    public $styleWork;
-    public $order;
+    public $app;
     public $content;
     public $styleContent;
     
-    public function actionIndex($order_id) 
+    public function actionIndex($app_id) 
     { 
-        $this->order = Order::findOne($order_id);
-        $this->order->getWork(false);
-        $this->content = OrderContent::getItemsOfOrder($this->order->id);
+        $this->app = Application::findOne($app_id);
+        $this->app->getFullOutNumber();
+        $this->content = ApplicationContent::getItemsOfApplication($this->app->id);
+        //debug($this->app);
         $this->objPHPExcel = new \PHPExcel();
         $this->setActiveSheet();
         $this->setSetup();
         $this->setWidthOfColumn();
-        $this->setTitles();
-        $this->setStyleWork();
-        $this->setWorkOrder();
-        $this->setStyleBorders();
-        $this->setStyleContentOrder();
-        $this->setContent();
+        $this->setOutNum();
+        //$this->setTitles();
+        //$this->setStyleWork();
+        //$this->setWorkOrder();
+        //$this->setStyleBorders();
+        //$this->setStyleContentOrder();
+        //$this->setContent();
         //debug('end');
         //$this->setStyleFieldOrder();
         $this->setStyleTitles();
              
         header("Content-Type:application/vnd.ms-excel");
-        header("Content-Disposition:attachment;filename='content-order.xls'");
+        header("Content-Disposition:attachment;filename='application.xls'");
 
         $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
@@ -81,24 +82,28 @@ class OrderContentSheetCreateController extends BaseController
     private function setFont()
     {
         $this->objPHPExcel->getDefaultStyle()->getFont()->setName('Arial');
-        $this->objPHPExcel->getDefaultStyle()->getFont()->setSize(10);   
+        $this->objPHPExcel->getDefaultStyle()->getFont()->setSize(12);   
     }
     
     private function setWidthOfColumn()
     {
         $this->activeSheet->getColumnDimension('A')->setWidth(15);
-        $this->activeSheet->getColumnDimension('B')->setWidth(5);
+        $this->activeSheet->getColumnDimension('B')->setWidth(40);
         $this->activeSheet->getColumnDimension('C')->setWidth(30);
-        $this->activeSheet->getColumnDimension('D')->setWidth(5);    
-        $this->activeSheet->getColumnDimension('E')->setWidth(5);    
-        $this->activeSheet->getColumnDimension('F')->setWidth(5);
-        $this->activeSheet->getColumnDimension('G')->setWidth(5);
-        $this->activeSheet->getColumnDimension('H')->setWidth(5);
-        $this->activeSheet->getColumnDimension('I')->setWidth(5);
-        $this->activeSheet->getColumnDimension('J')->setWidth(5);
-        $this->activeSheet->getColumnDimension('K')->setWidth(5);
-        $this->activeSheet->getColumnDimension('L')->setWidth(5);
-        $this->activeSheet->getColumnDimension('M')->setWidth(40);     
+        $this->activeSheet->getColumnDimension('D')->setWidth(20);    
+        $this->activeSheet->getColumnDimension('E')->setWidth(30);    
+        $this->activeSheet->getColumnDimension('F')->setWidth(20);
+        $this->activeSheet->getColumnDimension('G')->setWidth(30);
+        $this->activeSheet->getColumnDimension('H')->setWidth(20);
+        $this->activeSheet->getColumnDimension('I')->setWidth(15);     
+    }
+    
+    private function setOutNum() 
+    {
+        $this->activeSheet->getRowDimension('1')->setRowHeight(15);
+        //$this->activeSheet->getRowDimension('1')->setRowHeight(15);
+        
+        $this->activeSheet->setCellValue('A1', $this->app->out_num);    
     }
     
     private function setTitles()

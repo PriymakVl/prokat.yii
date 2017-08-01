@@ -3,32 +3,29 @@
 namespace app\modules\objects\forms;
 
 use app\forms\BaseForm;
-//use app\modules\drawing\logic\DrawingLogic;
-use app\modules\objects\models\ObjectDrawing; 
+use app\modules\drawing\models\DrawingVendor;
+//use app\modules\objects\models\ObjectDrawing; 
 
 class ObjectDrawingVendorForm extends BaseForm
 {   
-    public $sheet;
-    public $revision;
-    public $sheets;
+    public $file;
+
     
     public function rules() {
         return [
-            [['sheet'], 'required', 'message' => 'Необходимо указать лист чертежа'],
-            [['sheet'], 'integer'],
-            [['sheets'], 'integer'],
-            [['revision'], 'string'],
-            [['revision'], 'required', 'message' => 'Необходимо указать номер доработки'],
+            [['file'], 'required', 'message' => 'Поле обязательное для заполнения'],
+            [['file'], 'string'],
         ];
     }
 
 
     
-    public function save($dwg) 
+    public function save($obj) 
     {
-        $dwg->revision = $this->revision;
-        $dwg->sheet = $this->sheet;
-        $dwg->sheets = $this->sheets;
+        $dwg = new DrawingVendor();
+		$dwg->code = $obj->code;
+		$dwg->equipment = $obj->equipment;
+		$dwg->file = $this->file;
         return $dwg->save();
     }
     

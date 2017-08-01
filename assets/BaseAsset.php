@@ -29,6 +29,7 @@ class BaseAsset extends AssetBundle
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapPluginAsset', //bootstrap.js
     ];
     
     public $jsOptions = ['position' => View::POS_HEAD];

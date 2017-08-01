@@ -16,7 +16,8 @@ class ApplicationController extends BaseController
     public function actionIndex($app_id) 
     { 
         $app = Application::getOne($app_id, false, self::STATUS_ACTIVE);
-        $app->getFullEnsNumber()->getFullOutNumber();
+        $app->getFullEnsNumber()->getFullOutNumber()->convertType()->convertPeriod()->convertDepartment(true)
+            ->convertState()->convertCategory();
         $session = ApplicationLogic::checkStateSession($app_id, 'app_id'); 
         return $this->render('index', compact('app', 'session'));
     }
@@ -33,10 +34,9 @@ class ApplicationController extends BaseController
     public function actionForm($app_id = null) 
     { 
         $app = Application::getOne($app_id, null, self::STATUS_ACTIVE);
-        //if ($app) $app->convertDate($app, false);
-        
+		
         $form = new ApplicationForm();
-        //$form->getServices($form);
+        $form->getCategories();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($app)) { 
             $this->redirect(['/application', 'app_id' => $form->app_id]);
         }   
@@ -62,14 +62,6 @@ class ApplicationController extends BaseController
     {
         $application_id = applicationLogic::getActiveapplicationId();
         $this->redirect(['/application', 'application_id' => $application_id]);
-    }
-    
-    public function actionGetEquipmentForForm()
-    {
-        $area_id = Yii::$app->request->get('aree_id');
-        $equipment = Equipment::getEquipmentOfArea($area_id);
-        if (empty($equipment)) return 'error';
-        return json_encode($equipment);
     }
     
 }

@@ -33,7 +33,7 @@ class Objects extends BaseModel
     
     public static function getMainParent()
     {
-        $objects = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::MAIN_PARENTS])->all();
+        $objects = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::MAIN_PARENTS])->orderBy(['rating' => SORT_DESC])->all();
         return self::executeMethods($objects, ['getName']);
     }
 

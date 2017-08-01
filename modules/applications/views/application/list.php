@@ -44,7 +44,7 @@ $this->registerCssFile('/css/application.css');
                         <?=$number?>
                     </td>
                     <td class="text-center">
-                        <a href="<?=Url::to(['/application', 'app_id' =>$app->id])?>"><?=$app->department_rus ? $app->department_rus : 'Не указан'?></a>
+                        <a href="<?=Url::to(['/application', 'app_id' =>$app->id])?>"><?=$app->department ? $app->department : 'Не указан'?></a>
                     </td>
                     <td class="text-center">
                        <?=$app->out_num?>

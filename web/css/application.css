@@ -2,13 +2,19 @@
     position: relative;
 }
 
-.field-applicationform-out {
+.field-applicationform-out_num {
     position: absolute;
     left: 155px;
     top: 0;
 }
 
-#applicationform-type_repair {
+.field-applicationform-out_date {
+    position: absolute;
+    left: 315px;
+    top: 0;
+}
+
+#applicationform-type {
     width: 135px;
 }
 
@@ -44,4 +50,20 @@
     position: absolute;
     left: 505px;
     top: 130px;    
+}
+
+.app-category-wrp {
+    position: absolute;
+    left: 160px;
+    top: 215px; 
+}
+
+.app-category-wrp label {
+    position: absolute;
+    left: 0;
+    bottom: 30px;    
+}
+
+.app-category-wrp select {
+    width: 200px;
 }

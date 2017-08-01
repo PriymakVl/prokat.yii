@@ -17,6 +17,7 @@ class DrawingDepartmentForm extends DrawingForm
     public $note;
     public $file;
     public $parent_id;
+	public $alias;
     //form
     public $dwg_id;
     
@@ -37,6 +38,8 @@ class DrawingDepartmentForm extends DrawingForm
             ['note', 'default', 'value' => ''],
             ['designer', 'default', 'value' => ''],
             ['file', 'file', 'extensions' => ['pdf', 'tif']],
+            ['alias', 'string'],
+            ['alias', 'default', 'value' => ''],
         ];
 
     }
@@ -58,6 +61,7 @@ class DrawingDepartmentForm extends DrawingForm
     {
         $dwg->type = $this->type;
         $dwg->name = $this->name;
+		$dwg->alias = $this->alias;
         $dwg->designer = $this->designer;
         $dwg->parent_id = $this->parent_id;
         $dwg->note = $this->note;

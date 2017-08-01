@@ -1,6 +1,6 @@
 <?php
     use yii\web\JqueryAsset;
-    $this->registerJsFile('js/application/sort_app.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('/js/application/sort_app.js');
     //debug($params['customer'], false);
     $this->registerCssFile('css/application.css');
 ?>
