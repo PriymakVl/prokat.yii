@@ -2,16 +2,16 @@
 
 use yii\db\Migration;
 
-class m170424_175816_change_tab_letters_add_col_number extends Migration
+class m170806_141814_drawing_department_add_column_file_2 extends Migration
 {
     public function up()
     {
-        $this->addColumn('letters', 'number', 'integer(10) AFTER id');
+         $this->addColumn('drawings_department', 'file_cdw', 'varchar(100) AFTER file');
     }
 
     public function down()
     {
-        echo "m170424_175816_change_tab_letters_add_col_number cannot be reverted.\n";
+        echo "m170806_141814_drawing_department_add_column_file_2 cannot be reverted.\n";
 
         return false;
     }

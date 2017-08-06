@@ -53,9 +53,8 @@ class ApplicationController extends BaseController
     public function actionSetActive($application_id)
     {
         $application = application::findOne(['id' => $application_id]);
-        applicationLogic::setSessionActiveapplication($application_id);
-        if ((int)$application->number)$this->redirect(['/application', 'application_id' => $application_id]); 
-        else $this->redirect(['/application/draft', 'application_id' => $application_id]);
+        ApplicationLogic::setSessionActiveapplication($application_id);
+        $this->redirect(['/application', 'application_id' => $application_id]); 
     }
     
     public function actionGetActive()

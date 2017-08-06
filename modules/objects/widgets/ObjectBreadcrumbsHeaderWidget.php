@@ -89,8 +89,9 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
         $objects = Objects::findAll(['parent_id' => $parent->id, 'status' => Objects::STATUS_ACTIVE]);
         for ($i = 0; $i < 20; $i++) {
             if (!$objects[$i]) break;
+			$objects[$i]->getName()->getAlias();
             $submenu .= '<li>';
-            $submenu .= '<a href="/object?obj_id='.$objects[$i]->id.'">'.$objects[$i]->alias.'</a>';
+            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$objects[$i]->alias.'</a>';
             $submenu .= '</li>';   
         } 
         return $submenu .= '</ul>';  

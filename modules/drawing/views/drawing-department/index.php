@@ -80,10 +80,24 @@ $this->registerCssFile('/css/drawing.css');
         <!-- file dwg -->
         <? if ($dwg->type == 'file'): ?>
             <tr>
-                <td class="text-center">Файл чертежа(эскиза)</td>
+                <td class="text-center">Файл эскиза</td>
                 <td>
                     <? if($dwg->file): ?>
                         <a target="_blank" href="<?=Yii::$app->urlManager->createUrl(['/files/department/'.$dwg->file])?>"><?=$dwg->file?></a>
+                    <? else: ?>
+                        не указан
+                    <? endif; ?>
+                </td>
+            </tr>
+        <? endif; ?>
+        
+        <!-- file kompas -->
+        <? if ($dwg->file_cdw): ?>
+            <tr>
+                <td class="text-center">Файл эскиза в компасе</td>
+                <td>
+                    <? if($dwg->file_cdw): ?>
+                        <a target="_blank" href="<?=Yii::$app->urlManager->createUrl(['/files/department/'.$dwg->file_cdw])?>"><?=$dwg->file_cdw?></a>
                     <? else: ?>
                         не указан
                     <? endif; ?>

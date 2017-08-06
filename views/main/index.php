@@ -35,6 +35,6 @@ $this->registerJsFile('js/main/list_department_accordion.js',  ['depends' => [Jq
 
     <?=DrawingMainMenuWidget::widget()?>
 
-    <?=SectionMenuWidget::widget()?>
+    <?//=SectionMenuWidget::widget()?>
 
 </div>

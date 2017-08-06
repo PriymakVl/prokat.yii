@@ -9,6 +9,7 @@ use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
 
 $this->registerCssFile('/css/order.css');
+
 ?>
 <div class="content">
     <!-- top nenu -->
@@ -16,8 +17,17 @@ $this->registerCssFile('/css/order.css');
     
     <!-- info state of order -->
     <? if ($session == 'active'): ?>
-        <div class="active-order">Активный заказ</div>
+        <div class="alert alert-success active-order">Активный заказ</div>
     <? endif; ?>
+    
+    <!-- info create of order -->
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
+      <div class="alert alert-success alert-dismissable">
+          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
+          <h4><i class="icon fa fa-check"></i>Saved!</h4>
+          <?= Yii::$app->session->getFlash('success') ?>
+      </div>
+    <?php endif; ?>
     
     <!-- order data -->
     <table>

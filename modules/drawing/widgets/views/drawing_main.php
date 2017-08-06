@@ -11,7 +11,7 @@ use \yii\web\JqueryAsset;
             <a href="<?=Yii::$app->urlManager->createUrl(['drawing/vendor/danieli'])?>">Чертежи Danieli</a>
         </li>
         <li>
-            <a <? if ($controller == 'drawingdepartment') echo 'class="active-link"'; ?> href="<?=Yii::$app->urlManager->createUrl(['drawing/department/list'])?>">Чертежи цеха</a>
+            <a <? if ($controller == 'drawingdepartment') echo 'class="active-link"'; ?> href="<?=Yii::$app->urlManager->createUrl(['drawing/department/list'])?>">Эскизы цеха</a>
         </li>
         <li>
             <a <? if ($controller == 'drawingworks') echo 'class="active-link"'; ?> href="<?=Yii::$app->urlManager->createUrl(['drawing/works/list'])?>">Чертежи ПКО</a>

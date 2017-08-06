@@ -20,6 +20,7 @@ $config = [
         'equipments' => ['class' => 'app\modules\equipments\Module',],
          'letters' => ['class' => 'app\modules\letters\Module',],
         'applications' => ['class' => 'app\modules\applications\Module',],
+        'orderlist' => ['class' => 'app\modules\orderlist\Module',],
     ],
     'components' => [
         'request' => [
@@ -115,6 +116,7 @@ $config = [
                 'order/active/set' => 'order/order/set-active',
                 'order/active/get' => 'order/order/get-active',                
                 'order' => 'order/order', 
+                'order/copy' => 'order/order/copy',
                 //order content
                 'order/content/list' => 'order/order-content/list',
                 'order/content/form' => 'order/order-content/form',
@@ -125,6 +127,11 @@ $config = [
                 'order/content/list/set/parent' => 'order/order-content/set-parent',
                 'order/content/delete/list' => 'order/order-content/delete-list',
                 'order/content/item/file/add' => 'order/order-content/add-file',
+                //order-list
+                'order-list/list' => 'orderlist/order-list/list',
+                'order-list/form' => 'orderlist/order-list/form',
+                'order-list/active/set' => 'orderlist/order-list/set-active',
+                'order-list' => 'orderlist/order-list',
                 //object specification
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
                 'object/specification/copy/list' => 'objects/object-specification/copy-list',

@@ -155,6 +155,7 @@ class OrderContentSheetCreateController extends BaseController
                 $this->activeSheet->setCellValue('M'.$num, ($i + 1).') '.$this->order->work[$i]);    
             }
             $this->activeSheet->getStyle('M'.$num)->applyFromArray($this->styleWork);
+            $this->activeSheet->getStyle('M'.$num)->getAlignment()->setWrapText(true);
         }      
     }
     

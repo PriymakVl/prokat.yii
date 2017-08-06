@@ -40,10 +40,16 @@ $this->registerCssFile('/css/drawign.css');
             ?>
             <!-- parent_id -->
             <?= $f->field($form, 'parent_id')->textInput(['value' => $dwg->parent_id ? $dwg->parent_id : 0])->label('ID родителя:') ?>
+           
             <!-- flle -->
-            <div id="dwg-file-input-wrp" <? if ($dwg->type == 'folder') echo 'style="display:none;"'; ?>> 
+            <div id="dwg-file-input-wrp" <? if ($dwg->type == 'folder') echo 'style="display:none;"'; ?>>
+                <!-- file with extension tif, jpeg, pdf --> 
                 <?= $f->field($form, 'file')->fileInput()->label('Файл чертежа:') ?>
+                
+                <!-- file with extension cdw compas-->
+                <?= $f->field($form, 'file_cdw')->fileInput()->label('Файл чертежа в компасе:') ?>
             </div>
+            
             <!-- service -->
             <?php
             $form->service = $dwg->service ? $dwg->service : '';

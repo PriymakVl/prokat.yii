@@ -158,6 +158,12 @@ table input[type="checkbox"] {
     color: #000 !important;   
 } 
 
+/*alert*/
+.alert {
+    border-radius: 0px !important;
+    padding: 5px !important;
+}
+
     
 
 

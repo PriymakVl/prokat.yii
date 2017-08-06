@@ -277,6 +277,29 @@ class OrderLogic extends BaseLogic
         }
         return [];    
     }
+    
+    public static function copyOrder($order_id, $number) 
+    {
+        $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
+        $order->id = null;
+        $order->number = $number;
+        $order->setIsNewRecord(true);
+        $order->save(false); 
+        self::copyContentOrder($order_id, $order->id);
+        return $order->id;
+    }
+    
+    private static function copyContentOrder($old_id, $new_id)
+    {
+        $content = OrderContent::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $old_id])->all();
+        //if (!$content) return;
+        foreach ($content as $item) {
+            $item->id = null;
+            $item->order_id = $new_id;
+            $item->setIsNewRecord(true);
+            $item->save(false);      
+        }
+    }
 
     
 

@@ -11,13 +11,13 @@ use app\modules\order\models\OrderContent;
 use app\modules\order\forms\OrderContentForm;
 use app\modules\order\logic\OrderLogic;
 
-class OrderContentController extends BaseController 
+class OrderListContentController extends BaseController 
 {
     public $layout = "@app/views/layouts/base";
     
     public function actionIndex($item_id) 
     { 
-        $item = OrderContent::getOne($item_id, false, self::STATUS_ACTIVE)->countWeightAll()->getPathDrawing()->getWeight()
+        $item = OrderContent::getOne($item_id, __METHOD__, self::STATUS_ACTIVE)->countWeightAll()->getPathDrawing()->getWeight()
             ->getDrawing();
         $order = Order::findOne($item->order_id);
         $order->getNumber();
@@ -28,7 +28,7 @@ class OrderContentController extends BaseController
     
     public function actionList($order_id) 
     { 
-        $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
+        $order = Order::getOne($order_id, __METHOD__, self::STATUS_ACTIVE);
         $order->getNumber();
         $content = OrderContent::getItemsOfOrder($order->id);
         $state = OrderLogic::checkStateSession($order_id, 'order_id');
@@ -37,7 +37,7 @@ class OrderContentController extends BaseController
     
     public function actionForm($order_id, $item_id = null) 
     { 
-        $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
+        $order = Order::getOne($order_id, __METHOD__, self::STATUS_ACTIVE);
         $order->getNumber();
         $item = OrderContent::getOne($item_id, null, self::STATUS_ACTIVE);
         $form = new OrderContentForm();
@@ -50,7 +50,7 @@ class OrderContentController extends BaseController
     
     public function actionDeleteOne($item_id) 
     {
-        $item = OrderContent::getOne($item_id, false, self::STATUS_ACTIVE);
+        $item = OrderContent::getOne($item_id, __METHOD__, self::STATUS_ACTIVE);
         $item->deleteOne();
         return $this->redirect(['/order/content/list', 'order_id' => $item->order_id]);
         
@@ -94,7 +94,7 @@ class OrderContentController extends BaseController
     
     public function actionAddFile($file, $cat_dwg, $obj_id)
     {
-        $object = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
+        $object = Objects::getOne($obj_id, __METHOD__, self::STATUS_ACTIVE);
         $item_id = OrderLogic::addFileOfItemOrder($file, $cat_dwg, $object);
         if ($item_id) $this->redirect(['/order/content/item', 'item_id' => $item_id]);
         else throw new ForbiddenHttpException('error '.__METHOD__);

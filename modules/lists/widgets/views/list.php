@@ -28,6 +28,9 @@ $this->registerJsFile('js/list/list_active.js',  ['depends' => [JqueryAsset::cla
             </li>  
         <? endif; ?>
         <li>
+            <a href="<?=Yii::$app->urlManager->createUrl(['lists'])?>">Все списки</a>
+        </li>
+        <li>
             <a href="<?=Yii::$app->urlManager->createUrl(['lists/update'])?>">Обновить все списки</a>
         </li>    
     </ul>

@@ -2,7 +2,7 @@
     <!-- category of drawing -->
     <?php 
         $params = ['prompt' => 'Невыбран'];
-        $categories = ['vendor' => 'Производитель', 'works' => 'ПКО комбината', 'department' => 'Цех'];
+        $categories = ['vendor' => 'Производитель', 'works' => 'ПКО комбината', 'department' => 'Цех', 'standard' => 'Стандарт'];
         $form->cat_dwg = $item->cat_dwg;
         echo $f->field($form, 'cat_dwg')->dropDownList($categories, $params)->label('Кто разработал чертеж:');
     ?>

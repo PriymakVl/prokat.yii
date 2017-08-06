@@ -2,16 +2,16 @@
 
 use yii\db\Migration;
 
-class m170413_074428_add_column_state_tab_orders extends Migration
+class m170803_183405_add_field_weight_orders extends Migration
 {
     public function up()
     {
-        $this->addColumn('orders', 'state', 'int(4)');
+        $this->addColumn('orders', 'weight', 'varchar(50) AFTER period');
     }
 
     public function down()
     {
-        echo "m170413_074428_add_column_state_tab_orders cannot be reverted.\n";
+        echo "m170803_183405_add_field_weight_orders cannot be reverted.\n";
 
         return false;
     }

@@ -1,8 +1,8 @@
 <?php
 
 use \yii\helpers\Url;
-use \yii\web\JqueryAsset;
 
+$this->registerJsFile('js/order/order_copy.js');
 ?>
 <div  class="sidebar-menu">
     <h5>Заказ</h5>   
@@ -15,6 +15,9 @@ use \yii\web\JqueryAsset;
         </li>
          <li>
             <a href="<?=Url::to(['/order/delete', 'order_id' => $order_id])?>">Удалить заказ</a>
+        </li>
+        <li>
+            <a href="" onclick="return false;" id="order-copy">Перевыдать заказ</a>
         </li>
         <li>
             <a href="<?=Url::to(['/order/title/sheet/print', 'order_id' => $order_id])?>">Создать титул. лист</a>

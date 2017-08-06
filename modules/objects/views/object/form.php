@@ -24,8 +24,9 @@ $this->registerCssFile('/css/object.css');
 			
 			<!-- rusian name object -->          
             <?= $f->field($form, 'rus')->textInput(['value' => $obj ? $obj->rus : ''])->label('Название объекта:') ?>
-			<input type="checkbox" name="ObjectForm[all_name]" value="yes" id="objectform-all_name" />
-			<label>Изменить название для всех</label>
+            
+            <!-- names all change -->
+            <?= $f->field($form, 'all_name')->checkbox(['label' => 'Изменить название для всех']) ?>
 			
 			<!-- alias -->          
             <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias, 'style' => 'width:250px'])->label('Короткое название объекта:')?>

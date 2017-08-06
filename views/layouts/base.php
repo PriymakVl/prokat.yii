@@ -3,7 +3,7 @@ use yii\helpers\Html;
 //use app\assets\BaseAsset;
 //use app\assets\AppAsset;
 use app\widgets\HeaderWidget;
-use app\widgets\Alert;
+//use yii\bootstrap\Alert;
 
 $this->title = '';
 
@@ -25,7 +25,6 @@ $this->title = '';
         <?=HeaderWidget::widget()?>
         
         <div class="content-wrp"> 
-            <?//=Alert::widget()?>
             
             <?=$content?>
         

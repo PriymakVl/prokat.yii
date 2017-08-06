@@ -12,7 +12,6 @@ use app\modules\employees\models\Employee;
 class Order extends BaseModel
 {
     public $content;
-    public $weight;
     
     const PAGE_SIZE = 15;
     const STATE_DRAFT = 1;
@@ -89,8 +88,10 @@ class Order extends BaseModel
     
     public function countWeightOrder()
     {
-        $weight = OrderLogic::countWeightOfOrder($this->id);
-        $this->weight = OrderLogic::removeZerosFromWeight($weight);
+        if (!$this->weight) {
+            $weight = OrderLogic::countWeightOfOrder($this->id);
+            $this->weight = OrderLogic::removeZerosFromWeight($weight);    
+        }
         return $this;
     }
     

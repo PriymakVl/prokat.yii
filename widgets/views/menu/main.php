@@ -7,15 +7,11 @@
         <li>
             <a href="<?=Yii::$app->urlManager->createUrl(['list/active'])?>">Текущий список</a>
         </li>
-        <li>Мои списки</li>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['lists'])?>">Все списки</a>
+            <a href="<?=Yii::$app->urlManager->createUrl(['drawing/department/list'])?>">Эскизы цеха</a>
         </li>
-        <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['admin'])?>">Admin panel</a>
-        </li>
-        <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['object-danieli-update'])?>">Доб об из файлов</a>
-        </li>
+        <li><a href="/order/list">Заказы</a></li>
+        <li><a href="/application/list">Заявки</a></li>
+        <li><a href="/standard/list">Стандарты</a></li>
     </ul>
 </div>

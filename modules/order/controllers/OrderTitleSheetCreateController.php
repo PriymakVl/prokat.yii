@@ -228,7 +228,7 @@ class OrderTitleSheetCreateController extends BaseController
         $this->activeSheet->setCellValue('S2', $this->order->type);
         $this->activeSheet->setCellValue('U2', 'РСЦ ЦРМО  стан 400/200');
         $this->activeSheet->setCellValue('X2', $this->order->number);
-        $this->activeSheet->setCellValue('U7', $this->order->weight);
+        $this->activeSheet->setCellValue('U7', $this->order->weight.'кг');
         $this->activeSheet->setCellValue('L11','Нач. участка РСЦ ЦРМО(СПС)                     Лисецкий В.Р.');   
         //style
         $this->activeSheet->getStyle('U2')->getAlignment()->setWrapText(true);

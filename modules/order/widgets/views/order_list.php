@@ -5,9 +5,10 @@ use \yii\web\JqueryAsset;
 use app\modules\order\models\Order;
 
 $this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsset::className()]]);
+
 ?>
 <div  class="sidebar-menu">
-    <h5>Список заказов</h5>   
+    <h5>Перечень заказов</h5>   
     <ul >
         <li>
             <a href="<?=Url::to(['/order/form'])?>">Выдать заказ</a>
@@ -20,7 +21,7 @@ $this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsse
             <? endif; ?>
         </li> 
         <li>
-            <a href="#" onclick="return false;" id="order-list-print">Распечатать список</a>    
+            <a href="#" onclick="return false;" id="order-list-print">Распечатать перечень</a>    
         </li> 
     </ul>
 </div>

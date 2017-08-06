@@ -37,13 +37,14 @@ class OrderController extends BaseController
         $form = new OrderForm();
         $form->getServices($form)->getArea();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
-            $this->redirect(['/order', 'order_id' => $form->order_id]);
+            Yii::$app->session->setFlash('success', 'Ð—Ð°ÐºÐ°Ð· ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ ÑÐ¾Ð·Ð´Ð°Ð½');
+            $this->redirect(['/order/active/set', 'order_id' => $form->order_id]);
         }   
         //Debug($order);
         return $this->render('form', compact('order', 'form'));
     }
     
-    //âûâîäèò ñòðàíèöó õàðàêòåð ðàáîòû ïî çàêàçó
+    //Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ ÑÑ‚Ñ€Ð°Ð½Ð¸Ñ†Ñƒ Ñ…Ð°Ñ€Ð°ÐºÑ‚ÐµÑ€ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ð¿Ð¾ Ð·Ð°ÐºÐ°Ð·Ñƒ
     public function actionWork($order_id)
     {
         $order = Order::findOne($order_id);
@@ -58,20 +59,25 @@ class OrderController extends BaseController
         $this->redirect('/order/list');   
     }
     
-    public function actionContent($std_id = null) 
-    { 
-        $parent = Standard::findOne($std_id);
-        if (!$parent) $this->showError(__METHOD__);
-        $children = Standard::findAll(['status' => self::STATUS_ACTIVE, 'parent_id' => $std_id]);
-        return $this->render('content', compact('parent', 'children'));
+//    public function actionContent($std_id = null) 
+//    { 
+//        $parent = Standard::findOne($std_id);
+//        if (!$parent) $this->showError(__METHOD__);
+//        $children = Standard::findAll(['status' => self::STATUS_ACTIVE, 'parent_id' => $std_id]);
+//        return $this->render('content', compact('parent', 'children'));
+//    }
+
+    public function actionCopy($order_id, $number)
+    {
+        $new_id = OrderLogic::copyOrder($order_id, $number);
+        $this->redirect(['/order', 'order_id' => $new_id]);  
     }
     
     public function actionSetActive($order_id)
     {
         $order = Order::findOne(['id' => $order_id]);
         OrderLogic::setSessionActiveOrder($order_id);
-        if ((int)$order->number)$this->redirect(['/order', 'order_id' => $order_id]); 
-        else $this->redirect(['/order/draft', 'order_id' => $order_id]);
+        $this->redirect(['/order', 'order_id' => $order_id]); 
     }
     
     public function actionGetActive()

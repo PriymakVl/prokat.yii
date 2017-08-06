@@ -11,6 +11,7 @@ use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderListMenuWidget;
 use app\modules\order\widgets\OrderTopListMenuWidget;
+use app\modules\orderlist\widgets\OrderListListMenuWidget;
 
 $this->registerCssFile('/css/standard.css');
 
@@ -36,7 +37,7 @@ $this->registerCssFile('/css/standard.css');
             <? foreach ($list as $order): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" name="order" order_id="<?=$order->id?>" />
+                        <input type="checkbox" name="order" id="order-id" order_id="<?=$order->id?>" />
                     </td>
                     <td class="text-center">
                        <? if ($order->content): ?>
@@ -74,4 +75,5 @@ $this->registerCssFile('/css/standard.css');
     <?=MainMenuWidget::widget()?>
     <?=OrderListMenuWidget::widget(['state' => $state])?>
     <?=OrderActiveMenuWidget::widget()?>
+    <?=OrderListListMenuWidget::widget()?>
 </div>

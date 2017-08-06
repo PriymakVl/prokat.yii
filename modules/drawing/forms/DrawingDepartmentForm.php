@@ -16,6 +16,7 @@ class DrawingDepartmentForm extends DrawingForm
     public $type;
     public $note;
     public $file;
+    public $file_cdw;
     public $parent_id;
 	public $alias;
     //form
@@ -37,7 +38,8 @@ class DrawingDepartmentForm extends DrawingForm
             ['service', 'default', 'value' => 'mech'],
             ['note', 'default', 'value' => ''],
             ['designer', 'default', 'value' => ''],
-            ['file', 'file', 'extensions' => ['pdf', 'tif']],
+            ['file', 'file', 'extensions' => ['pdf', 'tif', 'jpg']],
+            ['file_cdw', 'file', 'extensions' => ['cdw'], 'message' => \Yii::t('app', 'Только файлы программы Компас')],
             ['alias', 'string'],
             ['alias', 'default', 'value' => ''],
         ];
@@ -53,7 +55,10 @@ class DrawingDepartmentForm extends DrawingForm
         $this->dwg_id = $dwg->id;
         $this->file = UploadedFile::getInstance($this, 'file');
         $dwg->file = $this->uploadFile($dwg->id, $this->file, 'department', '_depart');
-        if ($dwg->file) $dwg->update();
+        //file compas
+        $this->file_cdw = UploadedFile::getInstance($this, 'file_cdw');
+        $dwg->file_cdw = $this->uploadFile($dwg->id, $this->file_cdw, 'department', '_depart_kompas');
+        if ($dwg->file || $dwg->file_cdw) $dwg->save();
         return true;  
     }
     

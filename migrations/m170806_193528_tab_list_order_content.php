@@ -2,16 +2,18 @@
 
 use yii\db\Migration;
 
-class m170413_100623_change_column_tag_area_tab_orders extends Migration
+class m170806_193528_tab_list_order_content extends Migration
 {
     public function up()
     {
-         $this->addColumn('orders', 'area', 'varchar(100) AFTER issuer');
+
     }
 
     public function down()
     {
-        $this->dropColumn('orders', 'tag', 'varchar(100)');
+        echo "m170806_193528_tab_list_order_content cannot be reverted.\n";
+
+        return false;
     }
 
     /*

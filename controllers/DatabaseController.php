@@ -12,24 +12,49 @@ class DatabaseController extends BaseController
 {
     public function actionIndex()
     {
-        debug('dddddd');
-        //$app_new = Application::findAll();
-        $app_old = Applicationold::getAll();
-        
-        foreach ($app_old as $app) {
-            $app_new = Application::findOne(['id' => $app->id]);
-            //debug($app->type_repair);
-   //         if ($app->type_repair == 'Капитальный') {
-//                $app_new->type_repair = 'capital';
-//                debug($app_new);
-//            }
-//            else if ($app->type_repair == 'Текущий') {
-//                $app_new->type_repair = 'current';
-//            }
-            //$app_new->save();
-            echo '<p>'.$app->type_repair.'</p>';
+        $files = ['11430015.tif', '11636986.tif'];  
+        foreach ($files as $file) {
+            $this->open($file);
+        } 
+        exit('end');
+    }
+    
+    public function actionIndex2() 
+    {
+        $file = 'files/vendor/danieli/11430015.tif';
+        if (file_exists($file)) {
+// сбрасываем буфер вывода PHP, чтобы избежать переполнения памяти выделенной под скрипт
+        if (ob_get_level()) {
+            ob_end_clean();
         }
-        die('end');
+        // заставляем браузер показать окно сохранения файла
+        //header('Content-Description: File Transfer');
+        //header('Content-Type: application/octet-stream');
+        //header('Content-Disposition: attachment; filename=' . basename($file));
+        //header('Content-Transfer-Encoding: binary');
+        //header('Expires: 0');
+        //header('Cache-Control: must-revalidate');
+        //header('Pragma: public');
+        //header('Content-Length: ' . filesize($file));
+        // читаем файл и отправляем его пользователю
+        readfile($file);
+        exit('end');
+    }
+    
+    }
+    
+    private function open($filename) 
+    {
+        $file = 'files/vendor/danieli/'.$filename;
+        //$filename = basename($file);
+        //debug($filename);
+        header ("Content-Type: application/octet-stream");
+        header ("Accept-Ranges: bytes");
+        header ("Content-Length: ".filesize($file));
+        header('Content-Transfer-Encoding: binary');
+        header ("Content-Disposition: attachment; filename=".$filename);  
+        readfile($file);
+        return true;   
     }
     
 }
