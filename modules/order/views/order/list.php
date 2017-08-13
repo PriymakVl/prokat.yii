@@ -12,6 +12,8 @@ use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderListMenuWidget;
 use app\modules\order\widgets\OrderTopListMenuWidget;
 use app\modules\orderlist\widgets\OrderListListMenuWidget;
+use app\modules\objects\widgets\ObjectSearchMenuWidget;
+use app\modules\orderact\widgets\OrderActListMenuWidget;
 
 $this->registerCssFile('/css/standard.css');
 
@@ -75,5 +77,7 @@ $this->registerCssFile('/css/standard.css');
     <?=MainMenuWidget::widget()?>
     <?=OrderListMenuWidget::widget(['state' => $state])?>
     <?=OrderActiveMenuWidget::widget()?>
+    <?=ObjectSearchMenuWidget::widget()?>
     <?=OrderListListMenuWidget::widget()?>
+    <?=OrderActListMenuWidget::widget()?>
 </div>

@@ -78,13 +78,15 @@ class OrderLogic extends BaseLogic
         $item->weight = $item->weight ? $item->weight : $object->weight;
         $item->item = $item->item ? $item->item : $object->item;
         $item->equipment = $object->equipment;
+        if ($object->dimensions) $item->dimensions = $object->dimensions;
         return self::setDrawingAndFileFromObject($item, $object);
     }
     
     private static function setItemNameFromObject($item, $object) 
     {
         if ($item->name) return $item->name;
-        if ($object->alias) return $object->alias;
+        if ($object->order_name) return $object->order_name; 
+        else if ($object->alias) return $object->alias;
         else if ($object->rus) return $object->rus; 
         else return $object->eng;    
     }
@@ -298,6 +300,32 @@ class OrderLogic extends BaseLogic
             $item->order_id = $new_id;
             $item->setIsNewRecord(true);
             $item->save(false);      
+        }
+    }
+    
+    public static function getMaterialWithGost($material) 
+    {
+        switch($material) {
+            case 'Ст3': return 'Ст3 ГОСТ ';
+            case 'Ст45': return 'Ст45 ГОСТ ';
+            case 'Ст40Х': return 'Ст40Х ГОСТ ';
+            case 'Ст50Г': return 'Ст50Г ГОСТ ';
+            case 'Ст65Г': return 'Ст65Г ГОСТ ';
+            case 'ОЦС 5-5-5': return 'Бронза ОЦС 5-5-5';
+            default: return $material;
+        }
+    }
+    
+    public static function convertDimensions($dimen)
+    {
+        if (!$dimen) return '';
+        $dimen = unserialize($dimen);
+        switch($dimen['type']) {
+            case 'bush': return 'Ø'.$dimen['out_diam'].'/Ø'.$dimen['in_diam'].'; H='.$dimen['height'].';';
+            case 'shaft': return 'Ø'.$dimen['diam'].'; L='.$dimen['length'].';';
+            case 'bar': return $dimen['height'].'x'.$dimen['width'].'x'.$dimen['length'].';';
+            case 'nut': return $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'] : 'M'.$dimen['thread'].';';
+            case 'bolt': return $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'].'; L='.$dimen['length'] : 'M'.$dimen['thread'].'; L='.$dimen['length'].';';
         }
     }
 

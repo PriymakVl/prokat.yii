@@ -10,6 +10,10 @@
    clear: both;
 }
 
+.margin-top-15 {
+    margin-top: 15px;
+}
+
 /* info */
 .info-box {
 	padding:5px 0 5px 10px;

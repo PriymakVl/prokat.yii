@@ -18,6 +18,7 @@ class Objects extends BaseModel
     public $dwg;
     public $child;
     public $orders;
+    public $similar;
     
     const MAIN_PARENTS = 0;
     
@@ -86,7 +87,7 @@ class Objects extends BaseModel
     public static function searchCode($code)
     {
         $objects = self::find()->where(['status' => self::STATUS_ACTIVE])->andWhere(['like', 'code', $code])->all();
-        if (count($objects) > 1) self::executeMethods($objects, ['getName', 'getParent']);
+        if (count($objects) > 1) self::executeMethods($objects, ['getName', 'getParent', 'getAlias']);
         return $objects;
     }
     
@@ -143,10 +144,15 @@ class Objects extends BaseModel
         }
         return $children;
     }
-	
-
-
     
+    public function countSimilar()
+    {
+        if ($this->code) {
+            $this->similar = (int) Objects::find()->where(['code' => $this->code, 'status' => self::STATUS_ACTIVE])->count();    
+        }
+        return $this;
+    }
+	
 
 }
 

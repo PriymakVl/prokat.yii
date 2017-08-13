@@ -38,7 +38,13 @@ class OrderList extends BaseModel
         $query = self::find()->filterWhere($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all();
-        return self::executeMethods($list, []);
+        return self::executeMethods($list, [['checkActive', 'order-list-active']]);
+    }
+    
+    public function convertType()
+    {
+        $this->type = OrderListLogic::convertType($this->type);
+        return $this;
     }
     
     

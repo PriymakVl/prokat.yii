@@ -1,11 +1,11 @@
 <?php
 
 use \yii\helpers\Url;
-use \yii\web\JqueryAsset;
 
-$this->registerJsFile('js/order/item_list_delete.js', ['depends' => JqueryAsset::className()]);
-$this->registerJsFile('js/order/item_list_set_parent.js', ['depends' => JqueryAsset::className()]);
-$this->registerJsFile('js/order/form_add_object.js', ['depends' => JqueryAsset::className()]);
+$this->registerJsFile('/js/order/item_list_delete.js');
+$this->registerJsFile('/js/order/item_list_set_parent.js');
+$this->registerJsFile('/js/order/form_add_object.js');
+$this->registerJsFile('/js/order/order_act_registr.js');
 ?>
 <div  class="sidebar-menu">
     <h5><?=$action == 'index' ? 'Элемент заказа' : 'Элементы заказа'?></h5>   
@@ -13,9 +13,6 @@ $this->registerJsFile('js/order/form_add_object.js', ['depends' => JqueryAsset::
         <? if ($action == 'index'): ?>
             <li>
                 <a href="<?=Url::to(['/order/content/form', 'order_id' => $order_id])?>">Добавить элемент</a>
-            </li>
-            <li>
-                <a href="#" onclick="return false;" id="add-object" order_id="<?=$order_id?>">Добавить объект</a>
             </li>
             <? if ($item_id): ?>
                 <li>
@@ -29,15 +26,15 @@ $this->registerJsFile('js/order/form_add_object.js', ['depends' => JqueryAsset::
             <li>
                 <a href="<?=Url::to(['/order/content/form', 'order_id' => $order_id])?>">Добавить элемент</a>
             </li>
-            <li>
-                <a href="#" onclick="return false;" id="add-object" order_id="<?=$order_id?>">Добавить объект</a>
-            </li>
             <? if ($controller == 'order-content'): ?>
                 <li>
                     <a href="#" id="order-items-delete">Удалить элементы</a>
                 </li>
                 <li>
                     <a href="#" id="order-items-set-parent">Создать сборочный</a>
+                </li>
+                <li>
+                    <a href="#" onclick="return false;" id="order-act-registr">Зарегистрировать акт</a>
                 </li>
             <? endif; ?>
         <? endif; ?>

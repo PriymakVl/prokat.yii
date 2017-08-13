@@ -13,9 +13,9 @@ $this->registerCssFile('/css/order.css');
     <!-- title -->
     <div class="title-box">
         <? if ($list): ?>
-            Редакирование списка    
+            Редакирование списка заказов   
         <? else: ?>
-            Добавление списка  
+            Добавление списка заказов
         <? endif; ?>
     </div>
     

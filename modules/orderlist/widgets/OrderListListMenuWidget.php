@@ -10,7 +10,7 @@ class OrderListListMenuWidget extends Widget
     
     public function run()
     {
-        return $this->render('list');
+        return $this->render('list_list');
     }
 
 }

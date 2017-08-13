@@ -1,10 +1,9 @@
 <?php
 
 use \yii\helpers\Url;
-use \yii\web\JqueryAsset;
 use app\modules\order\models\Order;
 
-$this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile('js/order/order_list_print.js');
 
 ?>
 <div  class="sidebar-menu">

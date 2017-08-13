@@ -30,6 +30,9 @@ $this->registerCssFile('/css/object.css');
 			
 			<!-- alias -->          
             <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias, 'style' => 'width:250px'])->label('Короткое название объекта:')?>
+            
+            <!-- order name -->          
+            <?= $f->field($form, 'order_name')->textInput(['value' => $obj->order_name, 'style' => 'width:250px'])->label('Название в заказах:')?>
 			
 			<!-- id object -->
 			<?=$f->field($form, 'id')->textInput(['value' => $obj ? $obj->id : '', 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>

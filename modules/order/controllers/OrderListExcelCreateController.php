@@ -77,7 +77,7 @@ class OrderListExcelCreateController extends BaseController
     private function setFont()
     {
         $this->objPHPExcel->getDefaultStyle()->getFont()->setName('Arial');
-        $this->objPHPExcel->getDefaultStyle()->getFont()->setSize(10);   
+        $this->objPHPExcel->getDefaultStyle()->getFont()->setSize(12);   
     }
     
     private function setWidthOfColumn()
@@ -107,7 +107,7 @@ class OrderListExcelCreateController extends BaseController
         $i = 0;
         foreach($this->orders as $order) {
         	$row_next = $row_start + $i;
-            $this->activeSheet->getRowDimension($i + 2)->setRowHeight(20);
+            $this->activeSheet->getRowDimension($i + 2)->setRowHeight(50);
         	$this->activeSheet->setCellValue('A'.$row_next,$order->date);
         	$this->activeSheet->setCellValue('B'.$row_next,$order->number);
         	$this->activeSheet->setCellValue('C'.$row_next,$order->name);

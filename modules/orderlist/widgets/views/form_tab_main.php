@@ -9,10 +9,10 @@ use app\modules\orderlist\models\OrderList;
 <div id="order-list-form-main">
     <div class="top-box">
         <!-- out number -->          
-        <?=$f->field($form, 'out')->textInput(['value' => $list ? $list->out_num : '', 'maxlength'=>3, 'style' => 'width:120px'])->label('Исх№:')?>
+        <?=$f->field($form, 'out_num')->textInput(['value' => $list->out_num, 'maxlength'=>3, 'style' => 'width:120px'])->label('Исх.№:')?>
         
          <!-- date -->          
-        <?=$f->field($form, 'date')->textInput(['value' => $list->out_date ? $order->out_date : date('d.m.y'), 'style' => 'width:120px'])->label('Дата регистрации:')?>
+        <?=$f->field($form, 'out_date')->textInput(['value' => $list->out_date ? $order->out_date : date('d.m.y'), 'style' => 'width:120px'])->label('Дата регистрации:')?>
         <?
             //$form->date = $order ? $order->date : date('d.m.Y');
             //$test = Yii::$app->formatter->asDate('now', 'dd.MM.y');

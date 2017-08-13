@@ -109,6 +109,14 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
         
         <!-- option data -->
         <table>
+            <!-- order name -->
+            <tr>
+                <td width="150">Название в заказах</td>
+                <td>
+                    <?=$obj->order_name ? $obj->order_name : 'Не указано'?>
+                </td>
+            </tr>
+            
             <!-- id object -->
             <tr>
                 <td width="150">ID объекта</td>

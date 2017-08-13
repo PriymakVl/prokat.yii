@@ -20,14 +20,14 @@ $this->registerCssFile('/css/order.css');
         <? endif; ?>
     </div>
     
-    <!-- top menu -->
-    <?=OrderFormTopMenuWidget::widget()?>
-    
     <!-- info -->
     <div class="info-box">
         <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
         <span>Номер заказа:</span>&laquo; <?=$order->number?> &raquo;
     </div>
+    
+    <!-- top menu -->
+    <?=OrderFormTopMenuWidget::widget()?>
     
     <!-- form -->
     <div class="form-wrp">
@@ -39,8 +39,8 @@ $this->registerCssFile('/css/order.css');
             <!-- other tab -->
             <?=OrderFormTabWidget::widget(['nameTab' => 'other_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
             
-            <!-- other tab -->
-            <?//=OrderFormTabWidget::widget(['nameTab' => 'object_content', 'f' => $f, 'form' => $form, 'object' => $object])?>
+            <!-- dimensions tab -->
+            <?=OrderFormTabWidget::widget(['nameTab' => 'dimensions_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
             
             <!-- hidden order id -->
             <?=$f->field($form, 'order_id')->hiddenInput(['value' => $order ? $order->id : false])->label(false) ?>

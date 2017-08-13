@@ -16,7 +16,7 @@ class OrderController extends BaseController
     public function actionIndex($order_id) 
     { 
         $order = Order::get($order_id);
-        $session = OrderLogic::checkStateSession($order_id, 'order_id'); 
+        //debug($order->active);
         return $this->render('index', compact('order', 'session'));
     }
     
@@ -37,7 +37,7 @@ class OrderController extends BaseController
         $form = new OrderForm();
         $form->getServices($form)->getArea();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
-            Yii::$app->session->setFlash('success', 'Заказ успешно создан');
+            Yii::$app->session->setFlash('success', 'Заказ успешно '.($order ? 'отредактирован' : 'создан'));
             $this->redirect(['/order/active/set', 'order_id' => $form->order_id]);
         }   
         //Debug($order);
@@ -75,16 +75,15 @@ class OrderController extends BaseController
     
     public function actionSetActive($order_id)
     {
-        $order = Order::findOne(['id' => $order_id]);
-        OrderLogic::setSessionActiveOrder($order_id);
+        OrderLogic::setActive($order_id, 'order-active');
         $this->redirect(['/order', 'order_id' => $order_id]); 
     }
     
-    public function actionGetActive()
-    {
-        $order_id = OrderLogic::getActiveOrderId();
-        $this->redirect(['/order', 'order_id' => $order_id]);
-    }
+//    public function actionGetActive()
+//    {
+//        $order_id = OrderLogic::getActive();
+//        $this->redirect(['/order', 'order_id' => $order_id]);
+//    }
     
     public function actionGetEquipmentForForm()
     {

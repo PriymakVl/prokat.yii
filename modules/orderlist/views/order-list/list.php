@@ -35,15 +35,16 @@ use app\modules\orderlist\widgets\OrderListTopListMenuWidget;
                     <td>
                         <input type="checkbox" name="order-list" list_id="<?=$list->id?>" />
                     </td>
-                    <td>
-                        <a href="<?=Url::to(['/order-list', 'list_id' =>$list->id])?>"><?=$list->type?></a>
-                    </td>
                     <td class="text-center">
-                       <? if ($list->content): ?>
-                            <a href="<?=Url::to(['/order-list/content', 'list_id' => $list->id])?>"><?=$list->name?></a>
+                        <? if ($list->content): ?>
+                            <? $color = $list->active ? 'green' : 'grey'; ?>
+                            <a style="color: <?=$color?>" href="<?=Url::to(['/order-list/content', 'list_id' =>$list->id])?>"><?=$list->type?></a>
                         <? else: ?>
-                            <?=$list->name?>
-                        <? endif; ?>  
+                            <?=$list->type?>
+                        <? endif; ?>
+                    </td>
+                    <td>
+                        <a href="<?=Url::to(['/order-list', 'list_id' => $list->id])?>"><?=$list->name?></a>
                     </td>
                 </tr>
             <? endforeach; ?>

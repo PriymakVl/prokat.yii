@@ -3,7 +3,7 @@
 use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
 //use app\modules\orderlist\models\OrderList;
-//use app\modules\orderlist\widgets\OrderMenuWidget;
+use app\modules\orderlist\widgets\OrderListMenuWidget;
 //use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\orderlist\widgets\OrderListTopMenuWidget;
 //use app\modules\order\widgets\OrderContentMenuWidget;
@@ -16,13 +16,13 @@ $this->registerCssFile('/css/order.css');
     <?=OrderListTopMenuWidget::widget(['list_id' => $list->id])?>
     
     <!-- info state of order -->
-    <? if ($session == 'order-list-active'): ?>
+    <? if ($list->active): ?>
         <div class="alert alert-success active-order">Активный список заказов</div>
     <? endif; ?>
     
     <!-- info create of list order -->
     <?php if (Yii::$app->session->hasFlash('success-order-list')): ?>
-      <div class="alert alert-success alert-dismissable">
+      <div class="alert alert-success alert-dismissable margin-top-15">
           <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
           <?= Yii::$app->session->getFlash('success-order-list') ?>
       </div>
@@ -55,7 +55,7 @@ $this->registerCssFile('/css/order.css');
 
         <!-- type -->
         <tr>
-            <td class="text-center">Статья затрат</td>
+            <td class="text-center">Тип списка</td>
             <td>
                 <?=$list->type?>
             </td>
@@ -81,7 +81,7 @@ $this->registerCssFile('/css/order.css');
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     
-    <?//=OrderMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderListMenuWidget::widget(['list' => $list])?>
     
     <?//=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
     

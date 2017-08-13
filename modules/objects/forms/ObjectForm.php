@@ -21,6 +21,7 @@ class ObjectForm extends BaseForm
     public $code;
     public $rating;
     public $item; //position object in specification
+    public $order_name;
     //form
     public $types;
     public $equipments;
@@ -40,6 +41,7 @@ class ObjectForm extends BaseForm
             ['item', 'default', 'value' => 0],
             ['rating', 'default', 'value' => 0],
 			['all_name', 'string'],
+            ['order_name', 'string', 'length' => [2, 20] ],
         ];
     }
     
@@ -70,6 +72,7 @@ class ObjectForm extends BaseForm
         $obj->equipment = $this->equipment;
         $obj->item = $this->item;
         $obj->rating = $this->rating;
+        $obj->order_name = $this->order_name;
         $obj->save(); 
         if (!$obj->code) {
             $obj->code = $obj->id.'-code';
@@ -84,6 +87,7 @@ class ObjectForm extends BaseForm
 		foreach ($objects as $obj) {
 			$obj->rus = $this->rus;
 			if ($this->alias) $obj->alias = $this->alias;
+            if ($this->order_name) $obj->order_name = $this->order_name;
 			$obj->save();
 		}
 	}

@@ -16,7 +16,8 @@ class OrderListController extends BaseController
     public function actionIndex($list_id)
     {
         $list = OrderList::getOne($list_id, false, self::STATUS_ACTIVE);
-        //if ($list) $content = OrderListContent::getBylistId($list->id);
+        $list->convertType()->checkActive('order-list-active');
+        //$content = OrderListContent::getBylistId($list->id);
         return $this->render('index', compact('list', 'content'));
     }
     
@@ -33,7 +34,7 @@ class OrderListController extends BaseController
         $list = OrderList::getOne($list_id, null, self::STATUS_ACTIVE);       
         $form = new OrderListForm();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($list)) {
-            Yii::$app->session->setFlash('success-order-list', 'Список заказов успешно создан');
+            Yii::$app->session->setFlash('success-order-list', 'Список заказов успешно '.($list ? 'отредактирован' : 'создан'));
             return $this->redirect(['/order-list/active/set', 'list_id' => $form->list_id]);
         }        
         else return $this->render('form', compact('form', 'list'));    
@@ -48,14 +49,7 @@ class OrderListController extends BaseController
     
     public function actionSetActive($list_id)
     {
-        $list = OrderList::getOne($list_id, false, self::STATUS_ACTIVE);
-        OrderListLogic::setActive($list_id);
-        $this->redirect(['/order-list', 'list_id' => $list->id]); 
-    }
-    
-    public function actionGetActive()
-    {
-        $list_id = OrderListLogic::getActive();
-        $this->redirect(['/order-list', 'list_id' => $application_id]);
+        OrderListLogic::setActive($list_id, 'order-list-active');
+        $this->redirect(['/order-list', 'list_id' => $list_id]); 
     }
 }

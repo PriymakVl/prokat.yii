@@ -5,6 +5,7 @@ namespace app\modules\order\models;
 use yii\web\ForbiddenHttpException;
 use app\models\BaseModel;
 use app\modules\order\logic\OrderLogic;
+use app\modules\objects\models\Objects;
 
 class OrderContent extends BaseModel
 {
@@ -29,7 +30,7 @@ class OrderContent extends BaseModel
     {
         $content = self::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 'parent_id' => self::MAIN_PARENT])
                     ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $content = self::executeMethods($content, ['countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren']);
+        $content = self::executeMethods($content, ['countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
         return $content;
     }
     
@@ -88,6 +89,18 @@ class OrderContent extends BaseModel
         return $this;
     }
     
+    public function getMaterialWithGost()
+    {
+        if ($this->material) $this->material = OrderLogic::getMaterialWithGost($this->material);
+        return $this;
+    }
+    
+    public function getDimensions()
+    {
+        if ($this->dimensions) $this->dimensions = OrderLogic::convertDimensions($this->dimensions);
+        return $this;
+    }
+     
 }
 
 

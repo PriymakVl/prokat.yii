@@ -26,7 +26,6 @@ class OrderListForm extends BaseForm
             ['type', 'string'],
             ['note', 'string',],
             ['out_num', 'integer'],
-            ['out_num', 'default', 'value' => 0],
             [['out_date'], 'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
             ['out_date', 'default', 'value' => ''],
         ];
@@ -54,7 +53,7 @@ class OrderListForm extends BaseForm
         $order->type = $this->type;
         $order->name = $this->name;
         $order->note = $this->note;
-        $order->out_num = $this->out_num ? $this->out_num : 0;
+        $order->out_num = $this->out_num;
         $order->out_date = ($this->out_num && $this->out_date) ? strtotime($this->prepareDateForConvert($this->out_date)) : '';
         return $order;
     }

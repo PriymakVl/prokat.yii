@@ -40,7 +40,7 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
             $breadcrumbs .= $this->getSubMenu($parent);
             $breadcrumbs .= '</li>';
         } 
-        return $breadcrumbs.'<li><a href="#" onclick="return false" style="text-decoration: none; cursor: default;">'.$this->obj->alias.'</a><span class="glyphicon glyphicon-chevron-right top-breadcrumbs-chevron" aria-hidden="true"></li>';   
+        return $breadcrumbs.'<li><a href="/object/specification?obj_id='.$this->obj->parent_id.'">'.$this->obj->alias.'</a><span class="glyphicon glyphicon-chevron-right top-breadcrumbs-chevron" aria-hidden="true"></li>';   
     }
 
     private function getArrayParents()
@@ -87,11 +87,13 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
     {
         $submenu = '<ul class="dropdown-menu">';
         $objects = Objects::findAll(['parent_id' => $parent->id, 'status' => Objects::STATUS_ACTIVE]);
-        for ($i = 0; $i < 20; $i++) {
-            if (!$objects[$i]) break;
+        for ($i = 0; $i < count($objects); $i++) {
+            if (!$objects[$i] || $i > 20) break;
+            if ($objects[$i]->item > 99 && $objects[$i]->item < 300) continue;
 			$objects[$i]->getName()->getAlias();
             $submenu .= '<li>';
-            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$objects[$i]->alias.'</a>';
+            $item = $objects[$i]->item ?  $objects[$i]->item.' ' : '';
+            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$item.$objects[$i]->alias.'</a>';
             $submenu .= '</li>';   
         } 
         return $submenu .= '</ul>';  

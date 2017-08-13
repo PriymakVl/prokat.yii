@@ -10,3 +10,7 @@
     border: 1px solid #B49A6A; 
     padding: 5px;   
 }
+
+.dropdown-toggle:focus {
+    background-color: transparent !important;
+}

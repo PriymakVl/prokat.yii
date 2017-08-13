@@ -18,13 +18,13 @@ $(document).ready(function() {
         $('#content-form-main').hide(); 
         $('#content-form-object').hide();   
     });   
-    //work
-    $('#show-content-form-object').click(function() {
+    //dimensions
+    $('#show-content-form-dimensions').click(function() {
         $('.top-menu a').each(function() {
             $(this).removeClass('top-menu-active-link');    
         });
         $(this).addClass('top-menu-active-link');
-        $('#content-form-object').show();
+        $('#content-form-dimensions').show();
         $('#content-form-main, #content-form-other').hide();    
     });
 });

@@ -17,7 +17,6 @@ $this->registerJsFile('js/order/item_form_set_material.js',  ['depends' => [Jque
         <option value="Ст65Г">Ст65Г</option>
         <option value="Ст20">Ст20</option>
         <option value="Ст3">Ст3</option>
-        <option value="Ст3пс">Ст3пс</option>
-        <option value="Бронза ОЦС 5-5-5">Бр ОЦС 5-5-5</option>
+        <option value="ОЦС 5-5-5">Бр ОЦС 5-5-5</option>
     </select>
 </div>

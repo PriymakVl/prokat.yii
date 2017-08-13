@@ -15,6 +15,7 @@ class BaseModel extends ActiveRecord implements ConfigApp
 {
     public $cutNote;
     public static $pages;
+    public $active;
     
     use CommonStaticMethods;
     
@@ -106,6 +107,20 @@ class BaseModel extends ActiveRecord implements ConfigApp
     {
         if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Не указан</span>';
         else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer));
+        return $this;
+    }
+    
+    public function checkActive($session_name)
+    {
+        $session = Yii::$app->session;
+        $active_id = $session->get($session_name);
+        if ($active_id == $this->id) $this->active = true;
+        return $this; 
+    }
+    
+    public function convertMonth()
+    {
+        $this->month = self::convertMonth($this->month);
         return $this;
     }
     

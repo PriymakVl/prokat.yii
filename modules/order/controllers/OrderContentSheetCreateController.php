@@ -65,10 +65,10 @@ class OrderContentSheetCreateController extends BaseController
         $this->activeSheet->getPageSetup()->setOrientation(\PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);//ORIENTATION_PORTRAIT
         $this->activeSheet->getPageSetup()->SetPaperSize(\PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
 						
-        $this->activeSheet->getPageMargins()->setTop(0.75);
+        $this->activeSheet->getPageMargins()->setTop(0.25);
         $this->activeSheet->getPageMargins()->setRight(0.25);
         $this->activeSheet->getPageMargins()->setLeft(0.75);
-        $this->activeSheet->getPageMargins()->setBottom(0.75);   
+        $this->activeSheet->getPageMargins()->setBottom(0);   
     }
     
     private function setHeaderAndFooter()
@@ -167,15 +167,22 @@ class OrderContentSheetCreateController extends BaseController
             if ($this->content[$i]) {
                 $this->activeSheet->setCellValue('A'.$num, $this->content[$i]->drawing);
            	    $this->setItem($num, $this->content[$i]);
-            	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name);
+            	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name.PHP_EOL.$this->content[$i]->dimensions);//
                 $this->activeSheet->setCellValue('D'.$num, $this->content[$i]->count);
                 $this->setMaterial($num, $this->content[$i]->material);
                 $this->setWeight($num, $this->content[$i]); 
+                if ($this->content[$i]->delivery) {
+                    $this->activeSheet->mergeCells('G'.$num.':L'.$num);
+                    $this->activeSheet->setCellValue('G'.$num, 'Доставляет заказчик');
+                    $this->activeSheet->getStyle('G'.$num)->applyFromArray($this->styleContent);    
+                }
             }
+            $this->activeSheet->getStyle('C'.$num)->applyFromArray(['font'=>['size' => 12]]);
+            $this->activeSheet->getStyle('C'.$num)->getAlignment()->setWrapText(true);
             $this->activeSheet->getStyle('A3:M'.$num)->applyFromArray($this->styleBorder);
             $this->activeSheet->getStyle('A3:F'.$num)->applyFromArray($this->styleContent); 
             $this->activeSheet->getStyle('C'.$num)->getAlignment()->setWrapText(true);
-            $this->activeSheet->getRowDimension($num)->setRowHeight(40);
+            $this->activeSheet->getRowDimension($num)->setRowHeight(50);
             if ($this->content[$i]->children) $i = $this->setChildren($num, $i, $this->content[$i]->children);
         }    
     }
@@ -254,7 +261,7 @@ class OrderContentSheetCreateController extends BaseController
     private function  setStyleWork()
     {
         $this->styleWork = [
-            'alignment' => ['horizontal' => \PHPExcel_STYLE_ALIGNMENT::HORIZONTAL_LEFT, 'vertical' => \PHPExcel_STYLE_ALIGNMENT::VERTICAL_TOP]
+            'alignment' => ['horizontal' => \PHPExcel_STYLE_ALIGNMENT::HORIZONTAL_LEFT, 'vertical' => \PHPExcel_STYLE_ALIGNMENT::VERTICAL_TOP],
         ];    
     }
     

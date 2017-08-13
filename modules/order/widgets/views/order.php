@@ -2,7 +2,8 @@
 
 use \yii\helpers\Url;
 
-$this->registerJsFile('js/order/order_copy.js');
+$this->registerJsFile('/js/order/order_copy.js');
+
 ?>
 <div  class="sidebar-menu">
     <h5>Заказ</h5>   
@@ -15,6 +16,9 @@ $this->registerJsFile('js/order/order_copy.js');
         </li>
          <li>
             <a href="<?=Url::to(['/order/delete', 'order_id' => $order_id])?>">Удалить заказ</a>
+        </li>
+         <li>
+            <a href="<?=Url::to(['/order-list-content/add/order', 'order_id' => $order_id])?>">Добавить в список</a>
         </li>
         <li>
             <a href="" onclick="return false;" id="order-copy">Перевыдать заказ</a>

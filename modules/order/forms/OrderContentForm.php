@@ -28,30 +28,30 @@ class OrderContentForm extends BaseForm
     public $equipment;
     public $file;
     public $sheet;
+    public $variant;
+    public $delivery;
+    public $dimensions;
     //form
     public $item_id;
+    public $type_dimensions;
+    public $nut_thread; public $nut_pitch;
+    public $bolt_thread; public $bolt_pitch; public $bolt_length;
+    public $shaft_length; public $shaft_diam;
+    public $bush_height; public $bush_in_diam; public $bush_out_diam;
+    public $bar_height; public $bar_width; public $bar_length;
 
     
     public function rules() 
     {
         return [
-            [['name'], 'string',],
-            ['drawing', 'string'],
-            ['count', 'default', 'value' => 0],
-            ['weight', 'string'],
-            ['note', 'string',],
-            ['item', 'default', 'value' => 0],
-            ['material', 'string'],
-            ['rating', 'default', 'value' => 0],
-            ['order_id', 'integer'],
-            ['code', 'string'],
-            ['obj_id', 'default', 'value' => 0],
-            ['equipment', 'string'],
-            ['cat_dwg', 'string'],
-            ['file', 'string'],
+            [['type_dimensions', 'cat_dwg', 'equipment', 'code', ], 'string'],
+            [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'name'], 'string'],
+            [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_pitch', 'bolt_length',], 'integer'],
+            [['shaft_length', 'shaft_diam', 'bush_height', 'bush_in_diam', 'bush_out_diam'], 'integer'],
+            [['bar_length', 'bar_height', 'bar_width'], 'integer'],
+            [['count', 'item', 'rating', 'obj_id', 'delivery',], 'default', 'value' => 0],
             ['sheet', 'default', 'value' => 1],
         ];
-
     }
     
     public function behaviors()
@@ -73,42 +73,62 @@ class OrderContentForm extends BaseForm
         $item->order_id = $this->order_id; 
         $item->material = $this->material;
         $item->item = $this->item;
+        if ($this->type_dimensions) $item->dimensions = $this->setDimensions();
         //drawing
         $item->cat_dwg = $this->cat_dwg;
         $item->file = $this->file;
+        $item->delivery = $this->delivery;
+        $item->variant = $this->variant;
+        //if ($item->code || $item->obj_id) $this->saveParamsForObjects($item);
         $item->save();
         
         $this->item_id = $item->id;
         return true;
     }
-  //  public function save($item)
-//    {
-//        $obj = $this->getObject();
-//        if ($obj) {
-//			$item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
-//			if ($this->drawing) $item->drawing = $this->drawing;
-//			if ($this->weight) $item->weight = $this->weight;
-//			if ($this->name) $item->name = $this->name;
-//		}
-//        else {
-//			if (!$item) $item = new OrderContent();
-//            $item->name = $this->name ? $this->name : 'деталь';
-//            $item->drawing = $this->drawing;  
-//            $item->cat_dwg = $this->cat_dwg;
-//            $item->file = $this->file; 
-//			$item->weight = $this->weight;
-//            $item->sheet = $this->sheet;     
-//        } 
-//        $item->note = $this->note;
-//        $item->count = $this->count;
-//        $item->rating = $this->rating;
-//        $item->order_id = $this->order_id; 
-//        $item->material = $this->material;
-//        if ($this->item || $this->item === '0') $item->item = $this->item;
-//        $item->save();
-//        $this->item_id = $item->id;
-//        return true;
-//    }
+  
+    private function saveParamsForObjects($item)
+    {
+        if (!$item->code) $item->code = Objects::find()->select('code')->where(['id' => $item->obj_id])->column()[0]; 
+        $objects = Objects::findAll(['code' => $item->code, 'status' => Objects::STATUS_ACTIVE]);
+        foreach ($objects as $obj) {
+            if ($item->name) {
+                if ($obj->id == $obj_id) $obj->order_name = $item->name;
+                else if (!$obj->order_name) $obj->order_name = $item->name;    
+            }
+            if ($item->dimensions) $obj->dimensions = $item->dimensions;
+            $obj->save();
+        }  
+    }
+    
+    private function setDimensions()
+    {
+        $dimensions['type'] = $this->type_dimensions;
+ 
+        if ($this->type_dimensions == 'nut') {
+            $dimensions['thread'] = $this->nut_thread;
+            $dimensions['pitch'] = $this->nut_pitch;    
+        }
+        else if ($this->type_dimensions == 'bolt') {
+            $dimensions['thread'] = $this->bolt_thread;
+            $dimensions['pitch'] = $this->bolt_pitch; 
+            $dimensions['length'] = $this->bolt_length;   
+        }
+        else if ($this->type_dimensions == 'shaft') {
+            $dimensions['diam'] = $this->shaft_diam; 
+            $dimensions['length'] = $this->shaft_length;   
+        }
+        else if ($this->type_dimensions == 'bush') {
+            $dimensions['in_diam'] = $this->bush_in_diam;
+            $dimensions['out_diam'] = $this->bush_out_diam; 
+            $dimensions['height'] = $this->bush_height;   
+        }
+        else if ($this->type_dimensions == 'bar') {
+            $dimensions['height'] = $this->bar_height; 
+            $dimensions['length'] = $this->bar_length;   
+            $dimensions['width'] = $this->bar_width;   
+        }
+        return serialize($dimensions);
+    }
 
 //    private function getObject() 
 //    {

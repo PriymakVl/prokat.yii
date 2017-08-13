@@ -28,7 +28,7 @@ class OrderFormTabWidget extends Widget
             case 'work': return 'order_form_work'; break;
             case 'main_content': return 'content_form_main'; break;
             case 'other_content': return 'content_form_other'; break;
-            case 'object_content': return 'content_form_object'; break;
+            case 'dimensions_content': return 'content_form_dimensions'; break;
         }
     }
 

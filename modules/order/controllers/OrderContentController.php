@@ -18,21 +18,19 @@ class OrderContentController extends BaseController
     public function actionIndex($item_id) 
     { 
         $item = OrderContent::getOne($item_id, false, self::STATUS_ACTIVE)->countWeightAll()->getPathDrawing()->getWeight()
-            ->getDrawing();
+            ->getDrawing()->getMaterialWithGost()->getDimensions();
+            //debug($item);
         $order = Order::findOne($item->order_id);
-        $order->getNumber();
-        $object = Objects::getOne($item->obj_id, null, self::STATUS_ACTIVE);
-        if ($object) $object->getParent()->getName();
-        return $this->render('index', compact('order', 'item', 'object'));
+        $order->getNumber()->checkActive('order-active');
+        return $this->render('index', compact('order', 'item'));
     }
     
     public function actionList($order_id) 
     { 
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
-        $order->getNumber();
+        $order->getNumber()->checkActive('order-active');
         $content = OrderContent::getItemsOfOrder($order->id);
-        $state = OrderLogic::checkStateSession($order_id, 'order_id');
-        return $this->render('list', compact('order', 'content', 'state'));
+        return $this->render('list', compact('order', 'content'));
     }
     
     public function actionForm($order_id, $item_id = null) 
@@ -40,9 +38,12 @@ class OrderContentController extends BaseController
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->getNumber();
         $item = OrderContent::getOne($item_id, null, self::STATUS_ACTIVE);
+        $item->dimensions = unserialize($item->dimensions);
+        //debug($item->dimensions['type']);
         $form = new OrderContentForm();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($item)) { 
+            Yii::$app->session->setFlash('success-order-item', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
             return $this->redirect(['/order/content/item', 'item_id' => $form->item_id]);
         }   
         return $this->render('form', compact('item', 'form', 'order'));

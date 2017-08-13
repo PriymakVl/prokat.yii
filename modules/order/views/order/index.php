@@ -7,6 +7,7 @@ use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
+use app\modules\objects\widgets\ObjectSearchMenuWidget;
 
 $this->registerCssFile('/css/order.css');
 
@@ -15,16 +16,14 @@ $this->registerCssFile('/css/order.css');
     <!-- top nenu -->
     <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
     
-    <!-- info state of order -->
-    <? if ($session == 'active'): ?>
-        <div class="alert alert-success active-order">Активный заказ</div>
+    <!-- info order is active -->
+    <? if ($order->active): ?>
+        <div class="alert alert-success margin-top-15">Активный заказ</div>
     <? endif; ?>
     
     <!-- info create of order -->
     <?php if (Yii::$app->session->hasFlash('success')): ?>
-      <div class="alert alert-success alert-dismissable">
-          <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button>
-          <h4><i class="icon fa fa-check"></i>Saved!</h4>
+      <div class="alert alert-success">
           <?= Yii::$app->session->getFlash('success') ?>
       </div>
     <?php endif; ?>
@@ -143,8 +142,8 @@ $this->registerCssFile('/css/order.css');
     <?=MainMenuWidget::widget()?>
     
     <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
-    
+     <?=ObjectSearchMenuWidget::widget()?>
     <?=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
-    
+   
     <?=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
 </div>

@@ -7,7 +7,7 @@ $this->registerCssFile('/css/search.css');
 
 <!-- search object menu -->
 <div  class="sidebar-menu">
-    <h5>Поиск</h5>   
+    <h5>Поиск объекта</h5>   
     <form action="/search" class="search-sidebar" method="get">
 
         <input type="text" name="code" autofocus />

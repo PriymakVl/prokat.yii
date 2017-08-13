@@ -18,9 +18,10 @@ $config = [
         'objects' => ['class' => 'app\modules\objects\Module',],
         'employees' => ['class' => 'app\modules\employees\Module',],
         'equipments' => ['class' => 'app\modules\equipments\Module',],
-         'letters' => ['class' => 'app\modules\letters\Module',],
+        'letters' => ['class' => 'app\modules\letters\Module',],
         'applications' => ['class' => 'app\modules\applications\Module',],
         'orderlist' => ['class' => 'app\modules\orderlist\Module',],
+        'orderact' => ['class' => 'app\modules\orderact\Module',],
     ],
     'components' => [
         'request' => [
@@ -132,6 +133,15 @@ $config = [
                 'order-list/form' => 'orderlist/order-list/form',
                 'order-list/active/set' => 'orderlist/order-list/set-active',
                 'order-list' => 'orderlist/order-list',
+                //order-list-content
+                'order-list-content/add/order' => 'orderlist/order-list-content/add-order',
+                'order-list-content/add/list/order' => 'orderlist/order-list-content/add-list-order',
+                  //order-act
+                'order/act/list' => 'orderact/order-act/list',
+                'order/act/form' => 'orderact/order-act/form',
+                'order/act/registr' => 'orderact/order-act/registration',
+                'order/act/active/set' => 'orderact/order-act/set-active',
+                'order/act' => 'orderact/order-act',                
                 //object specification
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
                 'object/specification/copy/list' => 'objects/object-specification/copy-list',

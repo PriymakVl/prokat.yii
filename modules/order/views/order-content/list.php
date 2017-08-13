@@ -8,6 +8,7 @@ use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
 use app\modules\order\widgets\OrderItemChildrenWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
+use app\modules\objects\widgets\ObjectSearchMenuWidget;
 
 $this->registerCssFile('/css/order.css');
 
@@ -16,17 +17,17 @@ $this->registerCssFile('/css/order.css');
     <!-- top nenu -->
     <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
     
-    <!-- info state of order -->
-    <? if ($state == 'active'): ?>
-        <div class="active-order">Активный заказ</div>
-    <? endif; ?>
-    
     <!-- info -->
     <div class="info-box">
         <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
         <span>Номер заказа:</span><span <? if ($order->number == 'черновик') echo 'style="color:red;"'; ?>>&laquo; <?=$order->number?> &raquo;</span>
         <input type="hidden" id="order-id" value="<?=$order->id?>"/>
     </div>
+    
+    <!-- info state of order -->
+    <? if ($order->active): ?>
+        <div class="alert alert-success margin-top-15">Активный заказ</div>
+    <? endif; ?>
     
     <!-- order content -->
     <table>
@@ -94,6 +95,7 @@ $this->registerCssFile('/css/order.css');
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     <?=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
+     <?=ObjectSearchMenuWidget::widget()?>
     <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
     <?=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
 </div>

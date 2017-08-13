@@ -26,12 +26,6 @@ class OrderListLogic extends BaseLogic
         }
     }
     
-    public static function setActive($list_id)
-    {
-        $session = Yii::$app->session;
-        $session->set('order-list-active', $list_id);
-    }
-    
 
 
 }
