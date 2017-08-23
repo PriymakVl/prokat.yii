@@ -67,7 +67,7 @@ $this->registerCssFile('/css/order.css');
                     
                     <!-- name -->
                     <td>
-                        <a href="<?=Url::to(['/order/content/item', 'item_id' => $item->id])?>"><?=$item->name?></a>
+                        <a href="<?=Url::to(['/order/content/item', 'item_id' => $item->id])?>"><?=$item->name.' '.$item->dimensions?></a>
                     </td>
                     
                     <!-- count -->
@@ -97,5 +97,5 @@ $this->registerCssFile('/css/order.css');
     <?=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
      <?=ObjectSearchMenuWidget::widget()?>
     <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
-    <?=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
+    <? if (!$order->active) echo OrderActiveMenuWidget::widget(['order_id' => $order->id]); ?>
 </div>

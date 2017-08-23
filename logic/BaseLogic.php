@@ -73,6 +73,12 @@ class BaseLogic  extends Behavior implements ConfigApp
         $session->set($session_name, $id);
     }
     
+    public static function getActive($session_name)
+    {
+        $session = Yii::$app->session;
+        return $session->get($session_name);    
+    }
+    
 }
 
 

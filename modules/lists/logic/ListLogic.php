@@ -10,12 +10,12 @@ use app\logic\BaseLogic;
 class ListLogic extends BaseLogic
 {
     
-    const DEFAULT_LIST_ID = 7;
+    const DEFAULT_ACTIVE_LIST = 7;
 
-    public static function getListId()
+    public static function getActiveList()
     {
-        $session = Yii::$app->session;
-        return $session->get('list_id') ? $session->get('list_id') : self::DEFAULT_LIST_ID; 
+        $active_id = self::getActive('list-active');
+        return $active_id ? $active_id : self::DEFAULT_ACTIVE_LIST; 
     }
     
     public static function getParams()

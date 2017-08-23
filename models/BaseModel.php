@@ -53,9 +53,7 @@ class BaseModel extends ActiveRecord implements ConfigApp
     
     public function getCodeWithoutVariant($code)
     {
-        if (!$code) return false;
-        else if (!strpos($code, '/')) return $code;
-        else return explode('/', $code)[0];       
+        return self::codeWithoutVariant($code);      
     }
     
     public function getAlias($length = 15, $suffix = '')

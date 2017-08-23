@@ -9,7 +9,7 @@ use app\modules\objects\models\ObjectDrawing;
 
 class DrawingDepartment extends BaseModel
 {
-    public $number;
+    public $fullNumber;
     public $child;
     public $catName = 'Цех';
     public $category = 'department';
@@ -34,19 +34,19 @@ class DrawingDepartment extends BaseModel
     public static function getListDepartment($params)
     {
         $list = parent::getList($params, self::PAGE_SIZE);
-        return self::executeMethods($list, ['getNumber']);
+        return self::executeMethods($list, ['getFullNumber']);
     }
     
     public function getContentOfFolder()
     {
         $list = DrawingDepartment::findAll(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id]);
-        $this->content = $this->executeMethodsOfObjects($list, ['getNumber']);  
+        $this->content = $this->executeMethodsOfObjects($list, ['getFullNumber']);  
     }
 
-    public function getNumber()
+    public function getFullNumber()
     {
         $year = substr($this->year, 2);
-        $this->number = '27.'.$year.'.'.$this->id;
+        $this->fullNumber = '27.'.$year.'.'.$this->number;
         return $this;
     }
 
@@ -65,10 +65,11 @@ class DrawingDepartment extends BaseModel
     
     public static function getAllForObject($obj)
     {
-        $code = $obj->getCodeWithoutVariant($obj->code);
-        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'department', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
-        if ($ids) return self::findAll($ids);
-        return [];   
+        //$code = $obj->getCodeWithoutVariant($obj->code);
+        //$ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'department', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        //if ($ids) return self::findAll($ids);
+        //return []; 
+        //self::findAll(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);  
     }
     
     public static function check($obj)

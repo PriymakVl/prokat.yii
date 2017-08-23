@@ -22,7 +22,7 @@
 				</td>
                 <td>
                     <a style="color:<?=$obj->orders ? 'green' : $color?>;" href="<?=Url::to(['/object', 'obj_id' => $obj->id])?>" title="<?=Html::encode($obj->eng)?>">
-                        <?=$obj->name?>
+                        <?=$obj->name.' '.$obj->dimensions?>
                     </a>    
                 </td>
                 <td class="text-center">

@@ -16,7 +16,6 @@ class OrderController extends BaseController
     public function actionIndex($order_id) 
     { 
         $order = Order::get($order_id);
-        //debug($order->active);
         return $this->render('index', compact('order', 'session'));
     }
     

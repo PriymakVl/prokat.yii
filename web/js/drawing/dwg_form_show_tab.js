@@ -1,31 +1,32 @@
 $(document).ready(function() {
-    //main
-    $('#show-content-form-main').click(function() {
+
+    //department
+    $('#show-form-tab-department').click(function() {
         $('.top-menu a').each(function() {
             $(this).removeClass('top-menu-active-link');    
         });
         $(this).addClass('top-menu-active-link');
-        $('#content-form-main').show();
-        $('#content-form-other, #content-form-dimensions').hide();    
+        $('#form-tab-department').show();
+        $('#form-tab-object, #form-tab-dimensions').hide();    
     });
-    //other 
-    $('#show-content-form-other').click(function() {
+    
+    //object
+    $('#show-form-tab-object').click(function() {
         $('.top-menu a').each(function() {
             $(this).removeClass('top-menu-active-link');    
         });
         $(this).addClass('top-menu-active-link');
-        $('#content-form-other').show();
-        $('#content-form-main').hide(); 
-        $('#content-form-dimensions').hide();   
-    });  
-     
+        $('#form-tab-object').show();
+        $('#form-tab-department, #form-tab-dimensions').hide();  
+    }); 
+      
     //dimensions
-    $('#show-content-form-dimensions').click(function() {
+    $('#show-form-tab-dimensions').click(function() {
         $('.top-menu a').each(function() {
             $(this).removeClass('top-menu-active-link');    
         });
         $(this).addClass('top-menu-active-link');
-        $('#content-form-dimensions').show();
-        $('#content-form-main, #content-form-other').hide();    
+        $('#form-tab-dimensions').show();
+        $('#form-tab-department, #form-tab-object').hide();    
     });
 });

@@ -15,7 +15,7 @@ class ListController extends BaseController
     
     public function actionIndex()
     {
-        $list = Lists::getOneList(__METHOD__);
+        $list = Lists::getOneList();
         $list->convertType();
         $content = ListContent::getBylistId($list->id);
         return $this->render('index', compact('list', 'content'));
@@ -64,9 +64,9 @@ class ListController extends BaseController
         if ($list->deleteOne()) return $this->redirect(['/list/active']);
     }
     //do list active
-    public function actionActive($list_id = null)
+    public function actionSetActive($list_id)
     {
-        ListLogic::setSessionActiveList($list_id);
-        $this->redirect('/list/active');        
+        ListLogic::setActive($list_id, 'list-active');
+        $this->redirect('/list/active');       
     }
 }

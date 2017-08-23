@@ -44,7 +44,7 @@ $this->registerCssFile('/css/order.css');
         </tr>
         <!-- drawing -->
         <tr>
-            <td class="text-center">Чертеж</td>
+            <td class="text-center">Чертеж(эскиз)</td>
             <td>
                 <? if ($item->pathDrawing): ?>
                     <a target="_blank" href="<?=Url::to([$item->pathDrawing])?>"><?=$item->drawing?></a>

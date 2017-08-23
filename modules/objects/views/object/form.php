@@ -1,86 +1,50 @@
 <?php
 
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\widgets\MainMenuWidget;
-use yii\helpers\Html;
-$this->registerCssFile('/css/object.css');
-?>
+use app\modules\objects\widgets\ObjectFormTopMenuWidget;
+use app\modules\objects\widgets\ObjectFormTabWidget;
 
+$this->registerCssFile('/css/object.css');
+$this->registerJsFile('/js/object/form_show_tab.js');
+
+?>
 <div class="content">
     <!-- title -->
     <div class="title-box">
         <? if ($obj): ?>
-            Редакирование объекта    
+            Редакирование детали(узла)    
         <? else: ?>
-            Создание нового объекта
+            Добавление детали(узла)  
         <? endif; ?>
     </div>
     
+    <!-- top menu -->
+    <?=ObjectFormTopMenuWidget::widget()?>
+    
     <!-- form -->
     <div class="form-wrp">
-        <? $f = ActiveForm::begin(['id' => 'form-object']); ?>
-            <!-- engish name object-->
-            <? if ($obj->eng) echo $f->field($form, 'eng')->textInput(['value' => $obj->eng, 'readonly' => 'readonly'])->label('Name object:'); ?>
-			
-			<!-- rusian name object -->          
-            <?= $f->field($form, 'rus')->textInput(['value' => $obj ? $obj->rus : ''])->label('Название объекта:') ?>
+         <? $f = ActiveForm::begin(['id' => 'form-object', 'options' => ['enctype'=>'multipart/form-data']]); ?>
+        
+            <!-- main tab -->
+            <?=ObjectFormTabWidget::widget(['template' => 'object/form_tab_main', 'f' => $f, 'form' => $form, 'obj' => $obj, 'parent_id' => $parent_id])?>
             
-            <!-- names all change -->
-            <?= $f->field($form, 'all_name')->checkbox(['label' => 'Изменить название для всех']) ?>
-			
-			<!-- alias -->          
-            <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias, 'style' => 'width:250px'])->label('Короткое название объекта:')?>
+            <!-- drawing tab -->
+            <?//=ObjectFormTabWidget::widget(['template' => 'form_tab_drawing', 'f' => $f, 'form' => $form, 'obj' => $obj])?>
             
-            <!-- order name -->          
-            <?= $f->field($form, 'order_name')->textInput(['value' => $obj->order_name, 'style' => 'width:250px'])->label('Название в заказах:')?>
-			
-			<!-- id object -->
-			<?=$f->field($form, 'id')->textInput(['value' => $obj ? $obj->id : '', 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>
-			
-            <!-- code -->          
-            <?=$f->field($form, 'code')->textInput(['value' => $obj ? $obj->code : '', 'style' => 'width:200px'])->label('Код объекта:'); ?>
-			
-			<!-- weight -->          
-            <?=$f->field($form, 'weight')->textInput(['value' => $obj ? $obj->weight : '', 'style' => 'width:200px'])->label('Вес,кг'); ?>
-			
-			<!-- qty -->          
-            <?=$f->field($form, 'qty')->textInput(['value' => $obj ? $obj->qty : '1', 'style' => 'width:200px'])->label('Количество,шт'); ?>
+            <!-- dimensions tab -->
+            <?//=ObjectFormTabWidget::widget(['template' => 'form_tab_dimensions', 'f' => $f, 'form' => $form, 'obj' => $obj])?>
             
-			<!-- item -->          
-            <?= $f->field($form, 'item')->textInput(['value' => $obj ? $obj->item : '', 'style' => 'width:100px'])->label('Позиция:') ?>
-            
-			<!-- rating -->          
-            <?= $f->field($form, 'rating')->textInput(['value' => $obj ? $obj->rating : '', 'style' => 'width:100px'])->label('Рейтинг:') ?>
-			
-			<!-- parent -->          
-            <?= $f->field($form, 'parent_id')->textInput(['value' => $obj ? $obj->parent_id : null, 'style' => 'width:100px'])->label('ID parent:') ?>
-            
-			<!-- type -->
-            <?php
-                $params = ['prompt' => 'Не выбран']; 
-                if ($obj) $form->type = $obj->type;
-                echo $f->field($form, 'type')->dropDownList($form->types, $params)->label('Тип объекта:');
-            ?>
-            
-			<!-- equipment -->
-            <?php
-                $params = ['prompt' => 'Не выбран']; 
-                if ($obj) $form->equipment = $obj->equipment;
-                echo $f->field($form, 'equipment')->dropDownList($form->equipments, $params)->label('Оборудование объекта:');
-            ?>
-            <!-- note -->
-            <?php
-                if ($obj) $form->note = $obj->note;
-                echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
-            ?>
+            <!-- hidden dwg id -->
+            <?=$f->field($form, 'obj_id')->hiddenInput(['value' => $obj ? $obj->id : ''])->label(false) ?>
             
             <!-- button -->
             <input type="submit" value="Сохранить" />
-            <input type="button" value="Отменить" onclick="javascript:history.back();" />
-            <!-- hidden -->
-            <?=$f->field($form, 'id')->hiddenInput(['value' => $obj ? $obj->id : false])->label(false) ?> 
+            <input type="button" value="Отменить" onclick="javascript:history.back();" /> 
         <? ActiveForm::end(); ?>
     </div>
+
 </div>
 
 <!-- menu -->

@@ -2,11 +2,10 @@
 
 use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
-use app\modules\order\models\Order;
-use app\modules\order\widgets\OrderMenuWidget;
-use app\modules\order\widgets\OrderActiveMenuWidget;
-use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
+use app\modules\order\widgets\OrderMenuWidget;
+use app\modules\order\widgets\OrderTopMenuWidget;
+use app\modules\order\widgets\OrderContentObjectWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
 
 $this->registerCssFile('/css/order.css');
@@ -16,134 +15,142 @@ $this->registerCssFile('/css/order.css');
     <!-- top nenu -->
     <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
     
-    <!-- info order is active -->
+   <!-- info order is active -->
     <? if ($order->active): ?>
         <div class="alert alert-success margin-top-15">Активный заказ</div>
     <? endif; ?>
     
-    <!-- info create of order -->
-    <?php if (Yii::$app->session->hasFlash('success')): ?>
-      <div class="alert alert-success">
-          <?= Yii::$app->session->getFlash('success') ?>
+    <!-- info create of item order -->
+    <?php if (Yii::$app->session->hasFlash('success-order-item')): ?>
+      <div class="alert alert-success alert-dismissable margin-top-15">
+          <?= Yii::$app->session->getFlash('success-order-item') ?>
       </div>
     <?php endif; ?>
     
-    <!-- order data -->
+    <!-- info -->
+    <div class="info-box">
+        <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
+        <span>Номер заказа:</span><span <? if ($order->number == 'черновик') echo 'style="color:red;"'; ?>>&laquo; <?=$order->number?> &raquo;</span>
+    </div>
+    
+    <!-- order item data -->
     <table>
         <tr>
             <th width="180">Наименование</th>
             <th width="545">Значение</th>
         </tr>
-        <!-- number -->
         <tr>
-            <td class="text-center">Номер заказа</td>
+            <td colspan="2" class="text-center" style="color: green;">Данные указанные в заказном бланке</td>
+        </tr>
+        <!-- drawing -->
+        <tr>
+            <td class="text-center">Чертеж(эскиз)</td>
             <td>
-                <? if ($order->content): ?>
-                    <a <? if ($order->number == 'Не указан') echo 'style="color:red;"'?> href="<?=Url::to(['/order/content/list', 'order_id' => $order->id])?>">
-                        <?=$order->number?>
-                    </a>
+                <? if ($item->pathDrawing): ?>
+                    <a target="_blank" href="<?=Url::to([$item->pathDrawing])?>"><?=$item->drawing?></a>
+                <? elseif ($item->drawing): ?>
+                    <?=$item->drawing?>
                 <? else: ?>
-                     <?=$order->number == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->number?>
-                <? endif; ?>   
+                    <span style="color:red;">Не указан</span>
+                <? endif; ?>    
             </td>
         </tr>
-        <!-- state -->
-        <tr>
-            <td class="text-center">Состояние заказа</td>
-            <td><?=$order->state?></td>
-        </tr>
-        <!-- state -->
-        <tr>
-            <td class="text-center">Период выдачи</td>
-            <td><?=$order->period?></td>
-        </tr>
+        
+        <!-- variant -->
+        <? if ($item->variant): ?>
+            <tr>
+                <td class="text-center">Вариант</td>
+                <td><?=$item->variant?></td>
+            </tr>
+        <? endif; ?>
+        
+        <!-- item -->
+        <? if ($item->item): ?>
+            <tr>
+                <td class="text-center">Позиция</td>
+                <td><?=$item->item?></td>
+            </tr>
+        <? endif; ?>
+        
         <!-- name -->
         <tr>
-            <td class="text-center">Наименование заказа</td>
+            <td class="text-center">Наименование</td>
             <td>
-                <?=$order->name?>
+                <? if ($item->obj_id): ?>
+                    <a href="<?=Url::to(['/object', 'object_id' => $item->obj_id])?>"></a><?=$item->name?>
+                <? else: ?>
+                    <?=$item->name?>
+                <? endif;?>
             </td>
         </tr>
-        <!-- area -->
-        <? if ($order->area): ?>
+        
+        <!-- dimensions -->
+        <tr>
+            <td class="text-center">Габаритные размеры</td>
+            <td>
+                <?=$item->dimensions ? $item->dimensions : 'Не указаны'?>
+            </td>
+        </tr>
+        
+        <!-- count -->
+        <tr>
+            <td class="text-center">Количество</td>
+            <td>
+                <?=$item->count ? $item->count.' шт.' : '<span style="color:red;">Не указано</span>'?>
+            </td>
+        </tr>
+        <!-- material -->
+        <tr>
+            <td class="text-center">Материал</td>
+            <td>
+                <?=$item->material ? $item->material : '<span style="color:red;">Не указан</span>'?>
+            </td>
+        </tr>
+        <!-- weight one -->
+        <tr>
+            <td class="text-center">Вес 1 детали(узла)</td>
+            <td>
+                <?=$item->weight ? $item->weight.' кг' : '<span style="color:red;">Не указан</span>'?>
+            </td>
+        </tr>
+        <!-- weight all-->
+        <tr>
+            <td class="text-center">Вес всех деталей(узлов)</td>
+            <td>
+                <?=$item->weightAll ? $item->weightAll.' кг' : '<span style="color:red;">Не указан</span>'?>
+            </td>
+        </tr>
+        <!-- delivery -->
+        <? if ($item->delivery): ?>
             <tr>
-                <td class="text-center">Участок</td>
-                <td><?=$order->area?></td>
+                <td class="text-center">Доставка</td>
+                <td>Доставляет заказчик</td>
             </tr>
         <? endif; ?>
-        <!-- mechanism -->
         <tr>
-            <td class="text-center">Агрегат, механизм</td>
-            <td>
-                <?=$order->mechanism == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->mechanism?>
-            </td>
-        </tr>
-        <!-- unit -->
-        <tr>
-            <td class="text-center">Узел</td>
-            <td>
-                <?=$order->unit == 'Не указан' ? '<span style="color:red;">Не указан</span>' : $order->unit?>
-            </td>
-        </tr>
-        <!-- type -->
-        <tr>
-            <td class="text-center">Статья затрат</td>
-            <td>
-                <?=$order->type?>
-            </td>
-        </tr>
-        <!-- weight -->
-        <tr>
-            <td class="text-center">Вес заказа</td>
-            <td>
-                <?=$order->weight ? $order->weight.' кг' : '<span style="color:red;">Не указан</span>'?>
-            </td>
-        </tr>
-        <!-- service -->
-        <tr>
-            <td class="text-center">Служба</td>
-            <td>
-                <?=$order->service?>
-            </td>
-        </tr>
-        <!-- customer -->
-        <tr>
-            <td class="text-center">Заказал</td>
-            <td>
-                <?=$order->customer?>
-            </td>
-        </tr>
-        <!-- issuer -->
-        <tr>
-            <td class="text-center">Выдал</td>
-            <td>
-                <?=$order->issuer?>
-            </td>
-        </tr>
-        <!-- date create -->
-        <tr>
-            <td class="text-center">Дата выдачи</td>
-            <td>
-                <?=$order->date?>
-            </td>
+            <td colspan="2" class="text-center" style="color: green;">Дополнительная информация</td>
         </tr>
         <!-- note -->
-        <? if ($order->note): ?>
-            <tr>
-                <td class="text-center">Примечание</td>
-                <td><?=$order->note?></td>
-            </tr>
-        <? endif; ?>
-
+        <tr>
+            <td class="text-center">Примечание</td>
+            <td>
+                <?=$item->note ? $item->note : 'Не указано'?>
+            </td>
+        </tr>
+        
+        <?=OrderContentObjectWidget::widget(['item' => $item])?>
+        
+        <!--  rating -->
+        <tr>
+            <td class="text-center">Рейтинг</td>
+            <td><?=$item->rating?></td>
+        </tr>
     </table>
 </div>
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    
+    <?=OrderContentMenuWidget::widget(['item_id' => $item->id, 'order_id' => $order->id])?>
+    <?=ObjectSearchMenuWidget::widget()?>
     <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
-     <?=ObjectSearchMenuWidget::widget()?>
-    <?=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
-   
-    <?=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
 </div>

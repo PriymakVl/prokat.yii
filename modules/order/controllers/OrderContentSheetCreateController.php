@@ -165,9 +165,12 @@ class OrderContentSheetCreateController extends BaseController
         for ($i = 0; $i < 10; $i++) {
             $num = $i + $row_start;
             if ($this->content[$i]) {
-                $this->activeSheet->setCellValue('A'.$num, $this->content[$i]->drawing);
+                $variant = $this->content[$i]->variant ? PHP_EOL.'вариант '.$this->content[$i]->variant : '';
+                $sheet = ($this->content[$i]->sheet != 1) ? PHP_EOL.'лист '.$this->content[$i]->sheet : '';
+                $this->activeSheet->setCellValue('A'.$num, $this->content[$i]->drawing.$variant.$sheet);
            	    $this->setItem($num, $this->content[$i]);
-            	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name.PHP_EOL.$this->content[$i]->dimensions);//
+                $dimensions = $this->content[$i]->dimensions ? PHP_EOL.$this->content[$i]->dimensions : '';
+            	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name.$dimensions);
                 $this->activeSheet->setCellValue('D'.$num, $this->content[$i]->count);
                 $this->setMaterial($num, $this->content[$i]->material);
                 $this->setWeight($num, $this->content[$i]); 
@@ -179,6 +182,7 @@ class OrderContentSheetCreateController extends BaseController
             }
             $this->activeSheet->getStyle('C'.$num)->applyFromArray(['font'=>['size' => 12]]);
             $this->activeSheet->getStyle('C'.$num)->getAlignment()->setWrapText(true);
+            $this->activeSheet->getStyle('A'.$num)->getAlignment()->setWrapText(true);
             $this->activeSheet->getStyle('A3:M'.$num)->applyFromArray($this->styleBorder);
             $this->activeSheet->getStyle('A3:F'.$num)->applyFromArray($this->styleContent); 
             $this->activeSheet->getStyle('C'.$num)->getAlignment()->setWrapText(true);

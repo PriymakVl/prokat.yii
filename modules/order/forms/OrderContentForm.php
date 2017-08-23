@@ -8,6 +8,7 @@ use app\modules\order\models\OrderContent;
 use app\modules\objects\models\Objects;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
+use app\classes\WeightDetail;
 
 class OrderContentForm extends BaseForm
 {   
@@ -34,8 +35,8 @@ class OrderContentForm extends BaseForm
     //form
     public $item_id;
     public $type_dimensions;
-    public $nut_thread; public $nut_pitch;
-    public $bolt_thread; public $bolt_pitch; public $bolt_length;
+    public $nut_thread; public $nut_pitch; public $nut_class;
+    public $bolt_thread; public $bolt_pitch; public $bolt_length; public $bolt_class;
     public $shaft_length; public $shaft_diam;
     public $bush_height; public $bush_in_diam; public $bush_out_diam;
     public $bar_height; public $bar_width; public $bar_length;
@@ -45,7 +46,7 @@ class OrderContentForm extends BaseForm
     {
         return [
             [['type_dimensions', 'cat_dwg', 'equipment', 'code', ], 'string'],
-            [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'name'], 'string'],
+            [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'name', 'bolt_class', 'nut_class'], 'string'],
             [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_pitch', 'bolt_length',], 'integer'],
             [['shaft_length', 'shaft_diam', 'bush_height', 'bush_in_diam', 'bush_out_diam'], 'integer'],
             [['bar_length', 'bar_height', 'bar_width'], 'integer'],
@@ -65,7 +66,6 @@ class OrderContentForm extends BaseForm
 
         $item->name = $this->name;
         $item->drawing = $this->drawing;   
-		$item->weight = $this->weight;
         $item->sheet = $this->sheet;     
         $item->note = $this->note;
         $item->count = $this->count;
@@ -73,13 +73,14 @@ class OrderContentForm extends BaseForm
         $item->order_id = $this->order_id; 
         $item->material = $this->material;
         $item->item = $this->item;
-        if ($this->type_dimensions) $item->dimensions = $this->setDimensions();
+        $item->dimensions = $this->setDimensions();
+        $item->weight = $this->getWeight();
         //drawing
         $item->cat_dwg = $this->cat_dwg;
         $item->file = $this->file;
         $item->delivery = $this->delivery;
         $item->variant = $this->variant;
-        //if ($item->code || $item->obj_id) $this->saveParamsForObjects($item);
+        if ($item->code || $item->obj_id) $this->saveParamsForObjects($item);
         $item->save();
         
         $this->item_id = $item->id;
@@ -102,16 +103,19 @@ class OrderContentForm extends BaseForm
     
     private function setDimensions()
     {
-        $dimensions['type'] = $this->type_dimensions;
+        if (!$this->type_dimensions) return null;
+        else $dimensions['type'] = $this->type_dimensions;
  
         if ($this->type_dimensions == 'nut') {
             $dimensions['thread'] = $this->nut_thread;
-            $dimensions['pitch'] = $this->nut_pitch;    
+            $dimensions['pitch'] = $this->nut_pitch; 
+			$dimensions['class'] = $this->nut_class;			
         }
         else if ($this->type_dimensions == 'bolt') {
             $dimensions['thread'] = $this->bolt_thread;
             $dimensions['pitch'] = $this->bolt_pitch; 
             $dimensions['length'] = $this->bolt_length;   
+            $dimensions['class'] = $this->bolt_class;   
         }
         else if ($this->type_dimensions == 'shaft') {
             $dimensions['diam'] = $this->shaft_diam; 
@@ -127,7 +131,15 @@ class OrderContentForm extends BaseForm
             $dimensions['length'] = $this->bar_length;   
             $dimensions['width'] = $this->bar_width;   
         }
+        $this->dimensions = $dimensions;//for function getWeight
         return serialize($dimensions);
+    }
+    
+    private function getWeight()
+    {
+        if ($this->weight) return $this->weight;
+        else if ($this->dimensions) return WeightDetail::calculate($this->dimensions, $this->material);
+        return null;    
     }
 
 //    private function getObject() 
@@ -138,6 +150,7 @@ class OrderContentForm extends BaseForm
 //        if ($obj) $obj->getName();  
 //        return $obj; 
 //    }
+
 
 
 

@@ -14,3 +14,47 @@
 .dropdown-toggle:focus {
     background-color: transparent !important;
 }
+
+.alias-order-name-wrp, .weight-gty-item-parent-rating-wrp, .type-equipment-wrp {
+    position: relative;
+}
+
+.field-objectform-order_name {
+    position: absolute;
+    left: 310px;
+    top: 0;
+}
+
+.field-objectform-qty {
+    position: absolute;
+    left: 130px;
+    top: 0;    
+}
+
+.field-objectform-item {
+    position: absolute;
+    left: 260px;
+    top: 0;     
+}
+
+.field-objectform-parent_id {
+    position: absolute;
+    left: 390px;
+    top: 0;     
+}
+
+.field-objectform-rating {
+    position: absolute;
+    left: 520px;
+    top: 0;     
+}
+
+.field-objectform-equipment {
+    position: absolute;
+    left: 300px;
+    top: 0;     
+}
+
+#objectform-equipment, #objectform-type {
+    width: 200px;
+}

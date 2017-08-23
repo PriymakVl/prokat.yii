@@ -16,7 +16,7 @@ $this->registerCssFile('/css/drawing.css');
 ?>
 <div class="content list-all">
     <!-- title -->
-    <div class="title-box">Перечень цеховых чертежей(эскизов)</div>
+    <div class="title-box">Перечень эскизов</div>
     
     <!-- top menu -->
      <?=DrawingListTopMenuWidget::widget(['params' => $params])?>

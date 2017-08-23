@@ -38,7 +38,7 @@ class OrderContentController extends BaseController
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->getNumber();
         $item = OrderContent::getOne($item_id, null, self::STATUS_ACTIVE);
-        $item->dimensions = unserialize($item->dimensions);
+        if ($item) $item->dimensions = unserialize($item->dimensions);
         //debug($item->dimensions['type']);
         $form = new OrderContentForm();
         
@@ -83,14 +83,20 @@ class OrderContentController extends BaseController
         $this->redirect(['/order/content/item', 'item_id' => $item->id]);
     }
     
-    public function actionAddList($ids)
+    public function actionAddList($ids, $parent_id)
     {
+
         $objects = Objects::getArrayObjects($ids);
         foreach ($objects as $object) {
-            (new OrderContent())->saveParamsFromObject($object);
+            $result = OrderLogic::saveParamsFromObject($object);
+            if (!$result) {
+                throw new ForbiddenHttpException('Не указан активный заказ');
+                //\Yii::$app->session->setFlash('error-active', 'Не указан активный заказ');
+                //$this->redirect(['/object/specification', 'obj_id' => $parent_id]);
+            }
         }
-        $order_id = OrderLogic::getActiveOrderId();
-        $this->redirect(['/order/content/list', 'order_id' => $order_id]);
+        $active_id = OrderLogic::getActive('order-active');
+        $this->redirect(['/order/content/list', 'order_id' => $active_id]);
     }
     
     public function actionAddFile($file, $cat_dwg, $obj_id)

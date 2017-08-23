@@ -14,7 +14,7 @@ class ObjectController extends BaseController
     public function actionIndex($obj_id) 
     { 
         $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
-        $obj->getName()->getParent()->checkDrawing()->checkChild()->getOrders();
+        $obj->getName()->getParent()->checkDrawing()->checkChild()->getOrders()->convertDimensions();
         return $this->render('index', compact('obj'));
     }
     
@@ -27,6 +27,7 @@ class ObjectController extends BaseController
     
     public function actionForm($obj_id = null)
     {
+        $parent_id = Yii::$app->request->get('parent_id');
         $obj = $obj_id ? Objects::findOne($obj_id) : null;       
         $form = new ObjectForm();
         $form->getTypes()->getEquipments(); 
@@ -35,7 +36,7 @@ class ObjectController extends BaseController
             $obj_id = $form->save($obj);
             return $this->redirect(['/object', 'obj_id' => $obj_id]);
         }        
-        return $this->render('form', compact('form', 'obj'));     
+        return $this->render('form', compact('form', 'obj', 'parent_id'));     
     }
     
     public function actionCopy($obj_id, $parent_id)

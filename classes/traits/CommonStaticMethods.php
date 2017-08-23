@@ -92,4 +92,11 @@ trait CommonStaticMethods
             case '12': return 'Декабрь';
         }
     }
+    
+    public static function codeWithoutVariant($code)
+    {
+        if (!$code) return false;
+        else if (!strpos($code, '/')) return $code;
+        else return explode('/', $code)[0]; 
+    }
 }

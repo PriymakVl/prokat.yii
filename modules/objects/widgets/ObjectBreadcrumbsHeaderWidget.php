@@ -3,6 +3,7 @@
 namespace app\modules\objects\widgets;
 
 use Yii;
+use yii\helpers\Url;
 use yii\base\Widget;
 use app\modules\objects\models\Objects;
 use app\models\Tag;
@@ -29,7 +30,7 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
      private function getBreadcrumbs()
     {
         $equipment = Tag::find()->where(['alias' => $this->obj->equipment, 'type' => 'equipment'])->one();
-        $breadcrumbs = '<ul class="nav navbar-nav" id="top-breadcrumbs-link"><li><a href="/">'.$equipment->name.'</a></li> '; 
+        $breadcrumbs = '<ul class="nav navbar-nav" id="top-breadcrumbs-link"><li><a href="'.Url::to('/object/specification/main').'">'.$equipment->name.'</a></li> '; 
         $parents = $this->getArrayParents();
         $parents = array_reverse($parents);
 

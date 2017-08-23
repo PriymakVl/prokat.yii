@@ -27,10 +27,10 @@ class Lists extends BaseModeL
         return $this;
     }
     
-    public static function getOneList($method)
+    public static function getOneList()
     {
-        $id = ListLogic::getListId();
-        return self::getOne($id, $method, self::STATUS_ACTIVE);
+        $list_id = ListLogic::getActiveList();
+        return self::getOne($list_id, false, self::STATUS_ACTIVE);
     }
     
     public static function getAllList($params)

@@ -31,7 +31,7 @@ class HeaderWidget extends Widget {
             case 'drawing-works': return $this->getTemplateForActionDrawingworksController(); break;
             case 'object': return $this->getTemplateForActionObjectController(); break;
             case 'object-drawing': return 'obj_breadcrumbs'; break;
-            case 'object-specification': return 'obj_breadcrumbs'; break;
+            case 'object-specification': return $this->getTemplateForActionSpecificationController(); break;
             case 'search': return $this->getTemplateForActionSearchController(); break;
             case 'order': return 'search_order'; break;
             case 'order-content': return 'search_order'; break;
@@ -84,6 +84,15 @@ class HeaderWidget extends Widget {
         switch(Yii::$app->controller->action->id) {
             case 'list': return 'search_app'; break;
             case 'index': return 'search_app'; break;
+            default: return 'empty';
+        }    
+    }
+    
+    private function getTemplateForActionSpecificationController() 
+    {
+        switch(Yii::$app->controller->action->id) {
+            case 'main': return 'search_code'; break;
+            case 'index': return 'obj_breadcrumbs'; break;
             default: return 'empty';
         }    
     }

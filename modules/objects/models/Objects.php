@@ -58,7 +58,7 @@ class Objects extends BaseModel
         //else if ($sort == 'app')
         else if ($sort == 'highlight') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id, 'color' => 1])->orderBy(['item' => SORT_ASC])->all();
         else $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $children = self::executeMethods($children, ['getOrders']);
+        $children = self::executeMethods($children, ['getOrders', ['convertDimensions', ['dimensions']]]);
         if ($sort == 'order') $children = ObjectLogic::selectObjectsWithOrder($children);
         return ObjectLogic::prepareChildren($children); 
     }
@@ -152,6 +152,12 @@ class Objects extends BaseModel
         }
         return $this;
     }
+	
+	public function convertDimensions() 
+	{
+		if ($this->dimensions) $this->dimensions = OrderLogic::convertDimensions($this->dimensions);
+		return $this;
+	}
 	
 
 }

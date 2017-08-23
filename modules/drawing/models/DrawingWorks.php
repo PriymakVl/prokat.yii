@@ -14,6 +14,8 @@ class DrawingWorks extends BaseModel
     public $category = 'works';
     public $catName = 'ПКО';
     public $typeName;
+    public $file;
+    public $sheets = 1;
     
     const PAGE_SIZE = 30;
  
@@ -65,11 +67,7 @@ class DrawingWorks extends BaseModel
     
     public static function getAllForObject($obj)
     {
-        $code = $obj->getCodeWithoutVariant($obj->code);
-        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'works', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
-        if (!$ids) return [];
-        $drawings = self::findAll($ids);
-        return DrawingLogic::getFiles($drawings);   
+        return self::find()->where(['code' => $obj->code, 'status' => self::STATUS_ACTIVE])->orderBy(['number' => SORT_DESC, 'sheet' => SORT_ASC])->all();
     }
     
     public static function check($obj)

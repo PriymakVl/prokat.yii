@@ -13,7 +13,7 @@ class ObjectListChildrenWidget extends Widget
     public function run()
     {
         $color = $this->color ? $this->color : '#000';
-        return $this->render('object_children', ['children' => $this->children, 'color' => $color, 'type' => $this->type]);
+        return $this->render('object/object_children', ['children' => $this->children, 'color' => $color, 'type' => $this->type]);
     }
 
 }

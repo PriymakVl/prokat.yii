@@ -1,1 +1,8 @@
-
+.department-list-info {
+    padding:5px 0 5px 10px;
+	border:1px solid #B49A6A;
+    margin-bottom: 15px;
+    font-size: 16px;  
+    text-align: center; 
+    color: #000;
+}

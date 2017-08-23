@@ -60,26 +60,30 @@ class OrderLogic extends BaseLogic
         return str_replace('.', ',', $weightAll);
     }
     
-    public static function saveParamsFromObject($object, $order_id = null)
+    public static function saveParamsFromObject($object, $file = null)
     {
-        if (!$order_id) $order_id = self::getActiveOrderId();
-        $item = new OrderContent();
-        $item = OrderLogic::setParamsFromObject($item, $object, $order_id);
+        $order_id = self::getActive('order-active');
+        if (!$order_id) return false;
+        $item = OrderLogic::setParamsFromObject($object, $order_id, $file);;
         $item->save();
         return $item;
     }
     
-    public static function setParamsFromObject($item, $object, $order_id)
+    public static function setParamsFromObject($object, $order_id)
     {
+        $item = new OrderContent();
         $item->order_id = $order_id; 
         $item->obj_id = $object->id;
         $item->name = self::setItemNameFromObject($item, $object);
         $item->code = $object->code;
         $item->weight = $item->weight ? $item->weight : $object->weight;
-        $item->item = $item->item ? $item->item : $object->item;
+        //$item->item = $item->item ? $item->item : $object->item;
         $item->equipment = $object->equipment;
-        if ($object->dimensions) $item->dimensions = $object->dimensions;
-        return self::setDrawingAndFileFromObject($item, $object);
+        $item->dimensions = $object->dimensions;
+        $item->drawing = self::codeWithoutVariant($object->code);
+        if ($item->drawing != $item->code) $item->variant = explode('/', $object->code)[1];
+        $item = self::setDrawing($object, $item);
+        return $item;
     }
     
     private static function setItemNameFromObject($item, $object) 
@@ -91,7 +95,7 @@ class OrderLogic extends BaseLogic
         else return $object->eng;    
     }
     
-    private static function setDrawingAndFileFromObject($item, $object)
+    private static function setDrawing($object, $item)
     {
         $drawings = ObjectLogic::getDrawings($object);
         $number_dwg = DrawingLogic::countOfNumberDrawingsObject($drawings);
@@ -136,15 +140,7 @@ class OrderLogic extends BaseLogic
         $item->file = $dwg->file;  
         return $item;
     }
-    
-    public static function getActiveOrderId()
-    {
-        $session = Yii::$app->session;
-        $order_id = $session->get('order_id');
-        if (!$order_id) throw new ForbiddenHttpException('error active order '. __METHOD__);
-        return $order_id;    
-    }
-    
+
     public static function getPathDrawing($item)
     {
         if (!$item->equipment || !$item->file || !$item->cat_dwg) return null;
@@ -306,11 +302,11 @@ class OrderLogic extends BaseLogic
     public static function getMaterialWithGost($material) 
     {
         switch($material) {
-            case 'Ст3': return 'Ст3 ГОСТ ';
-            case 'Ст45': return 'Ст45 ГОСТ ';
-            case 'Ст40Х': return 'Ст40Х ГОСТ ';
-            case 'Ст50Г': return 'Ст50Г ГОСТ ';
-            case 'Ст65Г': return 'Ст65Г ГОСТ ';
+            case 'Ст3': return 'Ст3 ГОСТ 380-94';
+            case 'Ст45': return 'Ст45 ГОСТ 1050-88';
+            case 'Ст40Х': return 'Ст40Х ГОСТ 4543-71';
+            case 'Ст50Г': return 'Ст50Г ГОСТ 4543-71';
+            case 'Ст65Г': return 'Ст65Г ГОСТ 14959-79';
             case 'ОЦС 5-5-5': return 'Бронза ОЦС 5-5-5';
             default: return $material;
         }
@@ -324,9 +320,26 @@ class OrderLogic extends BaseLogic
             case 'bush': return 'Ø'.$dimen['out_diam'].'/Ø'.$dimen['in_diam'].'; H='.$dimen['height'].';';
             case 'shaft': return 'Ø'.$dimen['diam'].'; L='.$dimen['length'].';';
             case 'bar': return $dimen['height'].'x'.$dimen['width'].'x'.$dimen['length'].';';
-            case 'nut': return $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'] : 'M'.$dimen['thread'].';';
-            case 'bolt': return $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'].'; L='.$dimen['length'] : 'M'.$dimen['thread'].'; L='.$dimen['length'].';';
+            case 'nut': return self::convertDimensionsNut($dimen);
+            case 'bolt': return self::convertDimensionsBolt($dimen);
         }
+    }
+    
+    private static function convertDimensionsBolt($dimen)
+    {
+        if (!$dimen['thread']) return '';
+        $dimen_str = $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'].';' : 'M'.$dimen['thread'].';';
+        $dimen_str =$dimen['class'] ?  substr($dimen_str, 0, -1).'-'.$dimen['class'].';' : $dimen_str; 
+        $dimen_str =$dimen['length'] ? $dimen_str.' L='.$dimen['length'].';' : $dimen_str;
+        return $dimen_str;      
+    }
+	
+	private static function convertDimensionsNut($dimen)
+    {
+        if (!$dimen['thread']) return '';
+        $dimen_str = $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'].';' : 'M'.$dimen['thread'].';';
+        $dimen_str =$dimen['class'] ?  substr($dimen_str, 0, -1).'-'.$dimen['class'].';' : $dimen_str; 
+        return $dimen_str;      
     }
 
     

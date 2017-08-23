@@ -6,7 +6,7 @@ $(document).ready(function() {
             alert('Вы не выбрали список'); 
             return; 
        }
-       location.href = 'http://' + location.host + '/lists/list/active?list_id=' + list_id;
+       location.href = 'http://' + location.host + '/list/active/set?list_id=' + list_id;
 	});
     
 });

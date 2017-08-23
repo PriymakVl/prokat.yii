@@ -13,7 +13,7 @@ $this->registerJsFile('js/object/object_update.js',  ['depends' => [JqueryAsset:
     <h5>Объект</h5>   
     <ul>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['object/form'])?>">Создать объект</a>
+            <a href="<?=Yii::$app->urlManager->createUrl(['object/form', 'parent_id' => $obj_id])?>">Создать объект</a>
         </li>
         <li>
             <a href="<?=Yii::$app->urlManager->createUrl(['object/form', 'obj_id' => $obj_id])?>">Редактировать объект</a>

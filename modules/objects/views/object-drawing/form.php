@@ -5,6 +5,7 @@ use app\widgets\MainMenuWidget;
 use yii\helpers\Html;
 
 $this->registerCssFile('/css/drawing.css'); 
+$this->registerJsFile('/js/drawing/dwg_show_form_options.js');
 ?>
 <div class="content">
     <!-- title -->
@@ -20,21 +21,36 @@ $this->registerCssFile('/css/drawing.css');
     
     <!-- drawing form -->
     <div id="dwg-form-wrp" class="form-wrp">
-        <? $f = ActiveForm::begin(['id' => 'form-object-dwg']); ?>
+        <? $f = ActiveForm::begin(['id' => 'form-object-dwg', 'options' => ['enctype'=>'multipart/form-data']]); ?>
+            
             <!-- type -->
             <?php
-                $items = ['department' => 'Цех', 'works' => 'ПКО', 'standard' => 'Стандарт'];
-                echo $f->field($form, 'category')->dropDownList($items)->label('Кто разработал чертеж:');
+                $items = ['department' => 'Цех', 'works' => 'ПКО', 'danieli' => 'Danieli', 'sundbirsta' => 'Sundbirsta', 
+                    'standard_danieli' => 'Стандарт Danieli', 'standard' => 'Стандарт'];
+                $params = ['prompt' => 'Не выбран'];
+                echo $f->field($form, 'category')->dropDownList($items, $params)->label('Где создан чертеж(эскиз):');
             ?>
-            <!-- code object -->
-            <div id="dwg-id-wrp">
-                <?= $f->field($form, 'code')->textInput(['readonly' => 'readonly', 'value' => $obj->code])->label('Код детали:') ?>
+            
+            <!-- file -->
+            <?=$f->field($form, 'file')->fileInput()->label('Выбрать файл:')?> 
+            
+            <div id="dwg-options-wrp" style="display:none;">
+                <!-- number dwg -->
+                <?=$f->field($form, 'numberDwg')->textInput()->label('Номер чертежа:')?>
+                
+                <!-- sheet dwg -->
+                <?=$f->field($form, 'sheetDwg')->textInput()->label('Лист чертежа:')?>
+                
+                <!-- name dwg -->
+                <?=$f->field($form, 'nameDwg')->textInput()->label('Название чертежа:')?>
             </div>
             
-            <!-- dwg id -->
-            <div id="dwg-id-wrp">
-                <?= $f->field($form, 'dwg_id')->textInput()->label('Id чертежа:') ?>
-            </div>
+            
+            <!-- note -->
+            <?php
+                if ($dwg) $form->note = $dwg->note;
+                echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
+            ?>
                       
             <!-- button -->
             <input type="submit" value="Сохранить" />

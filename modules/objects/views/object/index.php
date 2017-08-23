@@ -34,6 +34,16 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
                 <? endif; ?>              
             </td>
         </tr>
+		
+		<!-- dimensions -->
+		<? if ($obj->dimensions): ?>
+			<tr>
+				<td>Габарит. размеры</td>
+				<td>
+					<?=$obj->dimensions?>             
+				</td>
+			</tr>
+		<? endif; ?>
         
         <!-- code-->
         <? if ($obj->code): ?>
@@ -74,6 +84,14 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
             <td>Количество</td>
             <td>
                 <?=$obj->qty?>
+            </td>
+        </tr>
+        
+        <!-- count of objects -->
+        <tr>
+            <td>Вес</td>
+            <td>
+                <?=$obj->weight ? $obj->weight.'кг' : 'Не указан'?>
             </td>
         </tr>
         

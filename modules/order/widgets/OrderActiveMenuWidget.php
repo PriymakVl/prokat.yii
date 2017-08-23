@@ -3,6 +3,7 @@
 namespace app\modules\order\widgets;
 
 use yii\base\Widget;
+use app\modules\order\logic\OrderLogic;
 
 class OrderActiveMenuWidget extends Widget 
 {
@@ -10,7 +11,8 @@ class OrderActiveMenuWidget extends Widget
 
     public function run()
     {
-        return $this->render('order_active', ['order_id' => $this->order_id]);
+        $active_id = OrderLogic::getActive('order-active');
+        return $this->render('order_active', ['active_id' => $active_id, 'order_id' => $this->order_id]);
     }
 
 }

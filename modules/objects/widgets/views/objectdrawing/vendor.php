@@ -27,4 +27,8 @@
     </td>
 </tr>
 <? endforeach; ?>
+<!-- revision toggle -->
+<tr>
+   <td colspan="7"><a href="#" onclick="return false;" id="dwg-revision-toggle">Показать все доработки Danieli</a></td> 
+</tr>
 

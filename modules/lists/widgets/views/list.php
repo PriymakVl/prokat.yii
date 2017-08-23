@@ -13,7 +13,7 @@ $this->registerJsFile('js/list/list_active.js',  ['depends' => [JqueryAsset::cla
     <ul id="all-list-menu">
         <? if ($action == 'all'): ?>
             <li>
-                <a href="#" onclick="return false;" id="list-active">Сделать текущим</a>
+                <a href="#" onclick="return false;" id="list-active">Сделать активным</a>
             </li>
         <? endif; ?>
         <li>

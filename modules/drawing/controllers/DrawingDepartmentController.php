@@ -15,7 +15,7 @@ class DrawingDepartmentController extends BaseController
     
     public function actionIndex($dwg_id = null) 
     { 
-        $dwg = DrawingDepartment::getOne($dwg_id, __METHOD__, self::STATUS_ACTIVE);
+        $dwg = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $dwg->convertDate($dwg)->getNumber()->convertService()->checkChild();
         return $this->render('index', compact('dwg'));
     }
@@ -32,10 +32,10 @@ class DrawingDepartmentController extends BaseController
     { 
         $dwg = (int)$dwg_id ? DrawingDepartment::findOne($dwg_id) : null;
         $form = new DrawingDepartmentForm();
-        $form->getServices($form);
+        $form->getServices($form)->getTypes()->getEquipments();
         //add drawign to objecct
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
-            return $this->redirect(['/drawing/department', 'dwg_id' => $form->dwg_id]);
+            return $this->redirect(['/drawing/department', 'dwg_id' => $form->dwg->id]);
         }   
         return $this->render('form', compact('dwg', 'form'));
     }

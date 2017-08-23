@@ -11,9 +11,7 @@ $this->registerCssFile('/css/drawing.css');
 
 ?>
 <div class="content">
-    <!-- title -->
-    <div class="title-box">Перечень цеховых эскизов</div>
-    
+
     <!-- top menu -->
     <?=DrawingDepartmentTopMenuWidget::widget()?>
     

@@ -11,9 +11,9 @@ use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderListMenuWidget;
 use app\modules\order\widgets\OrderTopListMenuWidget;
-use app\modules\orderlist\widgets\OrderListListMenuWidget;
+//use app\modules\orderlist\widgets\OrderListListMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
-use app\modules\orderact\widgets\OrderActListMenuWidget;
+//use app\modules\orderact\widgets\OrderActListMenuWidget;
 
 $this->registerCssFile('/css/standard.css');
 
@@ -24,6 +24,13 @@ $this->registerCssFile('/css/standard.css');
     
     <!-- top nenu -->
     <?=OrderTopListMenuWidget::widget(['params' => $params])?>
+    
+    <!-- flash message -->
+    <?php if (Yii::$app->session->hasFlash('error-active')): ?>
+       <div class="alert alert-danger">
+            <?= \Yii::$app->session->getFlash('success') ?>
+       </div>
+    <?php endif; ?>
     
     <!-- data of order -->
     <table id="standart-list">
@@ -76,8 +83,8 @@ $this->registerCssFile('/css/standard.css');
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     <?=OrderListMenuWidget::widget(['state' => $state])?>
-    <?=OrderActiveMenuWidget::widget()?>
+    <? if ($order->active) echo OrderActiveMenuWidget::widget(); ?>
     <?=ObjectSearchMenuWidget::widget()?>
-    <?=OrderListListMenuWidget::widget()?>
-    <?=OrderActListMenuWidget::widget()?>
+    <?//=OrderListListMenuWidget::widget()?>
+    <?//=OrderActListMenuWidget::widget()?>
 </div>

@@ -72,6 +72,7 @@ $config = [
                 //list
                 'lists/update' => 'lists/list/update-all',
                 'lists' => 'lists/list/all',
+                'list/active/set' => 'lists/list/set-active',
                 'list/active' => 'lists/list',
                 'list/content/update' => 'lists/content/form',
                 'list/form' => 'lists/list/form',
@@ -143,6 +144,7 @@ $config = [
                 'order/act/active/set' => 'orderact/order-act/set-active',
                 'order/act' => 'orderact/order-act',                
                 //object specification
+                'object/specification/main' => 'objects/object-specification/main',
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
                 'object/specification/copy/list' => 'objects/object-specification/copy-list',
                 'object/specification/change/parent' => 'objects/object-specification/change-parent',

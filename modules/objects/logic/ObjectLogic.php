@@ -33,7 +33,7 @@ class ObjectLogic extends BaseLogic
     { 
         $drawings['vendor'] = DrawingVendor::getAllForObject($obj);
         $drawings['works'] = DrawingWorks::getAllForObject($obj);
-        $drawings['department'] = DrawingDepartment::getAllForObject($obj);
+        $drawings['department'] = DrawingDepartment::findAll(['code' => $obj->code, 'status' => self::STATUS_ACTIVE]);
         $drawings['standard'] = DrawingStandardDanieli::getAllForObject($obj);
         if (self::checkArray($drawings)) return $drawings;
         else return null;

@@ -31,38 +31,22 @@
         
     <!-- drawings list -->   
     <div id="dwg-list-wrp" style="width: 720px;">
-        <table>        
-            <tr>
-                <th width="30"><input type="radio" disabled="disabled" /></th>
-                <th width="120">Создал</th>
-                <th width="80">Редакция</th>
-                <th width="60">Листов</th>
-                <th width="50">Лист</th>
-                <th width="150">Файл</th>
-                <th>Примечание</th>
-            </tr>
-            <? if ($drawings): ?>
-                <!-- drawing vendor -->
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'vendor', 'obj_id' => $obj->id])?>
-               
-               <!-- drawing works -->
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'works', 'obj_id' => $obj->id])?> 
-                
-                <!-- drawing department -->
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'department', 'obj_id' => $obj->id])?>
-                
-                <!-- drawing standard -->
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'standard', 'obj_id' => $obj->id])?>
-                <!-- revision toggle -->
-                <tr>
-                   <td colspan="7"><a href="#" onclick="return false;" id="dwg-revision-toggle">Показать все доработки Danieli</a></td> 
-                </div>
-            <? else: ?>
-                <tr>
-                    <td colspan="7" class="not-content">Чертежей нет</td>
-                </tr>
-            <? endif; ?>
-        </table> 
+        <? if ($drawings): ?>
+            <!-- drawing vendor -->
+            <?//=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'vendor', 'obj_id' => $obj->id])?>
+           
+           <!-- drawing works -->
+            <?//=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'works', 'obj_id' => $obj->id])?> 
+            
+            <!-- drawing department -->
+            <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'department', 'obj_id' => $obj->id])?>
+            
+            <!-- drawing standard -->
+            <?//=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'standard', 'obj_id' => $obj->id])?>
+
+        <? else: ?>
+            <div class="alert-danger">Чертежей нет</div>
+        <? endif; ?> 
     </div>
 </div>
     

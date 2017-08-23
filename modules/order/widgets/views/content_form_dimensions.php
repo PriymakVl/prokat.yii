@@ -14,6 +14,7 @@
         <h4>Габаритные размеры гайки</h4>
         <?=$f->field($form, 'nut_thread')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['thread'] : ''])->label('Резьба:')?>
         <?=$f->field($form, 'nut_pitch')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['thread'] : ''])->label('Шаг резьбы:')?>
+		<?=$f->field($form, 'nut_class')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['class'] : ''])->label('Класс прочности:')?>
     </div> 
     
     <!-- bolt dimesions --> 
@@ -21,7 +22,8 @@
         <h4>Габаритные размеры болта</h4>
         <?=$f->field($form, 'bolt_thread')->textInput(['value' => ($item->dimensions['type'] == 'bolt') ? $item->dimensions['thread'] : ''])->label('Резьба:')?>
         <?=$f->field($form, 'bolt_pitch')->textInput(['value' => ($item->dimensions['type'] == 'bolt') ? $item->dimensions['pitch'] : ''])->label('Шаг резьбы:')?>
-        <?=$f->field($form, 'bolt_length')->textInput(['value' => ($item->dimensions['type'] == 'bolt') ? $item->dimensions['thread'] : ''])->label('Длина:')?>
+        <?=$f->field($form, 'bolt_length')->textInput(['value' => ($item->dimensions['type'] == 'bolt') ? $item->dimensions['length'] : ''])->label('Длина:')?>
+        <?=$f->field($form, 'bolt_class')->textInput(['value' => ($item->dimensions['type'] == 'bolt') ? $item->dimensions['class'] : ''])->label('Класс прочности:')?>
     </div> 
     
     <!-- shaft dimesions --> 
@@ -34,9 +36,9 @@
 <!-- bar dimesions --> 
 <div id="bar-dimensions-wrp" <?=($item->dimensions['type'] == 'bar') ? '' : 'style="display:none;"'?>>
     <h4>Габаритные размеры планки</h4>
-    <?=$f->field($form, 'bar_length')->textInput(['value' => ($item->dimensions['type'] == 'bar') ? $item->dimensions['length'] : ''])->label('Длина:')?>
-    <?=$f->field($form, 'bar_height')->textInput(['value' => ($item->dimensions['type'] == 'bar') ? $item->dimensions['height'] : ''])->label('Высота:')?>
     <?=$f->field($form, 'bar_width')->textInput(['value' => ($item->dimensions['type'] == 'bar') ? $item->dimensions['width'] : ''])->label('Ширина:')?>
+    <?=$f->field($form, 'bar_length')->textInput(['value' => ($item->dimensions['type'] == 'bar') ? $item->dimensions['length'] : ''])->label('Длина:')?>
+    <?=$f->field($form, 'bar_height')->textInput(['value' => ($item->dimensions['type'] == 'bar') ? $item->dimensions['height'] : ''])->label('Толщина:')?>
 </div> 
     
     <!-- bush dimesions --> 

@@ -12,11 +12,11 @@ class DatabaseController extends BaseController
 {
     public function actionIndex()
     {
-        $files = ['11430015.tif', '11636986.tif'];  
-        foreach ($files as $file) {
-            $this->open($file);
-        } 
-        exit('end');
+       $drawings = \app\modules\drawing\models\DrawingDepartment::findAll(['status' => self::STATUS_ACTIVE]);
+       foreach ($drawings as $dwg) {
+            $dwg->number = $dwg->id;
+            $dwg->save();
+       }
     }
     
     public function actionIndex2() 
