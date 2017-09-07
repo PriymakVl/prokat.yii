@@ -9,6 +9,7 @@ use app\modules\order\models\Order;
 use app\modules\order\models\OrderContent;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
+use app\modules\equipments\models\Equipment;
 
 class OrderLogic extends BaseLogic
 {
@@ -16,14 +17,17 @@ class OrderLogic extends BaseLogic
     const CURRENT_PERIOD = 4;
 	const UNDEFINED_PERIOD = 1;
 
-    public static function getParams($period, $customer, $area, $state)
+    public static function getParams($period, $customer, $section = null, $equipment = null, $unit = null, $state = null)
     {
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
         if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
-        if ($state == Order::STATE_DRAFT) $params['state'] = $state;
+        //if ($state == Order::STATE_DRAFT) $params['state'] = $state;
+        $params['state'] = $state ? $state : Order::STATE_ACTIVE;
         if ($customer && $customer != 'all') $params['customer'] = $customer;
-        if ($area && $area != 'all') $params['area'] = $area;
+        if ($section) $params['section'] = $section;
+        if ($equipment) $params['equipment'] = $equipment;
+        if ($unit) $params['unit'] = $unit;
         if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
         return $params;   
     }
@@ -33,7 +37,7 @@ class OrderLogic extends BaseLogic
         switch($type) {
             case '1' : return 'улучшение'; break;
             case '4' : return 'изготовление'; break;
-            case '5' : return 'услуга'; break;
+            case '5' : return 'текущий ремонт'; break;
             case '6' : return 'капитальный ремонт'; break;
         }
     }
@@ -44,14 +48,6 @@ class OrderLogic extends BaseLogic
         $session->set('order_id', $order_id);
     }
     
-//    public static function checkStateSession($order_id)
-//    {
-//        $session = Yii::$app->session;
-//        $active_id = $session->get('order_id');
-//        if ($active_id == $order_id) return 'active';
-//        else return false;    
-//    }
-    
     public static function countWeightOfAll($weight, $count)
     {
         if (!$weight || !$count) return false;
@@ -60,16 +56,7 @@ class OrderLogic extends BaseLogic
         return str_replace('.', ',', $weightAll);
     }
     
-    public static function saveParamsFromObject($object, $file = null)
-    {
-        $order_id = self::getActive('order-active');
-        if (!$order_id) return false;
-        $item = OrderLogic::setParamsFromObject($object, $order_id, $file);;
-        $item->save();
-        return $item;
-    }
-    
-    public static function setParamsFromObject($object, $order_id)
+    public static function saveParamsFromObject($object, $order_id, $file)
     {
         $item = new OrderContent();
         $item->order_id = $order_id; 
@@ -80,9 +67,11 @@ class OrderLogic extends BaseLogic
         //$item->item = $item->item ? $item->item : $object->item;
         $item->equipment = $object->equipment;
         $item->dimensions = $object->dimensions;
+        if ($file) $item->file = $file;
         $item->drawing = self::codeWithoutVariant($object->code);
         if ($item->drawing != $item->code) $item->variant = explode('/', $object->code)[1];
         $item = self::setDrawing($object, $item);
+        $item->save();
         return $item;
     }
     
@@ -110,9 +99,9 @@ class OrderLogic extends BaseLogic
     private static function setDrawingDepartment($dwg, $item)
     {
         $item->cat_dwg = 'department';
-        $dwg->getNumber();
-        $item->drawing = $dwg->number;
-        $item->file = $dwg->file;
+        $dwg->getFullNumber();
+        $item->drawing = $dwg->fullNumber;
+        if (!$item->file) $item->file = $dwg->file;
         return $item;    
     }
     
@@ -120,7 +109,7 @@ class OrderLogic extends BaseLogic
     {
         $item->cat_dwg = 'vendor';  
         if ($item->equipment == 'danieli') $item->drawing = $item->getCodeWithoutVariant($dwg->code);
-        $item->file = $dwg->file; 
+        if (!$item->file) $item->file = $dwg->file; 
         return $item; 
     }
     
@@ -128,8 +117,10 @@ class OrderLogic extends BaseLogic
     {
         $item->cat_dwg = 'works';
         $item->drawing = $dwg->number;
-        $file = $dwg->getFiles();
-        if (count($file) == 1) $item->file = $file[0]->file;
+        if (!$item->file) {
+            $file = $dwg->getFiles(); 
+            if (count($file) == 1) $item->file = $file[0]->file;   
+        }
         return $item;
     }
     
@@ -137,7 +128,7 @@ class OrderLogic extends BaseLogic
     {
         $item->cat_dwg = 'standard';  
         if ($item->equipment == 'danieli') $item->drawing = $item->code;
-        $item->file = $dwg->file;  
+        if (!$item->file) $item->file = $dwg->file;  
         return $item;
     }
 
@@ -198,7 +189,7 @@ class OrderLogic extends BaseLogic
 	public static function getPeriod($date)
 	{
 		if (!$date) return self::UNDEFINED_PERIOD;
-		if ($date > 1487048400) return self::CURRENT_PERIOD;
+		if ($date > 1491253100) return self::CURRENT_PERIOD;
 		else if ($date < 1487048400 && $date > 1420434000) return 3; //2015 - 2017
 		else if ($date < 1420434000 )return 2;//2010 - 2015
 	}
@@ -249,19 +240,12 @@ class OrderLogic extends BaseLogic
         return $weight;
     }
     
-    public static function convertArea($area)
+    public static function convertLocation($id)
     {
-        switch ($area) {
-            case 'storage': return 'Склад заготовок';
-            case 'befor-mill': return 'Перед станом';
-            case 'mill': return 'Стан';
-            case 'sort': return 'Сортовая линия';
-            case 'bunt': return 'Бунтовая линия';
-            case 'slit': return 'Слитинг';
-            case 'finish': return 'Участок отделки';
-            case 'sundbirsta': return 'Участок отделки';
-            default: return $area;
-        }
+        if (!$id) return null;
+        $item = Equipment::getOne($id, null, self::STATUS_ACTIVE);
+        if ($item) return $item->name;
+        else return null;
     }
     
     public static function getOrdersByCode($code)
@@ -327,6 +311,7 @@ class OrderLogic extends BaseLogic
     
     private static function convertDimensionsBolt($dimen)
     {
+        //debug($dimen);
         if (!$dimen['thread']) return '';
         $dimen_str = $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'].';' : 'M'.$dimen['thread'].';';
         $dimen_str =$dimen['class'] ?  substr($dimen_str, 0, -1).'-'.$dimen['class'].';' : $dimen_str; 
@@ -340,6 +325,26 @@ class OrderLogic extends BaseLogic
         $dimen_str = $dimen['pitch'] ? 'M'.$dimen['thread'].'x'.$dimen['pitch'].';' : 'M'.$dimen['thread'].';';
         $dimen_str =$dimen['class'] ?  substr($dimen_str, 0, -1).'-'.$dimen['class'].';' : $dimen_str; 
         return $dimen_str;      
+    }
+    
+    public function getNumberOfFutureOrder()
+    {
+        $current_period = '1491253200';
+        //$sql = "SELECT * FROM `orders` WHERE `date` > ".$current_period." AND `status` = '1' ORDER BY `number` DESC";
+        //$orders = \Yii::$app->db->createCommand($sql)->execute();
+        $orders = Order::find()->where(['status' => Order::STATUS_ACTIVE])->andWhere(['>', 'date', $current_period])
+            ->orderBy(['number' => SORT_DESC])->all();
+        if ($orders === false) return 1; //if in database not records;
+        if ($orders[0]['number'] == 900) return 1;
+        return $orders[0]['number'] + 1;
+    }
+    
+    public function getIdAciveOrder($message)
+    {
+        $order_id = self::getActive('order-active');
+        if ($order_id) return $order_id;
+        \Yii::$app->session->setFlash('error', $message);
+        return false;    
     }
 
     

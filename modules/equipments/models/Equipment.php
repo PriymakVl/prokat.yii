@@ -24,15 +24,21 @@ class Equipment extends BaseModel
     	return ['employee-logic' => ['class' => EmployeeLogic::className()]];
     }
     
-    public static function getArea()
+    public static function getSections()
     {
         return self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::PARENT_ID_AREA])
                 ->orderBy(['rating' => SORT_DESC])->all();
     }
     
-    public static function getEquipmentOfArea($area_id)
+    public static function getEquipments($area_id)
     {
-        return self::find()->select('id, name')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $area_id]) 
+        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $area_id]) 
+            ->asArray()->all();   
+    }
+    
+    public static function getUnits($equipment_id)
+    {
+        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $equipment_id]) 
             ->asArray()->all();   
     }
 

@@ -13,7 +13,7 @@ $this->registerCssFile('/css/drawing.css');
 <div class="content">
 
     <!-- top menu -->
-    <?=DrawingDepartmentTopMenuWidget::widget()?>
+    <?//=DrawingDepartmentTopMenuWidget::widget()?>
     
     <!-- department dwg data -->
     <table id="dwg-department-data">
@@ -21,51 +21,54 @@ $this->registerCssFile('/css/drawing.css');
             <th width="200">Наименование</th>
             <th width="525">Значение</th>
         </tr>
-        <!-- name -->
+        
+        <!-- number dwg -->
         <tr>
             <td class="text-center">
-                <? if ($dwg->type == 'folder'): ?>
-                    Название папки
-                <? else: ?>
-                    Назание эскиза
-                <? endif; ?>
+                Номер эскиза
             </td>
             <td>
-                <? if ($dwg->child): ?>
-                    <?= Html::a($dwg->name, ['/drawing/department/folder/', 'dwg_id' => $dwg->id]) ?>
-                <? else: ?>
+                <?=$dwg->fullNumber?>
+            </td>
+        </tr>
+        
+        <!-- name dwg -->
+        <? if ($dwg->name): ?>
+            <tr>
+                <td class="text-center">
+                    Название эскиза
+                </td>
+                <td>
                     <?=$dwg->name?>
-                <? endif; ?>
+                </td>
+            </tr>
+        <? endif; ?>
+        
+        <!-- name object -->
+        <tr>
+            <td class="text-center">
+                Название объекта
+            </td>
+            <td>
+                <? if ($dwg->obj): ?>
+                    <?= Html::a($dwg->obj->name, ['/object', 'obj_id' => $dwg->obj->id], ['targer' => '_blank']) ?>
+                <? else: ?>
+                    <span>Не указан</span>
+                <? endif; ?>    
             </td>
         </tr>
         
-        <!-- alias -->
-        <tr>
-            <td class="text-center">
-                Короткое название
-            </td>
-            <td>
-                <?=$dwg->alias?>
-            </td>
-        </tr>
-        
-        <!-- number -->
-        <tr>
-            <td class="text-center">
-                <? if ($dwg->type == 'folder'): ?>
-                    Номер папки
-                <? else: ?>
-                    Номер эскиза
-                <? endif; ?>
-            </td>
-            <td>
-                <? if ($dwg->type == 'folder'): ?>
-                    <?=$dwg->id?>
-                <? else: ?>
-                    <?=$dwg->number?>
-                <? endif; ?>
-            </td>
-        </tr>
+        <? if ($dwg->obj->parent): ?>
+            <!-- name parent -->
+            <tr>
+                <td>
+                    Узел
+                </td>
+                <td>
+                    <?= Html::a($dwg->obj->parent->name, ['/object', 'obj_id' => $dwg->obj->parent_id], ['targer' => '_blank']) ?>
+                </td>   
+            </tr>
+        <? endif; ?>
         
         <!-- note -->
         <? if ($dwg->note): ?>
@@ -75,44 +78,12 @@ $this->registerCssFile('/css/drawing.css');
             </tr>
         <? endif; ?>
         
-        <!-- file dwg -->
-        <? if ($dwg->type == 'file'): ?>
-            <tr>
-                <td class="text-center">Файл эскиза</td>
-                <td>
-                    <? if($dwg->file): ?>
-                        <a target="_blank" href="<?=Yii::$app->urlManager->createUrl(['/files/department/'.$dwg->file])?>"><?=$dwg->file?></a>
-                    <? else: ?>
-                        не указан
-                    <? endif; ?>
-                </td>
-            </tr>
-        <? endif; ?>
-        
-        <!-- file kompas -->
-        <? if ($dwg->file_cdw): ?>
-            <tr>
-                <td class="text-center">Файл эскиза в компасе</td>
-                <td>
-                    <? if($dwg->file_cdw): ?>
-                        <a target="_blank" href="<?=Yii::$app->urlManager->createUrl(['/files/department/'.$dwg->file_cdw])?>"><?=$dwg->file_cdw?></a>
-                    <? else: ?>
-                        не указан
-                    <? endif; ?>
-                </td>
-            </tr>
-        <? endif; ?>
-        
-        <!-- service -->
-        <tr>
-            <td class="text-center">Служба</td>
-            <td><?=$dwg->service?></td>
-        </tr>
         <!-- designer -->
         <tr>
             <td class="text-center">Конструктор</td>
             <td><?= $dwg->designer ? $dwg->designer : 'не указан'?></td>
         </tr>
+        
         <!-- date of create -->
         <tr>
             <td class="text-center">Дата создания</td>

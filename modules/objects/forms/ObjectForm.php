@@ -41,7 +41,7 @@ class ObjectForm extends BaseForm
             ['item', 'default', 'value' => 0],
             ['rating', 'default', 'value' => 0],
 			['all_name', 'string'],
-            ['order_name', 'string', 'length' => [2, 20] ],
+            ['order_name', 'string', 'length' => [2, 40] ],
         ];
     }
     

@@ -5,7 +5,7 @@ use app\widgets\MainMenuWidget;
 use yii\helpers\Html;
 
 $this->registerCssFile('/css/drawing.css'); 
-$this->registerJsFile('/js/drawing/dwg_show_form_options.js');
+$this->registerJsFile('/js/drawing/dwg_form_show_options.js');
 ?>
 <div class="content">
     <!-- title -->
@@ -34,16 +34,57 @@ $this->registerJsFile('/js/drawing/dwg_show_form_options.js');
             <!-- file -->
             <?=$f->field($form, 'file')->fileInput()->label('Выбрать файл:')?> 
             
-            <div id="dwg-options-wrp" style="display:none;">
-                <!-- number dwg -->
-                <?=$f->field($form, 'numberDwg')->textInput()->label('Номер чертежа:')?>
-                
-                <!-- sheet dwg -->
-                <?=$f->field($form, 'sheetDwg')->textInput()->label('Лист чертежа:')?>
-                
-                <!-- name dwg -->
-                <?=$f->field($form, 'nameDwg')->textInput()->label('Название чертежа:')?>
+            <!-- dwg works options -->
+            <div class="panel panel-default" id="dwg-works-options-wrp" style="display:none;">
+                <div class="panel-heading">Параметры чертежа ПКО</div>
+                <div class="panel-body">
+                    <!-- number dwg -->
+                    <?=$f->field($form, 'numberWorksDwg')->textInput()->label('Номер чертежа:')?>
+                    
+                    <!-- sheet dwg -->
+                    <?=$f->field($form, 'sheetWorksDwg')->textInput()->label('Лист чертежа:')?>
+                    
+                    <!-- name dwg -->
+                    <?=$f->field($form, 'nameWorksDwg')->textInput()->label('Название чертежа:')?>
+                </div>
             </div>
+            
+            <!-- dwg department options -->
+            <div class="panel panel-default" id="dwg-department-options-wrp" style="display:none;">
+                <div class="panel-heading">Параметры эскиза</div>
+                <div class="panel-body">
+                    <!-- desinger -->
+                    <?php
+                    $params = ['prompt' => 'Не выбран'];
+                        $designers = ['Приймак В.Н.' => 'Приймак В.Н.', 'Немер А.Г.' => 'Немер А.Г.'];
+                        echo $f->field($form, 'designerDepartmentDwg')->dropDownList($designers, $params)->label('Конструктор:');
+                    ?>
+                </div>
+            </div>
+            
+            <!-- dwg danieli options -->
+            <div class="panel panel-default" id="dwg-danieli-options-wrp" style="display:none;">
+                <div class="panel-heading">Параметры чертежа Danieli</div>
+                <div class="panel-body">
+                    <!-- revision dwg -->
+                    <?=$f->field($form, 'revisionDanieliDwg')->textInput()->label('Доработка чертежа:')?>
+                    
+                    <!-- sheet dwg -->
+                    <?=$f->field($form, 'sheetDanieliDwg')->textInput()->label('Лист чертежа:')?>
+
+                </div>
+            </div>
+            
+            <!-- dwg standard danieli options -->
+            <div class="panel panel-default" id="dwg-standard-danieli-options-wrp" style="display:none;">
+                <div class="panel-heading">Параметры чертежа стандарт Danieli</div>
+                <div class="panel-body">
+                    <!-- name dwg -->
+                    <?=$f->field($form, 'nameStandardDanieliDwg')->textInput()->label('Наименование чертежа:')?>
+                </div>
+            </div>
+            
+            
             
             
             <!-- note -->

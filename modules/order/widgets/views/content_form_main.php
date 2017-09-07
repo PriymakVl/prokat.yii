@@ -8,9 +8,17 @@ use app\modules\order\widgets\OrderContentFormComponentWidget;
 ?>
 
 <div id="content-form-main">
-    <!-- drawing -->          
-    <?=$f->field($form, 'drawing')->textInput(['value' => $item->drawing, 'maxlength'=>50, 'style' => 'width:265px'])->label('Чертеж:')?>
+    <!-- number drawing -->          
+    <?=$f->field($form, 'drawing')->textInput(['value' => $item->drawing, 'maxlength'=>50, 'style' => 'width:265px'])->label('Номер чертежа:')?>
     
+    <!-- type drawing -->
+    <?
+    $types = ['department' => 'Эскиз', 'works' => 'Чертеж ПКО'];
+    $params = ['prompt' => 'Не выбран', 'new_draft' => $new_draft];
+    //$form->typeDwg = 1;
+    echo $f->field($form, 'typeDwg')->dropDownList($types, $params)->label('Тип нового чертежа:');
+    ?>
+   
     <!-- variant -->          
     <?=$f->field($form, 'variant')->textInput(['value' => $item->variant, 'maxlength'=>5, 'style' => 'width:100px'])->label('Вариант:')?>
     

@@ -8,7 +8,7 @@ use app\modules\equipments\models\Equipment;
 use app\modules\equipments\forms\EquipmentForm;
 use app\modules\equipments\logic\EquipmentLogic;
 
-class EmployeeController extends BaseController 
+class EquipmentController extends BaseController 
 {
     public $layout = "@app/views/layouts/base";
     /**
@@ -50,6 +50,18 @@ class EmployeeController extends BaseController
 		return $equipment->save();
 		exit;
 	}
+    
+    public function actionGetDataAjax()
+    {
+        $section_id = \Yii::$app->request->get('section_id');
+        $equipment_id = \Yii::$app->request->get('equipment_id');
+        $id = $equipment_id ? $equipment_id : $section_id;
+        $items = Equipment::getEquipments($id);
+        if ($items) return json_encode($items);
+        else if ($section_id) return 'equipments_not';
+        else return 'units_not';
+        exit();  
+    }
     
    
     

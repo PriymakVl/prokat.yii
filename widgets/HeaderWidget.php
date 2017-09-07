@@ -73,8 +73,8 @@ class HeaderWidget extends Widget {
     {
         switch(Yii::$app->controller->action->id) {
             case 'list': return 'search_department_dwg'; break;
-            case 'index': return 'dwg_department_breadcrumbs'; break;
-            case 'folder': return 'dwg_department_breadcrumbs'; break;
+            case 'index': return 'obj_breadcrumbs'; break;
+            case 'form': return 'obj_breadcrumbs'; break;
             default: return 'empty';
         }    
     }

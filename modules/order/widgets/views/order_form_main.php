@@ -3,14 +3,14 @@ use yii\jui\DatePicker;
 use yii\web\JqueryAsset;
 use app\modules\order\models\Order;
 
-$this->registerJsFile('js/order/form_order_get_equipment.js',  ['depends' => [JqueryAsset::className()]]);
-$this->registerJsFile('js/order/form_set_customer_issuer.js',  ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile('/js/order/form_order_get_equipment.js');
+$this->registerJsFile('/js/order/form_set_customer_issuer.js');
 ?>
 
 <div id="order-form-main">
     <div class="top-box">
         <!-- number -->          
-        <?=$f->field($form, 'number')->textInput(['value' => $order ? $order->number : '', 'maxlength'=>3, 'style' => 'width:120px'])->label('Номер заказа:')?>
+        <?=$f->field($form, 'number')->textInput(['value' => $order ? $order->number : $form->newNumber, 'maxlength'=>3, 'style' => 'width:120px'])->label('Номер заказа:')?>
         
          <!-- date -->          
         <?=$f->field($form, 'date')->textInput(['value' => $order->date ? $order->date : date('d.m.y'), 'style' => 'width:120px'])->label('Дата выдачи:')?>
@@ -28,6 +28,7 @@ $this->registerJsFile('js/order/form_set_customer_issuer.js',  ['depends' => [Jq
             <select id="state"  name="OrderForm[state]" class="form-control">
     			<option value="<?=Order::STATE_ACTIVE?>" <? if ($order->state == Order::STATE_ACTIVE) echo 'selected'; ?>>Выдан</option>
     			<option value="<?=Order::STATE_DRAFT?>" <? if ($order->state == Order::STATE_DRAFT) echo 'selected'; ?>>Черновик</option>
+    			<option value="<?=Order::STATE_PERMANENT?>" <? if ($order->state == Order::STATE_PERMANENT) echo 'selected'; ?>>Постоянный</option>
     			<option value="<?=Order::STATE_CLOSED?>" <? if ($order->state == Order::STATE_CLOSED) echo 'selected'; ?>>Закрыт</option>
                 <option value="<?=Order::STATE_NOT_ACCEPTED?>" <? if ($order->state == Order::STATE_NOT_ACCEPTED) echo 'selected'; ?>>Непринят</option>
             </select>
@@ -36,7 +37,7 @@ $this->registerJsFile('js/order/form_set_customer_issuer.js',  ['depends' => [Jq
     	<!-- type -->
         <?php 
             $form->type = $order ? $order->type : '4';
-            $types = ['4' => 'Изготовление (4)', '5' => 'Услуга (5)', '6' => 'Кап. ремонт (6)', '1' => 'Улучшение (1)'];
+            $types = ['4' => 'Изготовление (4)', '5' => 'Тек. ремонт (5)', '6' => 'Кап. ремонт (6)', '1' => 'Улучшение (1)'];
             echo $f->field($form, 'type')->dropDownList($types)->label('Статья затрат:');
         ?>
     </div><!-- /top-box -->
@@ -46,40 +47,52 @@ $this->registerJsFile('js/order/form_set_customer_issuer.js',  ['depends' => [Jq
     <?=$f->field($form, 'name')->textInput(['value' => $order->name])->label('Название заказа:')?>
     
     <div class="middle-box clear">
-        <!-- area -->
-        <div id="area-wrp">
-            <label>Участок:</label>
-            <select id="orderform-area" name="OrderForm[area]" class="form-control">
+    
+        <!-- sections -->
+        <div id="sections-wrp">
+            <label>Участки:</label>
+            <select id="orderform-sections" name="OrderForm[section]" class="form-control">
                 <option value="" selected="selected">Не выбран</option>
-                <? foreach ($form->areaAll as $area): ?>
-                    <option value="<?=$area->alias?>" <? if ($area->alias == $order->area) echo 'selected'; ?> area_id="<?=$area->id?>"><?=$area->name?></option>
+                <? foreach ($form->sections as $section): ?>
+                    <option value="<?=$section->id?>" <? if ($section->id == $order->section) echo 'selected'; ?> alias="<?=$section->alias?>"><?=$section->name?></option>
                 <? endforeach; ?>
             </select>
         </div>
         
-        <!-- mechanism select -->
-        <div id="area-mechanism-wrp">
-            <label>Агрегат, механизм:</label>
-            <select id="area-mechanism" disabled="disabled" class="form-control">
-                <option>Не выбран</option>
+        <!-- equipments select -->
+        <div id="section-equipments-wrp">
+            <label>Агрегаты, механизмы:</label>
+            <select id="section-equipments" <? if (!$form->equipments) echo 'disabled="disabled"'; ?> class="form-control">
+                <option name_equ="">Не выбран</option>
+                <? if ($form->equipments): ?>
+                    <? foreach ($form->equipments as $equipment): ?>
+                        <option value="<?=$equipment['alias']?>" <? if ($equipment['id'] == $order->equipment) echo 'selected'; ?> equipment_id="<?=$equipment['id']?>"><?=$equipment['name']?></option>
+                    <? endforeach; ?>
+                <? endif; ?>
             </select>
         </div>
         
         <!-- unit select -->
-        <div id="mechanism-unit-wrp">
-            <label>Узел:</label>
-            <select id="mechanism-unit" disabled="disabled" class="form-control">
-                <option>Не выбран</option>
+        <div id="equipment-units-wrp">
+            <label>Узлы:</label>
+            <select id="equipment-units" <? if (!$form->units) echo 'disabled="disabled"'; ?> class="form-control">
+                <option name_unit="">Не выбран</option>
+                <? if ($form->units): ?>
+                    <? foreach ($form->units as $unit): ?>
+                        <option value="<?=$unit['alias']?>" <? if ($unit['id'] == $order->unit) echo 'selected'; ?> unit_id="<?=$unit['id']?>"><?=$unit['name']?></option>
+                    <? endforeach; ?>
+                <? endif; ?>
             </select>
         </div>
+        
     </div><!-- /middle box -->
     
     
-    <!-- mechanism -->          
-    <?=$f->field($form, 'mechanism')->textInput(['value' => $order->mechanism])->label('Агрегат, механизм:')?>
+    <!-- equipment -->          
+    <?=$f->field($form, 'equipment')->textInput()->label('Агрегат, механизм:')?>
     
     <!-- unit -->          
-    <?=$f->field($form, 'unit')->textInput(['value' => $order->unit])->label('Узел:')?>
+    <?=$f->field($form, 'unit')->textInput()->label('Узел:')?>
 	
     <!-- issuer -->
     <div class="issuer-box">

@@ -8,7 +8,7 @@ use app\modules\drawing\logic\DrawingLogic;
 class DrawingStandardDanieli extends BaseModel
 {
     public $catName = 'Стандарт';
-    public $category = 'standard';
+    public $category = 'standard_danieli';
     public $sheet;
     public $sheets;
     public $revision = 'нет';

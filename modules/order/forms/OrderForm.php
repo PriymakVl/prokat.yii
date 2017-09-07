@@ -16,8 +16,6 @@ class OrderForm extends BaseForm
     public $issuer;
     public $customer;
     public $number;
-    public $mechanism;
-    public $unit;
     public $date;
     public $weight;
     public $service;
@@ -26,31 +24,33 @@ class OrderForm extends BaseForm
     public $work;
     public $description;
     public $state;
-    public $area;
+    public $section;
+    public $equipment;
+    public $unit;
     //form
-    public $order_id;
-    public $areaAll;
+    public $sections;
+    public $equipments;
+    public $units;
+    public $order;
+    //public $areaAll;
+    public $newNumber;
+    
+    public function __construct($order) 
+    {
+        parent::__construct();
+        if (is_object($order)) $this->order = $order; 
+        else $this->order = new Order();   
+    }
     
     public function rules() 
     {
         return [
-            [['name', 'type','description'], 'required', 'message' => 'Необходимо заполнить поле'],
-            [['issuer', 'customer', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
-            ['name', 'string'],
-            ['type', 'integer'],
-            ['service', 'string'],
-            ['note', 'string',],
-            ['issuer', 'string'],
-            ['customer', 'string'],
+            [['name', 'type', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['name', 'note', 'issuer', 'customer', 'work', 'weight', 'service', 'description'],  'string'],
+            [['unit', "equipment"], 'string'],
+            [['section', 'state'], 'integer'],
             ['number','checkNumber'],
-            ['mechanism', 'default', 'value' => 'Не указан'],
-            ['unit', 'default', 'value' => 'Не указан'],
-            ['work','string'],
-            ['weight','string'],
             [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
-            ['area', 'string'],
-            ['state', 'integer'],
-            ['description', 'string']
         ];
 
     }
@@ -62,40 +62,72 @@ class OrderForm extends BaseForm
     	return ['order-logic' => ['class' => OrderLogic::className()]];
     }
     
-    public function save($order) 
+    public function save() 
     {
-        if (!$order) $order = new Order();
-        $order = $this->updateData($order);
-        if (!$order->save()) return false;
-        $this->order_id = $order->id;
-        return true;  
+        $this->order->type = $this->type;
+        $this->order->name = $this->name;
+        $this->order->issuer = $this->getIssuer();
+        $this->order->customer = $this->getCustomer();
+        $this->order->note = $this->note;
+        $this->order->service = $this->service;
+        $this->order->date = strtotime($this->prepareDateForConvert($this->date));
+
+        $this->order->work = $this->setWork();
+        $this->order->weight = $this->weight;
+        
+        $this->order->section = $this->section;
+        $this->order->equipment = $this->getIdEquipment();
+        $this->order->unit = $this->getIdUnit();
+        
+        $this->order->description = $this->description;
+        $this->order->number = $this->number;
+        $this->order->state = $this->number ? $this->state : Order::STATE_DRAFT;
+        $this->order->period = OrderLogic::getPeriod($this->order->date);
+        return $this->order->save();
     }
     
-    private function updateData($order)
+    public function getSections()
     {
-        $order->type = $this->type;
-        $order->area = $this->area;
-        $order->name = $this->name;
-        $order->issuer = $this->getIssuer();
-        $order->customer = $this->getCustomer();
-        $order->note = $this->note;
-        $order->service = $this->service;
-        $order->date = strtotime($this->prepareDateForConvert($this->date));
-        //$order->year = date('Y', $order->date);
-        $order->work = $this->setWork();
-        $order->weight = $this->weight;
-        $order->unit = $this->unit;
-        $order->mechanism = $this->mechanism;
-        $order->description = $this->description;
-        $order->number = $this->number;
-        $order->state = $this->number ? $this->state : Order::STATE_DRAFT;
-        $order->period = OrderLogic::getPeriod($order->date);
-        return $order;
+        $this->sections = Equipment::getSections();
+        return $this;
     }
     
-    public function getArea()
+    public function getEquipments()  
     {
-        $this->areaAll = Equipment::getArea();
+        if ($this->order->section) $this->equipments = Equipment::getEquipments($this->order->section);
+        return $this;
+    }
+    
+    public function getUnits()
+    {
+        if ($this->order->equipment) $this->units = Equipment::getUnits($this->order->equipment);
+        return $this; 
+    }
+    
+    private function getIdEquipment()
+    {
+        if (!$this->equipment) return null;
+        $result = Equipment::find()->select('id')->where(['name' => $this->equipment, 'parent_id' => $this->section])->column();
+        if ($result) return $result[0];
+        $object = new Equipment();
+        $object->name = $this->equipment;
+        $object->alias = $this->equipment;
+        $object->parent_id = $this->section;
+        $object->save();
+        return $object->id;
+    }
+    
+    private function getIdUnit()
+    {
+        if (!$this->unit || !$this->order->equipment) return null;
+        $result = Equipment::find()->select('id')->where(['name' => $this->unit, 'parent_id' => $this->order->equipment])->column();
+        if ($result) return $result[0];
+        $object = new Equipment();
+        $object->name = $this->unit;
+        $object->alias = $this->unit;
+        $object->parent_id = $this->order->equipment;
+        $object->save();
+        return $object->id;
     }
     
     public function setWork()
@@ -136,6 +168,26 @@ class OrderForm extends BaseForm
             case 'Битюкова О.В': return '3';
             default: return $this->issuer;
         }
+    }
+    
+    public function getNumberOfFutureOrder()
+    {
+        $this->newNumber = OrderLogic::getNumberOfFutureOrder();
+        return $this;
+    }
+    
+    public function getNameEquipment()
+    {
+        if ($this->order->equipment) $result = Equipment::findOne(['id' => $this->order->equipment, 'status' => Equipment::STATUS_ACTIVE]);
+        if ($result) $this->equipment = $result->name;
+        return $this;
+    }
+    
+    public function getNameUnit()
+    {
+        if ($this->order->unit) $result = Equipment::findOne(['id' => $this->order->unit, 'status' => Equipment::STATUS_ACTIVE]);
+        if ($result) $this->unit = $result->name;
+        return $this;
     }
     
 }

@@ -9,7 +9,7 @@ use app\modules\objects\widgets\ObjectTopMenuWidget;
 use app\modules\lists\widgets\ListItemMenuWidget;
     
 $this->registerCssFile('/css/object.css');
-$this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile('/js/object/object_copy.js');
 
 ?>
 <div class="content">
@@ -50,11 +50,13 @@ $this->registerJsFile('/js/object/object_copy.js', ['depends' => [JqueryAsset::c
             <tr>
                 <td>Код</td>
                 <td>
-                    <?if($obj->dwg): ?>   
-                        <a href="<?=Yii::$app->urlManager->createUrl(['object/drawing', 'obj_id' => $obj->id])?>"><?=$obj->code?></a>
+                    <? if($obj->pathDwg): ?>
+                        <a href="<?=Url::to([$obj->pathDwg])?>" target="_blank"><?=$obj->code ? $obj->code : 'не указан'?></a>     
+                    <? elseif ($obj->numberDwg): ?>
+                        <a href="<?=Url::to(['/object/drawing', 'obj_id' => $obj->id])?>"><?=$obj->code ? $obj->code : 'не указан'?></a>
                     <? else: ?>
-                        <?=$obj->code?>
-                    <? endif; ?>
+                        <?=$obj->code ? $obj->code : 'не указан'?>
+                    <? endif; ?>  
                 </td>
             </tr>
         <? endif ?>

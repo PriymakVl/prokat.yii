@@ -1,10 +1,9 @@
 <?php
 
-use yii\web\JqueryAsset;
 use yii\helpers\Url;
 
-$this->registerJsFile('js/object/object_delete.js',  ['depends' => [JqueryAsset::className()]]);
-$this->registerJsFile('js/object/object_update.js',  ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile('/js/object/object_delete.js');
+$this->registerJsFile('/js/object/object_update.js');
     
 ?>
 
@@ -13,10 +12,10 @@ $this->registerJsFile('js/object/object_update.js',  ['depends' => [JqueryAsset:
     <h5>Объект</h5>   
     <ul>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['object/form', 'parent_id' => $obj_id])?>">Создать объект</a>
+            <a href="<?=Url::to(['/object/form', 'parent_id' => $obj_id])?>">Создать объект</a>
         </li>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['object/form', 'obj_id' => $obj_id])?>">Редактировать объект</a>
+            <a href="<?=Url::to(['/object/form', 'obj_id' => $obj_id])?>">Редактировать объект</a>
         </li>
         <li>
             <a href="#" onclick="return false;" id="obj-copy">Копировать объект</a>

@@ -178,7 +178,9 @@ $config = [
                 //application content   
                 'application/content/list' => 'applications/application-content/list', 
 				'application/content/form' => 'applications/application-content/form', 
-                'application/content/item' => 'applications/application-content',   
+                'application/content/item' => 'applications/application-content', 
+                //equipment
+                'equipment/data/get' => 'equipments/equipment/get-data-ajax',  
 								
             ],
         ],  

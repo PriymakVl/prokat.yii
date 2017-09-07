@@ -14,8 +14,7 @@ class DrawingWorks extends BaseModel
     public $category = 'works';
     public $catName = 'ПКО';
     public $typeName;
-    public $file;
-    public $sheets = 1;
+    //public $sheets = 1;
     
     const PAGE_SIZE = 30;
  
@@ -30,12 +29,12 @@ class DrawingWorks extends BaseModel
     	return ['drawing-logic' => ['class' => DrawingLogic::className()]];
     }
     
-    public function checkChild()
-    {
-        $child = self::findOne(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id]);
-        if ($child) $this->child = true;
-        return $this;    
-    }
+//    public function checkChild()
+//    {
+//        $child = self::findOne(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id]);
+//        if ($child) $this->child = true;
+//        return $this;    
+//    }
     
     public static function getListWorks($params)
     {       
@@ -43,10 +42,10 @@ class DrawingWorks extends BaseModel
         return self::executeMethods($list, ['checkChild']);
     }
     
-    public function getFiles()
-    {
-        return $this->hasMany(DrawingWorksFile::className(), ['dwg_id' => 'id'])->where(['status' => self::STATUS_ACTIVE])->orderBy('sheet');    
-    }
+//    public function getFiles()
+//    {
+//        return $this->hasMany(DrawingWorksFile::className(), ['dwg_id' => 'id'])->where(['status' => self::STATUS_ACTIVE])->orderBy('sheet');    
+//    }
     
     public function getParent()
     {
@@ -54,20 +53,20 @@ class DrawingWorks extends BaseModel
         return $this;
     }
     
-    public function getTypeName()
-    {
-        switch ($this->type) {
-            case 'drawing': $this->typeName = 'Чертеж'; break;
-            case 'folder': $this->typeName = 'Папка'; break;
-            case 'assembly': $this->typeName = 'Сборочный чертеж'; break;
-            case 'specification': $this->typeName = 'Спецификация'; break;
-        }
-        return $this;
-    }
+//    public function getTypeName()
+//    {
+//        switch ($this->type) {
+//            case 'drawing': $this->typeName = 'Чертеж'; break;
+//            case 'folder': $this->typeName = 'Папка'; break;
+//            case 'assembly': $this->typeName = 'Сборочный чертеж'; break;
+//            case 'specification': $this->typeName = 'Спецификация'; break;
+//        }
+//        return $this;
+//    }
     
     public static function getAllForObject($obj)
     {
-        return self::find()->where(['code' => $obj->code, 'status' => self::STATUS_ACTIVE])->orderBy(['number' => SORT_DESC, 'sheet' => SORT_ASC])->all();
+        return self::find()->where(['code' => $obj->code, 'status' => self::STATUS_ACTIVE])->all();
     }
     
     public static function check($obj)
@@ -77,11 +76,11 @@ class DrawingWorks extends BaseModel
         return self::findAll($ids);    
     }
     
-    public static function getSpecification($parent_id)
-    {
-        $specification = DrawingWorks::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy('item')->all();
-        return self::executeMethods($specification, ['checkChild']);
-    }
+//    public static function getSpecification($parent_id)
+//    {
+//        $specification = DrawingWorks::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy('item')->all();
+//        return self::executeMethods($specification, ['checkChild']);
+//    }
 
 }
 

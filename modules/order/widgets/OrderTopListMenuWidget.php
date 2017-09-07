@@ -12,8 +12,8 @@ class OrderTopListMenuWidget extends Widget
 
     public function run()
     {
-        $area = Equipment::getArea();
-        return $this->render('top_list', ['params' => $this->params, 'area' => $area]);
+        $sections = Equipment::getSections();
+        return $this->render('top_list', ['params' => $this->params, 'sections' => $sections]);
     }
 
 }

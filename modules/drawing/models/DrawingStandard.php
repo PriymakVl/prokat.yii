@@ -13,6 +13,11 @@ class DrawingStandard extends BaseModel
         return 'drawings_standard';
 
     }
+    
+    public static function getAllForObject($obj)
+    {
+        return self::find()->where(['code' => $obj->code, 'status' => self::STATUS_ACTIVE])->all();
+    }
 
 }
 

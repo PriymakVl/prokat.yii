@@ -18,7 +18,7 @@
 
 #order-content-item-material {
     position: absolute;
-    top: 220px;
+    top: 285px;
     left: 360px;
 }
 
@@ -28,19 +28,19 @@
 
 .field-ordercontentform-count {
     position: absolute;
-    top: 70px;
+    top: 135px;
     left: 185px;    
 }
 
 .field-ordercontentform-weight {
     position: absolute;
-    top: 70px;
+    top: 135px;
     left: 350px;    
 }
 
 .field-ordercontentform-delivery {
     position: absolute;
-    top: 95px;
+    top: 160px;
     left: 520px;     
 }
 
@@ -93,19 +93,19 @@
 
 .field-orderform-type {
   position: absolute;
-  left: 465px;  
+  left: 470px;  
   top: 0;
 }
 
 #state {
-    width: 120px;
+    width: 130px;
 }
 
 #orderform-type {
-    width: 230px;
+    width: 165px;
 }
 
-#area-mechanism, #mechanism-unit, #orderform-area{
+#section-equipments, #equipment-units, #orderform-sections{
     width: 200px;
 }
 
@@ -117,13 +117,13 @@
     margin: 35px 0 20px;
 }
 
-#area-wrp, #area-mechanism-wrp, #mechanism-unit-wrp {
+#sections-wrp, #section-equipments-wrp, #equipment-units-wrp {
     position: relative;
     float: left;
     margin-right: 25px;
 }
 
-#area-mechanism-wrp label,  #mechanism-unit-wrp label, #area-wrp label{
+#section-equipments-wrp label,  #equipment-units-wrp label, #sections-wrp label{
     position: absolute;
     top: -20px;       
 }
@@ -166,21 +166,37 @@
  *     position: absolute;
  *     bottom: 40px;
  * }
+ */
+
+#bolt-dimensions-wrp {
+    position: relative;
+}
+
+#ordercontentform-bolt_thread, #ordercontentform-bolt_pitch, #ordercontentform-bolt_length, #ordercontentform-bolt_class {
+  width: 150px;
+  padding-right: 50px;    
+}
+
+.field-ordercontentform-bolt_pitch {
+  position: absolute;
+  top: 30px;
+  left: 175px;    
+}
+
+.field-ordercontentform-bolt_length {
+  position: absolute;
+  top: 30px;
+  left: 350px;    
+}
+
+.field-ordercontentform-bolt_class {
+  position: absolute;
+  top: 30px;
+  left: 525px;    
+}
 
 
- * #ordercontentform-bolt_thread, #ordercontentform-bolt_pitch, #ordercontentform-bolt_length {
- *     width: 100px;
- *     padding-right: 50px;    
- * }
-
-
-
- * #ordercontentform-bolt_length {
- *     position: absolute;
- *     top: 50px;
- *     left: 400px;    
- * }
-
+/**
  * #ordercontentform-shaft_length, #ordercontentform-shaft_diam {
  *     width: 100px;
  *     padding-right: 50px;    

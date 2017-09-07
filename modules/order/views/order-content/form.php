@@ -5,7 +5,7 @@ use yii\helpers\Html;
 use app\widgets\MainMenuWidget;
 use app\modules\order\widgets\OrderFormTopMenuWidget;
 use app\modules\order\widgets\OrderContentFormComponentWidget;
-use app\modules\order\widgets\OrderFormTabWidget;
+use app\modules\order\widgets\ContentFormTabWidget;
 
 $this->registerCssFile('/css/order.css');
 
@@ -34,13 +34,13 @@ $this->registerCssFile('/css/order.css');
         <? $f = ActiveForm::begin(['id' => 'form-order-item']);?>
         
             <!-- main tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'main_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
+            <?=ContentFormTabWidget::widget(['nameTab' => 'main', 'f' => $f, 'form' => $form, 'item' => $item])?>
             
             <!-- other tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'other_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
+            <?=ContentFormTabWidget::widget(['nameTab' => 'other', 'f' => $f, 'form' => $form, 'item' => $item])?>
             
             <!-- dimensions tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'dimensions_content', 'f' => $f, 'form' => $form, 'item' => $item])?>
+            <?=ContentFormTabWidget::widget(['nameTab' => 'dimensions', 'f' => $f, 'form' => $form, 'item' => $item])?>
             
             <!-- hidden order id -->
             <?=$f->field($form, 'order_id')->hiddenInput(['value' => $order ? $order->id : false])->label(false) ?>

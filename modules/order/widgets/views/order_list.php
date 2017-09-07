@@ -20,6 +20,9 @@ $this->registerJsFile('js/order/order_list_print.js');
             <? endif; ?>
         </li> 
         <li>
+            <a href="<?=Url::to(['/order/list', 'state' => Order::STATE_PERMANENT])?>">Постоянно действ.</a>
+        </li>
+        <li>
             <a href="#" onclick="return false;" id="order-list-print">Распечатать перечень</a>    
         </li> 
     </ul>

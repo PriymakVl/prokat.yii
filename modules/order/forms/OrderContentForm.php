@@ -40,14 +40,17 @@ class OrderContentForm extends BaseForm
     public $shaft_length; public $shaft_diam;
     public $bush_height; public $bush_in_diam; public $bush_out_diam;
     public $bar_height; public $bar_width; public $bar_length;
+    public $typeDwg;
 
     
     public function rules() 
     {
         return [
-            [['type_dimensions', 'cat_dwg', 'equipment', 'code', ], 'string'],
-            [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'name', 'bolt_class', 'nut_class'], 'string'],
-            [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_pitch', 'bolt_length',], 'integer'],
+            ['name', 'required', 'message' => 'Необходимо заполнить поле'],
+            ['name', 'string', 'length' => [4, 40]],
+            [['type_dimensions', 'cat_dwg', 'equipment', 'code', 'typeDwg'], 'string'],
+            [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'bolt_class', 'nut_class', 'bolt_pitch'], 'string'],
+            [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_length'], 'integer'],
             [['shaft_length', 'shaft_diam', 'bush_height', 'bush_in_diam', 'bush_out_diam'], 'integer'],
             [['bar_length', 'bar_height', 'bar_width'], 'integer'],
             [['count', 'item', 'rating', 'obj_id', 'delivery',], 'default', 'value' => 0],
@@ -97,6 +100,7 @@ class OrderContentForm extends BaseForm
                 else if (!$obj->order_name) $obj->order_name = $item->name;    
             }
             if ($item->dimensions) $obj->dimensions = $item->dimensions;
+            if (!$obj->weight && $item->weight) $obj->weight = $item->weight;
             $obj->save();
         }  
     }

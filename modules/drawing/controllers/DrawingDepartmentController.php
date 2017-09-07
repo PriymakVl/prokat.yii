@@ -8,15 +8,16 @@ use app\controllers\BaseController;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\forms\DrawingDepartmentForm;
 use app\modules\drawing\logic\DrawingLogic;
+use app\modules\objects\models\Objects;
 
 class DrawingDepartmentController extends BaseController 
 {
     public $layout = "@app/views/layouts/base";
     
-    public function actionIndex($dwg_id = null) 
+    public function actionIndex($dwg_id) 
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
-        $dwg->convertDate($dwg)->getNumber()->convertService()->checkChild();
+        $dwg->convertDate($dwg)->getFullNumber()->getObject();
         return $this->render('index', compact('dwg'));
     }
     
@@ -28,24 +29,26 @@ class DrawingDepartmentController extends BaseController
         return $this->render('list', compact('list', 'params', 'pages'));
     }
     
-    public function actionForm($dwg_id = null) 
+    public function actionForm($dwg_id = null, $obj_id = null) 
     { 
-        $dwg = (int)$dwg_id ? DrawingDepartment::findOne($dwg_id) : null;
+        $dwg = DrawingDepartment::getOne($dwg_id, null, self::STATUS_ACTIVE);
+        $dwg->getFullNumber();
+        $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
+        if ($obj) $obj->getName();
         $form = new DrawingDepartmentForm();
-        $form->getServices($form)->getTypes()->getEquipments();
-        //add drawign to objecct
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
-            return $this->redirect(['/drawing/department', 'dwg_id' => $form->dwg->id]);
+            if ($obj_id) return $this->redirect(['/object/drawing', 'obj_id' => $dwg->obj_id]);
+            else return $this->redirect(['/drawing/department', 'dwg_id' => $dwg->id]);
         }   
-        return $this->render('form', compact('dwg', 'form'));
+        return $this->render('form', compact('dwg', 'form', 'obj'));
     }
     
-    public function actionFolder($dwg_id = null) 
-    { 
-        $folder = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
-        $folder->getContentOfFolder();
-        return $this->render('folder', compact('folder'));
-    }
+//    public function actionFolder($dwg_id = null) 
+//    { 
+//        $folder = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
+//        $folder->getContentOfFolder();
+//        return $this->render('folder', compact('folder'));
+//    }
     
     public function actionDelete($dwg_id = null) 
     {

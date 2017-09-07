@@ -32,8 +32,8 @@
     <label>Участки:</label>
     <select id="order-area">
         <option value="all">Все</option>
-        <? foreach ($area as $item): ?>
-            <option value="<?=$item->alias?>" <? if ($params['area'] == $item->alias) echo 'selected'; ?>><?=$item->name?></option>   
+        <? foreach ($sections as $section): ?>
+            <option value="<?=$section->id?>" <? if ($params['section'] == $section->id) echo 'selected'; ?>><?=$section->name?></option>   
         <? endforeach; ?>
     </select>
 </div>

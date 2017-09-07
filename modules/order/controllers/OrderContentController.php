@@ -78,25 +78,23 @@ class OrderContentController extends BaseController
     
     public function actionAddOne($obj_id)
     {
-        $object = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
-        $item = OrderLogic::saveParamsFromObject($object);
-        $this->redirect(['/order/content/item', 'item_id' => $item->id]);
+        $object = Objects::getOne($obj_id, false, self::STATUS_ACTIVE); 
+        $order_id = OrderLogic::getIdAciveOrder('Объект не добавлен в заказ. Нет активного заказа');
+        if (!$order_id) return $this->redirect(['/order/list']);
+        $item = OrderLogic::saveParamsFromObject($object, $order_id, \Yii::$app->request->get('file'));
+        if ($item) $this->redirect(['/order/content/item', 'item_id' => $item->id]);
     }
     
     public function actionAddList($ids, $parent_id)
     {
 
         $objects = Objects::getArrayObjects($ids);
+        $order_id = OrderLogic::getIdAciveOrder(count($objects) == 1 ? 'Объект не добавлен' : 'Объекты не добавлены'.' в заказ. Нет активного заказа.');
+        if (!$order_id) return $this->redirect(['/order/list']);
         foreach ($objects as $object) {
-            $result = OrderLogic::saveParamsFromObject($object);
-            if (!$result) {
-                throw new ForbiddenHttpException('Не указан активный заказ');
-                //\Yii::$app->session->setFlash('error-active', 'Не указан активный заказ');
-                //$this->redirect(['/object/specification', 'obj_id' => $parent_id]);
-            }
+            $result = OrderLogic::saveParamsFromObject($object, $order_id, \Yii::$app->request->get('file'));
         }
-        $active_id = OrderLogic::getActive('order-active');
-        $this->redirect(['/order/content/list', 'order_id' => $active_id]);
+        $this->redirect(['/order/content/list', 'order_id' => $order_id]);
     }
     
     public function actionAddFile($file, $cat_dwg, $obj_id)

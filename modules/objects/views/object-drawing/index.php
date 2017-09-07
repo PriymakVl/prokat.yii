@@ -7,9 +7,9 @@
     use app\modules\objects\widgets\ObjectDrawingWidget;
     use app\modules\objects\widgets\ObjectDrawingMenuWidget;
     
-    $this->registerCssFile('css/drawing.css');
-    $this->registerJsFile('js/drawing/dwg_revision_toggle.js',  ['depends' => [JqueryAsset::className()]]);
-    
+    $this->registerCssFile('/css/drawing.css');
+    $this->registerJsFile('/js/object/object_file_add_order.js');
+
 ?>
 
 <div class="content">
@@ -32,18 +32,30 @@
     <!-- drawings list -->   
     <div id="dwg-list-wrp" style="width: 720px;">
         <? if ($drawings): ?>
-            <!-- drawing vendor -->
-            <?//=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'vendor', 'obj_id' => $obj->id])?>
+            <!-- drawing Danieli -->
+            <? if ($drawings['danieli']): ?>
+                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['danieli'], 'category' => 'danieli', 'obj_id' => $obj->id])?>
+           <? endif; ?>
            
-           <!-- drawing works -->
-            <?//=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'works', 'obj_id' => $obj->id])?> 
+            <!-- drawing works -->
+            <? if ($drawings['works']): ?>
+                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['works'], 'category' => 'works', 'obj_id' => $obj->id])?> 
+            <? endif; ?>
             
             <!-- drawing department -->
-            <?=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'department', 'obj_id' => $obj->id])?>
+            <? if ($drawings['department']): ?>
+                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['department'], 'category' => 'department', 'obj_id' => $obj->id])?>
+            <? endif; ?>
             
-            <!-- drawing standard -->
-            <?//=ObjectDrawingWidget::widget(['drawings' => $drawings, 'category' => 'standard', 'obj_id' => $obj->id])?>
-
+            <!-- drawing standard danieli -->
+            <? if ($drawings['standard_danieli']): ?>
+                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['standard_danieli'], 'category' => 'standard_danieli', 'obj_id' => $obj->id])?>
+            <? endif; ?>
+            
+            <!-- drawing Sundbirsta -->
+            <? if ($drawings['sundbirsta']): ?>
+                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['sundbirsta'], 'category' => 'sundbirsta', 'obj_id' => $obj->id])?>
+            <? endif; ?>
         <? else: ?>
             <div class="alert-danger">Чертежей нет</div>
         <? endif; ?> 

@@ -27,9 +27,10 @@ $this->registerCssFile('/css/drawing.css');
             <th width="30">
                 <input type="checkbox" disabled="disabled" />
             </th>
-            <th width="100">№ чертежа</th>
-            <th width="460">Наименование</th>
-            <th width="130">Оборудование</th>
+            <th width="90">№ эскиза</th>
+            <th width="250">Наименование</th>
+            <th width="150">Объект</th>
+            <th width="200">Узел</th>
         </tr>
         <? if ($list): ?>
             <? foreach ($list as $dwg): ?>
@@ -39,18 +40,31 @@ $this->registerCssFile('/css/drawing.css');
                     </td>
                     <td class="text-center">
                         <? if($dwg->file): ?>
-                            <?= Html::a($dwg->number, ['/files/department/'.$dwg->file], ['target' => '_blank']) ?>
-                        <? elseif($dwg->type == 'folder'): ?>
-                            <?= Html::a('папка', ['/drawing/department/folder/', 'dwg_id' => $dwg->id]) ?>
+                            <?= Html::a($dwg->fullNumber, ['/files/department/'.$dwg->file], ['target' => '_blank']) ?>
                         <? else: ?>
-                            <?=$dwg->number?>
+                            <?=$dwg->fullNumber?>
                         <? endif; ?>
                     </td>
                     <td>
-                        <?= Html::a($dwg->name, ['/drawing/department/', 'dwg_id' => $dwg->id]) ?>
+                        <? if ($dwg->obj): ?>
+                            <?= Html::a($dwg->obj->name, ['/drawing/department', 'dwg_id' => $dwg->id]) ?>
+                        <? elseif ($dwg->name): ?>
+                            <?= Html::a($dwg->name, ['/drawing/department', 'dwg_id' => $dwg->id]) ?> 
+                        <? else: ?>
+                            <?= Html::a('Не указано', ['/drawing/department', 'dwg_id' => $dwg->id]) ?>
+                        <? endif; ?>   
                     </td>
                     <td class="text-center">
-                       <?=$dwg->equipment ? $dwg->equipment : "Не указано"?>
+                        <? if ($dwg->obj): ?>
+                            <?= Html::a($dwg->obj->code, ['/object', 'obj_id' => $dwg->obj->id], ['targer' => '_blank']) ?>
+                        <? else: ?>
+                            <span>Не указан</span>
+                        <? endif; ?>
+                    </td>
+                    <td class="text-center">
+                       <? if ($dwg->obj && $dwg->obj->parent): ?>
+                            <?= Html::a($dwg->obj->parent->name, ['/object/', 'obj_id' => $dwg->obj->parent->id], ['targer' => '_blank']) ?>
+                        <? endif; ?>
                     </td>
                 </tr>
             <? endforeach; ?>
@@ -71,7 +85,7 @@ $this->registerCssFile('/css/drawing.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?=DrawingListMenuWidget::widget()?>
-    <?=DrawingMenuWidget::widget()?>
+    <?//=DrawingListMenuWidget::widget()?>
+    <?//=DrawingMenuWidget::widget()?>
     <?=DrawingMainMenuWidget::widget()?>
 </div>

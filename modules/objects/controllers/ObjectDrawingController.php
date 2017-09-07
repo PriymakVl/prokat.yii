@@ -37,31 +37,31 @@ class ObjectDrawingController extends BaseController
         return $this->render('form', compact('obj', 'form'));       
     }
 	
-	public function actionFormVendor($obj_id) {
-		$obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
-		$form = new ObjectDrawingVendorForm(); 
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) { 
-            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
-        } 
-        return $this->render('add_vendor', compact('obj', 'form'));
-	}
+//	public function actionFormVendor($obj_id) {
+//		$obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
+//		$form = new ObjectDrawingVendorForm(); 
+//        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) { 
+//            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+//        } 
+//        return $this->render('add_vendor', compact('obj', 'form'));
+//	}
     
-    public function actionUpdateVendor($dwg_id, $obj_id) 
-    {
-        $dwg = DrawingVendor::getOne($dwg_id, false, self::STATUS_ACTIVE);
-        $form = new ObjectDrawingUpdateForm(); 
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
-            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
-        } 
-        return $this->render('update_vendor', compact('obj', 'form', 'dwg'));  
-    }
+//    public function actionUpdateVendor($dwg_id, $obj_id) 
+//    {
+//        $dwg = DrawingVendor::getOne($dwg_id, false, self::STATUS_ACTIVE);
+//        $form = new ObjectDrawingUpdateForm(); 
+//        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
+//            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+//        } 
+//        return $this->render('update_vendor', compact('obj', 'form', 'dwg'));  
+//    }
     
     public function actionDelete($dwg_id, $dwg_cat, $obj_id) 
     {
-        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
-        $dwg = DrawingLogic::getDrawingObjectByCode($dwg_cat, $dwg_id, $obj);
+        $dwg = DrawingLogic::getDrawingObject($dwg_cat, $dwg_id);
         if ($dwg) {
-            $dwg->status = self::STATUS_INACTIVE;
+            $dwg->obj_id = null;
+            $dwg->code = null;
             $dwg->save(); 
         }
         $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);

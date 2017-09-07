@@ -19,10 +19,10 @@ class OrderController extends BaseController
         return $this->render('index', compact('order', 'session'));
     }
     
-    public function actionList($period = null, $customer = null, $area = null)
+    public function actionList($period = null, $customer = null, $section = null, $equipment = null, $unit = null)
     {
         $state = Yii::$app->request->get('state');
-        $params = OrderLogic::getParams($period, $customer, $area, $state);
+        $params = OrderLogic::getParams($period, $customer, $section, $equipment, $unit, $state);
         $list = Order::getOrderList($params);
         $pages = Order::$pages;
         return $this->render('list', compact('list', 'params', 'pages', 'state'));
@@ -30,14 +30,16 @@ class OrderController extends BaseController
     
     public function actionForm($order_id = null) 
     { 
-        $order = (int)$order_id ? Order::findOne($order_id) : null;
+        $order = Order::getOne($order_id, null, self::STATUS_ACTIVE);
         if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer();
         //debug($order->state);
-        $form = new OrderForm();
-        $form->getServices($form)->getArea();
+        $form = new OrderForm($order);
+        $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()
+            ->getUnits()->getNameEquipment()->getNameUnit();
+        //debug($form->unit);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             Yii::$app->session->setFlash('success', 'Заказ успешно '.($order ? 'отредактирован' : 'создан'));
-            $this->redirect(['/order/active/set', 'order_id' => $form->order_id]);
+            $this->redirect(['/order/active/set', 'order_id' => $form->order->id]);
         }   
         //Debug($order);
         return $this->render('form', compact('order', 'form'));

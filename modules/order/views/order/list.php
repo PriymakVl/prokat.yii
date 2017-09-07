@@ -14,6 +14,7 @@ use app\modules\order\widgets\OrderTopListMenuWidget;
 //use app\modules\orderlist\widgets\OrderListListMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
 //use app\modules\orderact\widgets\OrderActListMenuWidget;
+use app\modules\order\widgets\OrderSortEquipmentMenuWidget;
 
 $this->registerCssFile('/css/standard.css');
 
@@ -25,10 +26,10 @@ $this->registerCssFile('/css/standard.css');
     <!-- top nenu -->
     <?=OrderTopListMenuWidget::widget(['params' => $params])?>
     
-    <!-- flash message -->
-    <?php if (Yii::$app->session->hasFlash('error-active')): ?>
-       <div class="alert alert-danger">
-            <?= \Yii::$app->session->getFlash('success') ?>
+    <!-- flash error message -->
+    <?php if (Yii::$app->session->hasFlash('error')): ?>
+       <div class="alert alert-danger margin-top-15">
+            <?= \Yii::$app->session->getFlash('error') ?>
        </div>
     <?php endif; ?>
     
@@ -58,7 +59,7 @@ $this->registerCssFile('/css/standard.css');
                         <? endif; ?>  
                     </td>
                     <td>
-                        <a <? if ($order->state != Order::STATE_ACTIVE) echo 'style="color:red;"'?> href="<?=Url::to(['/order', 'order_id' =>$order->id])?>">
+                        <a <? if ($order->state == Order::STATE_DRAFT || $order->state == Order::STATE_CLOSED || $order->state == Order::STATE_NOT_ACCEPTED) echo 'style="color:red;"'?> href="<?=Url::to(['/order', 'order_id' =>$order->id])?>">
                             <?=$order->name?>
                         </a>
                     </td>
@@ -85,6 +86,8 @@ $this->registerCssFile('/css/standard.css');
     <?=OrderListMenuWidget::widget(['state' => $state])?>
     <? if ($order->active) echo OrderActiveMenuWidget::widget(); ?>
     <?=ObjectSearchMenuWidget::widget()?>
+    <?=OrderSortEquipmentMenuWidget::widget()?>
+     <?=OrderActiveMenuWidget::widget()?>
     <?//=OrderListListMenuWidget::widget()?>
     <?//=OrderActListMenuWidget::widget()?>
 </div>

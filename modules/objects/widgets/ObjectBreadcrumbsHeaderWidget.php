@@ -20,6 +20,7 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
 
     public function run()
     {
+        if (!$this->obj_id) return $this->render('menu/object_boot_breadcrumbs');
         $this->obj = Objects::findOne($this->obj_id);
         if ($this->obj) $this->obj->getName()->getAlias();
         
@@ -30,9 +31,13 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
      private function getBreadcrumbs()
     {
         $equipment = Tag::find()->where(['alias' => $this->obj->equipment, 'type' => 'equipment'])->one();
-        $breadcrumbs = '<ul class="nav navbar-nav" id="top-breadcrumbs-link"><li><a href="'.Url::to('/object/specification/main').'">'.$equipment->name.'</a></li> '; 
-        $parents = $this->getArrayParents();
-        $parents = array_reverse($parents);
+        $breadcrumbs = '<ul class="nav navbar-nav" id="top-breadcrumbs-link">';
+        $breadcrumbs .= '<li>';
+        $breadcrumbs .= '<a href="#" class="dropdown-toggle" data-toggle="dropdown">Участки</a>';
+        $breadcrumbs .= $this->getSubMenuArea();
+        $breadcrumbs .= '</li> '; 
+        
+        $parents = array_reverse($this->getArrayParents());
 
         foreach ($parents as $parent) {
             $breadcrumbs .= '<li class="dropdown">';
@@ -91,6 +96,20 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
         for ($i = 0; $i < count($objects); $i++) {
             if (!$objects[$i] || $i > 20) break;
             if ($objects[$i]->item > 99 && $objects[$i]->item < 300) continue;
+			$objects[$i]->getName()->getAlias();
+            $submenu .= '<li>';
+            $item = $objects[$i]->item ?  $objects[$i]->item.' ' : '';
+            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$item.$objects[$i]->alias.'</a>';
+            $submenu .= '</li>';   
+        } 
+        return $submenu .= '</ul>';  
+    }
+    
+    private function getSubMenuArea() 
+    {
+        $submenu = '<ul class="dropdown-menu">';
+        $objects = Objects::findAll(['parent_id' => 0, 'status' => Objects::STATUS_ACTIVE]);
+        for ($i = 0; $i < count($objects); $i++) {
 			$objects[$i]->getName()->getAlias();
             $submenu .= '<li>';
             $item = $objects[$i]->item ?  $objects[$i]->item.' ' : '';

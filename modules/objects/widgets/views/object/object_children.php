@@ -8,7 +8,6 @@
 <? if ($children): ?>
     <tbody class="obj-children">
         <? foreach ($children as $obj): ?>
-			<? //debug($obj); ?>
             <tr <? if ($obj->color == 1) echo 'style="background: #FFFF00;"'; ?>>
                 <td>    
                     <input type="checkbox"  name="object" obj_id="<?=$obj->id?>" />
@@ -27,6 +26,8 @@
                 </td>
                 <td class="text-center">
                     <? if($obj->dwg): ?>
+                        <a href="<?=Url::to([$obj->pathDwg])?>" target="_blank"><?=$obj->code ? $obj->code : 'не указан'?></a>     
+                    <? elseif ($obj->numberDwg): ?>
                         <a href="<?=Url::to(['/object/drawing', 'obj_id' => $obj->id])?>"><?=$obj->code ? $obj->code : 'не указан'?></a>
                     <? else: ?>
                         <?=$obj->code ? $obj->code : 'не указан'?>

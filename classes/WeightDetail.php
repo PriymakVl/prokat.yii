@@ -27,7 +27,7 @@ class WeightDetail
     
     static private function setDensity($material)
     {
-        self::$density = ($material == '��� 5-5-5') ? 8.8 : 7.85; 
+        self::$density = ($material == 'ОЦС 5-5-5') ? 8.8 : 7.85; 
     }
     
     static private function calculateWeightBar()
@@ -40,58 +40,57 @@ class WeightDetail
         return bcmul($volume, self::$density, 2);  
     }
     
-     private function calculateWeightBush() {
+    static private function calculateWeightBush() {
         $in_volume = self::countVolumeCylinder(self::$dimensions['in_diam'], self::$dimensions['height']);
         $out_volume = self::countVolumeCylinder(self::$dimensions['out_diam'], self::$dimensions['height']);
+        if ($in_volume > $out_volume) {
+            \Yii::$app->session->setFlash('error-order-item', 'Вес не посчитан внутренний диаметр втулки больше наружного');
+            return false;    
+        }
         $bush_volume = $out_volume - $in_volume;
         return bcmul($bush_volume, self::$density, 2);
     }
     
-    private function calculateWeightShaft() {
+    static private function calculateWeightShaft() {
         $volume = self::countVolumeCylinder(self::$dimensions['diam'], self::$dimensions['length']);
         return bcmul($volume, self::$density, 2);
     }
     
-    private function calculateWeightBolt() {
-        $rod_volume = self::countVolumeCylinder(self::$dimensions['thread'], self::$dimensions['length']);
-        $head_volume = self::countHeadVolumeBolt();
-        $volume = $rod_volume + $head_volume;
-        return bcmul($volume, self::$density, 2);  
+    static private function calculateWeightBolt() {
+        $data = file('files/data/bolt_weight.txt');
+        $threads = explode(';', $data[0]);
+        $index = array_search(self::$dimensions['thread'], $threads);
+        
+        for ($i = 1; $i < count($data); $i++) {
+            $row = explode(';', $data[$i]);
+            if ($row[0] == self::$dimensions['length']) {
+                return round(($row[$index] / 1000), 3, PHP_ROUND_HALF_UP);   
+            }
+            else continue;    
+        }
+        return false;
     }
     
-    private function countVolumeCylinder($diam, $height)
+    static private function countVolumeCylinder($diam, $height)
     {
         $radius = ($diam / 2) / 1000;
         $square = bcmul($radius, $radius, 6);
         $area = bcmul($square, M_PI, 6);
         return bcmul($area, $height, 6);
     }
-    
-    private function countVolumeHexahedron($side, $height)
+
+    static private function countWeightHexahedron($in_diam, $length)
     {
-        $const = 2.1213;
-        $area = bcmul($const, ($side / 1000), 6);
-        return bcmul($area, $height, 6);
+        $weights_metеr = ['10'=>'0.68', '13'=>'1.15', '16'=>'1.74', '18'=>'2.2', '21'=>'3', '24'=>'3.92', '27'=>'5.33',
+            '30'=>'6.12', '34'=>'7.86', '36'=>'8.81', '41'=>'11,99', '46'=>'14.95', '55'=>'20.58', '65'=>'28.7', '75'=>'38.24'];
+        $weight_meter = $weights_metеr[$in_diam];
+        return bcmul($weight_meter, ($length / 1000), 3); 
     }
     
-    private function countHeadVolumeBolt()
+    static private function calculateWeightNut()
     {
-        $side = self::getLengthSideHeadBolt();
-        $height = self::getHeightHeadBolt();
-        return self::countVolumeHexahedron($side, $height);
-    }
-    
-    private function getLengthSideHeadBolt()
-    {
-        $sizes = ['6' => '5', '8' => '7.5', '10' => '8', '12' => '9', '14' => '10.5', '16' => '12', '18' => '13.5',
-        '20' => '15', '22' => '17', '24' => '18', '27' => '20.5', '30' => '23', '36' => '27.5', '42' => '32.5', '48' => '37.5'];
-        return $sizes[self::$dimensions['thread']];
-    }
-    
-    private function getHeightHeadBolt()
-    {
-        $sizes = ['6' => '4', '8' => '5.3', '10' => '6.4', '12' => '7.5', '14' => '8.8', '16' => '10', '18' => '12',
-        '20' => '12.5', '22' => '14', '24' => '15', '27' => '17', '30' => '18.7', '36' => '22.5', '42' => '26', '48' => '30'];
-        return $sizes[self::$dimensions['thread']];
+        $weights = ['5' => '0.001', '6' => '0.002', '8' => '0.005', '10' => '0.011', '12' => '0.015', '14' => '0.025', '16' => '0.033', 
+        '18' => '0.047', '20' => '0.063', '22' => '0.077', '24' => '0.107', '27' => '0.161', '30' => '0.225', '36' => '0.377', '42' => '0.624', '48' => '0.956'];
+        return $weights[self::$dimensions['thread']];
     }
 }

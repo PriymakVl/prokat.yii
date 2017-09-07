@@ -67,7 +67,9 @@ $this->registerCssFile('/css/order.css');
                     
                     <!-- name -->
                     <td>
-                        <a href="<?=Url::to(['/order/content/item', 'item_id' => $item->id])?>"><?=$item->name.' '.$item->dimensions?></a>
+                        <a href="<?=Url::to(['/order/content/item', 'item_id' => $item->id])?>"><?=$item->name?></a>
+                        <?=$item->delivery ? '<span> (Доставляет заказчик)</span>' : '' ?>
+                        <br /><span><?=$item->dimensions?></span>
                     </td>
                     
                     <!-- count -->

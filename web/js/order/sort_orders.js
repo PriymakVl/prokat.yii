@@ -2,19 +2,36 @@ $(document).ready(function() {
     $('#order-period').change(function() {
         var period = $(this).find('option:selected').val();
         var gets = buidGetString('period', period);
-        location.href = 'http://' + location.host + '/order/list?' + gets;    
+        if (period) location.href = 'http://' + location.host + '/order/list?' + gets;  
+        else location.href = 'http://' + location.host + '/order/list';  
     }); 
     
     $('#order-customer').change(function() {
         var customer = $(this).find('option:selected').val();
         var gets = buidGetString('customer', customer);
-        location.href = 'http://' + location.host + '/order/list?' + gets;    
+        if (customer) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
     });
     
-    $('#order-area').change(function() {
-        var area = $(this).find('option:selected').val();
-        var gets = buidGetString('area', area);
-        location.href = 'http://' + location.host + '/order/list?' + gets;    
+    $('#order-section').change(function() {
+        var section_id = $(this).find('option:selected').val();
+        var gets = buidGetString('section', section_id);
+        if (section_id) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
+    });
+    
+    $('#order-equipment').change(function() {
+        var equipment_id = $(this).find('option:selected').val();
+        var gets = buidGetString('equipment', equipment_id);
+        if (equipment_id) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
+    });
+    
+    $('#order-unit').change(function() {
+        var unit_id = $(this).find('option:selected').val();
+        var gets = buidGetString('unit', unit_id);
+        if (unit_id) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
     });
     
  

@@ -9,12 +9,15 @@ use app\models\BaseModel;
 use app\modules\objects\logic\ObjectLogic;
 use app\logic\BaseLogic;
 use app\modules\order\logic\OrderLogic;
+use app\modules\drawing\logic\DrawingLogic;
 
 class Objects extends BaseModel
 {
     public $name;
     public $parent;
     public $drawings;
+    public $numberDwg;
+    public $pathDwg;
     public $dwg;
     public $child;
     public $orders;
@@ -58,7 +61,7 @@ class Objects extends BaseModel
         //else if ($sort == 'app')
         else if ($sort == 'highlight') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id, 'color' => 1])->orderBy(['item' => SORT_ASC])->all();
         else $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $children = self::executeMethods($children, ['getOrders', ['convertDimensions', ['dimensions']]]);
+        $children = self::executeMethods($children, ['getOrders', 'getNumberOfDrawings', ['convertDimensions', ['dimensions']]]);
         if ($sort == 'order') $children = ObjectLogic::selectObjectsWithOrder($children);
         return ObjectLogic::prepareChildren($children); 
     }
@@ -70,9 +73,17 @@ class Objects extends BaseModel
         return $this;    
     }
     
-    public function checkDrawing()
+    public function getNumberOfDrawings()
     {
-        $this->dwg = ObjectLogic::checkDrawing($this); 
+        $drawings = ObjectLogic::getDrawings($this);
+        $this->numberDwg = DrawingLogic::countOfNumberDrawingsObject($drawings);
+        if ($this->numberDwg == 1) {
+            if ($drawings['danieli']) $this->dwg = $drawings['danieli'][0];
+            else if ($drawings['department']) $this->dwg = $drawings['department'][0];
+            else if ($drawings['works']) $this->dwg = $drawings['works'][0];
+            else if ($drawings['standard_danieli']) $this->dwg = $drawings['standard_danieli'][0];
+            $this->pathDwg = DrawingLogic::getPathDrawing($this->dwg);    
+        }
         return $this;      
     }
     

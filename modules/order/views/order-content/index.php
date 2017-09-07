@@ -21,9 +21,16 @@ $this->registerCssFile('/css/order.css');
     <? endif; ?>
     
     <!-- info create of item order -->
-    <?php if (Yii::$app->session->hasFlash('success-order-item')): ?>
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
       <div class="alert alert-success alert-dismissable margin-top-15">
-          <?= Yii::$app->session->getFlash('success-order-item') ?>
+          <?= Yii::$app->session->getFlash('success') ?>
+      </div>
+    <?php endif; ?>
+    
+    <!-- info error create of item order -->
+    <?php if (Yii::$app->session->hasFlash('error')): ?>
+      <div class="alert alert-danger alert-dismissable margin-top-15">
+          <?= Yii::$app->session->getFlash('error') ?>
       </div>
     <?php endif; ?>
     
@@ -100,12 +107,15 @@ $this->registerCssFile('/css/order.css');
             </td>
         </tr>
         <!-- material -->
-        <tr>
-            <td class="text-center">Материал</td>
-            <td>
-                <?=$item->material ? $item->material : '<span style="color:red;">Не указан</span>'?>
-            </td>
-        </tr>
+        <? if ($item->material != 'Cб'): ?>
+            <tr>
+                <td class="text-center">Материал</td>
+                <td>
+                    <?=$item->material ? $item->material : '<span style="color:red;">Не указан</span>'?>
+                </td>
+            </tr>
+        <? endif; ?>
+        
         <!-- weight one -->
         <tr>
             <td class="text-center">Вес 1 детали(узла)</td>

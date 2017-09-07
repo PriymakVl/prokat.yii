@@ -18,6 +18,8 @@ class Order extends BaseModel
     const STATE_ACTIVE = 2;
     const STATE_CLOSED = 3;
     const STATE_NOT_ACCEPTED = 4;
+    const STATE_PERMANENT = 5;
+    
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
     
@@ -37,7 +39,7 @@ class Order extends BaseModel
     {
         $order = self::getOne($order_id, __METHOD__, self::STATUS_ACTIVE);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
-                ->getFullCustomer()->getFullIssuer()->convertArea()->convertState()->convertPeriod()->checkActive('order-active');
+                ->getFullCustomer()->getFullIssuer()->convertLocation()->convertState()->convertPeriod()->checkActive('order-active');
         return $order;   
     }
     
@@ -56,6 +58,7 @@ class Order extends BaseModel
     public static function getOrderList($params)
     {
         if ($params['state'] == self::STATE_DRAFT) $query = self::find()->where($params);
+        else if ($params['state'] == self::STATE_PERMANENT) $query = self::find()->where($params);
         else $query = self::find()->where($params)->andWhere(['!=', 'state', self::STATE_DRAFT]);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['number' => SORT_DESC])->all();
@@ -155,9 +158,11 @@ class Order extends BaseModel
         return $this;
     }
     
-    public function convertArea()
+    public function convertLocation()
     {
-        $this->area = OrderLogic::convertArea($this->area);
+        $this->section = OrderLogic::convertLocation($this->section);
+        if ($this->section) $this->equipment = OrderLogic::convertLocation($this->equipment);
+        if ($this->equipment) $this->unit = OrderLogic::convertLocation($this->unit);
         return $this;
     }
     

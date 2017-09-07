@@ -11,7 +11,7 @@ class OrderContentFormComponentWidget extends Widget
 
     public function run()
     {
-        if ($this->template == 'material') $template = 'order_content_form_material';
+        if ($this->template == 'material') $template = 'content_form_material';
         return $this->render($template);
     }
 

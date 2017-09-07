@@ -3,6 +3,7 @@
 namespace app\modules\order\widgets;
 
 use yii\base\Widget;
+use app\modules\drawing\logic\DrawingLogic;
 
 class OrderFormTabWidget extends Widget 
 {
@@ -26,9 +27,6 @@ class OrderFormTabWidget extends Widget
             case 'main': return 'order_form_main'; break;
             case 'other': return 'order_form_other'; break;
             case 'work': return 'order_form_work'; break;
-            case 'main_content': return 'content_form_main'; break;
-            case 'other_content': return 'content_form_other'; break;
-            case 'dimensions_content': return 'content_form_dimensions'; break;
         }
     }
 
