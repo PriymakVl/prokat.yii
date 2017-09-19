@@ -16,8 +16,14 @@ class OrderLogic extends BaseLogic
     
     const CURRENT_PERIOD = 4;
 	const UNDEFINED_PERIOD = 1;
+    
+    const TYPE_ENHANCEMENT = 1; //улучшение
+    const TYPE_MAKING = 4; //изготовление
+    const TYPE_MAINTENANCE = 5; //текущий ремонт
+    const TYPE_CAPITAL_REPAIR = 6; // капитальный ремонт
+    
 
-    public static function getParams($period, $customer, $section = null, $equipment = null, $unit = null, $state = null)
+    public static function getParams($period, $customer, $section = null, $equipment = null, $unit = null, $state = null, $type = null)
     {
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
@@ -28,17 +34,18 @@ class OrderLogic extends BaseLogic
         if ($section) $params['section'] = $section;
         if ($equipment) $params['equipment'] = $equipment;
         if ($unit) $params['unit'] = $unit;
-        if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
+        if ($type) $params['type'] = $type;
+        //if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
         return $params;   
     }
     
     public static function convertType($type)
     {
         switch($type) {
-            case '1' : return 'улучшение'; break;
-            case '4' : return 'изготовление'; break;
-            case '5' : return 'текущий ремонт'; break;
-            case '6' : return 'капитальный ремонт'; break;
+            case self::TYPE_ENHANCEMENT : return 'Улучшение'; break;
+            case self::TYPE_MAKING : return 'Изготовление'; break;
+            case self::TYPE_MAINTENANCE : return 'Текущий ремонт'; break;
+            case self::TYPE_CAPITAL_REPAIR : return 'Капитальный ремонт'; break;
         }
     }
     
@@ -90,9 +97,10 @@ class OrderLogic extends BaseLogic
         $number_dwg = DrawingLogic::countOfNumberDrawingsObject($drawings);
         if ($number_dwg != 1) return $item;
         if (count($drawings['department']) == 1) $item = self::setDrawingDepartment($drawings['department'][0], $item);
-        else if (count($drawings['vendor']) == 1) $item = self::setDrawingVendor($drawings['vendor'][0], $item);
+        else if (count($drawings['danieli']) == 1) $item = self::setDrawingDanieli($drawings['danieli'][0], $item);
+        else if (count($drawings['sundbirsta']) == 1) $item = self::setDrawingSundbirsta($drawings['sundbirsta'][0], $item);
         else if (count($drawings['works']) == 1) $item = self::setDrawingWorks($drawings['works'][0], $item);
-        else if (count($drawings['standard']) == 1) $item = self::setDrawingStandard($drawings['standard'][0], $item); 
+        else if (count($drawings['standard_danieli']) == 1) $item = self::setDrawingStandardDanieli($drawings['standard_danieli'][0], $item); 
         return $item;    
     }
     
@@ -105,10 +113,18 @@ class OrderLogic extends BaseLogic
         return $item;    
     }
     
-    private static function setDrawingVendor($dwg, $item)
+    private static function setDrawingDanieli($dwg, $item)
     {
-        $item->cat_dwg = 'vendor';  
-        if ($item->equipment == 'danieli') $item->drawing = $item->getCodeWithoutVariant($dwg->code);
+        $item->cat_dwg = 'danieli';  
+        $item->drawing = $item->getCodeWithoutVariant($dwg->code);
+        if (!$item->file) $item->file = $dwg->file; 
+        return $item; 
+    }
+    
+    private static function setDrawingSundbirsta($dwg, $item)
+    {
+        $item->cat_dwg = 'sundbirsta';  
+        if ($item->equipment == 'sundbirsta') $item->drawing = $dwg->code;
         if (!$item->file) $item->file = $dwg->file; 
         return $item; 
     }
@@ -124,10 +140,10 @@ class OrderLogic extends BaseLogic
         return $item;
     }
     
-    private static function setDrawingStandard($dwg, $item)
+    private static function setDrawingStandardDanieli($dwg, $item)
     {
-        $item->cat_dwg = 'standard';  
-        if ($item->equipment == 'danieli') $item->drawing = $item->code;
+        $item->cat_dwg = 'standard_danieli';  
+        $item->drawing = $item->getCodeWithoutVariant($dwg->code);
         if (!$item->file) $item->file = $dwg->file;  
         return $item;
     }
@@ -135,10 +151,11 @@ class OrderLogic extends BaseLogic
     public static function getPathDrawing($item)
     {
         if (!$item->equipment || !$item->file || !$item->cat_dwg) return null;
-        if ($item->cat_dwg == 'vendor') return '/files/vendor/'.$item->equipment.'/'.$item->file; 
+        if ($item->cat_dwg == 'danieli') return '/files/vendor/danieli/'.$item->file;
+        else  if ($item->cat_dwg == 'sundbirsta') return '/files/vendor/sundbirsta'.$item->file; 
         else  if ($item->cat_dwg == 'department') return '/files/department/'.$item->file;
         else if ($item->cat_dwg == 'works') return '/files/works/'.$item->file;
-        else if ($item->cat_dwg == 'standard') return '/files/standard/'.$item->equipment.'/'.$item->file;
+        else if ($item->cat_dwg == 'standard_danieli') return '/files/standard/danieli/'.$item->file;
         else return null;
     }
     
@@ -327,7 +344,7 @@ class OrderLogic extends BaseLogic
         return $dimen_str;      
     }
     
-    public function getNumberOfFutureOrder()
+    public static function getNumberOfFutureOrder()
     {
         $current_period = '1491253200';
         //$sql = "SELECT * FROM `orders` WHERE `date` > ".$current_period." AND `status` = '1' ORDER BY `number` DESC";
@@ -339,7 +356,7 @@ class OrderLogic extends BaseLogic
         return $orders[0]['number'] + 1;
     }
     
-    public function getIdAciveOrder($message)
+    public static function getIdAciveOrder($message)
     {
         $order_id = self::getActive('order-active');
         if ($order_id) return $order_id;

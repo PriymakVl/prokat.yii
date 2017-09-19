@@ -18,7 +18,7 @@
 
 #order-content-item-material {
     position: absolute;
-    top: 285px;
+    top: 220px;
     left: 360px;
 }
 
@@ -28,20 +28,20 @@
 
 .field-ordercontentform-count {
     position: absolute;
-    top: 135px;
-    left: 185px;    
+    top: 70px;
+    left: 150px;    
 }
 
 .field-ordercontentform-weight {
     position: absolute;
-    top: 135px;
-    left: 350px;    
+    top: 70px;
+    left: 280px;    
 }
 
 .field-ordercontentform-delivery {
     position: absolute;
-    top: 160px;
-    left: 520px;     
+    top: 94px;
+    left: 410px;     
 }
 
 .field-ordercontentform-sheet {
@@ -195,19 +195,35 @@
   left: 525px;    
 }
 
+#order-dwg-options-wrp {
+    position: relative;
+}
 
-/**
- * #ordercontentform-shaft_length, #ordercontentform-shaft_diam {
- *     width: 100px;
- *     padding-right: 50px;    
- * }
+.field-ordercontentform-type_dwg {
+    position: absolute;
+    left: 220px;
+    top: 25px;
+}
 
- * #ordercontentform-bush_height, #ordercontentform-bush_inner_diam, #ordercontentform-bush_out_diam {
- *     width: 100px;
- *     padding-right: 50px;    
- * }
+.field-ordercontentform-filename {
+    position: absolute;
+    left: 415px;
+    top: 0;
+}
 
- * #nut-dimensions-wrp, #bolt-dimensions-wrp, #shaft-dimensions-wrp, #bush-dimensions-wrp {
- *     position: relative;
- * }
- */
+.field-ordercontentform-file {
+    display: none;
+    position: absolute;
+    left: 400px;
+    top: 5px;
+}
+
+.equipment-invetory-box {
+    position: relative;
+}
+
+.field-orderform-inventory {
+    position: absolute;
+    top: 0;
+    left: 450px;
+}

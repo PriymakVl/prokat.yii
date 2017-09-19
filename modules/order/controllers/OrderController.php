@@ -19,10 +19,10 @@ class OrderController extends BaseController
         return $this->render('index', compact('order', 'session'));
     }
     
-    public function actionList($period = null, $customer = null, $section = null, $equipment = null, $unit = null)
+    public function actionList($period = null, $customer = null, $section = null, $equipment = null, $unit = null, $type = null)
     {
         $state = Yii::$app->request->get('state');
-        $params = OrderLogic::getParams($period, $customer, $section, $equipment, $unit, $state);
+        $params = OrderLogic::getParams($period, $customer, $section, $equipment, $unit, $state, $type);
         $list = Order::getOrderList($params);
         $pages = Order::$pages;
         return $this->render('list', compact('list', 'params', 'pages', 'state'));
@@ -31,7 +31,7 @@ class OrderController extends BaseController
     public function actionForm($order_id = null) 
     { 
         $order = Order::getOne($order_id, null, self::STATUS_ACTIVE);
-        if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer();
+        if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer()->convertLocation();
         //debug($order->state);
         $form = new OrderForm($order);
         $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()

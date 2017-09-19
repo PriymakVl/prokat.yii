@@ -33,6 +33,7 @@ class DrawingDepartmentController extends BaseController
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, null, self::STATUS_ACTIVE);
         $dwg->getFullNumber();
+        $obj_id = $obj_id ? $obj_id : $dwg->obj_id;
         $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
         if ($obj) $obj->getName();
         $form = new DrawingDepartmentForm();

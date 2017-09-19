@@ -35,7 +35,7 @@ $this->registerCssFile('/css/order.css');
     </div>
     
     <!-- order data -->
-    <table>
+    <table class="margin-top-15">
         <tr>
             <th width="180">Наименование</th>
             <th width="545">Значение</th>
@@ -83,14 +83,12 @@ $this->registerCssFile('/css/order.css');
         <? endif; ?>
 
         <!-- equipment -->
-        <? if ($order->equipment): ?>
             <tr>
                 <td class="text-center">Агрегат, механизм</td>
                 <td>
-                    <?=$order->equipment?>
+                    <?=$order->equipment ? $order->equipment : '<span style="color:red;">Не указан</span>'?>
                 </td>
             </tr>
-        <? endif; ?>
         
         <!-- unit -->
         <? if ($order->unit): ?>
@@ -99,8 +97,16 @@ $this->registerCssFile('/css/order.css');
                 <td>
                     <?=$order->unit?>
                 </td>
-            </tr
+            </tr>
         <? endif; ?>
+        
+        <!-- inventory -->
+        <tr>
+            <td class="text-center">Инвентар. номер</td>
+            <td>
+                <?=$order->inventory ? $order->inventory : '<span style="color:red;">Не указан</span>'?>
+            </td>
+        </tr>
         
         <!-- type -->
         <tr>
@@ -109,6 +115,7 @@ $this->registerCssFile('/css/order.css');
                 <?=$order->type?>
             </td>
         </tr>
+        
         <!-- weight -->
         <tr>
             <td class="text-center">Вес заказа</td>

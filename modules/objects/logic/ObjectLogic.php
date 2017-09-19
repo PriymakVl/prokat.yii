@@ -41,17 +41,6 @@ class ObjectLogic extends BaseLogic
         else return null;
     }
     
-//    public static function checkDrawing($obj)
-//    {
-//        $drawings['danieli'] = DrawingDanieli::check($obj);
-//        $drawings['works'] = DrawingWorks::check($obj);
-//        $drawings['department'] = DrawingDepartment::check($obj);
-//        $drawings['standard_danieli'] = DrawingStandardDanieli::check($obj);
-//        if ($drawings['danieli'] || $drawings['works'] || $drawings['department'] || $drawings['standard_danieli']) return true;
-//        else return false;
-//        //return self::checkArray($drawings);    
-//    }
-    
     //that objects do not occur in the specification in copy
     public static function deleteExistingObjects($objects, $children)
     {
@@ -90,6 +79,39 @@ class ObjectLogic extends BaseLogic
             if ($object->orders) $objs_order[] = $object;
         }
         return $objs_order;
+    }
+    
+    public static function setDimensions($item)
+    {
+        if (!$item->type_dimensions) return null;
+        else $dimensions['type'] = $item->type_dimensions;
+ 
+        if ($item->type_dimensions == 'nut') {
+            $dimensions['thread'] = $item->nut_thread;
+            $dimensions['pitch'] = $item->nut_pitch; 
+			$dimensions['class'] = $item->nut_class;			
+        }
+        else if ($item->type_dimensions == 'bolt') {
+            $dimensions['thread'] = $item->bolt_thread;
+            $dimensions['pitch'] = $item->bolt_pitch; 
+            $dimensions['length'] = $item->bolt_length;   
+            $dimensions['class'] = $item->bolt_class;   
+        }
+        else if ($item->type_dimensions == 'shaft') {
+            $dimensions['diam'] = $item->shaft_diam; 
+            $dimensions['length'] = $item->shaft_length;   
+        }
+        else if ($item->type_dimensions == 'bush') {
+            $dimensions['in_diam'] = $item->bush_in_diam;
+            $dimensions['out_diam'] = $item->bush_out_diam; 
+            $dimensions['height'] = $item->bush_height;   
+        }
+        else if ($item->type_dimensions == 'bar') {
+            $dimensions['height'] = $item->bar_height; 
+            $dimensions['length'] = $item->bar_length;   
+            $dimensions['width'] = $item->bar_width;   
+        }
+        return $dimensions;
     }
 
 

@@ -34,7 +34,7 @@ $this->registerCssFile('/css/standard.css');
     <?php endif; ?>
     
     <!-- data of order -->
-    <table id="standart-list">
+    <table id="standart-list" class="margin-top-15">
         <tr>
             <th width="30">
                 <input type="checkbox" name="order" id="checked-all" />

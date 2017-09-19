@@ -19,7 +19,6 @@ class OrderContentController extends BaseController
     { 
         $item = OrderContent::getOne($item_id, false, self::STATUS_ACTIVE)->countWeightAll()->getPathDrawing()->getWeight()
             ->getDrawing()->getMaterialWithGost()->getDimensions();
-            //debug($item);
         $order = Order::findOne($item->order_id);
         $order->getNumber()->checkActive('order-active');
         return $this->render('index', compact('order', 'item'));
@@ -40,11 +39,12 @@ class OrderContentController extends BaseController
         $item = OrderContent::getOne($item_id, null, self::STATUS_ACTIVE);
         if ($item) $item->dimensions = unserialize($item->dimensions);
         //debug($item->dimensions['type']);
-        $form = new OrderContentForm();
+        $form = new OrderContentForm($item);
+        $form->getNewNumberDepartmentDwg();
         
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($item)) { 
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
             Yii::$app->session->setFlash('success-order-item', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
-            return $this->redirect(['/order/content/item', 'item_id' => $form->item_id]);
+            return $this->redirect(['/order/content/item', 'item_id' => $form->element->id]);
         }   
         return $this->render('form', compact('item', 'form', 'order'));
     }
@@ -64,17 +64,17 @@ class OrderContentController extends BaseController
         
     }
     
-    public function actionAddObjectForm($order_id, $code)
-    {
-        $object = Objects::findOne(['code' => $code, 'status' => self::STATUS_ACTIVE]);  
-        if (!$object) {
-            //Yii::$app->getSession()->setFlash('error', 'Your Text Here..');  
-            //return $this->redirect(['/order/content/list', 'order_id' => $order_id]); 
-            exit('not find object by code');
-        }
-        $item = OrderLogic::saveParamsFromObject($object, $order_id);
-        $this->redirect(['/order/content/item', 'item_id' => $item->id]);
-    }
+//    public function actionAddObjectForm($order_id, $code)
+//    {
+//        $object = Objects::findOne(['code' => $code, 'status' => self::STATUS_ACTIVE]);  
+//        if (!$object) {
+//            //Yii::$app->getSession()->setFlash('error', 'Your Text Here..');  
+//            //return $this->redirect(['/order/content/list', 'order_id' => $order_id]); 
+//            exit('not find object by code');
+//        }
+//        $item = OrderLogic::saveParamsFromObject($object, $order_id);
+//        $this->redirect(['/order/content/item', 'item_id' => $item->id]);
+//    }
     
     public function actionAddOne($obj_id)
     {

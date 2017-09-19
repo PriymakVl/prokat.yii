@@ -27,6 +27,7 @@ class OrderForm extends BaseForm
     public $section;
     public $equipment;
     public $unit;
+    public $inventory; //inventory number
     //form
     public $sections;
     public $equipments;
@@ -47,7 +48,7 @@ class OrderForm extends BaseForm
         return [
             [['name', 'type', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['name', 'note', 'issuer', 'customer', 'work', 'weight', 'service', 'description'],  'string'],
-            [['unit', "equipment"], 'string'],
+            [['unit', 'equipment', 'inventory'], 'string'],
             [['section', 'state'], 'integer'],
             ['number','checkNumber'],
             [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
@@ -69,6 +70,7 @@ class OrderForm extends BaseForm
         $this->order->issuer = $this->getIssuer();
         $this->order->customer = $this->getCustomer();
         $this->order->note = $this->note;
+        $this->order->inventory = $this->inventory;
         $this->order->service = $this->service;
         $this->order->date = strtotime($this->prepareDateForConvert($this->date));
 
@@ -83,6 +85,7 @@ class OrderForm extends BaseForm
         $this->order->number = $this->number;
         $this->order->state = $this->number ? $this->state : Order::STATE_DRAFT;
         $this->order->period = OrderLogic::getPeriod($this->order->date);
+        //debug($this);
         return $this->order->save();
     }
     

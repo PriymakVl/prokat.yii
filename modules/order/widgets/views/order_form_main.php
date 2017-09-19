@@ -2,6 +2,7 @@
 use yii\jui\DatePicker;
 use yii\web\JqueryAsset;
 use app\modules\order\models\Order;
+use app\modules\order\logic\OrderLogic;
 
 $this->registerJsFile('/js/order/form_order_get_equipment.js');
 $this->registerJsFile('/js/order/form_set_customer_issuer.js');
@@ -37,7 +38,8 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
     	<!-- type -->
         <?php 
             $form->type = $order ? $order->type : '4';
-            $types = ['4' => 'Изготовление (4)', '5' => 'Тек. ремонт (5)', '6' => 'Кап. ремонт (6)', '1' => 'Улучшение (1)'];
+            $types = [Orderlogic::TYPE_MAKING => 'Изготовление (4)', Orderlogic::TYPE_MAINTENANCE => 'Тек. ремонт (5)', 
+            Orderlogic::TYPE_CAPITAL_REPAIR => 'Кап. ремонт (6)',  Orderlogic::TYPE_ENHANCEMENT=> 'Улучшение (1)'];
             echo $f->field($form, 'type')->dropDownList($types)->label('Статья затрат:');
         ?>
     </div><!-- /top-box -->
@@ -87,12 +89,17 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
         
     </div><!-- /middle box -->
     
+    <div class="equipment-invetory-box">
+        <!-- equipment -->          
+        <?=$f->field($form, 'equipment')->textInput(['style' => 'width:425px', 'value' => $order->equipment])->label('Агрегат, механизм:')?>
     
-    <!-- equipment -->          
-    <?=$f->field($form, 'equipment')->textInput()->label('Агрегат, механизм:')?>
+        <!-- unit -->          
+        <?=$f->field($form, 'unit')->textInput(['value' => $order->unit])->label('Узел:')?>
+        
+        <!-- inventory -->          
+        <?=$f->field($form, 'inventory')->textInput(['style' => 'width:200px'])->label('Инвентарный номер:')?>
+    </div>
     
-    <!-- unit -->          
-    <?=$f->field($form, 'unit')->textInput()->label('Узел:')?>
 	
     <!-- issuer -->
     <div class="issuer-box">

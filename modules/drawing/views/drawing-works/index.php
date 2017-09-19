@@ -1,12 +1,10 @@
 <?php
 
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
+use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
 use app\modules\drawing\widgets\DrawingWorksTopMenuWidget;
-use app\modules\drawing\widgets\DrawingFileMenuWidget;
 
 $this->registerCssFile('/css/drawing.css');
 
@@ -24,100 +22,67 @@ $this->registerCssFile('/css/drawing.css');
         
         <!-- name -->
         <tr>
+            <td>Название</td>
             <td>
-                <? if ($dwg->type == 'folder'): ?>
-                    Название папки
-                <? else: ?>
-                    Назание чертежа
-                <? endif; ?></td>
-            <td>
-                <? if ($dwg->child): ?>
-                    <a href="<?=Yii::$app->urlManager->createUrl(['drawing/works/specification', 'dwg_id' => $dwg->id])?>"><?=$dwg->name?></a>
-                <? else: ?>
-                    <?=$dwg->name?>
-                <? endif; ?>              
+                <?=$dwg->name?>           
             </td>
         </tr>
         
         <!-- number -->
-        <? if ($dwg->number): ?>
-            <tr>
-                <td>
-                    <? if ($dwg->type == 'folder'): ?>
-                        Номер папки
-                    <? else: ?>
-                        Номер чертежа
-                    <? endif; ?>
-                </td>
-                <td>
-                    <? if($dwg->type == 'folder'): ?>
-                        <?= Html::a('папка №'.$dwg->id, ['/drawing/works/folder/', 'dwg_id' => $dwg->id]) ?>
-                    <? elseif(count($dwg->files) > 1): ?>
-                        <?= Html::a($dwg->number, ['/drawing/works/files', 'dwg_id' => $dwg->id]) ?>
-                    <? elseif($dwg->files): ?>
-                        <?= Html::a($dwg->number, ['/files/works/'.$dwg->files[0]->file]) ?>
-                    <? else: ?>
-                        <?=$dwg->number?>
-                    <? endif; ?>
-                </td>
-            </tr>
-        <? endif ?>
-        
-        <!--  parent -->
-        <? if ($dwg->parent): ?>
-            <tr>
-                <td>Сборочный чертеж</td>
-                <td>
-                    <a href="<?=Yii::$app->urlManager->createUrl(['drawing/works/specification', 'dwg_id' => $dwg->parent->id])?>"><?=$dwg->parent->name?></a>
-                </td>
-            </tr>
-        <? endif; ?>
-        
-        <!-- item -->
-        <? if ($dwg->parent): ?>
-        <tr>
-            <td>Позиция</td>
+        <tr>    
+            <td>Номер</td>
             <td>
-                <?=$dwg->item?>
+                <?=$dwg->number?>
+            </td>
+        </tr>
+        
+        <!-- sheet 1 -->
+        <tr>
+            <td>Лист 1</td>
+            <td>
+                <? if ($dwg->sheet_1): ?>
+                    <a href="<?=Url::to(['/files/works/'.$dwg->sheet_1])?>"><?=$dwg->sheet_1?></a>
+                <? else: ?>
+                <span>Нет файла</span>
+                <? endif; ?>
+            </td>
+        </tr>
+        
+        <!-- sheet 2 -->
+        <? if ($dwg->sheet_2): ?>
+            <tr>
+            <td>Лист 2</td>
+            <td>
+                <?=$dwg->sheet_2?>
             </td>
         </tr>
         <? endif; ?>
         
-        <!-- lists -->
-        <tr>
-            <td>Количество листов</td>
+        <!-- sheet 3 -->
+        <? if ($dwg->sheet_3): ?>
+            <tr>
+            <td>Лист 2</td>
             <td>
-                <?= $dwg->sheets ? $dwg->sheets : 1 ?>
+                <?=$dwg->sheet_3?>
             </td>
         </tr>
-        
-        <!-- type -->
-        <tr>
-            <td>Тип</td>
-            <td>
-                <?=$dwg->typeName?>
-            </td>
-        </tr>
-        
+        <? endif; ?>
+
         <!-- design department -->
-        <? if ($dwg->department): ?>
         <tr>
             <td>Конструкторсий отдел</td>
             <td>
-                <?=$dwg->department?>
+                <?//=$dwg->department ? $dwg->department : 'Не указан'?>
             </td>
         </tr>
-        <? endif; ?>
         
         <!-- desinger -->
-        <? if ($dwg->designer): ?>
         <tr>
             <td>Конструктор</td>
             <td>
-                <?=$dwg->designer?>
+                <?//=$dwg->designer ? $dwg->desinger : 'Не указан'?>
             </td>
         </tr>
-        <? endif; ?>
         
         <!-- date -->
         <tr>
@@ -127,13 +92,6 @@ $this->registerCssFile('/css/drawing.css');
             </td>
         </tr>
 
-        <!-- id drawing -->
-        <tr>
-            <td>ID Dwg</td>
-            <td id="obj-id">
-                <?=$dwg->id?>
-            </td>
-        </tr>
         </table>
         
         <!-- note -->
@@ -150,6 +108,4 @@ $this->registerCssFile('/css/drawing.css');
     <?=DrawingMenuWidget::widget(['dwg_id' => $dwg->id])?>
     
     <?=DrawingMainMenuWidget::widget()?>
-    
-    <?=DrawingFileMenuWidget::widget(['dwg_id' => $dwg->id])?>
 </div>

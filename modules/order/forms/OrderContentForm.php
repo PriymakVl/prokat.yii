@@ -2,6 +2,7 @@
 
 namespace app\modules\order\forms;
 
+use yii\web\UploadedFile;
 use app\forms\BaseForm;
 use app\modules\order\logic\OrderLogic;
 use app\modules\order\models\OrderContent;
@@ -9,6 +10,8 @@ use app\modules\objects\models\Objects;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
 use app\classes\WeightDetail;
+use app\modules\drawing\models\DrawingDepartment;
+use app\modules\drawing\models\DrawingWorks;
 
 class OrderContentForm extends BaseForm
 {   
@@ -26,13 +29,17 @@ class OrderContentForm extends BaseForm
     public $code;
     public $obj_id;
     public $cat_dwg;
-    public $equipment;
+    public $type_dwg;
+    public $filename;
     public $file;
     public $sheet;
     public $variant;
     public $delivery;
     public $dimensions;
     //form
+    public $element;
+    public $newNumberDepartmentDwg;
+    public $newFullNumberDepartmentDwg;
     public $item_id;
     public $type_dimensions;
     public $nut_thread; public $nut_pitch; public $nut_class;
@@ -40,21 +47,27 @@ class OrderContentForm extends BaseForm
     public $shaft_length; public $shaft_diam;
     public $bush_height; public $bush_in_diam; public $bush_out_diam;
     public $bar_height; public $bar_width; public $bar_length;
-    public $typeDwg;
 
+    public function __construct($element)
+    {
+        parent::__construct();
+        if (is_object($element)) $this->element = $element;
+        else $this->element = new OrderContent();      
+    }
     
     public function rules() 
     {
         return [
             ['name', 'required', 'message' => 'Необходимо заполнить поле'],
-            ['name', 'string', 'length' => [4, 40]],
-            [['type_dimensions', 'cat_dwg', 'equipment', 'code', 'typeDwg'], 'string'],
+            ['name', 'string', 'length' => [2, 40]],
+            [['type_dimensions', 'cat_dwg', 'code', 'type_dwg', 'filename'], 'string'],
             [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'bolt_class', 'nut_class', 'bolt_pitch'], 'string'],
             [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_length'], 'integer'],
             [['shaft_length', 'shaft_diam', 'bush_height', 'bush_in_diam', 'bush_out_diam'], 'integer'],
             [['bar_length', 'bar_height', 'bar_width'], 'integer'],
             [['count', 'item', 'rating', 'obj_id', 'delivery',], 'default', 'value' => 0],
             ['sheet', 'default', 'value' => 1],
+            ['file', 'file', 'extensions' => ['tif', 'jpg', 'pdf']],
         ];
     }
     
@@ -63,80 +76,54 @@ class OrderContentForm extends BaseForm
     	return ['order-logic' => ['class' => OrderLogic::className()]];
     }
 
-  public function save($item)
+  public function save()
     {
-        if (!$item) $item = new OrderContent();
-
-        $item->name = $this->name;
-        $item->drawing = $this->drawing;   
-        $item->sheet = $this->sheet;     
-        $item->note = $this->note;
-        $item->count = $this->count;
-        $item->rating = $this->rating;
-        $item->order_id = $this->order_id; 
-        $item->material = $this->material;
-        $item->item = $this->item;
-        $item->dimensions = $this->setDimensions();
-        $item->weight = $this->getWeight();
+        $this->element->name = $this->name;     
+        $this->element->note = $this->note;
+        $this->element->count = $this->count;
+        $this->element->rating = $this->rating;
+        $this->element->order_id = $this->order_id; 
+        $this->element->material = $this->material;
+        $this->element->item = $this->item;
+        $this->dimensions = ObjectLogic::setDimensions($this);
+        if ($this->dimensions) $this->element->dimensions = serialize($this->dimensions);
+        $this->element->weight = $this->getWeight();
+        $this->element->obj_id = $this->obj_id;
         //drawing
-        $item->cat_dwg = $this->cat_dwg;
-        $item->file = $this->file;
-        $item->delivery = $this->delivery;
-        $item->variant = $this->variant;
-        if ($item->code || $item->obj_id) $this->saveParamsForObjects($item);
-        $item->save();
+        $this->setDrawing();
         
-        $this->item_id = $item->id;
+        $this->element->delivery = $this->delivery;
+        $this->element->variant = $this->variant;
+        if ($this->element->code || $this->element->obj_id) $this->saveParamsForObjects();
+        $this->element->save();
         return true;
     }
   
-    private function saveParamsForObjects($item)
+    private function saveParamsForObjects()
     {
-        if (!$item->code) $item->code = Objects::find()->select('code')->where(['id' => $item->obj_id])->column()[0]; 
-        $objects = Objects::findAll(['code' => $item->code, 'status' => Objects::STATUS_ACTIVE]);
+        if (!$this->element->code) $this->element->code = Objects::find()->select('code')->where(['id' => $this->element->obj_id])->column()[0]; 
+        $objects = Objects::findAll(['code' => $this->element->code, 'status' => Objects::STATUS_ACTIVE]);
         foreach ($objects as $obj) {
-            if ($item->name) {
-                if ($obj->id == $obj_id) $obj->order_name = $item->name;
-                else if (!$obj->order_name) $obj->order_name = $item->name;    
+            if ($this->element->name) {
+                if ($obj->id == $obj_id) $obj->order_name = $this->element->name;
+                else if (!$obj->order_name) $obj->order_name = $this->element->name;    
             }
-            if ($item->dimensions) $obj->dimensions = $item->dimensions;
-            if (!$obj->weight && $item->weight) $obj->weight = $item->weight;
+            if ($this->element->dimensions) $obj->dimensions = $this->element->dimensions;
+            if (!$obj->weight && $this->element->weight) $obj->weight = $this->element->weight;
             $obj->save();
         }  
     }
     
-    private function setDimensions()
+    private function setDrawing()
     {
-        if (!$this->type_dimensions) return null;
-        else $dimensions['type'] = $this->type_dimensions;
- 
-        if ($this->type_dimensions == 'nut') {
-            $dimensions['thread'] = $this->nut_thread;
-            $dimensions['pitch'] = $this->nut_pitch; 
-			$dimensions['class'] = $this->nut_class;			
-        }
-        else if ($this->type_dimensions == 'bolt') {
-            $dimensions['thread'] = $this->bolt_thread;
-            $dimensions['pitch'] = $this->bolt_pitch; 
-            $dimensions['length'] = $this->bolt_length;   
-            $dimensions['class'] = $this->bolt_class;   
-        }
-        else if ($this->type_dimensions == 'shaft') {
-            $dimensions['diam'] = $this->shaft_diam; 
-            $dimensions['length'] = $this->shaft_length;   
-        }
-        else if ($this->type_dimensions == 'bush') {
-            $dimensions['in_diam'] = $this->bush_in_diam;
-            $dimensions['out_diam'] = $this->bush_out_diam; 
-            $dimensions['height'] = $this->bush_height;   
-        }
-        else if ($this->type_dimensions == 'bar') {
-            $dimensions['height'] = $this->bar_height; 
-            $dimensions['length'] = $this->bar_length;   
-            $dimensions['width'] = $this->bar_width;   
-        }
-        $this->dimensions = $dimensions;//for function getWeight
-        return serialize($dimensions);
+        $this->element->drawing = $this->drawing;   
+        $this->element->sheet = $this->sheet;  
+        $this->element->cat_dwg = $this->cat_dwg; 
+        if ($this->filename) $this->element->file = $this->filename; 
+        if ($this->type_dwg == 'new') {
+            $obj = $this->saveObject();
+            $this->element->file = $this->saveDrawing($obj);
+        } 
     }
     
     private function getWeight()
@@ -144,6 +131,76 @@ class OrderContentForm extends BaseForm
         if ($this->weight) return $this->weight;
         else if ($this->dimensions) return WeightDetail::calculate($this->dimensions, $this->material);
         return null;    
+    }
+    
+    public function saveDrawing($obj) 
+    {
+        switch($this->cat_dwg) {
+            case 'department': return $this->saveDwgDepartment($obj);
+            case 'works': return $this->saveDwgWorks($obj);
+            //case 'danieli': return $this->saveDwgDanieli();
+            //case 'standard': return new DrawingStandard();
+            //case 'standard_danieli': return $this->saveDwgStandardDanieli();
+            default: return false;
+        }       
+    }
+
+    
+    private function saveDwgDepartment($obj)
+    {
+        $dwg = new DrawingDepartment();
+        $dwg->obj_id = $obj->id;
+        $dwg->code = $obj->code;
+        $dwg->date = time();
+        $dwg->number = $this->newNumberDepartmentDwg;
+        $dwg->name = $obj->rus;
+        $dwg->save();
+        $file = UploadedFile::getInstance($this, 'file');
+        if ($file) $dwg->file = $this->uploadFile($dwg->id, $file, 'department', '_depart');
+        $dwg->save();
+        return $dwg->file;
+    }
+    
+    private function saveDwgWorks($obj)
+    {
+        $dwg = new DrawingWorks();
+        $dwg->obj_id = $obj->id;
+        $dwg->code = $obj->code;
+        //$dwg->parent_id = $obj->parent_id;
+        $dwg->date = time();
+        $dwg->number = $this->drawing;
+        $dwg->name = $obj->rus;
+        $dwg->save();
+        $file = UploadedFile::getInstance($this, 'file');
+        if ($file) $dwg->sheet_1 = $this->uploadFile($dwg->id, $file, 'works', '_works_1');
+        $dwg->save();
+        return $dwg->sheet_1;
+    }
+
+    
+    private function saveObject() 
+    {
+        $obj = new Objects();
+        $obj->rus = $this->name;
+        $obj->alias = $this->name;
+        $obj->order_name = $this->name;
+        $obj->parent_id = 22821;
+        $obj->weight = $this->weight;
+        $obj->dimensions = $this->dimensions;
+        $obj->save();
+        $obj->code = $obj->id.'-code';
+        $obj->save();
+        $this->element->obj_id = $obj->id;
+        $this->element->code = $obj->code;
+        return $obj;    
+    }
+    
+    public function getNewNumberDepartmentDwg()
+    {
+        $this->newNumberDepartmentDwg = DrawingLogic::getNewNumberDepartmentDwg();
+        $year = date('y');
+        $this->newFullNumberDepartmentDwg = '27.'.$this->newNumberDepartmentDwg.'.'.$year;
+        return $this;
     }
 
 //    private function getObject() 

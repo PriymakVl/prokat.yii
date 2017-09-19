@@ -22,7 +22,7 @@ $this->registerCssFile('/css/drawing.css');
      <?=DrawingListTopMenuWidget::widget(['params' => $params])?>
      
     <!-- list dwg -->
-    <table id="department-dwg-all">
+    <table id="department-dwg-all" class="margin-top-15">
         <tr>
             <th width="30">
                 <input type="checkbox" disabled="disabled" />

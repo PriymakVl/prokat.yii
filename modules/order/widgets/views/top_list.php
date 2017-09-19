@@ -1,8 +1,9 @@
 <?php
     use yii\web\JqueryAsset;
+    use app\modules\order\logic\OrderLogic;
     
     $this->registerCssFile('/css/order.css');
-    $this->registerJsFile('js/order/sort_orders.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('/js/order/sort_orders.js');
     //debug($params['customer'], false);
 ?>
 <div class="top-menu top-menu-margin">
@@ -17,7 +18,7 @@
     </select>
 
     <!-- sort customer -->
-     <label>Заказал:</label>
+    <label>Заказал:</label>
     <select id="order-customer">
         <option value="all">Все</option>
         <option value="1" <? if ($params['customer'] == 1) echo 'selected'; ?>>Костырко В.Н.</option>
@@ -28,12 +29,14 @@
         <option value="8" <? if ($params['customer'] == 9) echo 'selected'; ?>>Пасюк В.В.</option>
     </select>
     
-    <!-- sort tags -->
-    <label>Участки:</label>
-    <select id="order-area">
-        <option value="all">Все</option>
-        <? foreach ($sections as $section): ?>
-            <option value="<?=$section->id?>" <? if ($params['section'] == $section->id) echo 'selected'; ?>><?=$section->name?></option>   
-        <? endforeach; ?>
+    <!-- type -->
+    <label>Тип:</label>
+    <select id="order-type">
+        <option value="">Все</option>
+        <option value="<?=Orderlogic::TYPE_MAKING?>" <? if ($params['type'] == Orderlogic::TYPE_MAKING) echo 'selected'; ?>>Изготовление</option>
+        <option value="<?=Orderlogic::TYPE_MAINTENANCE?>" <? if ($params['type'] == Orderlogic::TYPE_MAINTENANCE) echo 'selected'; ?>>Тек. ремонт</option>
+		<option value="<?=Orderlogic::TYPE_CAPITAL_REPAIR?>" <? if ($params['type'] == Orderlogic::TYPE_CAPITAL_REPAIR) echo 'selected'; ?>>Кап. ремонт</option>
+        <option value="<?=Orderlogic::TYPE_ENHANCEMENT?>" <? if ($params['type'] == Orderlogic::TYPE_ENHANCEMENT) echo 'selected'; ?>>Улучшение</option>
     </select>
+        
 </div>

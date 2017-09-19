@@ -1,8 +1,7 @@
 <?php
-    use \yii\web\JqueryAsset;
-    $this->registerJsFile('js/drawing/dwg_list_sort.js',  ['depends' => [JqueryAsset::className()]]);
+    $this->registerJsFile('/js/drawing/dwg_list_sort.js');
 ?>
-<div class="top-menu">
+<div class="top-menu margin-top-15 ">
     <label>Конструкторское бюро:</label>
     <select id="department-dwg">
         <option value="">Все</option>

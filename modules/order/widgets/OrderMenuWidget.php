@@ -10,7 +10,7 @@ class OrderMenuWidget extends Widget
 
     public function run()
     {
-        return $this->render('order', ['order_id' => $this->order_id]);
+        return $this->render('order_menu', ['order_id' => $this->order_id]);
     }
 
 }

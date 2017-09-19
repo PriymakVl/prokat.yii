@@ -21,7 +21,7 @@ class OrderTitleSheetCreateController extends BaseController
     public function actionIndex($order_id) 
     { 
         $this->order = Order::findOne($order_id);
-        $this->order->getNumber();
+        $this->order->getNumber()->countWeightOrder()->convertLocation();
         //debug($this->order);
         $this->objPHPExcel = new \PHPExcel();
         $this->setActiveSheet();
@@ -219,7 +219,7 @@ class OrderTitleSheetCreateController extends BaseController
     {
         $this->activeSheet->setCellValue('A2','РСЦ РМЦ');
         //mechamism
-        $mechanism = $this->order->mechanism == 'неизвесто' ?  '' : $this->order->mechanism;
+        $mechanism = $this->order->equipment == 'неизвесто' ?  '' : $this->order->mechanism;
         $this->activeSheet->setCellValue('A4', $mechanism);
         //unit
         $unit = $this->order->unit == 'неизвесто' ?  '' : $this->order->unit;

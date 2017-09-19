@@ -58,18 +58,6 @@ $this->registerCssFile('/css/drawing.css');
             </td>
         </tr>
         
-        <? if ($dwg->obj->parent): ?>
-            <!-- name parent -->
-            <tr>
-                <td>
-                    Узел
-                </td>
-                <td>
-                    <?= Html::a($dwg->obj->parent->name, ['/object', 'obj_id' => $dwg->obj->parent_id], ['targer' => '_blank']) ?>
-                </td>   
-            </tr>
-        <? endif; ?>
-        
         <!-- note -->
         <? if ($dwg->note): ?>
             <tr>

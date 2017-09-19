@@ -73,7 +73,8 @@ class ObjectDrawingForm extends BaseForm
         $this->dwg->name = $this->nameStandardDanieliDwg; 
         $file = UploadedFile::getInstance($this, 'file');
         $file->saveAs('files/standard/danieli/'.$file->name);
-        //$this->dwg->file = $file->name;
+        $this->dwg->file = $file->name;
+        $this->dwg->note = $this->note;
         return $this->dwg->save();
     }
     

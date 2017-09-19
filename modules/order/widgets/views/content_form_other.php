@@ -1,25 +1,34 @@
+<?
+    $this->registerJsFile('/js/order/set_new_number_department_dwg.js');
+?>
 <div id="content-form-other" style="display:none;">
-    <!-- category of drawing -->
-    <?php 
-        $params = ['prompt' => 'Невыбран'];
-        $categories = ['vendor' => 'Производитель', 'works' => 'ПКО комбината', 'department' => 'Цех', 'standard' => 'Стандарт'];
-        $form->cat_dwg = $item->cat_dwg;
-        echo $f->field($form, 'cat_dwg')->dropDownList($categories, $params)->label('Кто разработал чертеж:');
-    ?>
+
+    <div id="order-dwg-options-wrp">
+        <!-- category of drawing -->
+        <?php
+            $items = ['department' => 'Цех', 'works' => 'ПКО', 'danieli' => 'Danieli', 'sundbirsta' => 'Sundbirsta', 
+                'standard_danieli' => 'Стандарт Danieli', 'standard' => 'Стандарт'];
+            $params = ['prompt' => 'Не выбран', 'style' => 'width:200px'];
+            $form->cat_dwg = $item->cat_dwg;
+            echo $f->field($form, 'cat_dwg')->dropDownList($items, $params)->label('Где создан чертеж:');
+        ?>
+        
+        <!-- type dwg -->
+        <?=$f->field($form, 'type_dwg')->checkbox(['value' => 'new', 'label' => 'Новый чертеж:', 'department_number' => $form->newFullNumberDepartmentDwg])?>
+        
+         <!-- drawing name of file -->          
+        <?=$f->field($form, 'filename')->textInput(['value' => $item->file, 'style' => 'width:200px;'])->label('Файл чертежа:')?>
     
-    <!-- category of drawing -->
-    <?php 
-        $params = ['prompt' => 'Невыбран'];
-        $equipments = ['danieli' => 'Danieli', 'sundbirsta' => 'Sundbirsta', 'crane' => 'Краны', 'gydro' => 'Гидравлика'];
-        $form->equipment = $item->equipment;
-        echo $f->field($form, 'equipment')->dropDownList($equipments, $params)->label('Производитель оборудования:');
-    ?>
+        <!-- drawing file -->
+        <?=$f->field($form, 'file')->fileInput()->label('Выбрать файл:')?>
+    </div>
     
-     <!-- drawing file -->          
-    <?=$f->field($form, 'file')->textInput(['value' => $item->file])->label('Файл чертежа:')?>
     
     <!-- rating -->          
     <?=$f->field($form, 'rating')->textInput(['value' => $item->rating])->label('Рейтинг:')?>
+    
+    <!-- object id -->          
+    <?=$f->field($form, 'obj_id')->textInput(['value' => $item->obj_id])->label('Id объекта:')?>
    
    
    <!-- note -->

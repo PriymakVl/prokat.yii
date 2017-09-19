@@ -16,7 +16,7 @@ class DrawingWorksController extends BaseController
     public function actionIndex($dwg_id) 
     { 
         $dwg = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
-        $dwg->convertDate($dwg)->checkChild()->getParent()->getTypeName()->getFiles();
+        $dwg->convertDate($dwg)->getObject()->getName();
         return $this->render('index', compact('dwg'));
     }
     

@@ -2,7 +2,7 @@
     use \yii\web\JqueryAsset;
     $this->registerJsFile('js/drawing/dwg_list_sort.js',  ['depends' => [JqueryAsset::className()]]);
 ?>
-<div class="top-menu">
+<div class="top-menu margin-top-15">
     <label>Год:</label>
     <select id="year-create-dwg">
         <option value="">Все</option>

@@ -34,6 +34,13 @@ $(document).ready(function() {
         else location.href = 'http://' + location.host + '/order/list';    
     });
     
+    $('#order-type').change(function() {
+        var type = $(this).find('option:selected').val();
+        var gets = buidGetString('type', type);
+        if (type) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
+    });
+    
  
 });
 

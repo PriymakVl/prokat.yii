@@ -37,7 +37,7 @@ class Order extends BaseModel
     
     public static function get($order_id)
     {
-        $order = self::getOne($order_id, __METHOD__, self::STATUS_ACTIVE);
+        $order = self::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
                 ->getFullCustomer()->getFullIssuer()->convertLocation()->convertState()->convertPeriod()->checkActive('order-active');
         return $order;   

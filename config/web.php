@@ -115,6 +115,7 @@ $config = [
                 'order/list/file/save' => 'order/order-list-excel-create', 
                 'order/title/sheet/print' => 'order/order-title-sheet-create',
                 'order/content/sheet/print' => 'order/order-content-sheet-create', 
+                'order/blank/print' => 'order/order-blank-sheet-create', 
                 'order/active/set' => 'order/order/set-active',
                 'order/active/get' => 'order/order/get-active',                
                 'order' => 'order/order', 

@@ -36,12 +36,10 @@ $this->registerCssFile('/css/drawing.css');
                         <input type="checkbox" name="drawing" dwg_id="<?=$dwg->id?>" />
                     </td>
                     <td class="text-center">
-                        <? if($dwg->type == 'folder'): ?>
-                            <?= Html::a('папка №'.$dwg->id, ['/drawing/works/specification/', 'dwg_id' => $dwg->id]) ?>
-                        <? elseif(count($dwg->files) > 1): ?>
-							<a href="<?=Url::to(['/drawing/works/files', 'dwg_id' => $dwg->id])?>"><?=$dwg->number?></a>
-                        <? elseif($dwg->files): ?>
-							<a href="<?=Url::to(['/files/works/'.$dwg->files[0]->file])?>" target="_blank"><?=$dwg->number?></a>
+                        <? if ($dwg->sheet_2 || $dwg->sheet_3): ?>
+							<a href="<?=Url::to(['/drawing/works', 'dwg_id' => $dwg->id])?>"><?=$dwg->number?></a>
+                        <? elseif ($dwg->sheet_1): ?>
+                            <a href="<?=Url::to(['/files/works'.$dwg->sheet_1])?>" target="_blank"><?=$dwg->number?></a>
                         <? else: ?>
                             <?=$dwg->number?>
                         <? endif; ?>
@@ -57,9 +55,6 @@ $this->registerCssFile('/css/drawing.css');
             </tr>
         <? endif; ?>
     </table>
-    
-    <!-- type drawing hidden -->
-    <input type="hidden" value="<?=Yii::$app->controller->id?>" id="dwg-controller"/>
 	
 	<!-- pagination -->
     <div class="pagination-wrp">
@@ -71,9 +66,9 @@ $this->registerCssFile('/css/drawing.css');
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     
-    <?=DrawingListMenuWidget::widget()?>
+    <?//=DrawingListMenuWidget::widget()?>
     
-    <?=DrawingMenuWidget::widget()?>
+    <?//=DrawingMenuWidget::widget()?>
     
     <?=DrawingMainMenuWidget::widget()?>
 </div>
