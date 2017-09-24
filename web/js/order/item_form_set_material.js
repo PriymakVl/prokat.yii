@@ -1,6 +1,11 @@
 $(document).ready(function() {
-    $('#order-content-item-material').change(function() {
+    $('#material-form-wrp .order-content-item-material').change(function() {
         var material = $(this).find('option:selected').val();
-        $('#item-material').val(material);    
-    });   
+        $('#ordercontentform-material').val(material);    
+    }); 
+    
+     $('#material-add-form-wrp .order-content-item-material').change(function() {
+        var material = $(this).find('option:selected').val();
+        $('#ordercontentform-material_add').val(material);    
+    });  
 });

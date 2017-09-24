@@ -68,7 +68,7 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
                 <option name_equ="">Не выбран</option>
                 <? if ($form->equipments): ?>
                     <? foreach ($form->equipments as $equipment): ?>
-                        <option value="<?=$equipment['alias']?>" <? if ($equipment['id'] == $order->equipment) echo 'selected'; ?> equipment_id="<?=$equipment['id']?>"><?=$equipment['name']?></option>
+                        <option value="<?=$equipment['alias']?>" <? if ($equipment['id'] == $order->equipment) echo 'selected'; ?> inventory="<?=$equpment['inventory']?>" name_equ="<?=$equpment['name']?>" equipment_id="<?=$equipment['id']?>"><?=$equipment['name']?></option>
                     <? endforeach; ?>
                 <? endif; ?>
             </select>
@@ -81,7 +81,7 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
                 <option name_unit="">Не выбран</option>
                 <? if ($form->units): ?>
                     <? foreach ($form->units as $unit): ?>
-                        <option value="<?=$unit['alias']?>" <? if ($unit['id'] == $order->unit) echo 'selected'; ?> unit_id="<?=$unit['id']?>"><?=$unit['name']?></option>
+                        <option value="<?=$unit['alias']?>" <? if ($unit['id'] == $order->unit) echo 'selected'; ?> name_unit="<?=$unit['name']?>" unit_id="<?=$unit['id']?>"><?=$unit['name']?></option>
                     <? endforeach; ?>
                 <? endif; ?>
             </select>
@@ -91,13 +91,13 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
     
     <div class="equipment-invetory-box">
         <!-- equipment -->          
-        <?=$f->field($form, 'equipment')->textInput(['style' => 'width:425px', 'value' => $order->equipment])->label('Агрегат, механизм:')?>
+        <?=$f->field($form, 'equipment')->textInput(['value' => $order->equipmentName, 'style' => 'width:425px'])->label('Агрегат, механизм:')?>
     
         <!-- unit -->          
-        <?=$f->field($form, 'unit')->textInput(['value' => $order->unit])->label('Узел:')?>
+        <?=$f->field($form, 'unit')->textInput(['value' => $order->unitName])->label('Узел:')?>
         
         <!-- inventory -->          
-        <?=$f->field($form, 'inventory')->textInput(['style' => 'width:200px'])->label('Инвентарный номер:')?>
+        <?=$f->field($form, 'inventory')->textInput(['value' => $order->inventory, 'style' => 'width:200px'])->label('Инвентарный номер:')?>
     </div>
     
 	

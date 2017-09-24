@@ -25,6 +25,7 @@ class OrderContentForm extends BaseForm
     public $item;
     public $count;
     public $material;
+    public $material_add;
     public $order_id;
     public $code;
     public $obj_id;
@@ -60,7 +61,7 @@ class OrderContentForm extends BaseForm
         return [
             ['name', 'required', 'message' => 'Необходимо заполнить поле'],
             ['name', 'string', 'length' => [2, 40]],
-            [['type_dimensions', 'cat_dwg', 'code', 'type_dwg', 'filename'], 'string'],
+            [['type_dimensions', 'cat_dwg', 'code', 'type_dwg', 'filename', 'material_add'], 'string'],
             [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'bolt_class', 'nut_class', 'bolt_pitch'], 'string'],
             [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_length'], 'integer'],
             [['shaft_length', 'shaft_diam', 'bush_height', 'bush_in_diam', 'bush_out_diam'], 'integer'],
@@ -84,6 +85,7 @@ class OrderContentForm extends BaseForm
         $this->element->rating = $this->rating;
         $this->element->order_id = $this->order_id; 
         $this->element->material = $this->material;
+        $this->element->material_add = $this->material_add;
         $this->element->item = $this->item;
         $this->dimensions = ObjectLogic::setDimensions($this);
         if ($this->dimensions) $this->element->dimensions = serialize($this->dimensions);

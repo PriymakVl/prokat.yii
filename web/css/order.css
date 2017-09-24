@@ -12,17 +12,17 @@
 }
 
 /** form content **/
-.form-wrp {
+.form-wrp, #material-form-wrp, #material-add-form-wrp {
     position: relative;
 }
 
-#order-content-item-material {
+#material-add-form-wrp .order-content-item-material, #material-form-wrp .order-content-item-material {
     position: absolute;
-    top: 220px;
+    top: 0;
     left: 360px;
 }
 
-#order-content-item-material select{
+.order-content-item-material select{
     width: 150px;
 }
 

@@ -12,6 +12,9 @@ use app\modules\employees\models\Employee;
 class Order extends BaseModel
 {
     public $content;
+    public $sectionName;
+    public $equipmentName;
+    public $unitName;
     
     const PAGE_SIZE = 15;
     const STATE_DRAFT = 1;
@@ -160,9 +163,9 @@ class Order extends BaseModel
     
     public function convertLocation()
     {
-        $this->section = OrderLogic::convertLocation($this->section);
-        if ($this->section) $this->equipment = OrderLogic::convertLocation($this->equipment);
-        if ($this->equipment) $this->unit = OrderLogic::convertLocation($this->unit);
+        $this->sectionName = OrderLogic::convertLocation($this->section);
+        $this->equipmentName = OrderLogic::convertLocation($this->equipment);
+        $this->unitName = OrderLogic::convertLocation($this->unit);
         return $this;
     }
     

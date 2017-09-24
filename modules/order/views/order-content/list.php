@@ -79,7 +79,13 @@ $this->registerCssFile('/css/order.css');
                     
                     <!-- material -->
                     <td class="text-center">
-                        <?=$item->material ? $item->material : '<span style="color:red;">Нет</span>'?>
+                        <? if ($item->material && $item->material_add): ?>
+                            <?=$item->material.'<br>'.$item->material_add?>
+                        <? elseif ($item->material): ?>
+                            <?=$item->material?>
+                        <? else: ?>
+                            <span style="color:red;">Нет</span>
+                        <? endif; ?>
                     </td>
                 </tr>
                 <? if ($item->children): ?>

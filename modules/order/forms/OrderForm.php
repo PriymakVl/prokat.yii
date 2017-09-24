@@ -110,14 +110,20 @@ class OrderForm extends BaseForm
     private function getIdEquipment()
     {
         if (!$this->equipment) return null;
-        $result = Equipment::find()->select('id')->where(['name' => $this->equipment, 'parent_id' => $this->section])->column();
-        if ($result) return $result[0];
-        $object = new Equipment();
-        $object->name = $this->equipment;
-        $object->alias = $this->equipment;
-        $object->parent_id = $this->section;
-        $object->save();
-        return $object->id;
+        $equipment = Equipment::find()->where(['name' => $this->equipment, 'parent_id' => $this->section])->one();
+        if ($equipment) {
+            if ($this->inventory) $equipment->inventory = $this->inventory;
+            $equipment->save();
+        }
+        else {
+            $equipment = new Equipment();
+            $equipment->name = $this->equipment;
+            $equipment->alias = $this->equipment;
+            $equipment->parent_id = $this->section;
+            $equipment->inventory = $this->inventory;
+            $equipment->save();    
+        }
+        return $equipment->id;
     }
     
     private function getIdUnit()

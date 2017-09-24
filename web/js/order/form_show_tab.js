@@ -6,7 +6,7 @@ $(document).ready(function() {
         });
         $(this).addClass('top-menu-active-link');
         $('#order-form-main').show();
-        $('#order-form-other, #order-form-work').hide();    
+        $('#order-form-other, #order-form-work, #order-form-inventory, #inventory-menu').hide();    
     });
     //other 
     $('#show-order-form-other').click(function() {
@@ -15,9 +15,9 @@ $(document).ready(function() {
         });
         $(this).addClass('top-menu-active-link');
         $('#order-form-other').show();
-        $('#order-form-main').hide(); 
-        $('#order-form-work').hide();   
-    });   
+        $('#order-form-inventory, #order-form-work, #order-form-main, #inventory-menu').hide();   
+    });
+      
     //work
     $('#show-order-form-work').click(function() {
         $('.top-menu a').each(function() {
@@ -25,6 +25,16 @@ $(document).ready(function() {
         });
         $(this).addClass('top-menu-active-link');
         $('#order-form-work').show();
-        $('#order-form-main, #order-form-other').hide();    
+        $('#order-form-main, #order-form-other, #order-form-inventory, #inventory-menu').hide();    
+    });
+    
+    //inventory
+    $('#show-order-form-inventory').click(function() {
+        $('.top-menu a').each(function() {
+            $(this).removeClass('top-menu-active-link');    
+        });
+        $(this).addClass('top-menu-active-link');
+        $('#order-form-inventory, #inventory-menu').show();
+        $('#order-form-other, #order-form-work, #order-form-main').hide();    
     });
 });

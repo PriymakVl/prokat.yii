@@ -92,6 +92,7 @@ class OrderContent extends BaseModel
     public function getMaterialWithGost()
     {
         if ($this->material) $this->material = OrderLogic::getMaterialWithGost($this->material);
+        if ($this->material_add) $this->material_add = OrderLogic::getMaterialWithGost($this->material_add);
         return $this;
     }
     

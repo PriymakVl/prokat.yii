@@ -32,7 +32,7 @@ class OrderController extends BaseController
     { 
         $order = Order::getOne($order_id, null, self::STATUS_ACTIVE);
         if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer()->convertLocation();
-        //debug($order->state);
+        //debug($order);
         $form = new OrderForm($order);
         $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()
             ->getUnits()->getNameEquipment()->getNameUnit();

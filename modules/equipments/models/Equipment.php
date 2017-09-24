@@ -32,7 +32,7 @@ class Equipment extends BaseModel
     
     public static function getEquipments($area_id)
     {
-        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $area_id]) 
+        return self::find()->select('id, name, alias, inventory')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $area_id]) 
             ->asArray()->all();   
     }
     

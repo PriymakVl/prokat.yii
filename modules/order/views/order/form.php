@@ -6,6 +6,7 @@ use app\widgets\MainMenuWidget;
 use app\modules\order\widgets\OrderFormTopMenuWidget;
 use app\modules\order\widgets\OrderContentFormComponentWidget;
 use app\modules\order\widgets\OrderFormTabWidget;
+use app\modules\order\widgets\OrderFormInventoryMenuWidget;
 
 $this->registerCssFile('/css/order.css');
 
@@ -23,6 +24,9 @@ $this->registerCssFile('/css/order.css');
     <!-- top menu -->
     <?=OrderFormTopMenuWidget::widget()?>
     
+    <!-- inventory menu -->
+    <?=OrderFormInventoryMenuWidget::widget()?>
+    
     <!-- form -->
     <div class="form-wrp">
         <? $f = ActiveForm::begin(['id' => 'form-order-item']);?>
@@ -33,8 +37,11 @@ $this->registerCssFile('/css/order.css');
             <!-- other tab -->
             <?=OrderFormTabWidget::widget(['nameTab' => 'other', 'f' => $f, 'form' => $form, 'order' => $order])?>
             
-            <!-- other tab -->
+            <!-- work tab -->
             <?=OrderFormTabWidget::widget(['nameTab' => 'work', 'f' => $f, 'form' => $form, 'order' => $order])?>
+            
+            <!-- inventory tab -->
+            <?=OrderFormTabWidget::widget(['nameTab' => 'inventory', 'f' => $f, 'form' => $form, 'order' => $order])?>
             
             <!-- hidden order id -->
             <?=$f->field($form, 'order_id')->hiddenInput(['value' => $order ? $order->id : false])->label(false) ?>

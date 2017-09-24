@@ -2,10 +2,11 @@ $(document).ready(function() {
     $('#orderform-sections').change(function() {
         var section_id = $(this).val(); 
         if (!section_id) {
-            $('#section-equipments').html('<option>Не выбран</option>').prop('disabled', true);
-            $('#equipment-units').html('<option>Не выбран</option>').prop('disabled', true);
+            $('#section-equipments').html('<option value="">Не выбран</option>').prop('disabled', true);
+            $('#equipment-units').html('<option value="">Не выбран</option>').prop('disabled', true);
             $('#orderform-equipment').val(''); 
             $('#orderform-unit').val('');
+            $('#orderform-inventory').val('');
             return;    
         }
         else if (section_id) $.get('/equipment/data/get', {section_id: section_id}, addEquipments);    
@@ -14,13 +15,18 @@ $(document).ready(function() {
     $('#section-equipments').change(function() {
         var equipment_id = $(this).val();
         var name = $('option:selected', this).attr('name_equ');
-        $('#orderform-equipment').val(name);
-        if (!name) {
-            $('#equipment-units').html('<option>Не выбран</option>').prop('disabled', true); 
+        var inventory = $('option:selected', this).attr('inventory');
+        
+        if (!name || !equipment_id) {
+            $('#equipment-units').html('<option value="">Не выбран</option>').prop('disabled', true); 
             $('#orderform-unit').val('');
             return;    
         }
-        else if (equipment_id) $.get('/equipment/data/get', {equipment_id: equipment_id}, addUnits);    
+        else {
+            $('#orderform-equipment').val(name);
+            if (inventory != 'null') $('#orderform-inventory').val(inventory);
+            $.get('/equipment/data/get', {equipment_id: equipment_id}, addUnits);    
+        }     
     }); 
     
     $('#equipment-units').change(function() {
@@ -33,25 +39,35 @@ $(document).ready(function() {
 function addEquipments(data)
 {
     var items, html;
-    if (data == 'equipments_not') alert('Оборудование участка не указано');
+    if (data == 'equipments_not') {
+        alert('Оборудование участка не указано');
+        $('#section-equipments, #equipment-units').html('<option>Не выбран</option>').prop('disabled', true); 
+        $('#orderform-equipment, #orderform-unit, #orderform-inventory').val('');
+    }
     else {
         items = JSON.parse(data);
         for (var i = 0; i < items.length; i++) { 
-            html += '<option value="' + items[i].id + '" name_equ="' + items[i].name + '">' + items[i].alias + '</option>';
+            html = '<option value="">Не выбран</option>';
+            html += '<option value="' + items[i].id + '" inventory="' + items[i].inventory + '" name_equ="' + items[i].name + '">' + items[i].alias + '</option>';
         }
-        $('#section-equipments').append(html).prop( "disabled", false); 
+        $('#section-equipments').html(html).prop( "disabled", false); 
+        $('#equipment-units').html('<option value="">Не выбран</option>').prop( "disabled", true);
     }    
 }
 
 function addUnits(data)
 {
     var items, html;
-    if (data == 'units_not') alert('Узлы оборудования не указаны');
+    if (data == 'units_not') {
+        alert('Узлы оборудования не указаны');
+        $('#equipment-units').html('<option>Не выбран</option>').prop('disabled', true);    
+    }
     else {
         items = JSON.parse(data);
         for (var i = 0; i < items.length; i++) { 
+            html = '<option value="">Не выбран</option>';
             html += '<option value="' + items[i].id + '" name_unit="' + items[i].name + '">' + items[i].alias + '</option>';
         }
-        $('#equipment-units').append(html).prop( "disabled", false); 
+        $('#equipment-units').html(html).prop( "disabled", false); 
     }    
 }

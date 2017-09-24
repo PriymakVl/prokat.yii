@@ -75,10 +75,10 @@ $this->registerCssFile('/css/order.css');
         </tr>
 	
         <!-- section -->
-        <? if ($order->section): ?>
+        <? if ($order->sectionName): ?>
             <tr>
                 <td class="text-center">Участок</td>
-                <td><?=$order->section?></td>
+                <td><?=$order->sectionName?></td>
             </tr>
         <? endif; ?>
 
@@ -86,16 +86,16 @@ $this->registerCssFile('/css/order.css');
             <tr>
                 <td class="text-center">Агрегат, механизм</td>
                 <td>
-                    <?=$order->equipment ? $order->equipment : '<span style="color:red;">Не указан</span>'?>
+                    <?=$order->equipmentName ? $order->equipmentName : '<span style="color:red;">Не указан</span>'?>
                 </td>
             </tr>
         
         <!-- unit -->
-        <? if ($order->unit): ?>
+        <? if ($order->unitName): ?>
             <tr>
                 <td class="text-center">Узел</td>
                 <td>
-                    <?=$order->unit?>
+                    <?=$order->unitName?>
                 </td>
             </tr>
         <? endif; ?>

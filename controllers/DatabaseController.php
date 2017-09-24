@@ -8,23 +8,22 @@ use app\modules\objects\models\Objects;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorksFile;
 use app\modules\drawing\models\DrawingDepartmentOld;
+use app\modules\drawing\models\DrawingDanieli;
 use app\models\InventoryNumber;
 
 class DatabaseController extends BaseController 
 {
     public function actionIndex()
     {
-        $path = 'files/excel/inventory.xls';
-        //$objPHPExcel = new \PHPExcel();
-        //$objPHPExcel = PHPExcel_IOFactory::load($path);
-        //debug($objPHPExcel);
-        $fileType = \PHPExcel_IOFactory::identify($path);  // узнаем тип файла, excel может хранить файлы в разных форматах, xls, xlsx и другие
-        $reader = \PHPExcel_IOFactory::createReader($fileType); // создаем объект для чтения файла
-        $excel = $reader->load($path); // загружаем данные файла в объект
-        $array = $excel->getActiveSheet()->toArray(); // выгружаем данные из объекта в массив
-        $this->setData($array);
+        $data = DrawingDanieli::getAll();
+        $f = fopen('files/drawings.txt', 'a');
+        foreach ($data as $obj) {
+            $str = $obj->code.'-'.$obj->file.PHP_EOL;
+            fwrite($f, $str);
+            //file_put_contents('files/drawings.txt', $str, FILE_APPEND);
+        }
+        fclose($f);
         exit('end');
-        debug($array);
     }
     
     public function setData($data)

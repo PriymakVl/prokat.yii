@@ -41,7 +41,7 @@ class OrderBlankSheetCreateController extends BaseController
         //$this->setStyleTitles();
              
         header("Content-Type:application/vnd.ms-excel");
-        header("Content-Disposition:attachment;filename='blank-order.xls'");
+        header("Content-Disposition:attachment;filename='".$this->order->number.".xls'");
 
         $objWriter = \PHPExcel_IOFactory::createWriter($this->objPHPExcel, 'Excel5');
         $objWriter->save('php://output');
@@ -129,19 +129,19 @@ class OrderBlankSheetCreateController extends BaseController
         $this->activeSheet->getRowDimension('9')->setRowHeight(15);
         $this->activeSheet->getRowDimension('10')->setRowHeight(15);
 
-        $this->activeSheet->setCellValue('A5','Агрегат, механизм');
+        $this->activeSheet->setCellValue('A5','Агрегат, механ.');
         $this->activeSheet->setCellValue('A6','Узел');
         $this->activeSheet->setCellValue('A7','Инвент. номер');
         $this->activeSheet->setCellValue('A8','Заказал');
         $this->activeSheet->setCellValue('A9','Выдал');
         $this->activeSheet->setCellValue('A10','Вес заказа');
 
-        $this->activeSheet->setCellValue('B5', $this->order->equipment);
-        $this->activeSheet->setCellValue('B6', $this->order->unit);
-        $this->activeSheet->setCellValue('B7', $this->order->inventory);
+        $this->activeSheet->setCellValue('B5', $equipment = $this->order->equipmentName ? $this->order->equipmentName : '');
+        $this->activeSheet->setCellValue('B6', $unit = $this->order->unitName ?  $this->order->unitName : '');
+        $this->activeSheet->setCellValue('B7', $this->order->inventory ? $this->order->inventory : '');
         $this->activeSheet->setCellValue('B8', $this->order->customer);
         $this->activeSheet->setCellValue('B9', $this->order->issuer);
-        $this->activeSheet->setCellValue('B10', $this->order->weight);
+        $this->activeSheet->setCellValue('B10', $this->order->weight.'кг');
 
         //merge field
         $this->activeSheet->mergeCells('B5:F5');
@@ -152,6 +152,7 @@ class OrderBlankSheetCreateController extends BaseController
         $this->activeSheet->mergeCells('B10:F10');
         //border
         $this->activeSheet->getStyle('A5:F10')->applyFromArray($this->styleBorder);
+        //$this->activeSheet->getStyle('B10')->applyFromArray($this->styleBorder);
     }
     
     private function setWorkOrder()
@@ -206,9 +207,7 @@ class OrderBlankSheetCreateController extends BaseController
         for ($i = 0; $i < $count; $i++) {
             $num = $i + $row_start;
             if ($this->content[$i]) {
-                $variant = $this->content[$i]->variant ? PHP_EOL.'вариант '.$this->content[$i]->variant : '';
-                $sheet = ($this->content[$i]->sheet != 1) ? PHP_EOL.'лист '.$this->content[$i]->sheet : '';
-                $this->activeSheet->setCellValue('A'.$num, $this->content[$i]->drawing.$variant.$sheet);
+                $this->setDrawing($num, $this->content[$i]);
            	    $this->setItem($num, $this->content[$i]);
                 $dimensions = $this->content[$i]->dimensions ? PHP_EOL.$this->content[$i]->dimensions : '';
             	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name.$dimensions);
@@ -231,6 +230,20 @@ class OrderBlankSheetCreateController extends BaseController
 //            $this->activeSheet->getRowDimension($num)->setRowHeight(50);
             //if ($this->content[$i]->children) $i = $this->setChildren($num, $i, $this->content[$i]->children);
         }    
+    }
+    
+    private function setDrawing($num, $item)
+    {
+        $variant = $item->variant ? PHP_EOL.'вариант '.$item->variant : '';
+        $sheet = ($item->sheet != 1) ? PHP_EOL.'лист '.$item->sheet : '';
+        $drawing = $item->drawing.$variant.$sheet;
+        if ($item->cat_dwg == 'danieli' && $item->file) {
+            $this->activeSheet->setCellValue('A'.$num, $drawing);
+            $this->activeSheet->getCell('A'.$num)->getHyperlink()->setUrl('http://www.prokat.esy.es/files/vendor/danieli/'.$item->file);
+            $this->activeSheet->getCell('A'.$num)->getHyperlink()->setTooltip('Navigate to website');
+            $this->activeSheet->getStyle('A'.$num)->applyFromArray(['font' => ['color' => ['rgb' => '0000FF'], 'underline' => \PHPExcel_Style_Font::UNDERLINE_SINGLE]]);
+        }
+        else $this->activeSheet->setCellValue('A'.$num, $drawing);     
     }
     
     private function setChildren($num, $i, $children)

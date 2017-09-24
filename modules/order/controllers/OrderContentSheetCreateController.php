@@ -29,6 +29,7 @@ class OrderContentSheetCreateController extends BaseController
         $this->setSetup();
         $this->setWidthOfColumn();
         $this->setTitles();
+        $this->setHeaderAndFooter();
         $this->setStyleWork();
         $this->setWorkOrder();
         $this->setStyleBorders();
@@ -73,9 +74,9 @@ class OrderContentSheetCreateController extends BaseController
     
     private function setHeaderAndFooter()
     {
-        $this->activeSheet->setTitle("Лист 1");	
+        //$this->activeSheet->setTitle("Лист 1");	
         //$this->activeSheet->getHeaderFooter()->setOddHeader("&CШапка нашего прайс листа");	
-        //$this->activeSheet->getHeaderFooter()->setOddFooter('&L&B'.$this->activeSheet->getTitle().'&RСтраница &P из &N');   
+        $this->activeSheet->getHeaderFooter()->setOddFooter('&CСтраница 1');   
     }
     
     private function setFont()
@@ -172,7 +173,7 @@ class OrderContentSheetCreateController extends BaseController
                 $dimensions = $this->content[$i]->dimensions ? PHP_EOL.$this->content[$i]->dimensions : '';
             	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name.$dimensions);
                 $this->activeSheet->setCellValue('D'.$num, $this->content[$i]->count);
-                $this->setMaterial($num, $this->content[$i]->material);
+                $this->setMaterial($num, $this->content[$i]->material, $this->content[$i]->material_add);
                 $this->setWeight($num, $this->content[$i]); 
                 if ($this->content[$i]->delivery) {
                     $this->activeSheet->mergeCells('G'.$num.':L'.$num);
@@ -215,7 +216,7 @@ class OrderContentSheetCreateController extends BaseController
     {
         if ($object->weight === '0,00') return;
         if (!$object->count || !$object->weightAll) return;
-        $weight = $object->weight.' '.$object->weightAll;
+        $weight = $object->weight.PHP_EOL.$object->weightAll;
         $this->activeSheet->setCellValue('F'.$num, $weight);
         $this->activeSheet->getStyle('F'.$num)->getAlignment()->setWrapText(true);
         if (strlen($object->weight) > 4 || strlen($object->weightAll) > 4) {
@@ -230,9 +231,11 @@ class OrderContentSheetCreateController extends BaseController
         else if ($item->children && !$item->item) $this->activeSheet->setCellValue('B'.$num, 'Сб');  
     }
     
-    private function setMaterial($num, $material)
+    private function setMaterial($num, $material, $material_add)
     {
+        $material = $material_add ? $material.PHP_EOL.$material_add : $material;
    	    $this->activeSheet->setCellValue('E'.$num, $material); 
+        $this->activeSheet->getStyle('E'.$num)->getAlignment()->setWrapText(true);
         if (iconv_strlen($material) < 5) return; 
         $this->activeSheet->getStyle('E'.$num)->getAlignment()->setTextRotation(90);
         $this->activeSheet->getStyle('E'.$num)->applyFromArray(['font'=>['size' => 7]]);   

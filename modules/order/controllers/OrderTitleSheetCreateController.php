@@ -28,6 +28,7 @@ class OrderTitleSheetCreateController extends BaseController
         $this->setSetup();
         $this->setTitles();
         $this->setInfoOrder();
+        $this->setHeaderAndFooter();
         $this->setStyleBorders();
         $this->setWeight();
         $this->setFooter();
@@ -71,8 +72,8 @@ class OrderTitleSheetCreateController extends BaseController
     
     private function setHeaderAndFooter()
     {
-        $this->activeSheet->setTitle("Лист 1");	
-        //$this->activeSheet->getHeaderFooter()->setOddHeader("&CШапка нашего прайс листа");	
+        //$this->activeSheet->setTitle("Лист 1");	
+        $this->activeSheet->getHeaderFooter()->setOddHeader("&L&14Инвентарный №".$this->order->inventory);	
         //$this->activeSheet->getHeaderFooter()->setOddFooter('&L&B'.$this->activeSheet->getTitle().'&RСтраница &P из &N');   
     }
     
@@ -218,11 +219,11 @@ class OrderTitleSheetCreateController extends BaseController
     private function setDataOrder()
     {
         $this->activeSheet->setCellValue('A2','РСЦ РМЦ');
-        //mechamism
-        $mechanism = $this->order->equipment == 'неизвесто' ?  '' : $this->order->mechanism;
-        $this->activeSheet->setCellValue('A4', $mechanism);
+        //equipment
+        $equipment = $this->order->equipmentName ? $this->order->equipmentName : '';
+        $this->activeSheet->setCellValue('A4', $equipment);
         //unit
-        $unit = $this->order->unit == 'неизвесто' ?  '' : $this->order->unit;
+        $unit = $this->order->unitName ?  $this->order->unitName : '';
         $this->activeSheet->setCellValue('J4', $unit);
         $this->activeSheet->setCellValue('A11', $this->order->description); 
         $this->activeSheet->setCellValue('S2', $this->order->type);

@@ -114,6 +114,15 @@ $this->registerCssFile('/css/order.css');
                     <?=$item->material ? $item->material : '<span style="color:red;">Не указан</span>'?>
                 </td>
             </tr>
+            <!-- additinal material -->
+            <? if ($item->material_add): ?>
+                <tr>
+                    <td class="text-center">Доп. материал</td>
+                    <td>
+                        <?=$item->material_add?>
+                    </td>
+                </tr>
+            <? endif; ?>
         <? endif; ?>
         
         <!-- weight one -->

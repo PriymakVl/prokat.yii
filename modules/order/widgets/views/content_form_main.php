@@ -32,11 +32,21 @@ use app\modules\order\widgets\OrderContentFormComponentWidget;
     <!-- count -->          
     <?=$f->field($form, 'count')->textInput(['value' => $item->count ? $item->count : 1, 'maxlength'=>5, 'style' => 'width:100px'])->label('Количество:')?>
     
-    <!-- material -->          
-    <?=$f->field($form, 'material')->textInput(['value' => $item->material, 'id' => 'item-material', 'maxlength'=>100, 'style' => 'width:300px'])->label('Материал:')?>
+    <!-- material --> 
+        <div id="material-form-wrp">
+            <?=$f->field($form, 'material')->textInput(['value' => $item->material, 'maxlength'=>100, 'style' => 'width:300px'])->label('Материал:')?>
+        
+        <!-- select material -->
+        <?=OrderContentFormComponentWidget::widget(['template' => 'material'])?>
+    </div>  
     
-    <!-- select material widget -->
-    <?=OrderContentFormComponentWidget::widget(['template' => 'material'])?>
+    <!-- additional material --> 
+        <div id="material-add-form-wrp">
+            <?=$f->field($form, 'material_add')->textInput(['value' => $item->material_add, 'maxlength'=>100, 'style' => 'width:300px'])->label('Дополнительный материал:')?>
+        
+        <!-- select additional material -->
+        <?=OrderContentFormComponentWidget::widget(['template' => 'material'])?>
+    </div>        
     
     <!-- weight -->          
     <?=$f->field($form, 'weight')->textInput(['value' => $item->weight, 'maxlength'=>10, 'style' => 'width:100px'])->label('Вес:(кг)')?>
