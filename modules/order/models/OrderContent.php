@@ -31,7 +31,16 @@ class OrderContent extends BaseModel
         $content = self::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 'parent_id' => self::MAIN_PARENT])
                     ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
         $content = self::executeMethods($content, ['countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
-        return $content;
+        return OrderLogic::arrangingContent($content);
+    }
+    
+    public static function getContentForPrint($ids)
+    {
+        $ids = explode(',', $ids);
+        $content = self::findAll($ids);
+        if (!$content) return false;
+        $content = OrderLogic::sortContentById($ids, $content);
+        return self::executeMethods($content, ['countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
     }
     
     public function countWeightAll()
@@ -58,7 +67,7 @@ class OrderContent extends BaseModel
     public function getChildren()
     {
         $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $this->children = self::executeMethods($children, ['countWeightAll', 'getPathDrawing']);
+        $this->children = self::executeMethods($children, ['countWeightAll', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
         return $this;
     }
     
@@ -99,6 +108,15 @@ class OrderContent extends BaseModel
     public function getDimensions()
     {
         if ($this->dimensions) $this->dimensions = OrderLogic::convertDimensions($this->dimensions);
+        return $this;
+    }
+    
+    public function getCodeObject()
+    {
+        if (!$this->code && $this->obj_id) {
+            $object = Objects::getOne($this->obj_id, false, self::STATUS_ACTIVE);
+            $this->code = $object->code;     
+        }
         return $this;
     }
      

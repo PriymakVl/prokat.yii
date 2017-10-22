@@ -13,7 +13,7 @@ $this->registerJsFile('/js/order/form_add_inventory.js');
         <option value="stand">Клети</option>
         <option value="sort">Сортовая</option>
         <option value="bunt">Бунтовая</option>
-        <option value="mill">Гидравлика</option>
+        <option value="gydro">Гидравлика</option>
         <option value="grease">Смазка</option>
         <option value="finish">Отделка</option>
         <option value="crane">Краны</option>
@@ -24,5 +24,7 @@ $this->registerJsFile('/js/order/form_add_inventory.js');
         <option value="stock">Склад заготовок</option>
         <option value="">Без категории</option>
         <option value="pinch-roll">Трайб-аппараты</option>
+        <option value="shear">Ножницы</option>
+        <option value="sliting">Слитинг</option>
     </select>
 </div>

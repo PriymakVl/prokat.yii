@@ -6,12 +6,16 @@ use app\models\BaseModel;
 use app\modules\orderact\logic\OrderActLogic;
 use app\modules\orderact\models\OrderAct;
 use app\modules\order\models\OrderContent;
+use app\modules\order\models\Order;
 
 class OrderActContent extends BaseModel
 {
-    public $dwg;
-    public $name;
-    public $obj_id;
+    public $item;
+    public $order;
+    public $act;
+    
+    const STATE_RECEIVED = 1;
+    const STATE_INSTALLED = 2;
     
     public static function tableName()
     {
@@ -23,26 +27,38 @@ class OrderActContent extends BaseModel
     	return ['order-logic-act' => ['class' => OrderActLogic::className()]];
     }
     
-    public static function setContentWhenRegistrationAct($act_id, $ids)
+    public function setDataWhenRegistrationAct($act_id, $item)
     {
-        $items = OrderContent::findAll(explode(',', $ids));
-        foreach ($items as $item) {
-            $sql = "INSERT INTO `".self::tableName()."` (`act_id`, `item_id`, `count`) VALUES ($act_id, $item->id, $item->count)";
-            \Yii::$app->db->createCommand($sql)->execute();
-        }
-        return true;
+        $this->act_id = $act_id;
+        $this->order_id = $item->order_id;
+        $this->item_id = $item->id;
+        $this->code = $item->code;
+        $this->state = self::STATE_RECEIVED;
+        return $this;
     }
 
     public static function getContentByActId($act_id)
     {
-        $content = self::findAll(['act_id' => $act_id, 'status' => STATUS_ACTIVE]);
-        foreach ($content as $obj) {
-            $item = OrderContent::findOne(['id' => $obj->item_id]);
-            $obj->name = $item->name;
-            $obj->dwg = $item->dwg;
-            $obj->obj_id = $item->obj_id;
+        $content = self::findAll(['act_id' => $act_id, 'status' => self::STATUS_ACTIVE]);
+        foreach ($content as $item) {
+            $item->item = OrderContent::findOne(['id' => $item->item_id]);
+            if ($item->item) $item->item->getPathDrawing()->getCodeObject();
         }
         return $content;
+    }
+    
+    public function getOrder()
+    {
+        $this->order = Order::findOne($this->order_id);
+        $this->order->getNumber();
+        return $this;
+    }
+    
+    public function getAct()
+    {
+        $this->act = OrderAct::findOne($this->act_id);
+        $this->act->convertMonth($this->act->month);
+        return $this;    
     }
 }
 

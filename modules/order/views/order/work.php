@@ -19,7 +19,7 @@ $this->registerCssFile('/css/order.css');
     </div>
     
     <!-- order work -->
-    <table class="order-work">
+    <table class="order-work margin-top-15">
         <tr>
             <th width="725">Характер работы</th>
         </tr>

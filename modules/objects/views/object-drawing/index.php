@@ -17,7 +17,7 @@
     <?=ObjectTopMenuWidget::widget(['obj_id' => $obj->id])?>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название:</span>&laquo; <?=$obj->name?> &raquo;<br />
         <span>Код:</span>&laquo; <?=$obj->code ? $obj->code : 'Не указан'?> &raquo;
     </div>
@@ -57,7 +57,7 @@
                 <?=ObjectDrawingWidget::widget(['drawings' => $drawings['sundbirsta'], 'category' => 'sundbirsta', 'obj_id' => $obj->id])?>
             <? endif; ?>
         <? else: ?>
-            <div class="alert-danger">Чертежей нет</div>
+            <div class="alert alert-danger margin-top-15">Чертежей нет</div>
         <? endif; ?> 
     </div>
 </div>

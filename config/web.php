@@ -22,6 +22,7 @@ $config = [
         'applications' => ['class' => 'app\modules\applications\Module',],
         'orderlist' => ['class' => 'app\modules\orderlist\Module',],
         'orderact' => ['class' => 'app\modules\orderact\Module',],
+        'product' => ['class' => 'app\modules\product\Module',],
     ],
     'components' => [
         'request' => [
@@ -67,6 +68,7 @@ $config = [
                 'search/drawing/works' => 'search/search/drawing-works',
                 'search/drawing/department' => 'search/search/drawing-department',
                 'search/order' => 'search/search/order',
+                'search/order/act' => 'search/search/order-act',
                 'search/application' => 'search/search/application',
                 'search' => 'search/search/code',
                 //list
@@ -98,6 +100,8 @@ $config = [
                 'drawing/works' => 'drawing/drawing-works',
                 //drawing standard
                 'drawing/standard/danieli/form' => 'drawing/drawing-standard-danieli/form', 
+                //drawing danieli
+                'drawing/danieli/form' => 'drawing/drawing-danieli/form',
                 //admin
                 'admin/excel/file/read' => 'admin/excel/read',
                 'admin' => 'admin/mainadmin', 
@@ -130,6 +134,7 @@ $config = [
                 'order/content/list/set/parent' => 'order/order-content/set-parent',
                 'order/content/delete/list' => 'order/order-content/delete-list',
                 'order/content/item/file/add' => 'order/order-content/add-file',
+                'order/content/items/managment' => 'order/order-content/items-managment',
                 //order-list
                 'order-list/list' => 'orderlist/order-list/list',
                 'order-list/form' => 'orderlist/order-list/form',
@@ -140,10 +145,16 @@ $config = [
                 'order-list-content/add/list/order' => 'orderlist/order-list-content/add-list-order',
                   //order-act
                 'order/act/list' => 'orderact/order-act/list',
+                'order/act/delete/list' => 'orderact/order-act/delete-list',
+                'order/act/delete' => 'orderact/order-act/delete',
                 'order/act/form' => 'orderact/order-act/form',
                 'order/act/registr' => 'orderact/order-act/registration',
+                'order/act/edit/state' => 'orderact/order-act/edit-state',
                 'order/act/active/set' => 'orderact/order-act/set-active',
-                'order/act' => 'orderact/order-act',                
+                'order/act' => 'orderact/order-act', 
+                //order-act-content
+                'order/act/content/delete' => 'orderact/order-act-content/delete',               
+                'order/act/content/form' => 'orderact/order-act-content/form',                              
                 //object specification
                 'object/specification/main' => 'objects/object-specification/main',
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
@@ -182,6 +193,9 @@ $config = [
                 'application/content/item' => 'applications/application-content', 
                 //equipment
                 'equipment/data/get' => 'equipments/equipment/get-data-ajax',  
+                //product
+                'product/manufactured' => 'product/product/manufactured',
+                'product' => 'product/product',
 								
             ],
         ],  

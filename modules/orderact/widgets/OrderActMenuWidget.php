@@ -6,11 +6,11 @@ use yii\base\Widget;
 
 class OrderActMenuWidget extends Widget 
 {
-    public $act_id;
+    public $act;
 
     public function run()
     {
-        return $this->render('menu_act', ['act_id' => $this->act_id]);
+        return $this->render('menu_act', ['act' => $this->act]);
     }
 
 }

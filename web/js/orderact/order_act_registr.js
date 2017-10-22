@@ -10,14 +10,14 @@ $(document).ready(function() {
         
         order_id = $('#order-id').val();
         
-        number = prompt('Введите номер заказа');
+        number = prompt('Введите номер акта');
         
         if (!number) {
-            alert('Вы не ввели номер заказа');
+            alert('Вы не ввели номер акта');
             return;
         } 
         if (!+number) {
-            alert('Номер заказа должен быть числом');
+            alert('Номер акта должно быть число');
             return;    
         }
         

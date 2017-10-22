@@ -6,11 +6,16 @@
 	position: relative;
 	margin-bottom: 15px;
 }
-.link-home {
+
+.link-home, .link-back {
     margin: 0 60px 0 15px;
     line-height: 40px;
     color: #000;
     background: none !important;    
+}
+
+.link-home:hover, .link-back:hover {
+    color: #000;
 }
 
 

@@ -8,7 +8,7 @@ $this->registerJsFile('/js/order/item_form_set_material.js');
 
 <div class="order-content-item-material">
     <label>Выбрать материал:</label>
-    <select>
+    <select class="form-control">
         <option value="" selected="selected">Не выбран</option>
         <option value="Ст45">Ст45</option>
         <option value="Ст40Х">Ст40Х</option>

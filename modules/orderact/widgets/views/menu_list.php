@@ -2,7 +2,8 @@
 
 use \yii\helpers\Url;
 
-//$this->registerJsFile('js/order/order_list_print.js',  ['depends' => [JqueryAsset::className()]]);
+$this->registerJsFile('/js/orderact/act_edit_state.js');
+$this->registerJsFile('/js/orderact/act_list_delete.js');
 
 ?>
 <div  class="sidebar-menu">
@@ -15,6 +16,12 @@ use \yii\helpers\Url;
         <? endif; ?>
         <li>
             <a href="<?=Url::to(['/order/act/form'])?>">Зарегистрировать акт</a>
+        </li>
+        <li>
+            <a href="#" onclick="return false;" id="order-acts-delete">Удалить акты</a>
+        </li>
+        <li>
+            <a href="#" onclick="return false;" id="order-act-passed">Переданы в ЦРМО</a>    
         </li>
         <li>
             <a href="#" onclick="return false;" id="order-act-print">Распечатать перечень</a>    

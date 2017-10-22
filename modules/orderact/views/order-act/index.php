@@ -6,14 +6,14 @@ use app\widgets\MainMenuWidget;
 use app\modules\orderact\widgets\OrderActMenuWidget;
 //use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\orderact\widgets\OrderActTopMenuWidget;
-//use app\modules\order\widgets\OrderContentMenuWidget;
+use app\modules\orderact\widgets\OrderActContentMenuWidget;
 
 $this->registerCssFile('/css/order.css');
 
 ?>
 <div class="content">
-    <!-- top nenu -->
-    <?=OrderActTopMenuWidget::widget(['act_id' => $act->id])?>
+    <!-- info box -->
+    <div class="info-box text-center"><strong>Акт работ выполненных по заказу </strong></div>
     
     <!-- info active act -->
     <? if ($act->active): ?>
@@ -21,14 +21,14 @@ $this->registerCssFile('/css/order.css');
     <? endif; ?>
     
     <!-- info create of act order -->
-    <?php if (Yii::$app->session->hasFlash('success-order-act')): ?>
+    <?php if (Yii::$app->session->hasFlash('success')): ?>
       <div class="alert alert-success alert-dismissable margin-top-15">
-          <?= Yii::$app->session->getFlash('success-order-act') ?>
+          <?= Yii::$app->session->getFlash('success') ?>
       </div>
     <?php endif; ?>
     
     <!-- order act data -->
-    <table>
+    <table class="margin-top-15">
         <tr>
             <th width="180">Наименование</th>
             <th width="545">Значение</th>
@@ -39,25 +39,39 @@ $this->registerCssFile('/css/order.css');
             <td><?=$act->number?></td>
         </tr>
         
-        <!-- Цех(участок) -->
+        <!-- state -->
         <tr>
-            <td class="text-center">Цех(участок)</td>
-            <td>
-                <?=$act->department?>
-            </td>
+            <td class="text-center">Состояние акта</td>
+            <td><?=$act->state?></td>
         </tr>
         
         <!-- number of order -->
         <tr>
             <td class="text-center">Номер заказа</td>
             <td>
-                <a href="<?=Url::to(['/order', 'order_id' => $act->order_id])?>"><?=$act->order->number?></a>
+                <a href="<?=Url::to(['/order/content/list', 'order_id' => $act->order_id])?>"><?=$act->order->number?></a>
+            </td>
+        </tr>
+        
+        <!-- name of order -->
+        <tr>
+            <td class="text-center">Название заказа</td>
+            <td>
+                <a href="<?=Url::to(['/order', 'order_id' => $act->order_id])?>"><?=$act->order->name?></a>
+            </td>
+        </tr>
+        
+        <!-- Цех(участок) -->
+        <tr>
+            <td class="text-center">Цех(участок)</td>
+            <td>
+                <?=$act->department ? $act->department : 'Не указан'?>
             </td>
         </tr>
         
         <!-- customer -->
         <tr>
-            <td class="text-center">Заказал</td>
+            <td class="text-center">Принял</td>
             <td>
                 <?=$act->order->customer?>
             </td>
@@ -67,7 +81,7 @@ $this->registerCssFile('/css/order.css');
         <tr>
             <td class="text-center">Себестоимость</td>
             <td>
-                <?=$act->cost.'грн'?>
+                <?=$act->cost ? $act->cost.'грн' : 'Не указана'?>
             </td>
         </tr>
         
@@ -75,27 +89,29 @@ $this->registerCssFile('/css/order.css');
         <tr>
             <td class="text-center">Нормо часы</td>
             <td>
-                <?=$act->time?>
+                <?=$act->working_hour?>
             </td>
         </tr>
         
         <!-- date of create-->
         <tr>
-            <td class="text-center">Дата создания</td>
-            <td><?=date('d.m.y', $act->date_creat)?></td>
+            <td class="text-center">Период оформления</td>
+            <td><?=$act->period ? $act->period : '<span style="color:red;">Не указан</span>'?></td>
         </tr>
         
         <!-- date of registration -->
         <tr>
-            <td class="text-center">Дата рагистрации</td>
-            <td><?=date('d.m.y', $act->date_regist)?></td>
+            <td class="text-center">Дата регистрации</td>
+            <td><?=date('d.m.y', $act->date_registr).'г.'?></td>
         </tr>
         
         <!-- date of passed -->
-        <tr>
-            <td class="text-center">Дата сдачи</td>
-            <td><?=date('d.m.y', $act->date_pass)?></td>
-        </tr>
+        <? if ($act->date_pass): ?>
+            <tr>
+                <td class="text-center">Дата сдачи</td>
+                <td><?=date('d.m.y', $act->date_pass)?></td>
+            </tr>
+        <? endif; ?>
         
         <!-- note -->
         <tr>
@@ -104,6 +120,37 @@ $this->registerCssFile('/css/order.css');
         </tr>
 
     </table>
+    
+    <? if($content): ?>
+        <table class="margin-top-15">
+            <tr>
+                <th width="30"><input type="radio" name="order-act-item" id="checked-all" disabled="disabled" /></th>
+                <th width="150">Чертеж</th>
+                <th>Наименование</th>
+                <th width="100">Количество</th>
+            </tr>
+            <? foreach ($content as $item): ?>
+                <tr>
+                    <td><input type="radio" name="order-act-item" item_id="<?=$item->id?>" act_id="<?=$item->act_id?>"/></td>
+                    <td class="text-center">
+                        <? if ($item->item->pathDrawing): ?>
+                            <a target="_blank" href="<?=Url::to([$item->item->pathDrawing])?>"><?=$item->item->drawing?></a>
+                        <? else: ?>
+                            <?=$item->item->drawing?>
+                        <? endif; ?>
+                    </td>
+                    <td>
+                        <? if ($item->item->code): ?>
+                            <a target="_blank" href="<?=Url::to(['/product', 'code' => $item->item->code])?>"><?=$item->item->name?></a>
+                        <? else: ?>
+                            <?=$item->item->name?>
+                        <? endif; ?>
+                    </td>
+                    <td class="text-center"><?=$item->count?></td>
+                </tr>
+            <? endforeach; ?>
+        </table>
+    <? endif; ?>
 </div>
 <!-- menu -->
 <div class="sidebar-wrp">
@@ -111,7 +158,7 @@ $this->registerCssFile('/css/order.css');
     
     <?=OrderActMenuWidget::widget(['act' => $act])?>
     
-    <?//=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderActContentMenuWidget::widget(['act' => $act])?>
     
     <?//=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
 </div>

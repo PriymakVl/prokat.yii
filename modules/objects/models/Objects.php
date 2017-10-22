@@ -22,6 +22,7 @@ class Objects extends BaseModel
     public $child;
     public $orders;
     public $similar;
+    public $reserve;
     
     const MAIN_PARENTS = 0;
     
@@ -141,7 +142,7 @@ class Objects extends BaseModel
     public function getOrders()
     {
         //sort standard danieli
-        if ($this->code && $this->code[0] != '0') $this->orders = OrderLogic::getOrdersByCode($this->code);
+        if ($this->code) $this->orders = OrderLogic::getOrdersByCode($this->code);
         return $this;
     }
     
@@ -169,6 +170,12 @@ class Objects extends BaseModel
 		if ($this->dimensions) $this->dimensions = OrderLogic::convertDimensions($this->dimensions);
 		return $this;
 	}
+    
+    public function getReserve()
+    {
+        $this->reserve = ObjectLogic::getReserve($this->code);
+        return $this;
+    }
 	
 
 }

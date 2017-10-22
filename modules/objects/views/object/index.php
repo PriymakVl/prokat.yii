@@ -17,7 +17,7 @@ $this->registerJsFile('/js/object/object_copy.js');
     <?=ObjectTopMenuWidget::widget(['obj_id' => $obj->id])?>
     
     <!-- data object -->
-    <table class="object-data">
+    <table class="object-data margin-top-15">
         <tr>
             <th width="150">Наименование</th>
             <th width="565">Значение</th>
@@ -117,6 +117,14 @@ $this->registerJsFile('/js/object/object_copy.js');
                         }
                     ?>
                 </td>
+            </tr>
+            
+            <!-- reserve -->
+            <tr>
+                <td>
+                    <a href="<?=Url::to(['/product/manufactured', 'code' =>$obj->code])?>">Резерв</a>
+                </td>
+                <td><?=$obj->reserve ? '<span style="color:green;">'.$obj->reserve.'шт.</span>': '<span style="color:red">Нет</span>'?></td>
             </tr>
         <? endif; ?>
         </table>

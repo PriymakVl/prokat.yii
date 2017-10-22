@@ -6,6 +6,7 @@ use Yii;
 use app\logic\BaseLogic;
 use yii\web\ForbiddenHttpException;
 use app\modules\order\models\Order;
+use app\modules\objects\models\Objects;
 use app\modules\order\models\OrderContent;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
@@ -28,8 +29,8 @@ class OrderLogic extends BaseLogic
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
         if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
-        //if ($state == Order::STATE_DRAFT) $params['state'] = $state;
-        $params['state'] = $state ? $state : Order::STATE_ACTIVE;
+        if ($state == Order::STATE_DRAFT) $params['state'] = $state;
+        if ($state != 'all') $params['state'] = $state ? $state : Order::STATE_ACTIVE;
         if ($customer && $customer != 'all') $params['customer'] = $customer;
         if ($section) $params['section'] = $section;
         if ($equipment) $params['equipment'] = $equipment;
@@ -71,8 +72,11 @@ class OrderLogic extends BaseLogic
         $item->name = self::setItemNameFromObject($item, $object);
         $item->code = $object->code;
         $item->weight = $item->weight ? $item->weight : $object->weight;
-        //$item->item = $item->item ? $item->item : $object->item;
+        $item->item = $item->item ? $item->item : $object->item;
         $item->equipment = $object->equipment;
+        $item->count = 1;
+        if ($object->material) $item->material = $object->material;
+        else if ($object->type == 'unit') $item->material = 'Сб';
         $item->dimensions = $object->dimensions;
         if ($file) $item->file = $file;
         $item->drawing = self::codeWithoutVariant($object->code);
@@ -268,8 +272,11 @@ class OrderLogic extends BaseLogic
     public static function getOrdersByCode($code)
     {
         $order_ids = OrderContent::find()->select('order_id')->where(['code' => $code, 'status' => self::STATUS_ACTIVE])->column();
+        
         if ($order_ids) {
             $orders = Order::findAll($order_ids);
+            $sql = 'SELECT * FROM '.Order::tableName().' WHERE `id` IN ('.implode(',', $order_ids).') AND state !='.Order::STATE_DRAFT.' AND status='.Order::STATUS_ACTIVE;
+            $orders = Order::findBySql($sql)->all();
             if (!$orders) return [];
             $orders = self::executeMethodsOfObjects($orders, ['getNumber', 'convertState']); 
             return array_reverse($orders);  
@@ -309,6 +316,7 @@ class OrderLogic extends BaseLogic
             case 'Ст50Г': return 'Ст50Г ГОСТ 4543-71';
             case 'Ст65Г': return 'Ст65Г ГОСТ 14959-79';
             case 'ОЦС 5-5-5': return 'Бронза ОЦС 5-5-5';
+            case 'Сб': return 'Сборочный узел';
             default: return $material;
         }
     }
@@ -346,6 +354,8 @@ class OrderLogic extends BaseLogic
     
     public static function getNumberOfFutureOrder()
     {
+        $number = self::getNumberFromWhiteList();
+        if ($number) return $number;
         $current_period = '1491253200';
         //$sql = "SELECT * FROM `orders` WHERE `date` > ".$current_period." AND `status` = '1' ORDER BY `number` DESC";
         //$orders = \Yii::$app->db->createCommand($sql)->execute();
@@ -356,6 +366,27 @@ class OrderLogic extends BaseLogic
         return $orders[0]['number'] + 1;
     }
     
+    private static function getNumberFromWhiteList()
+    {
+        $path = '../web/params/order_numbers.txt';
+        $numbers = file($path);
+        if (!$numbers) {
+            \Yii::$app->session->setFlash('danger', 'Список свободных заказов пуст');
+            return false;
+        }
+        return $numbers[0]; 
+    }
+    
+    public static function deleteNumberFromWhiteList($number)
+    {
+        $path = '../web/params/order_numbers.txt';
+        $numbers = file($path);
+        if (!$numbers) return false;
+        if (trim($numbers[0]) != $number) return false;
+        unset($numbers[0]);
+        return file_put_contents($path, implode('', $numbers));    
+    }
+    
     public static function getIdAciveOrder($message)
     {
         $order_id = self::getActive('order-active');
@@ -363,8 +394,48 @@ class OrderLogic extends BaseLogic
         \Yii::$app->session->setFlash('error', $message);
         return false;    
     }
-
     
+    public static function deleteOrAddItemContent($ids)
+    {
+        $content = OrderContent::findAll(explode(',', $ids));
+        foreach ($content as $item) {
+            if ($item->item) {
+                $item->item = '';
+                $item->save();
+            }
+            else {
+                if (!$item->obj_id) continue;
+                $obj = Objects::getOne($item->obj_id, null, Objects::STATUS_ACTIVE);
+                if ($obj) $item->item = $obj->item;
+                $item->save();
+            }
+        }
+    }
+    
+    public static function arrangingContent($content)
+    {
+        global $contentOrder;
+        if (!$content) return [];
+        foreach ($content as $item) {
+            if ($item->children) {
+                $contentOrder[] = $item;
+                self::arrangingContent($item->children);
+            }
+            else $contentOrder[] = $item;
+        }
+        return $contentOrder;
+    }
+    
+    public static function sortContentById($ids, $content)
+    {
+        $data = [];
+        foreach ($ids as $id) {
+            foreach ($content as $item) {
+                if ($item->id == $id) $data[] = $item;
+            }    
+        }
+        return $data;    
+    }
 
 }
 

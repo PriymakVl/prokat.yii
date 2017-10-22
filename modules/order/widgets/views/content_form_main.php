@@ -2,6 +2,7 @@
 
 use app\modules\order\widgets\OrderContentFormComponentWidget;
 
+$this->registerJsFile('/js/order/content_form_set_name.js');
 ?>
 
 <div id="content-form-main">
@@ -20,8 +21,21 @@ use app\modules\order\widgets\OrderContentFormComponentWidget;
     <!-- item -->          
     <?=$f->field($form, 'item')->textInput(['value' => $item->item ? $item->item : 0, 'maxlength'=>5, 'style' => 'width:100px'])->label('Позиция:')?>
     
-    <!-- name -->          
-    <?=$f->field($form, 'name')->textInput(['value' => $item->name])->label('Название:')?>
+    <!-- name --> 
+    <div id="unit-name-wrp">
+        <?=$f->field($form, 'name')->textInput(['value' => $item->name, 'style' => 'width:400px'])->label('Название:')?>
+        
+        <div id="unit-name-select-wrp">
+            <label>Выбрать название:</label>
+    		<select id="names" class="form-control" style="width:220px;">
+    			<option value="">Не выбрано</option>
+                <? foreach ($form->detailNames as $name): ?>
+                    <option value="<?=$name?>"><?=$name?></option>
+                <? endforeach; ?>
+    		</select>
+        </div>
+    </div>         
+    
     
     <!-- delivery -->
     <?

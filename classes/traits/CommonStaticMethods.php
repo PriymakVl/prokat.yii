@@ -75,22 +75,29 @@ trait CommonStaticMethods
 		}
 	}
     
-    public static function convertMonth($month)
+    public static function convertMonth($month, $lower = false)
     {
         switch($month) {
-            case '1': return '������';
-            case '2': return '�������';
-            case '3': return '����';
-            case '4': return '������';
-            case '5': return '���';
-            case '6': return '����';
-            case '7': return '����';
-            case '8': return '������';
-            case '9': return '��������';
-            case '10': return '�������';
-            case '11': return '������';
-            case '12': return '�������';
+            case '1': return $lower ? 'январь' : 'Январь';
+            case '2': return $lower ? 'февраль' : 'Февраль';
+            case '3': return $lower ? 'март' : 'Март';
+            case '4': return $lower ? 'апрель' : 'Апрель';
+            case '5': return $lower ? 'май' : 'Май';
+            case '6': return $lower ? 'июнь' : 'Июнь';
+            case '7': return $lower ? 'июль' : 'Июль';
+            case '8': return $lower ? 'август' : 'Август';
+            case '9': return $lower ? 'сентябрь' : 'Сентябрь';
+            case '10': return $lower ? 'октябрь' : 'Октябрь';
+            case '11': return $lower ? 'ноябрь' : 'Ноябрь';
+            case '12': return $lower ? 'декабрь' : 'Декабрь';
         }
+    }
+    
+    public static function getArrayMonths()
+    {
+        return ['1' => 'Январь', '2' => 'Февраль', '3' => 'Март', '4' => 'Апрель', '5' => 'Май', '6' => 'Июнь',
+            '7' => 'Июль', '8' => 'Август', '9' => 'Сентябрь', '10' => 'Октябрь', '11' => 'Ноябрь', '12' => 'Декабрь'
+        ];
     }
     
     public static function codeWithoutVariant($code)

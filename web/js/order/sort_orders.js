@@ -15,7 +15,8 @@ $(document).ready(function() {
     
     $('#order-section').change(function() {
         var section_id = $(this).find('option:selected').val();
-        var gets = buidGetString('section', section_id);
+        //var gets = buidGetString('section', section_id);
+        var gets = 'period=all&state=all&section=' + section_id;
         if (section_id) location.href = 'http://' + location.host + '/order/list?' + gets;
         else location.href = 'http://' + location.host + '/order/list';    
     });
@@ -38,6 +39,13 @@ $(document).ready(function() {
         var type = $(this).find('option:selected').val();
         var gets = buidGetString('type', type);
         if (type) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
+    });
+    
+    $('#order-state').change(function() {
+        var state = $(this).find('option:selected').val();
+        var gets = buidGetString('state', state);
+        if (state) location.href = 'http://' + location.host + '/order/list?' + gets;
         else location.href = 'http://' + location.host + '/order/list';    
     });
     

@@ -12,9 +12,24 @@
     <!-- nut dimesions --> 
     <div id="nut-dimensions-wrp" <?=($item->dimensions['type'] == 'nut') ? '' : 'style="display:none;"'?>>
         <h4>Габаритные размеры гайки</h4>
-        <?=$f->field($form, 'nut_thread')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['thread'] : ''])->label('Резьба:')?>
-        <?=$f->field($form, 'nut_pitch')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['thread'] : ''])->label('Шаг резьбы:')?>
-		<?=$f->field($form, 'nut_class')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['class'] : ''])->label('Класс прочности:')?>
+        <!-- nut thread --> 
+        <?php
+            $items = ['6'=>'М6', '8' => 'М8', '10' => 'М10', '12'=>'М12', '14' => 'М14', '16' => 'М16', '18' => 'М18', '20' => 'М20', '22' => 'М22',
+                    '24' => 'М24', '27' => 'М27', '30' => 'М30', '36' => 'М36', '42' => 'М42', '48' => 'М48'];
+            $params = ['prompt' => 'Не выбран']; 
+            $form->bolt_thread = $item->dimensions['thread']; 
+            echo $f->field($form, 'nut_thread')->dropDownList($items, $params)->label('Диаметр резьбы:');
+        ?>
+        <?//=$f->field($form, 'nut_thread')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['thread'] : ''])->label('Резьба:')?>
+        <?//=$f->field($form, 'nut_pitch')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['thread'] : ''])->label('Шаг резьбы:')?>
+		<!-- nut pitch -->
+        <?php
+            $items = ['0,5'=>'0,5', '0,75' => '0,75', '1' => '1', '1,25'=>'1,25', '1,5' => '1,5', '2' => '2', '3' => '3'];
+            $params = ['prompt' => 'Не выбран']; 
+            $form->nut_pitch = $item->dimensions['pitch'];
+            echo $f->field($form, 'nut_pitch')->dropDownList($items, $params)->label('Шаг резьбы:');
+        ?>
+        <?=$f->field($form, 'nut_class')->textInput(['value' => ($item->dimensions['type'] == 'nut') ? $item->dimensions['class'] : ''])->label('Класс прочности:')?>
     </div> 
     
     <!-- bolt dimesions --> 

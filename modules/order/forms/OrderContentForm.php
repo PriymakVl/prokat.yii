@@ -38,6 +38,7 @@ class OrderContentForm extends BaseForm
     public $delivery;
     public $dimensions;
     //form
+    public $detailNames;
     public $element;
     public $newNumberDepartmentDwg;
     public $newFullNumberDepartmentDwg;
@@ -61,9 +62,9 @@ class OrderContentForm extends BaseForm
         return [
             ['name', 'required', 'message' => 'Необходимо заполнить поле'],
             ['name', 'string', 'length' => [2, 40]],
-            [['type_dimensions', 'cat_dwg', 'code', 'type_dwg', 'filename', 'material_add'], 'string'],
+            [['type_dimensions', 'cat_dwg', 'code', 'type_dwg', 'filename', 'material_add', 'nut_pitch'], 'string'],
             [['note', 'material', 'variant', 'file', 'weight', 'drawing', 'bolt_class', 'nut_class', 'bolt_pitch'], 'string'],
-            [['order_id', 'nut_thread', 'nut_pitch', 'bolt_thread', 'bolt_length'], 'integer'],
+            [['order_id', 'nut_thread', 'bolt_thread', 'bolt_length'], 'integer'],
             [['shaft_length', 'shaft_diam', 'bush_height', 'bush_in_diam', 'bush_out_diam'], 'integer'],
             [['bar_length', 'bar_height', 'bar_width'], 'integer'],
             [['count', 'item', 'rating', 'obj_id', 'delivery',], 'default', 'value' => 0],
@@ -112,6 +113,7 @@ class OrderContentForm extends BaseForm
             }
             if ($this->element->dimensions) $obj->dimensions = $this->element->dimensions;
             if (!$obj->weight && $this->element->weight) $obj->weight = $this->element->weight;
+            if ($this->material) $obj->material = $this->material;
             $obj->save();
         }  
     }
@@ -201,21 +203,15 @@ class OrderContentForm extends BaseForm
     {
         $this->newNumberDepartmentDwg = DrawingLogic::getNewNumberDepartmentDwg();
         $year = date('y');
-        $this->newFullNumberDepartmentDwg = '27.'.$this->newNumberDepartmentDwg.'.'.$year;
+        $this->newFullNumberDepartmentDwg = '27.'.$year.'.'.$this->newNumberDepartmentDwg;
         return $this;
     }
 
-//    private function getObject() 
-//    {
-//        $obj = null;
-//        if ($this->obj_id) $obj = Objects::getOne($obj_id);
-//        else if ($this->drawing) $obj = Objects::findOne(['code' => $this->drawing, 'status' => self::STATUS_ACTIVE]); 
-//        if ($obj) $obj->getName();  
-//        return $obj; 
-//    }
-
-
-
+    public function getArrayDetailNames()
+    {
+        $this->detailNames = \Yii::$app->params['detailNames'];
+        return $this;
+    }
 
 }
 

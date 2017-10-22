@@ -85,7 +85,7 @@ class OrderForm extends BaseForm
         $this->order->number = $this->number;
         $this->order->state = $this->number ? $this->state : Order::STATE_DRAFT;
         $this->order->period = OrderLogic::getPeriod($this->order->date);
-        //debug($this);
+        OrderLogic::deleteNumberFromWhiteList($this->number);
         return $this->order->save();
     }
     
@@ -198,7 +198,7 @@ class OrderForm extends BaseForm
         if ($result) $this->unit = $result->name;
         return $this;
     }
-    
+      
 }
 
 

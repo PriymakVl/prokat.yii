@@ -7,18 +7,19 @@ use app\controllers\BaseController;
 use app\modules\orderact\logic\OrderActLogic;
 use app\modules\orderact\models\OrderAct;
 use app\modules\orderact\models\OrderActContent;
-use app\modules\orderact\forms\OrderActForm;
+use app\modules\orderact\forms\OrderActContentForm;
 
 class OrderActContentController extends BaseController
 {
     public $layout = "@app/views/layouts/base";
     
-    public function actionIndex($list_id)
+    public function actionIndex($item_id)
     {
-        $list = OrderList::getOne($list_id, false, self::STATUS_ACTIVE);
-        $list->convertType()->checkActive('order-list-active');
-        //$content = OrderListContent::getBylistId($list->id);
-        return $this->render('index', compact('list', 'content'));
+        $item = OrderActContent::getOne($item_id, false, self::STATUS_ACTIVE);
+        $act = OrderAct::getOne($item->act_id, false, self::STATUS_ACTIVE);
+        $detail = OrderContent::getOne($item->item_id, false, self::STATUS_ACTIVE);
+        $order = Order::getOne($detail->order_id, false, self::STATUS_ACTIVE);
+        return $this->render('index', compact('item', 'detail', 'order', 'act'));
     }
     
     public function actionList($type = null)
@@ -29,22 +30,28 @@ class OrderActContentController extends BaseController
         return $this->render('list', compact('list_list', 'params', 'pages'));
     }
     
-    public function actionForm($list_id = null)
+    public function actionForm($act_id, $item_id = null)
     {     
-        $list = OrderList::getOne($list_id, null, self::STATUS_ACTIVE);       
-        $form = new OrderListForm();
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($list)) {
-            Yii::$app->session->setFlash('success-order-list', 'Список заказов успешно '.($list ? 'отредактирован' : 'создан'));
-            return $this->redirect(['/order-list/active/set', 'list_id' => $form->list_id]);
+        $item = OrderActContent::getOne($item_id, null, self::STATUS_ACTIVE); 
+        if (!$item) {
+            $item = new OrderActContent();
+            $item->act_id = $act_id;
+            $item->save();    
+        }     
+        $form = new OrderActContentForm($item);
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
+            Yii::$app->session->setFlash('success', 'Элемент акта успешно '.($item ? 'отредактирован' : 'создан'));
+            return $this->redirect(['/order/act', 'act_id' => $form->item->act_id]);
         }        
-        else return $this->render('form', compact('form', 'list'));    
+        else return $this->render('form', compact('form', 'item'));    
     }
     
-   public function actionDelete($list_id)
+   public function actionDelete($item_id)
     {
-        $list = OrderList::getOne($list_id, false, self::STATUS_ACTIVE);
-        $list->deleteOne();
-        $this->redirect('/order-list/list');   
+        $item = OrderActContent::getOne($item_id, false, self::STATUS_ACTIVE);
+        $item->deleteOne();
+        \Yii::$app->session->setFlash('success', 'Элемент успешно удален');
+        return $this->redirect(\Yii::$app->request->referrer);   
     }
     
     public function actionSetActive($list_id)

@@ -11,6 +11,7 @@
         <? else: ?>
             Поиск произведен по номеру чертежа:<span>&laquo; <?=$drawing?> &raquo;</span>
         <? endif; ?>
+        <a href="#" onclick="javascript:history.back();">Вернуться назад</a>
     </div>
 <? if ($orders): ?>
     <table>

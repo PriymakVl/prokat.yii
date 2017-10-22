@@ -8,6 +8,8 @@ use app\modules\orderact\logic\OrderActLogic;
 use app\modules\orderact\models\OrderAct;
 use app\modules\orderact\models\OrderActContent;
 use app\modules\orderact\forms\OrderActForm;
+use app\modules\order\models\Order;
+use app\modules\order\models\OrderContent;
 
 class OrderActController extends BaseController
 {
@@ -16,46 +18,75 @@ class OrderActController extends BaseController
     public function actionIndex($act_id)
     {
         $act = OrderAct::getOne($act_id, false, self::STATUS_ACTIVE);
+        $act->getOrder()->convertDepartment()->getPeriod()->convertState();
         $act->checkActive('order-act-active');
-        $content = OrderActContent::getByActId($act->id);
+        $content = OrderActContent::getContentByActId($act->id);
         return $this->render('index', compact('act', 'content'));
     }
     
-    public function actionList($mounth = null, $year = null, $state = null)
+    public function actionList($month = null, $year = null, $state = null)
     {
-        $params = OrderActLogic::getParams($mounth, $year, $state);
+        $params = OrderActLogic::getParams($month, $year, $state);
         $list = OrderAct::getActList($params);
-        $pages = OrderAct::$pages;
-        return $this->render('list', compact('list', 'params', 'pages'));
+        $period = self::convertMonth(date('m'), true).' '.date('Y').'г.';
+        $costs = OrderActLogic::countCostMonth($month, $year);
+        return $this->render('list', compact('list', 'params', 'period', 'costs'));
     }
     
-    public function actionForm($act_id)
+    public function actionForm($act_id = null)
     {     
-        $act = OrderAct::getOne($act_id, false, self::STATUS_ACTIVE);
-        $order = Order::getOne($act->order_id, false, self::STATUS_ACTIVE);
-        $content = OrderActContent::getContentByActId($act->id);       
-        $form = new OrderActForm();
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($act)) {
-            Yii::$app->session->setFlash('success-order-act', 'Акт успешно отредактирован');
-            return $this->redirect(['/order-act/active/set', 'act_id' => $form->act_id]);
+        $act = OrderAct::getOne($act_id, null, self::STATUS_ACTIVE);
+        $order = $act ? Order::getOne($act->order_id, false, self::STATUS_ACTIVE) : null;
+        //$content = OrderActContent::getContentByActId($act->id);       
+        $form = new OrderActForm($act);
+        $form->getMonths();
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
+            $message = $act_id ? 'Акт успешно отредактирован' : 'Акт успешно создан';
+            Yii::$app->session->setFlash('success', $message);
+            return $this->redirect(['/order/act', 'act_id' => $form->act->id]);
         }        
-        else return $this->render('form', compact('form', 'act', 'order', 'content'));    
+        else return $this->render('form', compact('form', 'act', 'order'));    
     }
     
     public function actionRegistration($ids, $order_id, $number)
     {   
         $act_id = OrderAct::registration($number, $order_id);
-        OrderActContent::setContentWhenRegistrationAct($act_id, $ids);
-        $this->redirect(['/order-act/form', 'act_id' => $act_id]);   
+        $items = OrderContent::findAll(explode(',', $ids));
+        foreach ($items as $item) {
+            $act_item = new OrderActContent();
+            $act_item->setDataWhenRegistrationAct($act_id, $item);
+            $act_item->save();
+        }
+        $this->redirect(['/order/act/form', 'act_id' => $act_id]);   
     }
     
-   public function actionDelete($act_id)
+    public function actionDelete($act_id)
     {
-        $result_act = OrderAct::deleteOne($act_id);
-        $result_content = OrderActContent::deleteOne($act_id);
-        if ($result_act && $result_content) Yii::$app->session->setFlash('success-order-act', 'Акт и содержимое успешно удалены');
-        else Yii::$app->session->setFlash('error-order-act', 'При удалении акта произошла ошибка');
-        $this->redirect('/order-act/list');   
+        $act = OrderAct::findOne($act_id);
+        if ($act) {
+            $act->deleteOne();
+            OrderActLogic::deleteActContent($act->id);
+            \Yii::$app->session->setFlash('success', 'Акт успешно удален');
+            $this->redirect('/order/act/list'); 
+        }
+        else {
+                \Yii::$app->session->setFlash('danger', 'При удалении акта произошла ошибка');
+                $this->redirect(['/order/act', 'act_id' => $act->id]);    
+        }  
+    }
+    
+    public function actionDeleteList($ids)
+    {
+        $result = OrderActLogic::deleteActs($ids);
+        if ($result) \Yii::$app->session->setFlash('success', 'Акты успешно удалены');
+        else \Yii::$app->session->setFlash('danger', 'При удалении актов произошла ошибка');
+        $this->redirect('/order/act/list');   
+    }
+    
+    public function actionEditState($ids)
+    {
+        OrderActLogic::editActState($ids);
+        return $this->redirect(\Yii::$app->request->referrer);
     }
     
     public function actionSetActive($act_id)

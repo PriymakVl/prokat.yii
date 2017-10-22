@@ -40,7 +40,7 @@ class OrderContentController extends BaseController
         if ($item) $item->dimensions = unserialize($item->dimensions);
         //debug($item->dimensions['type']);
         $form = new OrderContentForm($item);
-        $form->getNewNumberDepartmentDwg();
+        $form->getNewNumberDepartmentDwg()->getArrayDetailNames();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
             Yii::$app->session->setFlash('success-order-item', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
@@ -57,24 +57,19 @@ class OrderContentController extends BaseController
         
     }
     
-     public function actionDeleteList($ids, $order_id) 
+    public function actionDeleteList($ids, $order_id) 
     {
         OrderContent::deleteList($ids);
         return $this->redirect(['/order/content/list', 'order_id' => $order_id]);
         
     }
     
-//    public function actionAddObjectForm($order_id, $code)
-//    {
-//        $object = Objects::findOne(['code' => $code, 'status' => self::STATUS_ACTIVE]);  
-//        if (!$object) {
-//            //Yii::$app->getSession()->setFlash('error', 'Your Text Here..');  
-//            //return $this->redirect(['/order/content/list', 'order_id' => $order_id]); 
-//            exit('not find object by code');
-//        }
-//        $item = OrderLogic::saveParamsFromObject($object, $order_id);
-//        $this->redirect(['/order/content/item', 'item_id' => $item->id]);
-//    }
+    public function actionItemsManagment($ids, $order_id) 
+    {
+        OrderLogic::deleteOrAddItemContent($ids);
+        return $this->redirect(['/order/content/list', 'order_id' => $order_id]);
+        
+    }
     
     public function actionAddOne($obj_id)
     {

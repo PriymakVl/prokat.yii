@@ -20,6 +20,7 @@ $(document).ready(function() {
         if (!name || !equipment_id) {
             $('#equipment-units').html('<option value="">Не выбран</option>').prop('disabled', true); 
             $('#orderform-unit').val('');
+            $('#orderform-inventory').val('');
             return;    
         }
         else {
@@ -46,8 +47,8 @@ function addEquipments(data)
     }
     else {
         items = JSON.parse(data);
+        html = '<option value="">Не выбран</option>';
         for (var i = 0; i < items.length; i++) { 
-            html = '<option value="">Не выбран</option>';
             html += '<option value="' + items[i].id + '" inventory="' + items[i].inventory + '" name_equ="' + items[i].name + '">' + items[i].alias + '</option>';
         }
         $('#section-equipments').html(html).prop( "disabled", false); 
@@ -64,8 +65,8 @@ function addUnits(data)
     }
     else {
         items = JSON.parse(data);
+        html = '<option value="">Не выбран</option>';
         for (var i = 0; i < items.length; i++) { 
-            html = '<option value="">Не выбран</option>';
             html += '<option value="' + items[i].id + '" name_unit="' + items[i].name + '">' + items[i].alias + '</option>';
         }
         $('#equipment-units').html(html).prop( "disabled", false); 

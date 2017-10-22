@@ -14,12 +14,19 @@
     margin-top: 15px;
 }
 
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+
+.text-center {
+    text-align: center !important;    
+}
+
 /* info */
 .info-box {
 	padding:5px 0 5px 10px;
 	border:1px solid #B49A6A;
-	text-align: left;
-    margin-top: 15px;    
+	text-align: left;   
 }
 
 .info-box span {
@@ -72,9 +79,7 @@
 .content table td {
     padding-left: 5px;
 }
-.content table td.text-center {
-    text-align: center !important;    
-}
+
 table input[type="radio"] {
     margin: 8px;   
 }

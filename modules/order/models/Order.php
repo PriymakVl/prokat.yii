@@ -60,9 +60,10 @@ class Order extends BaseModel
     
     public static function getOrderList($params)
     {
-        if ($params['state'] == self::STATE_DRAFT) $query = self::find()->where($params);
-        else if ($params['state'] == self::STATE_PERMANENT) $query = self::find()->where($params);
-        else $query = self::find()->where($params)->andWhere(['!=', 'state', self::STATE_DRAFT]);
+        //if ($params['state'] == self::STATE_DRAFT) $query = self::find()->where($params);
+        //else if ($params['state'] == self::STATE_PERMANENT) $query = self::find()->where($params);
+        //else $query = self::find()->where($params)->andWhere(['!=', 'state', self::STATE_DRAFT]);
+        $query = self::find()->where($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['number' => SORT_DESC])->all();
         return self::executeMethods($list, ['getNumber', 'getShortCustomer', 'getContent']);

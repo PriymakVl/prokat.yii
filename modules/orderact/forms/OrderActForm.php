@@ -13,19 +13,28 @@ class OrderActForm extends BaseForm
     public $date_creat;
     public $date_pass;
     public $cost;
-    public $time;
+    public $working_hour;
     public $order_id;
     public $note;
     public $department;
+    public $month;
+    public $state;
     //form
-    public $act_id;
+    public $act;
+    public $months;
+    
+    public function __construct($act)
+    {
+        if ($act) $this->act = $act;
+        else $this->act = new OrderAct();
+    }
     
     public function rules() 
     {
         return [
             [['number'], 'required', 'message' => 'Необходимо заполнить поле'],
             ['cost', 'string'],
-            ['time', 'string'],
+            [['working_hour', 'month', 'state'], 'integer'],
             ['department', 'string'],
             [['date_creat'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
             [['date_pass'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
@@ -41,34 +50,24 @@ class OrderActForm extends BaseForm
     	return ['order-act-logic' => ['class' => OrderActLogic::className()]];
     }
     
-    public function save($act) 
+    public function save() 
     {
-        $act = $this->updateData($act);
-        if (!$act->save()) return false;
-        $this->saveContent($act);
-        $this->act_id = $act->id;
-        return true;  
+        $this->act->number = $this->number;
+        $this->act->note = $this->note;
+        $this->act->department = $this->department;
+        $this->act->state = $this->state;
+        //$this->act->date_creat = strtotime($this->prepareDateForConvert($this->date_creat));
+        //$this->act->date_regist = $this->date_regist;
+        //$this->act->date_pass = $this->date_pass;
+        $this->act->working_hour = $this->working_hour;
+        $this->act->cost = $this->cost;
+        return $this->act->save();   
     }
     
-    private function updateData($act)
+    public function getMonths()
     {
-        $act->number = $this->number;
-        $act->note = $this->note;
-        $act->date_creat = strtotime($this->prepareDateForConvert($this->date_creat));
-        $act->date_regist = $this->date_regist;
-        $act->date_pass = $this->date_pass;
-        $act->time = $this->time;
-        $act->cost = $this->cost;
-        return $act;
-    }
-    
-    private function saveContent($act)
-    {
-        $content = OrderActContent::findAll(['act_id' => $act->id, 'status' => STATUS_ACTIVE]);
-        if (!$content) return false;
-        foreach ($content as $item) {
-            $item->count = $_POST['count_'.$item->id];
-        }
+        $this->months = self::getArrayMonths();
+        return $this;
     }
     
 }

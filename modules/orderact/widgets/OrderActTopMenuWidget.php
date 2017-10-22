@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\order\widgets;
+namespace app\modules\orderact\widgets;
 
 use Yii;
 use yii\base\Widget;

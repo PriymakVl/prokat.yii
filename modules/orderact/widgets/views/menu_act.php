@@ -2,31 +2,23 @@
 
 use \yii\helpers\Url;
 
-$this->registerJsFile('js/order/order_copy.js');
+//$this->registerJsFile('js/order/order_copy.js');
 ?>
+
 <div  class="sidebar-menu">
-    <h5>Заказ</h5>   
+    <h5>Акт</h5>   
     <ul >
         <li>
-            <a href="<?=Url::to(['/order/form'])?>">Выдать заказ</a>
+            <a href="<?=Url::to(['/order/act/form'])?>">Зарегистрировать акт</a>
         </li>
         <li>
-            <a href="<?=Url::to(['/order/form', 'order_id' => $order_id])?>">Редактировать заказ</a>
+            <a href="<?=Url::to(['/order/act/form', 'act_id' => $act->id])?>">Редактировать акт</a>
         </li>
          <li>
-            <a href="<?=Url::to(['/order/delete', 'order_id' => $order_id])?>">Удалить заказ</a>
-        </li>
-         <li>
-            <a href="<?=Url::to(['/order-list-content/add/order', 'order_id' => $order_id])?>">Добавить в список</a>
+            <a href="<?=Url::to(['/order/act/delete', 'act_id' => $act->id])?>">Удалить акт</a>
         </li>
         <li>
-            <a href="" onclick="return false;" id="order-copy">Перевыдать заказ</a>
-        </li>
-        <li>
-            <a href="<?=Url::to(['/order/title/sheet/print', 'order_id' => $order_id])?>">Создать титул. лист</a>
-        </li>
-        <li>
-            <a href="<?=Url::to(['/order/content/sheet/print', 'order_id' => $order_id])?>">Создать внутр. лист</a>
+            <a href="<?=Url::to(['/order/act/demand/print', 'act_id' => $act->id])?>">Создать требование</a>
         </li>
     </ul>
 </div>

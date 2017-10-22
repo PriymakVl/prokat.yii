@@ -18,12 +18,18 @@ class OrderContentSheetCreateController extends BaseController
     public $order;
     public $content;
     public $styleContent;
+    public $page;
     
-    public function actionIndex($order_id) 
+    public function actionIndex($order_id, $ids, $page) 
     { 
+        $this->page = $page;
         $this->order = Order::findOne($order_id);
         $this->order->getWork(false);
-        $this->content = OrderContent::getItemsOfOrder($this->order->id);
+        $this->content = OrderContent::getContentForPrint($ids);
+        if (!$this->content) {
+            Yii::$app->session->setFlash('error', 'Нет элементов для печати'); 
+            return $this->redirect(Yii::$app->request->referrer);   
+        }
         $this->objPHPExcel = new \PHPExcel();
         $this->setActiveSheet();
         $this->setSetup();
@@ -31,7 +37,7 @@ class OrderContentSheetCreateController extends BaseController
         $this->setTitles();
         $this->setHeaderAndFooter();
         $this->setStyleWork();
-        $this->setWorkOrder();
+        if ($page == 1) $this->setWorkOrder();
         $this->setStyleBorders();
         $this->setStyleContentOrder();
         $this->setContent();
@@ -75,8 +81,8 @@ class OrderContentSheetCreateController extends BaseController
     private function setHeaderAndFooter()
     {
         //$this->activeSheet->setTitle("Лист 1");	
-        //$this->activeSheet->getHeaderFooter()->setOddHeader("&CШапка нашего прайс листа");	
-        $this->activeSheet->getHeaderFooter()->setOddFooter('&CСтраница 1');   
+        $this->activeSheet->getHeaderFooter()->setOddHeader('&R&12Страница '.$this->page);	
+        //$this->activeSheet->getHeaderFooter()->setOddFooter('&C&14Страница '.$this->page);   
     }
     
     private function setFont()
@@ -173,6 +179,7 @@ class OrderContentSheetCreateController extends BaseController
                 $dimensions = $this->content[$i]->dimensions ? PHP_EOL.$this->content[$i]->dimensions : '';
             	$this->activeSheet->setCellValue('C'.$num, $this->content[$i]->name.$dimensions);
                 $this->activeSheet->setCellValue('D'.$num, $this->content[$i]->count);
+                //debug($this->content[$i], false);
                 $this->setMaterial($num, $this->content[$i]->material, $this->content[$i]->material_add);
                 $this->setWeight($num, $this->content[$i]); 
                 if ($this->content[$i]->delivery) {
@@ -188,28 +195,7 @@ class OrderContentSheetCreateController extends BaseController
             $this->activeSheet->getStyle('A3:F'.$num)->applyFromArray($this->styleContent); 
             $this->activeSheet->getStyle('C'.$num)->getAlignment()->setWrapText(true);
             $this->activeSheet->getRowDimension($num)->setRowHeight(50);
-            if ($this->content[$i]->children) $i = $this->setChildren($num, $i, $this->content[$i]->children);
         }    
-    }
-    
-    private function setChildren($num, $i, $children)
-    {
-        $end = 10 - $i++;
-        for ($j = 0; $j < $end; $j++) {
-            $num++;
-            //debug($children[$j]);
-            $this->activeSheet->setCellValue('A'.$num, $children[$j]->drawing);
-       	    $this->setItem($num, $children[$j]);
-        	$this->activeSheet->setCellValue('C'.$num, $children[$j]->name);
-            $this->activeSheet->setCellValue('D'.$num, $children[$j]->count);
-            $this->setMaterial($num, $children[$j]->material);
-            $this->setWeight($num, $children[$j]); 
-            //style
-            $this->activeSheet->getStyle('A3:M'.$num)->applyFromArray($this->styleBorder);
-            $this->activeSheet->getStyle('A3:F'.$num)->applyFromArray($this->styleContent); 
-            $this->activeSheet->getRowDimension($num)->setRowHeight(40);
-        } 
-        return $j + $i;   
     }
     
     private function setWeight($num, $object)
@@ -233,6 +219,7 @@ class OrderContentSheetCreateController extends BaseController
     
     private function setMaterial($num, $material, $material_add)
     {
+        if (!$material) return;
         $material = $material_add ? $material.PHP_EOL.$material_add : $material;
    	    $this->activeSheet->setCellValue('E'.$num, $material); 
         $this->activeSheet->getStyle('E'.$num)->getAlignment()->setWrapText(true);

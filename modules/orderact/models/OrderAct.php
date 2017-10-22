@@ -11,12 +11,14 @@ class OrderAct extends BaseModel
 {
     public $content;
     public $order;
+    public $period;
+    public $colorState;
     
     const PAGE_SIZE = 15;
     
-    const STATE_ACTIVE = 1;
-    const STATE_CANCELED = 2;
-    const STATE_PASSED = 3;
+    const STATE_PROCESSED = 1;
+    const STATE_PASSED = 2;
+    const STATE_CANCELED = 3;
     
     public static function tableName()
     {
@@ -37,16 +39,14 @@ class OrderAct extends BaseModel
     public function getOrder()
     {
         $this->order = Order::findOne($this->order_id);
-        $this->order->getNumber();
+        $this->order->getNumber()->getCustomerForPrint();
         return $this;
     }
     
     public static function getActList($params)
     {
-        $query = self::find()->filterWhere($params);
-        self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
-        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['date_registr' => SORT_DESC])->all();
-        return self::executeMethods($list, ['getOrder', 'convertState', 'getContent', 'convertMonth']);
+        $list = self::findAll($params);
+        return self::executeMethods($list, ['getOrder', 'getColorState']);
     }
     
     public function convertState()
@@ -57,14 +57,42 @@ class OrderAct extends BaseModel
     
     public function registration($number, $order_id)
     {
+        $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $data_registr = time();
         $month = date('n');
         $year = date('Y');
-        $state = OrderAct::STATE_ACTIVE;
-        $sql = "INSERT INTO `".self::tableName()."` (`number`, `order_id`, `date_registr`, `month`, `year`, `state`) 
-                VALUES ($number, $order_id, $data_registr, $month, $year, $state)";
+        $state = OrderAct::STATE_PROCESSED;
+        $sql = "INSERT INTO `".self::tableName()."` (`number`, `order_id`, `date_registr`, `month`, `year`, `state`, `type`) 
+                VALUES ($number, $order_id, $data_registr, $month, $year, $state, $order->type)";
         \Yii::$app->db->createCommand($sql)->execute();
         return \Yii::$app->db->getLastInsertID();
+    }
+    
+    public function convertDepartment()
+    {
+        $this->department = OrderActLogic::convertDepartment($this->department);
+        return $this;
+    }
+    
+    public function getPeriod()
+    {
+        $this->period = OrderActLogic::getPeriod($this);
+        return $this;
+    }
+    
+    public static function searchByNumber($number)
+    {
+        $acts = self::findAll(['number' => $number, 'status' => self::STATUS_ACTIVE]);
+        if (!$acts) return false;
+        return self::executeMethods($acts, ['getOrder', 'getPeriod', 'convertDepartment']);
+    }
+    
+    public function getColorState()
+    {
+        if ($this->state == self::STATE_PROCESSED) $this->colorState = 'red';
+        else if ($this->state == self::STATE_PASSED) $this->colorState = 'green';
+        else $this->colorState = 'grey';
+        return $this;
     }
 
 }

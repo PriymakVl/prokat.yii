@@ -1,6 +1,6 @@
 <?php
-    use yii\web\JqueryAsset;
     use app\modules\order\logic\OrderLogic;
+    use app\modules\order\models\Order;
     
     $this->registerCssFile('/css/order.css');
     $this->registerJsFile('/js/order/sort_orders.js');
@@ -37,6 +37,17 @@
         <option value="<?=Orderlogic::TYPE_MAINTENANCE?>" <? if ($params['type'] == Orderlogic::TYPE_MAINTENANCE) echo 'selected'; ?>>Тек. ремонт</option>
 		<option value="<?=Orderlogic::TYPE_CAPITAL_REPAIR?>" <? if ($params['type'] == Orderlogic::TYPE_CAPITAL_REPAIR) echo 'selected'; ?>>Кап. ремонт</option>
         <option value="<?=Orderlogic::TYPE_ENHANCEMENT?>" <? if ($params['type'] == Orderlogic::TYPE_ENHANCEMENT) echo 'selected'; ?>>Улучшение</option>
+    </select>
+    
+    <!-- state -->
+    <label>Состояние:</label>
+    <select id="order-state">
+        <option value="all" <? if (empty($params['state'])) echo 'selected'; ?>>Все</option>
+        <option value="<?=Order::STATE_ACTIVE?>" <? if ($params['state'] == Order::STATE_ACTIVE) echo 'selected'; ?>>Выданы</option>
+        <option value="<?=Order::STATE_DRAFT?>" <? if ($params['state'] == Order::STATE_DRAFT) echo 'selected'; ?>>Черновики</option>
+        <option value="<?=Order::STATE_CLOSED?>" <? if ($params['state'] == Order::STATE_CLOSED) echo 'selected'; ?>>Закрытые</option>
+		<option value="<?=Order::STATE_NOT_ACCEPTED?>" <? if ($params['state'] == Order::STATE_NOT_ACCEPTED) echo 'selected'; ?>>Не приняты</option>
+        <option value="<?=Order::STATE_PERMANENT?>" <? if ($params['state'] == Order::STATE_PERMANENT) echo 'selected'; ?>>Постоянные</option>
     </select>
         
 </div>

@@ -12,6 +12,7 @@ use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
 use app\modules\drawing\models\DrawingSundbirsta;
 use app\modules\drawing\models\DrawingStandardDanieli;
+use app\modules\orderact\models\OrderActContent;
 
 class ObjectLogic extends BaseLogic
 {
@@ -112,6 +113,25 @@ class ObjectLogic extends BaseLogic
             $dimensions['width'] = $item->bar_width;   
         }
         return $dimensions;
+    }
+    
+        public static function getReserve($code)
+    {
+        $items_reseived = OrderActContent::findAll(['code' => $code, 'status' => self::STATUS_ACTIVE, 'state' => OrderActContent::STATE_RECEIVED]);
+        $items_installed = OrderActContent::findAll(['code' => $code, 'status' => self::STATUS_ACTIVE, 'state' => OrderActContent::STATE_INSTALLED]);
+        $summ_reseived = self::countReserve($items_reseived);
+        $summ_installed = self::countReserve($items_installed);
+        return $summ_reseived - $summ_installed;
+    }
+    
+    private static function countReserve($items)
+    {
+        $summ = 0;
+        if (!$items) return $summ;
+        foreach ($items as $item) {
+            $summ += $item->count;
+        }
+        return $summ;
     }
 
 

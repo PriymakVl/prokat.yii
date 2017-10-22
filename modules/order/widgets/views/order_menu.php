@@ -3,6 +3,7 @@
 use \yii\helpers\Url;
 
 $this->registerJsFile('/js/order/order_copy.js');
+$this->registerJsFile('/js/order/content_print.js');
 
 ?>
 <div  class="sidebar-menu">
@@ -29,7 +30,7 @@ $this->registerJsFile('/js/order/order_copy.js');
             <a href="<?=Url::to(['/order/title/sheet/print', 'order_id' => $order_id])?>">Напечатать титул. лист</a>
         </li>
         <li>
-            <a href="<?=Url::to(['/order/content/sheet/print', 'order_id' => $order_id])?>">Напечатать внутр. лист</a>
+            <a href="#" onclick="return false;" id="order-content-print">Напечатать внутр. лист</a>
         </li>
         <li>
             <a href="<?=Url::to(['/order/blank/print', 'order_id' => $order_id])?>">Напечатать бланк</a>

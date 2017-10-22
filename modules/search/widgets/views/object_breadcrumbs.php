@@ -10,7 +10,7 @@
     </tr>
     <tr>
         <td class="text-center">
-            <a href="<?=Url::to(['object/drawing', 'obj_id' => $object->id])?>"><?=$object->code ? $object->code : 'не указан'?></a>
+            <a href="<?=Url::to(['/object/drawing', 'obj_id' => $object->id])?>"><?=$object->code ? $object->code : 'не указан'?></a>
         </td>
         <td>
             <?=$breadcrumbs?>

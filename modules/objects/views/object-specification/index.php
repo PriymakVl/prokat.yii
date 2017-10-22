@@ -18,7 +18,7 @@ $this->registerCssFile('css/specification.css');
     <?=ObjectTopMenuWidget::widget(['obj_id' => $parent->id])?>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название:</span>&laquo; <?=$parent->name?> &raquo;
         <? if ($parent->code): ?>
             <br />
@@ -29,7 +29,7 @@ $this->registerCssFile('css/specification.css');
     </div>
     
     <!-- specification -->
-    <table>
+    <table class="margin-top-15">
         <tr>
                 <th width="30"><input type="checkbox" id="checked-all" /></th>
                 <th width="50">Поз</th>

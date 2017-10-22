@@ -41,7 +41,7 @@ $this->registerCssFile('/css/order.css');
     </div>
     
     <!-- order item data -->
-    <table>
+    <table class="margin-bottom-15">
         <tr>
             <th width="180">Наименование</th>
             <th width="545">Значение</th>

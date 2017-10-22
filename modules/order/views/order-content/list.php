@@ -11,6 +11,7 @@ use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
 
 $this->registerCssFile('/css/order.css');
+$this->registerJsFile('/js/order/content_list_pagination.js');
 
 ?>
 <div class="content">
@@ -29,6 +30,26 @@ $this->registerCssFile('/css/order.css');
         <div class="alert alert-success margin-top-15">Активный заказ</div>
     <? endif; ?>
     
+    <!-- action error -->
+    <?php if (Yii::$app->session->hasFlash('error')): ?>
+       <div class="alert alert-danger margin-top-15">
+            <?= Yii::$app->session->getFlash('error') ?>
+       </div>
+    <?php endif; ?>
+
+    <!-- page box -->
+    <? if (count($content) > 10): ?>
+        <div id="page-content-wrp" class="top-menu margin-bottom-15 margin-top-15">
+            <a id="page-all" class="top-menu-active-link" href="#" onclick="return false;">Показать все</a>
+            <a id="page-1" href="#" page="1" onclick="return false;">Страница 1</a>
+            <a id="page-2" href="#" page="2" onclick="return false;">Страница 2</a>
+            <? if (count($content) > 20) echo '<a id="page-3" href="#" page="3" onclick="return false;">Страница 3</a>'?>
+            <? if (count($content) > 30) echo '<a id="page-4" href="#" page="4" onclick="return false;">Страница 4</a>'?>
+            <? if (count($content) > 40) echo '<a id="page-5" href="#" page="5" onclick="return false;">Страница 5</a>'?>
+            <? if (count($content) > 50) echo '<a id="page-6" href="#" page="5" onclick="return false;">Страница 6</a>'?>
+        </div>
+    <? endif; ?>
+    
     <!-- order content -->
     <table>
         <tr>
@@ -40,10 +61,11 @@ $this->registerCssFile('/css/order.css');
             <th width="85">Матер.</th>
         </tr>
         <? if ($content): ?>
+            <? $number = 1; ?>
             <? foreach ($content as $item): ?>
                 <tr <? if ($item->children) echo 'class="item-parent"'; ?>>
                     <td>
-                        <input type="checkbox" name="content" item_id="<?=$item->id?>" />
+                        <input type="checkbox" name="content" item_id="<?=$item->id?>" number="<?=$number?>" />
                     </td>
                     <!-- drawing -->
                     <td class="text-center">
@@ -57,7 +79,7 @@ $this->registerCssFile('/css/order.css');
                     </td>
                     
                     <!-- item -->
-                    <td class="text-center">
+                    <td class="text-center" <? if ($item->parent_id != 0) echo 'style="background:yellow;"' ?>>
                         <? if ($item->children && !$item->item): ?>
                             <span>СБ</span>
                         <? else: ?>
@@ -88,9 +110,7 @@ $this->registerCssFile('/css/order.css');
                         <? endif; ?>
                     </td>
                 </tr>
-                <? if ($item->children): ?>
-                    <?=OrderItemChildrenWidget::widget(['parent' => $item])?>
-                <? endif ?>
+                <? $number++ ?>
             <? endforeach; ?>
         <? else: ?>
             <tr>
@@ -98,6 +118,15 @@ $this->registerCssFile('/css/order.css');
             </tr>
         <? endif; ?>
     </table>
+    
+    <!-- note -->
+    <? if ($order->note): ?>
+    <p class="header-note">Примечание:</p>
+    <div class="info-box" style="width:720px">
+        <?=$order->note?>
+    </div>
+    <? endif; ?>
+    
 </div>
 <!-- menu -->
 <div class="sidebar-wrp">

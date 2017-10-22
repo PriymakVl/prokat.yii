@@ -31,6 +31,12 @@ $this->registerCssFile('/css/drawing.css');
                 <?= $f->field($form, 'sheets')->textInput(['value' => $dwg->sheets])->label('Количество листвов:') ?>
                 
                 <?= $f->field($form, 'revision')->textInput(['value' => $dwg->revision])->label('Номер доработки:') ?>
+                
+                <!-- note -->
+            <?php
+                if ($dwg) $form->note = $dwg->note;
+                echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
+            ?>
             </div>
                       
             <!-- button -->

@@ -1,0 +1,33 @@
+.top-box, .act-form-date-wrp, .act-form-data-wrp {
+    position: relative;
+}
+
+.field-orderactform-department {
+    position: absolute;
+    top: 0;
+    left: 170px;
+}
+
+#state-wrp {
+    position: absolute;
+    top: 0;
+    left: 410px;   
+}
+
+.field-orderactform-month {
+    position: absolute;
+    top: 0;
+    left: 170px;    
+}
+
+.field-orderactform-year {
+    position: absolute;
+    top: 0;
+    left: 410px;    
+}
+
+.field-orderactform-working_hour {
+    position: absolute;
+    top: 0;
+    left: 200px;  
+}

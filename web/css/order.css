@@ -3,6 +3,9 @@
 }
 
 /** list content **/
+.header-note {
+    margin: 15px 0 -15px;
+}
 .item-parent {
     background: #E8E8E8;
 }
@@ -12,8 +15,14 @@
 }
 
 /** form content **/
-.form-wrp, #material-form-wrp, #material-add-form-wrp {
+.form-wrp, #material-form-wrp, #material-add-form-wrp, #unit-name-wrp {
     position: relative;
+}
+
+#unit-name-select-wrp {
+    position: absolute;
+    top: 0;
+    left: 430px;    
 }
 
 #material-add-form-wrp .order-content-item-material, #material-form-wrp .order-content-item-material {
@@ -22,7 +31,7 @@
     left: 360px;
 }
 
-.order-content-item-material select{
+.order-content-item-material select {
     width: 150px;
 }
 
@@ -139,8 +148,12 @@
 }
 
 /** top menu list **/
-#order-period, #order-customer {
-    margin-right: 25px;
+#order-period, #order-customer, #order-type{
+    margin-right: 15px;
+}
+
+#order-period, #order-customer, #order-type, #order-state{
+    width: 100px;
 }
 
 /** content order tab dismission */
