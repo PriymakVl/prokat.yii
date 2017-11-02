@@ -31,7 +31,7 @@ $this->registerJsFile('/js/object/form_show_tab.js');
             <?=ObjectFormTabWidget::widget(['template' => 'object/form_tab_main', 'f' => $f, 'form' => $form, 'obj' => $obj, 'parent_id' => $parent_id])?>
             
             <!-- drawing tab -->
-            <?//=ObjectFormTabWidget::widget(['template' => 'form_tab_drawing', 'f' => $f, 'form' => $form, 'obj' => $obj])?>
+            <?=ObjectFormTabWidget::widget(['template' => 'object/form_tab_dwg', 'f' => $f, 'form' => $form, 'obj' => $obj])?>
             
             <!-- dimensions tab -->
             <?//=ObjectFormTabWidget::widget(['template' => 'form_tab_dimensions', 'f' => $f, 'form' => $form, 'obj' => $obj])?>

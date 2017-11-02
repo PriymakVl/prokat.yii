@@ -13,6 +13,8 @@ class Product extends BaseModel
     public $objects;
     public $acts;
     
+    const PAGE_SIZE = 15;
+    
     public static function tableName()
     {
         return 'products';
@@ -41,7 +43,9 @@ class Product extends BaseModel
 
     public static function manufactured($params)
     {
-        $items = OrderActContent::find()->filterWhere($params)->all();
+        $query = OrderActContent::find()->filterWhere($params);
+        self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
+        $items = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all();
         if (!$items) return [];
         return self::executeMethods($items, ['getOrder', 'getAct']);
     }

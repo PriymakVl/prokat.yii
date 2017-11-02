@@ -100,7 +100,8 @@ table input[type="checkbox"] {
 .content .title-box {
 	border:1px solid #B49A6A;
 	text-align: center; 
-    font-size: 18px;    
+    font-size: 18px;  
+    position: relative;  
 }
 /* form */
 .content .form-wrp {

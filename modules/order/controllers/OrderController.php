@@ -14,7 +14,7 @@ class OrderController extends BaseController
     public $layout = "@app/views/layouts/base";
     
     public function actionIndex($order_id) 
-    { 
+    {   
         $order = Order::get($order_id);
         return $this->render('index', compact('order', 'session'));
     }
@@ -39,7 +39,8 @@ class OrderController extends BaseController
         //debug($form->unit);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             Yii::$app->session->setFlash('success', 'Заказ успешно '.($order ? 'отредактирован' : 'создан'));
-            $this->redirect(['/order/active/set', 'order_id' => $form->order->id]);
+            OrderLogic::setActive($form->order->id, 'order-active');
+            $this->redirect(['/order', 'order_id' => $form->order->id]);
         }   
         //Debug($order);
         return $this->render('form', compact('order', 'form'));
@@ -74,11 +75,11 @@ class OrderController extends BaseController
         $this->redirect(['/order', 'order_id' => $new_id]);  
     }
     
-    public function actionSetActive($order_id)
-    {
-        OrderLogic::setActive($order_id, 'order-active');
-        $this->redirect(['/order', 'order_id' => $order_id]); 
-    }
+//    public function actionSetActive($order_id)
+//    {
+//        OrderLogic::setActive($order_id, 'order-active');
+//        $this->redirect(['/order', 'order_id' => $order_id]); 
+//    }
     
 //    public function actionGetActive()
 //    {

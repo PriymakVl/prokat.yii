@@ -21,7 +21,7 @@ $this->registerCssFile('/css/order.css');
     </div>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15 margin-bottom-15">
         <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
         <span>Номер заказа:</span>&laquo; <?=$order->number?> &raquo;
     </div>

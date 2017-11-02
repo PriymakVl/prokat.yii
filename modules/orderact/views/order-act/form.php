@@ -6,6 +6,7 @@ use app\widgets\MainMenuWidget;
 use app\modules\orderact\models\OrderAct;
 use app\modules\orderact\widgets\OrderActFormTopMenuWidget;
 use app\modules\orderact\widgets\OrderActFormTabWidget;
+use app\modules\order\logic\OrderLogic;
 
 $this->registerCssFile('/css/orderact.css');
 
@@ -27,7 +28,7 @@ $this->registerCssFile('/css/orderact.css');
             <div id="order-act-form-tab-main">
     <div class="top-box">
         <!-- number -->          
-        <?=$f->field($form, 'number')->textInput(['value' => $act ? $act->number : '', 'maxlength'=>4, 'style' => 'width:120px'])->label('Номер акта:')?>
+        <?=$f->field($form, 'number')->textInput(['value' => $act ? $act->number : '', 'maxlength'=>4, 'style' => 'width:100px'])->label('Номер акта:')?>
         
     	<!-- department -->
         <?php 
@@ -40,28 +41,36 @@ $this->registerCssFile('/css/orderact.css');
     	<!-- state -->
         <div id="state-wrp">
             <label>Состояние:</label>
-            <select id="state"  name="OrderActForm[state]" class="form-control" style="width: 180px;">
+            <select id="state"  name="OrderActForm[state]" class="form-control" style="width: 150px;">
     			<option value="<?=OrderAct::STATE_PROCESSED?>" <? if ($act->state == OrderAct::STATE_PROCESSED) echo 'selected'; ?>>В оформлении</option>
     			<option value="<?=OrderAct::STATE_PASSED?>" <? if ($act->state == OrderAct::STATE_PASSED) echo 'selected'; ?>>Сдан</option>
     			<option value="<?=OrderAct::STATE_CANCELED?>" <? if ($act->state == OrderAct::STATE_CANCELED) echo 'selected'; ?>>Отменен</option>
             </select>
         </div>
+        
+        <!-- type -->          
+        <?php
+            $params = ['prompt' => 'Не выбран', 'style' => 'width:150px'];
+            $form->type = $act->type;
+            $types = [Orderlogic::TYPE_MAKING => 'Изготовление', OrderLogic::TYPE_MAINTENANCE => 'Услуга'];
+            echo $f->field($form, 'type')->dropDownList($types, $params)->label('Тип:');
+        ?>
     	
     </div><!-- /top-box -->
     
     <div class="act-form-date-wrp">
         <!-- date registration -->          
-        <?=$f->field($form, 'date_creat')->textInput(['value' => $act->date_registr ? date('d.m.y', $act->date_registr) : date('d.m.y'), 'style' => 'width:120px'])->label('Зарегистр-ван:')?>
+        <?=$f->field($form, 'date_registr')->textInput(['value' => $act->date_registr ? date('d.m.y', $act->date_registr) : date('d.m.y'), 'style' => 'width:120px'])->label('Зарегистр-ван:')?>
        
-       <!-- month -->          
+      <!-- month -->          
         <?php
-            $params = ['prompt' => 'Не выбран', 'style' => 'width:180px'];
-            $form->month = $act->month ? $act->month : date('m');
+            $params = ['prompt' => 'Не выбран', 'style' => 'width:150px'];
+            $form->month = $act ? $act->month : date('m');
             echo $f->field($form, 'month')->dropDownList($form->months, $params)->label('Месяц:');
         ?>
         
         <!-- year -->          
-        <?=$f->field($form, 'year')->textInput(['value' => $act->year ? $act->year : date('Y'), 'style' => 'width:180px'])->label('Год:')?>
+        <?=$f->field($form, 'year')->textInput(['value' => $act ? $act->year : date('Y'), 'style' => 'width:100px'])->label('Год:')?>
     </div>
     
     <!-- data -->

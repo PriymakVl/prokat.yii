@@ -1,8 +1,8 @@
 $(document).ready(function() {
 
-    //department
-    $('#objectdrawingform-category').change(function() {
+    $('#objectdrawingform-category, #objectform-categorydwg').change(function() {
         var category = $(this).val();
+        
         if (category == 'department') {
             $('#dwg-department-options-wrp').show();
             $('#dwg-works-options-wrp, #dwg-danieli-options-wrp, #dwg-standard-danieli-options-wrp').hide();

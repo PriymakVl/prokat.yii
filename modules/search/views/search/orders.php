@@ -5,7 +5,7 @@
 ?>
 <div class="content">
     <h2 class="title-search">Результаты поиска</h2>
-    <div class="info-box">
+    <div class="info-box margin-bottom-15">
         <? if ($number): ?>
             Поиск произведен по номеру заказа:<span>&laquo; <?=$number?> &raquo;</span>
         <? else: ?>

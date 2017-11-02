@@ -21,6 +21,15 @@ class OrderActLogic extends BaseLogic
         return $params;   
     }
     
+    public static function getParamsContent($month, $year, $customer)
+    {
+        $params['customer'] = $customer;
+        $params['month_receipt'] = $month ? $month : date('n');
+        $params['year_receipt'] = $year ? $year : date('Y');
+        $params['status'] = self::STATUS_ACTIVE;
+        return $params;   
+    }
+    
     public static function convertState($state)
     {
         switch ($state) {
@@ -104,19 +113,6 @@ class OrderActLogic extends BaseLogic
         return $total_cost;   
     }
     
-    public static function searchByDrawing($dwg_num)
-    {
-        $acts = [];
-        $items = OrderActContent::findAll(['code' => $dwg_num, 'status' => self::STATUS_ACTIVE]);
-        if (!$items) return $acts;
-        foreach ($items as $item) {
-            $act = OrderAct::findOne($item->act_id);
-            $act->getOrder()->getPeriod()->convertDepartment();
-            $acts[] = $act;
-        }
-        return $acts;
-    }
-
 }
 
 

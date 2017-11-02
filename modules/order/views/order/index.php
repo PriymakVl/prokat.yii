@@ -2,6 +2,7 @@
 
 use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
+use app\widgets\FlashMessageWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderTopMenuWidget;
@@ -21,15 +22,11 @@ $this->registerCssFile('/css/order.css');
         <div class="alert alert-success margin-top-15">Активный заказ</div>
     <? endif; ?>
     
-    <!-- info create of item order -->
-    <?php if (Yii::$app->session->hasFlash('success-order-item')): ?>
-      <div class="alert alert-success alert-dismissable margin-top-15">
-          <?= Yii::$app->session->getFlash('success-order-item') ?>
-      </div>
-    <?php endif; ?>
+    <!-- flash messge -->
+    <?=FlashMessageWidget::widget()?>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
         <span>Номер заказа:</span><span <? if ($order->number == 'черновик') echo 'style="color:red;"'; ?>>&laquo; <?=$order->number?> &raquo;</span>
     </div>

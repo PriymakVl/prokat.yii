@@ -4,7 +4,8 @@
 
 /** list content **/
 .header-note {
-    margin: 15px 0 -15px;
+    margin: 15px 0 0 0;
+    color: #000;
 }
 .item-parent {
     background: #E8E8E8;

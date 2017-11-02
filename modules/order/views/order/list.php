@@ -1,11 +1,10 @@
 <?php
 
-use \yii\web\JqueryAsset;
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 use Yii\helpers\Url;
 use yii\widgets\LinkPager;
 use app\widgets\MainMenuWidget;
+use app\widgets\FlashMessageWidget;
 use app\modules\order\models\Order;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
@@ -25,13 +24,9 @@ $this->registerCssFile('/css/standard.css');
     
     <!-- top nenu -->
     <?=OrderTopListMenuWidget::widget(['params' => $params])?>
-    
-    <!-- flash error message -->
-    <?php if (Yii::$app->session->hasFlash('error')): ?>
-       <div class="alert alert-danger margin-top-15">
-            <?= \Yii::$app->session->getFlash('error') ?>
-       </div>
-    <?php endif; ?>
+
+    <!-- flash messge -->
+    <?=FlashMessageWidget::widget()?>
     
     <!-- data of order -->
     <table id="standart-list" class="margin-top-15">

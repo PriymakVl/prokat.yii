@@ -24,6 +24,9 @@ $this->registerJsFile('/js/object/object_update.js');
             <a href="<?=Url::to(['/object/delete/one', 'obj_id' => $obj_id])?>">Удалить объект</a>
         </li>
         <li>
+            <a href="<?=Url::to(['/product/list', 'obj_id' => $obj_id])?>">Показать все</a>
+        </li>
+        <li>
             <a target="_blank" href="<?=Url::to(['/order/content/item/add', 'obj_id' => $obj_id])?>">Добавить в заказ</a>
         </li>
     </ul>   

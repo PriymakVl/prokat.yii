@@ -2,6 +2,7 @@
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
@@ -11,9 +12,12 @@ $this->registerCssFile('/css/drawing.css');
 
 ?>
 <div class="content">
-
+    <!-- info -->
+    <div class="info-box margin-bottom-15" style="text-align: center; font-size: 16px; color:#000;">
+        Эскиз детали
+    </div>
     <!-- top menu -->
-    <?//=DrawingDepartmentTopMenuWidget::widget()?>
+    <?=DrawingDepartmentTopMenuWidget::widget()?>
     
     <!-- department dwg data -->
     <table id="dwg-department-data">
@@ -43,6 +47,34 @@ $this->registerCssFile('/css/drawing.css');
                 </td>
             </tr>
         <? endif; ?>
+        
+        <!-- file -->
+        <tr>
+            <td class="text-center">
+                Файл чертежа
+            </td>
+            <td>
+                <? if ($dwg->file): ?>
+                   <a href="<?=Url::to('/files/department/'.$dwg->file)?>" target="_blank"><?=$dwg->file?></a>
+                <? else: ?>
+                    <span>Нет</span>
+                <? endif; ?>    
+            </td>
+        </tr>
+        
+        <!-- file kompas-->
+        <tr>
+            <td class="text-center">
+                Файл в формате компас
+            </td>
+            <td>
+                <? if ($dwg->file_cdw): ?>
+                   <a href="<?=Url::to('/files/department/kompas/'.$dwg->file_cdw)?>" target="_blank"><?=$dwg->file_cdw?></a>
+                <? else: ?>
+                    <span>Нет</span>
+                <? endif; ?>    
+            </td>
+        </tr>
         
         <!-- name object -->
         <tr>

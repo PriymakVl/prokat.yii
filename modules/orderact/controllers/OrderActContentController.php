@@ -22,13 +22,21 @@ class OrderActContentController extends BaseController
         return $this->render('index', compact('item', 'detail', 'order', 'act'));
     }
     
-    public function actionList($type = null)
+    public function actionList($month = null, $year = null, $customer = null)
     {
-        $params = OrderListLogic::getParams($type);
-        $list_list = OrderList::getList($params);
-        $pages = OrderList::$pages;
-        return $this->render('list', compact('list_list', 'params', 'pages'));
+        $params = OrderActLogic::getParamsContent($month, $year, $customer);
+        $list = OrderActContent::getList($params);
+        $pages = OrderActContent::$pages;
+        return $this->render('list', compact('list', 'params', 'pages'));
     }
+    
+//    public function actionListMonth($month = null, $year = null, $customer = null)
+//    {
+//        $params = OrderListLogic::getParams($month);
+//        $list_list = OrderList::getList($params);
+//        $pages = OrderList::$pages;
+//        return $this->render('list', compact('list_list', 'params', 'pages'));
+//    }
     
     public function actionForm($act_id, $item_id = null)
     {     
@@ -37,7 +45,8 @@ class OrderActContentController extends BaseController
             $item = new OrderActContent();
             $item->act_id = $act_id;
             $item->save();    
-        }     
+        }  
+        $item->getItemOrder();   
         $form = new OrderActContentForm($item);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             Yii::$app->session->setFlash('success', 'Элемент акта успешно '.($item ? 'отредактирован' : 'создан'));

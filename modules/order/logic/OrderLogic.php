@@ -73,7 +73,7 @@ class OrderLogic extends BaseLogic
         $item->code = $object->code;
         $item->weight = $item->weight ? $item->weight : $object->weight;
         $item->item = $item->item ? $item->item : $object->item;
-        $item->equipment = $object->equipment;
+        if ($object->equipment) $item->equipment = $object->equipment;
         $item->count = 1;
         if ($object->material) $item->material = $object->material;
         else if ($object->type == 'unit') $item->material = 'Сб';

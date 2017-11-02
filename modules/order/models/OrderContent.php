@@ -70,16 +70,16 @@ class OrderContent extends BaseModel
         $this->children = self::executeMethods($children, ['countWeightAll', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
         return $this;
     }
-    
-    public static function searchByDrawing($dwg)
-    {
-        $result = self::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', 'drawing', $dwg])->all();
-        if (empty($result)) return [];
-        if (count($result) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
-        else $orders = OrderLogic::getArrayOrders($result);
-        self::executeMethods($orders, ['getNumber']);
-        return $orders;
-    }
+
+     //public static function searchByCode($code)
+//    {
+//        $result = self::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', 'code', $code])->all();
+//        if (empty($result)) return [];
+//        if (count($result) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
+//        else $orders = OrderLogic::getArrayOrders($result);
+//        self::executeMethods($orders, ['getNumber']);
+//        return $orders;
+//    }
     
     public function getWeight()
     {

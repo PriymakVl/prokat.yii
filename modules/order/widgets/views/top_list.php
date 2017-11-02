@@ -26,7 +26,7 @@
 		<option value="4" <? if ($params['customer'] == 4) echo 'selected'; ?>>Волковский С.В.</option>
         <option value="7" <? if ($params['customer'] == 7) echo 'selected'; ?>>Станиславский О.В.</option>
         <option value="8" <? if ($params['customer'] == 8) echo 'selected'; ?>>Коваль А.П.</option>
-        <option value="8" <? if ($params['customer'] == 9) echo 'selected'; ?>>Пасюк В.В.</option>
+        <option value="9" <? if ($params['customer'] == 9) echo 'selected'; ?>>Пасюк В.В.</option>
     </select>
     
     <!-- type -->

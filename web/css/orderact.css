@@ -5,29 +5,49 @@
 .field-orderactform-department {
     position: absolute;
     top: 0;
-    left: 170px;
+    left: 130px;
 }
 
 #state-wrp {
     position: absolute;
     top: 0;
-    left: 410px;   
+    left: 340px;   
 }
 
-.field-orderactform-month {
+.field-orderactform-type {
     position: absolute;
     top: 0;
-    left: 170px;    
+    left: 520px;    
 }
 
 .field-orderactform-year {
     position: absolute;
     top: 0;
-    left: 410px;    
+    left: 335px;    
+}
+
+.field-orderactform-month {
+    position: absolute;
+    top: 0;
+    left: 150px;    
 }
 
 .field-orderactform-working_hour {
     position: absolute;
     top: 0;
     left: 200px;  
+}
+
+.title-box a {
+    color: #000;
+    font-size: 15px;
+    position: absolute;
+    top: 2px;
+    left: 15px;
+    text-decoration: underline;
+}
+
+.title-box a:hover {
+    color: #000 !important;
+    text-decoration: none;
 }

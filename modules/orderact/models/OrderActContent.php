@@ -14,6 +14,8 @@ class OrderActContent extends BaseModel
     public $order;
     public $act;
     
+    const PAGE_SIZE = 15;
+    
     const STATE_RECEIVED = 1;
     const STATE_INSTALLED = 2;
     
@@ -29,10 +31,15 @@ class OrderActContent extends BaseModel
     
     public function setDataWhenRegistrationAct($act_id, $item)
     {
+        $order = Order::findOne($item->order_id);
+        if ($order) $this->customer = $order->customer;
         $this->act_id = $act_id;
         $this->order_id = $item->order_id;
         $this->item_id = $item->id;
         $this->code = $item->code;
+        $this->drawing = $item->drawing;
+        $this->month_receipt = date('m');
+        $this->year_receipt = date('Y');
         $this->state = self::STATE_RECEIVED;
         return $this;
     }
@@ -50,15 +57,27 @@ class OrderActContent extends BaseModel
     public function getOrder()
     {
         $this->order = Order::findOne($this->order_id);
-        $this->order->getNumber();
+        if ($this->order) $this->order->getNumber();
         return $this;
     }
     
     public function getAct()
     {
         $this->act = OrderAct::findOne($this->act_id);
-        $this->act->convertMonth($this->act->month);
+        $this->act->month = OrderActLogic::convertMonth($this->act->month, true);
         return $this;    
+    }
+    
+    public function getItemOrder()
+    {
+        if ($this->item_id) $this->item = OrderContent::findOne($this->item_id);
+        return $this;
+    }
+    
+    public static function getList($params)
+    {
+        $list = self::find()->filterWhere($params)->all();
+        return self::executeMethods($list, ['getAct', 'getOrder', 'getItemOrder']);
     }
 }
 

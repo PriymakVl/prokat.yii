@@ -2,7 +2,7 @@
 
 use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
-//use app\modules\orderlist\models\OrderList;
+use app\widgets\FlashMessageWidget;
 use app\modules\orderact\widgets\OrderActMenuWidget;
 //use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\orderact\widgets\OrderActTopMenuWidget;
@@ -20,12 +20,8 @@ $this->registerCssFile('/css/order.css');
         <div class="alert alert-success active-order">Активный акт</div>
     <? endif; ?>
     
-    <!-- info create of act order -->
-    <?php if (Yii::$app->session->hasFlash('success')): ?>
-      <div class="alert alert-success alert-dismissable margin-top-15">
-          <?= Yii::$app->session->getFlash('success') ?>
-      </div>
-    <?php endif; ?>
+    <!-- info message -->
+    <?=FlashMessageWidget::widget()?>
     
     <!-- order act data -->
     <table class="margin-top-15">
@@ -59,6 +55,12 @@ $this->registerCssFile('/css/order.css');
             <td>
                 <a href="<?=Url::to(['/order', 'order_id' => $act->order_id])?>"><?=$act->order->name?></a>
             </td>
+        </tr>
+        
+        <!-- inventory number -->
+        <tr>
+            <td class="text-center">Инв. номер</td>
+            <td><?=$act->order->inventory ? $act->order->inventory : 'Не указан'?></td>
         </tr>
         
         <!-- Цех(участок) -->
@@ -125,9 +127,11 @@ $this->registerCssFile('/css/order.css');
         <table class="margin-top-15">
             <tr>
                 <th width="30"><input type="radio" name="order-act-item" id="checked-all" disabled="disabled" /></th>
-                <th width="150">Чертеж</th>
+                <th width="100">Чертеж</th>
                 <th>Наименование</th>
-                <th width="100">Количество</th>
+                <th width="70">Кол-во</th>
+                <th width="70">Вес акт</th>
+                <th width="80">Вес заказ</th>
             </tr>
             <? foreach ($content as $item): ?>
                 <tr>
@@ -147,6 +151,9 @@ $this->registerCssFile('/css/order.css');
                         <? endif; ?>
                     </td>
                     <td class="text-center"><?=$item->count?></td>
+                    <? if ($item->weight && $item->item->weight && ($item->weight > $item->item->weight)) $highlite_weight = true ?>
+                    <td class="text-center" <? if ($highlite_weight) echo 'style="color:red;"';?>><?=$item->weight?></td>
+                    <td class="text-center"><?=$item->item->weight?></td>
                 </tr>
             <? endforeach; ?>
         </table>

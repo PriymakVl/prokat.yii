@@ -9,10 +9,10 @@ use app\controllers\BaseController;
 use app\modules\objects\models\Objects;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
-use app\modules\order\models\Order;
-use app\modules\order\models\OrderContent;
+use app\modules\order\logic\OrderLogic;
 use app\modules\applications\models\Application;
 use app\modules\orderact\logic\OrderActLogic;
+use app\modules\search\logic\SearchLogic;
 use app\modules\orderact\models\OrderAct;
 
 class SearchController extends BaseController 
@@ -31,7 +31,7 @@ class SearchController extends BaseController
         $drawings = DrawingDepartment::find()->where(['number' => $number , 'status' => self::STATUS_ACTIVE])->all();  
         if (count($drawings == 1)) return $this->redirect(['/drawing/department', 'dwg_id' => $drawings[0]->id]);
         if (!$drawings) {
-            \Yii::$app->session->setFlash('danger', 'Эскиз с таким номером не найден');
+            Yii::$app->session->setFlash('danger', 'Эскиз с таким номером не найден');
             return $this->redirect(\Yii::$app->request->referrer);        
         } 
         else return $this->render('drafts', ['drawings' => $drawings, 'number' => $number]);
@@ -45,22 +45,28 @@ class SearchController extends BaseController
         return $this->render('drawing/works/search/result', ['drawings' => $result, 'number' => $number]);
     }
     
-    public function actionOrder($order_num = null, $dwg_num = null)
+    public function actionOrder($order_num = null, $dwg_num = null, $code = null)
     {
-        if ($order_num) $orders = Order::searchByNumber($order_num);
-        else $orders = OrderContent::searchByDrawing($dwg_num);
+        $orders = SearchLogic::searchOrders($order_num, $dwg_num, $code);
+        if (!$orders) {
+            Yii::$app->session->setFlash('danger', 'Заказ не найден');
+            return $this->redirect(Yii::$app->request->referrer);  
+        }
         if (count($orders) == 1) return $this->redirect(['/order', 'order_id' => $orders[0]->id]);
         else return $this->render('orders', ['orders' => $orders, 'number' => $order_num, 'drawing' => $dwg_num]);
     }
     
-    public function actionOrderAct($act_num = null, $dwg_num = null)
+    public function actionOrderAct($act_num = null, $dwg_num = null, $code = null)
     {
-        if ($act_num) $acts = OrderAct::searchByNumber($act_num);
-        else $acts = OrderActLogic::searchByDrawing($dwg_num);
+        $acts = SearchLogic::searchOrderActs($act_num, $dwg_num, $code);
         if (!$acts) {
-            $message = $act_num ? 'Акта с таким номером не найдено' : 'Акта с таким чертежом не найдено';
-            \Yii::$app->session->setFlash('danger', $message);
-            $act_num ? \Yii::$app->session->setFlash('act_num', $act_num) : \Yii::$app->session->setFlash('dwg_num', $dwg_num); 
+            if ($act_num) $item = 'номером';
+            else if ($dwg_num) $item = 'чертежом';
+            else $item = 'кодом детали';
+            Yii::$app->session->setFlash('danger', 'Акта с таким '.$item.' не найдено');
+            if ($act_num) Yii::$app->session->setFlash('act_num', $act_num);
+            else if ($dwg_num) Yii::$app->session->setFlash('dwg_num', $dwg_num); 
+            else Yii::$app->session->setFlash('code', $code);
             return $this->redirect(\Yii::$app->request->referrer);  
         }
         else if (count($acts) == 1) return $this->redirect(['/order/act', 'act_id' => $acts[0]->id]);

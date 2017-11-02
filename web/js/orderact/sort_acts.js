@@ -1,8 +1,22 @@
 $(document).ready(function() {
-    $('#order-act-state').change(function() {
+    $('#sort-act-state').change(function() {
         var state = $(this).find('option:selected').val();
         var gets = buidGetString('state', state);
         if (state) location.href = 'http://' + location.host + '/order/act/list?' + gets;  
+        else location.href = 'http://' + location.host + '/order/act/list';  
+    }); 
+    
+    $('#sort-act-month').change(function() {
+        var month = $(this).find('option:selected').val();
+        var gets = buidGetString('month', month);
+        if (month) location.href = 'http://' + location.host + '/order/act/list?' + gets;  
+        else location.href = 'http://' + location.host + '/order/act/list';  
+    }); 
+    
+    $('#sort-act-year').change(function() {
+        var year = $(this).find('option:selected').val();
+        var gets = buidGetString('year', year);
+        if (year) location.href = 'http://' + location.host + '/order/act/list?' + gets;  
         else location.href = 'http://' + location.host + '/order/act/list';  
     }); 
     

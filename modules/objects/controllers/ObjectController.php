@@ -29,12 +29,11 @@ class ObjectController extends BaseController
     {
         $parent_id = Yii::$app->request->get('parent_id');
         $obj = $obj_id ? Objects::findOne($obj_id) : null;       
-        $form = new ObjectForm();
+        $form = new ObjectForm($obj);
         $form->getTypes()->getEquipments(); 
 
-        if($form->load(Yii::$app->request->post()) && $form->validate()) {
-            $obj_id = $form->save($obj);
-            return $this->redirect(['/object', 'obj_id' => $obj_id]);
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
+            return $this->redirect(['/object', 'obj_id' => $form->obj->id]);
         }        
         return $this->render('form', compact('form', 'obj', 'parent_id'));     
     }

@@ -1,8 +1,8 @@
 <?php
 
-use yii\web\JqueryAsset;
 use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
+use app\widgets\FlashMessageWidget;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderContentMenuWidget;
@@ -19,7 +19,7 @@ $this->registerJsFile('/js/order/content_list_pagination.js');
     <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
         <span>Номер заказа:</span><span <? if ($order->number == 'черновик') echo 'style="color:red;"'; ?>>&laquo; <?=$order->number?> &raquo;</span>
         <input type="hidden" id="order-id" value="<?=$order->id?>"/>
@@ -30,16 +30,12 @@ $this->registerJsFile('/js/order/content_list_pagination.js');
         <div class="alert alert-success margin-top-15">Активный заказ</div>
     <? endif; ?>
     
-    <!-- action error -->
-    <?php if (Yii::$app->session->hasFlash('error')): ?>
-       <div class="alert alert-danger margin-top-15">
-            <?= Yii::$app->session->getFlash('error') ?>
-       </div>
-    <?php endif; ?>
-
+    <!-- flash messge -->
+    <?=FlashMessageWidget::widget()?>
+    
     <!-- page box -->
     <? if (count($content) > 10): ?>
-        <div id="page-content-wrp" class="top-menu margin-bottom-15 margin-top-15">
+        <div id="page-content-wrp" class="margin-top-15">
             <a id="page-all" class="top-menu-active-link" href="#" onclick="return false;">Показать все</a>
             <a id="page-1" href="#" page="1" onclick="return false;">Страница 1</a>
             <a id="page-2" href="#" page="2" onclick="return false;">Страница 2</a>
@@ -51,7 +47,7 @@ $this->registerJsFile('/js/order/content_list_pagination.js');
     <? endif; ?>
     
     <!-- order content -->
-    <table>
+    <table class="margin-top-15">
         <tr>
             <th width="30"><input type="checkbox" name="content" id="checked-all"/></th>
             <th width="150">Чертеж</th>

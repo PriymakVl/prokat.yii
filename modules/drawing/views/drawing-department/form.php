@@ -52,7 +52,7 @@ $this->registerJsFile('/js/drawing/dwg_form_show_tab.js');
                 <?= $f->field($form, 'file')->fileInput()->label('Файл эскиза:') ?>
                 
                 <!-- file with extension cdw compas-->
-                <?//= $f->field($form, 'file_cdw')->fileInput()->label('Файл чертежа в компасе:') ?>
+                <?= $f->field($form, 'file_cdw')->fileInput()->label('Файл чертежа в компасе:') ?>
             </div> 
             
             <!-- service -->

@@ -8,6 +8,7 @@ use app\modules\product\models\Product;
 use app\modules\product\forms\ProductForm;
 use app\modules\product\logic\ProductLogic;
 use app\modules\orderact\models\OrderActContent;
+use app\modules\objects\models\Objects;
 
 class ProductController extends BaseController 
 {
@@ -21,11 +22,12 @@ class ProductController extends BaseController
     
     public function actionManufactured($code, $month = null, $year = null, $order = null)
     {
-        $params = ProductLogic::getParamsManufactured($code, $month, $year, $order);
+        $params = ProductLogic::getParamsManufactured($code, $month, $year, $order);     
         $items = Product::manufactured($params);
         $pages = Product::$pages;
-        debug($items);
-        return $this->render('manufactured', compact('items', 'params', 'pages'));
+        $object = Objects::findOne(['code' => $code, 'status' => self::STATUS_ACTIVE]);
+        $object->getName();
+        return $this->render('manufactured', compact('items', 'params', 'pages', 'object'));
     }
     
 //    public function actionForm($order_id = null) 
@@ -53,6 +55,14 @@ class ProductController extends BaseController
 //        $order->deleteOne();
 //        $this->redirect('/order/list');   
 //    }
+
+    public function actionList($obj_id) 
+    {
+        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
+        $obj->getName();
+        if ($obj) $objects = Objects::searchCode($obj->code);
+        return $this->render('list', compact('objects', 'obj'));   
+    }
     
 
     

@@ -1,7 +1,6 @@
 <?php
-use yii\web\JqueryAsset;
 
-$this->registerJsFile('js/order/change_search_order.js', ['depends' => JqueryAsset::className()]); 
+$this->registerJsFile('/js/order/change_search_order.js'); 
 ?>
 <div class="header search-box search-order">
     <a href="/" class="link-home">Главная</a>
@@ -9,6 +8,8 @@ $this->registerJsFile('js/order/change_search_order.js', ['depends' => JqueryAss
     <input type="radio" name="search" value="order_num" checked="checked" holder="Введите номер заказа"/>
     <label>Чертеж</label>
     <input type="radio" name="search" value="dwg_num" holder="Введите номер чертежа"/>
+    <label>Код</label>
+    <input type="radio" name="search" value="code" holder="Введите код детали"/>
     
     <form action="/search/order" class="search-header" method="get">
         <input type="text" name="order_num" placeholder="Введите номер заказа" autofocus />

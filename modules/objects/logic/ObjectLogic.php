@@ -133,6 +133,23 @@ class ObjectLogic extends BaseLogic
         }
         return $summ;
     }
+    
+    public static function getEquipmentObject($obj)
+    {
+        debug($obj);
+        $parent = Objects::getOne($obj->parent_id, false, self::STATUS_ACTIVE);
+        if (!$parent || $parent->parent_id == 0) return false;
+        if ($parent->type == 'equipment') return $obj->equipment = $parent;
+        else self::getEquipmentObject($parent->parent_id);
+    }
+    
+    public static function getDepartmentObject($parent_id)
+    {
+        $parent = Objects::getOne($parent_id, false, self::STATUS_ACTIVE);
+        if (!$parent) return false;
+        if ($parent->parent_id == 0) return $parent;
+        else self::getDepartmentObject($parent->parent_id);
+    }
 
 
 }

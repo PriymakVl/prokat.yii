@@ -37,7 +37,7 @@ class DrawingDepartment extends BaseModel
     {
         $query = self::find()->where($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $page_size]);
-        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['number' => SORT_DESC])->all(); 
+        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all(); 
         return self::executeMethods($list, ['getFullNumber', 'getObject']);
     }
     

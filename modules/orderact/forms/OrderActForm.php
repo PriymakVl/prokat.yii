@@ -10,7 +10,7 @@ use app\modules\orderact\models\OrderAct;
 class OrderActForm extends BaseForm
 {   
     public $number;
-    public $date_creat;
+    public $date_registr;
     public $date_pass;
     public $cost;
     public $working_hour;
@@ -18,7 +18,9 @@ class OrderActForm extends BaseForm
     public $note;
     public $department;
     public $month;
+    public $year;
     public $state;
+    public $type;
     //form
     public $act;
     public $months;
@@ -33,12 +35,10 @@ class OrderActForm extends BaseForm
     {
         return [
             [['number'], 'required', 'message' => 'Необходимо заполнить поле'],
-            ['cost', 'string'],
-            [['working_hour', 'month', 'state'], 'integer'],
-            ['department', 'string'],
-            [['date_creat'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
-            [['date_pass'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
-            ['note', 'string'],
+            [['date_registr'], 'required', 'message' => 'Необходимо указать дату регистрации'],
+            [['cost', 'department', 'note'], 'string'],
+            [['working_hour', 'state', 'type', 'month', 'year'], 'integer'],
+            [['date_registr'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
         ];
 
     }
@@ -56,11 +56,13 @@ class OrderActForm extends BaseForm
         $this->act->note = $this->note;
         $this->act->department = $this->department;
         $this->act->state = $this->state;
-        //$this->act->date_creat = strtotime($this->prepareDateForConvert($this->date_creat));
-        //$this->act->date_regist = $this->date_regist;
-        //$this->act->date_pass = $this->date_pass;
+        $this->act->date_registr = strtotime($this->prepareDateForConvert($this->date_registr));
+        $this->act->year = $this->year ? $this->year : date('Y', $this->act->date_registr);
+        $this->act->month = $this->month ? $this->month : date('m', $this->act->date_registr);
+        if ($this->state == OrderAct::STATE_PASSED) $this->date_pass = time();
         $this->act->working_hour = $this->working_hour;
         $this->act->cost = $this->cost;
+        $this->act->type = $this->type;
         return $this->act->save();   
     }
     

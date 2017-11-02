@@ -9,8 +9,9 @@ $this->registerCssFile('css/drawing.css');
     <tr>
         <th width="30"><input type="radio" disabled="disabled" /></th>
         <th width="115">Конструктор</th>
-        <th width="80">Создан</th>
-        <th width="95">№ эскиза</th>
+        <th width="85">№ эскиза</th>
+        <th width="140">Файл эскиза</th>
+        <th width="140">Файл компас</th>
         <th>Примечание</th>
     </tr>
     <? foreach ($drawings as $dwg): ?>
@@ -22,15 +23,20 @@ $this->registerCssFile('css/drawing.css');
                 <?=$dwg->designer ? $dwg->designer : 'Не указан'?>
             </td>
             <td class="text-center">
-                <a href="<?=Url::to(['/drawing/'.$dwg->category, 'dwg_id' => $dwg->id])?>" target="_blank">
-                    <?=date('d.m.y', $dwg->date)?>
-                </a>
+                <a href="<?=Url::to(['/drawing/'.$dwg->category, 'dwg_id' => $dwg->id])?>" target="_blank"><?=$dwg->fullNumber?></a>
             </td>
             <td class="text-center"> 
                 <? if ($dwg->file): ?>           
-                    <a target="_blank" href="<?=Url::to(['/files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->fullNumber?></a>                 
+                    <a target="_blank" href="<?=Url::to(['/files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->file?></a>                 
                 <? else: ?>
-                    <?=$dwg->fullNumber?>
+                    <span style="color:red;">Не добавлен</span>
+                <? endif; ?>
+            </td>
+            <td class="text-center"> 
+                <? if ($dwg->file_cdw): ?>           
+                    <a target="_blank" href="<?=Url::to(['/files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->file_cdw?></a>                 
+                <? else: ?>
+                    <span style="color:red;">Не добавлен</span>
                 <? endif; ?>
             </td>
             <td>

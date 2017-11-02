@@ -80,13 +80,6 @@ class OrderAct extends BaseModel
         return $this;
     }
     
-    public static function searchByNumber($number)
-    {
-        $acts = self::findAll(['number' => $number, 'status' => self::STATUS_ACTIVE]);
-        if (!$acts) return false;
-        return self::executeMethods($acts, ['getOrder', 'getPeriod', 'convertDepartment']);
-    }
-    
     public function getColorState()
     {
         if ($this->state == self::STATE_PROCESSED) $this->colorState = 'red';

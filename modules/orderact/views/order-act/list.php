@@ -1,9 +1,9 @@
 <?php
 
-use Yii\helpers\Url;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use app\widgets\MainMenuWidget;
-//use app\modules\order\models\Order;
+use app\widgets\FlashMessageWidget;
 //use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\orderact\models\OrderAct;
 use app\modules\orderact\widgets\OrderActListMenuWidget;
@@ -15,20 +15,17 @@ use app\modules\orderact\widgets\OrderActTopListMenuWidget;
 ?>
 <div class="content">
     <!-- title -->
-    <div class="title-box">Перечень актов за <strong><?=$period?></strong></div>
+    <div class="title-box">
+        <a href="<?=Url::to(['/order/act/content/list'])?>">Детали</a>
+        <span>Перечень актов за </span>
+        <strong><?=$period?></strong>
+    </div>
     
     <!-- top nenu -->
     <?=OrderActTopListMenuWidget::widget(['params' => $params])?>
     
     <!-- info message -->
-    <? $messages = ['danger', 'success', 'warning']; ?>
-    <? foreach ($messages as $message): ?>
-        <?php if (\Yii::$app->session->hasFlash($message)): ?>
-          <div class="alert alert-<?=$message?> margin-top-15">
-              <?= \Yii::$app->session->getFlash($message) ?>
-          </div>
-        <?php endif; ?>
-    <? endforeach; ?>
+    <?=FlashMessageWidget::widget()?>
     
     <!-- list akt orders -->
     <table class="margin-top-15">
@@ -67,7 +64,7 @@ use app\modules\orderact\widgets\OrderActTopListMenuWidget;
             <? endforeach; ?>
         <? else: ?>
             <tr>
-                <td colspan="5" class="not-content">Актов еще нет</td>
+                <td colspan="6" class="not-content">Актов еще нет</td>
             </tr>
         <? endif; ?>
     </table>
@@ -105,6 +102,7 @@ use app\modules\orderact\widgets\OrderActTopListMenuWidget;
             <? endif; ?> 
         </table>
     <? endif; ?>
+    
 </div><!-- class content -->
 
 <!-- menu -->

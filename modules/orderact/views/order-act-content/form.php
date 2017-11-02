@@ -18,8 +18,11 @@ $this->registerCssFile('/css/orderact.css');
         <? endif; ?>
     </div>
     
-    <!-- top menu -->
-    <?//=OrderActContentFormTopMenuWidget::widget()?>
+    <!-- info -->
+    <div class="info-box margin-top-15" >
+        Название: <strong><?=$item->item->name?></strong><br />
+        Код: <strong><?=$item->item->code?></strong>
+    </div>
     
     <!-- form -->
     <div class="form-wrp">
@@ -28,8 +31,13 @@ $this->registerCssFile('/css/orderact.css');
         <!-- count -->          
         <?=$f->field($form, 'count')->textInput(['value' => $item ? $item->count : '', 'maxlength'=>4, 'style' => 'width:120px'])->label('Количество:')?>
         
-        <!-- weight -->          
-        <?=$f->field($form, 'weight')->textInput(['value' => $item ? $item->weight : '', 'style' => 'width:120px'])->label('Вес:')?>
+        <!-- weight --> 
+        <? 
+            $weight = '';
+            if ($item) $weight = $item->weight;
+            if (!$weight && $item->item) $weight = $item->item->weight;
+        ?>         
+        <?=$f->field($form, 'weight')->textInput(['value' => $weight, 'style' => 'width:120px'])->label('Вес:')?>
         
         <!-- order act item id -->          
         <?=$f->field($form, 'item_id')->textInput(['value' => $item ? $item->item_id : '', 'style' => 'width:120px'])->label('ID элемента заказа:')?>

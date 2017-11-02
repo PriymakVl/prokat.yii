@@ -18,11 +18,14 @@
             <a href="<?=Yii::$app->urlManager->createUrl(['drawing/works/list'])?>">ПКО</a>
         </li>
         <li>
-            <a href="/order/list">Заказы</a><span>&nbsp;|</span>
-            <a href="/order-list/list">Списки</a><span>&nbsp;|</span>
+            <a href="/order/list">Заказы</a><span>&nbsp;&#124;</span>
+            <a href="/order-list/list">Списки</a><span>&nbsp;&#124;</span>
             <a href="/order/act/list">Акты</a>
         </li>
-        <li><a href="/application/list">Заявки</a></li>
+        <li>
+            <a href="/application/list">Заявки</a><span>&nbsp;&#124;</span>
+            <a href="/product/category">Товары</a>
+        </li>
         <li>
             <a href="<?=Yii::$app->urlManager->createUrl(['object/form'])?>">Создать объект</a>
         </li>

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 $this->registerCssFile('/css/object.css');
 ?>
 
-<div id="show-tab-main">
+<div id="form-tab-main">
 
     <!-- engish name object-->
     <? if ($obj->eng) echo $f->field($form, 'eng')->textInput(['value' => $obj->eng, 'readonly' => 'readonly'])->label('Name object:'); ?>

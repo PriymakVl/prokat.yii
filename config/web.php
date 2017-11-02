@@ -155,6 +155,7 @@ $config = [
                 //order-act-content
                 'order/act/content/delete' => 'orderact/order-act-content/delete',               
                 'order/act/content/form' => 'orderact/order-act-content/form',                              
+                'order/act/content/list' => 'orderact/order-act-content/list',                              
                 //object specification
                 'object/specification/main' => 'objects/object-specification/main',
                 'object/specification/delete/list' => 'objects/object-specification/delete-list',
@@ -195,6 +196,7 @@ $config = [
                 'equipment/data/get' => 'equipments/equipment/get-data-ajax',  
                 //product
                 'product/manufactured' => 'product/product/manufactured',
+                'product/list' => 'product/product/list',
                 'product' => 'product/product',
 								
             ],

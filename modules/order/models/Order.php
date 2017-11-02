@@ -102,12 +102,12 @@ class Order extends BaseModel
         return $this;
     }
     
-    public static function searchByNumber($number)
-    {
-        $orders = self::findAll(['number' => trim($number)]);
-        if (count($orders) > 1) self::executeMethods($orders, ['getNumber', 'convertPeriod', 'getShortCustomer']);
-        return $orders;
-    }
+//    public static function searchByNumber($number)
+//    {
+//        $orders = self::findAll(['number' => trim($number)]);
+//        if (count($orders) > 1) self::executeMethods($orders, ['getNumber', 'convertPeriod', 'getShortCustomer']);
+//        return $orders;
+//    }
     
     public function getFullCustomer()
     {

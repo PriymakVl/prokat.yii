@@ -38,12 +38,13 @@ class OrderContentController extends BaseController
         $order->getNumber();
         $item = OrderContent::getOne($item_id, null, self::STATUS_ACTIVE);
         if ($item) $item->dimensions = unserialize($item->dimensions);
-        //debug($item->dimensions['type']);
+
         $form = new OrderContentForm($item);
         $form->getNewNumberDepartmentDwg()->getArrayDetailNames();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
-            Yii::$app->session->setFlash('success-order-item', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
+            Yii::$app->session->setFlash('success', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
+            OrderLogic::setActive($order->id, 'order-active');
             return $this->redirect(['/order/content/item', 'item_id' => $form->element->id]);
         }   
         return $this->render('form', compact('item', 'form', 'order'));
