@@ -1,4 +1,4 @@
-.top-box, .act-form-date-wrp, .act-form-data-wrp {
+.top-box, .act-form-date-wrp, .act-form-data-wrp, .act-form-order-wrp {
     position: relative;
 }
 
@@ -33,6 +33,12 @@
 }
 
 .field-orderactform-working_hour {
+    position: absolute;
+    top: 0;
+    left: 200px;  
+}
+
+.field-orderactform-order_id {
     position: absolute;
     top: 0;
     left: 200px;  

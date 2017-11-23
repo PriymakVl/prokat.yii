@@ -2,6 +2,7 @@
 
 namespace app\modules\drawing\models;
 
+use yii\web\UploadedFile;
 use app\models\BaseModel;
 use app\modules\drawing\models\DrawingWorksFile;
 use app\modules\drawing\logic\DrawingLogic;
@@ -31,12 +32,6 @@ class DrawingWorks extends BaseModel
     	return ['drawing-logic' => ['class' => DrawingLogic::className()]];
     }
     
-//    public function checkChild()
-//    {
-//        $child = self::findOne(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->id]);
-//        if ($child) $this->child = true;
-//        return $this;    
-//    }
     
     public static function getListWorks($params)
     {       
@@ -58,45 +53,46 @@ class DrawingWorks extends BaseModel
         return $this;
     }
     
-//    public function getFiles()
-//    {
-//        return $this->hasMany(DrawingWorksFile::className(), ['dwg_id' => 'id'])->where(['status' => self::STATUS_ACTIVE])->orderBy('sheet');    
-//    }
-    
     public function getParent()
     {
         $this->parent = parent::findOne(['status' => self::STATUS_ACTIVE, 'id' => $this->parent_id]);
         return $this;
     }
     
-//    public function getTypeName()
-//    {
-//        switch ($this->type) {
-//            case 'drawing': $this->typeName = 'Чертеж'; break;
-//            case 'folder': $this->typeName = 'Папка'; break;
-//            case 'assembly': $this->typeName = 'Сборочный чертеж'; break;
-//            case 'specification': $this->typeName = 'Спецификация'; break;
-//        }
-//        return $this;
-//    }
-    
     public static function getAllForObject($obj)
     {
         return self::find()->where(['code' => $obj->code, 'status' => self::STATUS_ACTIVE])->all();
     }
     
-//    public static function check($obj)
-//    {
-//        $code = $obj->getCodeWithoutVariant($obj->code);
-//        $ids = ObjectDrawing::find()->select('dwg_id')->where(['category' => 'works', 'code' => $code, 'status' => self::STATUS_ACTIVE])->column();
-//        return self::findAll($ids);    
-//    }
+    public static function saveDwg($form, $obj, $dwg = null)
+    {
+        if ($form->numberWorksDwg) $dwg = self::findOne(['number' => $form->numberWorksDwg, 'status' => self::STATUS_ACTIVE]);
+        if (!$dwg) $dwg = new DrawingWorks();
+        $dwg->obj_id = $obj->id;
+        $dwg->code = $obj->code;
+        $dwg->parent_id = $obj->parent_id;
+        if ($form->noteDwg) $dwg->note = $form->noteDwg; 
+        $dwg->date = time();
+        $dwg->number = $form->numberWorksDwg ? $form->numberWorksDwg : $obj->code;
+        $dwg->name = $form->nameWorksDwg;
+        self::uploadSheet($form, $dwg, 1); 
+        self::uploadSheet($form, $dwg, 2); 
+        self::uploadSheet($form, $dwg, 3);
+        $dwg->save();
+        return true; 
+    }
     
-//    public static function getSpecification($parent_id)
-//    {
-//        $specification = DrawingWorks::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy('item')->all();
-//        return self::executeMethods($specification, ['checkChild']);
-//    }
+    private static function uploadSheet($form, $dwg, $number) 
+    {
+        $sheet = UploadedFile::getInstance($form, 'works_dwg_'.$number);
+        if (!$sheet) return false;
+        $filename = $dwg->id.'_works_'.$number.'.'.$sheet->extension;
+        $sheet->saveAs('files/works/'.$filename); 
+        if ($number == 1) $dwg->sheet_1 = $filename;   
+        else if ($number == 2) $dwg->sheet_2 = $filename;   
+        else if ($number == 3) $dwg->sheet_3 = $filename;    
+    }
+    
 
 }
 

@@ -32,29 +32,28 @@ class ObjectDrawingController extends BaseController
         $obj->getName();
         $form = new ObjectDrawingForm();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) { 
+            //Yii::$app->response->format = Response::FORMAT_JSON;
             return $this->redirect(['/object/drawing', 'obj_id' => $obj->id]);
         }
         return $this->render('form', compact('obj', 'form'));       
     }
 	
-//	public function actionFormVendor($obj_id) {
-//		$obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
-//		$form = new ObjectDrawingVendorForm(); 
-//        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) { 
-//            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
-//        } 
-//        return $this->render('add_vendor', compact('obj', 'form'));
-//	}
-    
-//    public function actionUpdateVendor($dwg_id, $obj_id) 
-//    {
-//        $dwg = DrawingVendor::getOne($dwg_id, false, self::STATUS_ACTIVE);
-//        $form = new ObjectDrawingUpdateForm(); 
-//        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
-//            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
-//        } 
-//        return $this->render('update_vendor', compact('obj', 'form', 'dwg'));  
-//    }
+    //set code object number dwg
+    public function actionSetCodeObject($dwg_cat, $dwg_id, $obj_id)
+    {
+        debug($dwg_id);
+        $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
+        debug(explode('-', $obj->code)[0]);
+        if (explode('-', $obj->code) != $obj->id) {
+           Yii::$app->session->setFlash('error', 'Код этого объекта можно изменить только в форме');
+           return $this->redirect(['/object/drawing', 'obj_id' => $obj->id]); 
+        }
+        $dwg = DrawingLogic::getDrawingObject($dwg_cat, $dwg_id);
+        $obj->code = $dwg->number;
+        $obj->save();
+        Yii::$app->session->setFlash('success', 'Код объекта успешно изменен');
+        return $this->redirect(['/object', 'obj_id' => $obj->id]); 
+    }
     
     public function actionDelete($dwg_id, $dwg_cat, $obj_id) 
     {
@@ -68,18 +67,18 @@ class ObjectDrawingController extends BaseController
     }
         
     //add note 
-    public function actionNote($dwg_id, $dwg_cat, $obj_id, $file_id = null) 
-    {
-        $form = new NoteDrawingForm;
-        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
-        $obj->getName();
-        $dwg = Drawinglogic::getDrawingObject($dwg_cat, $dwg_id);
-        if ($dwg->category == 'works') $file = DrawingWorksFile::getOne($file_id, null, self::STATUS_ACTIVE);
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->updateNote($dwg, $file_id)) {
-            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
-        } 
-        //debug($form, false);
-        return $this->render('note_form', compact('form', 'obj', 'dwg', 'file'));
-    }
+//    public function actionNote($dwg_id, $dwg_cat, $obj_id, $file_id = null) 
+//    {
+//        $form = new NoteDrawingForm;
+//        $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
+//        $obj->getName();
+//        $dwg = Drawinglogic::getDrawingObject($dwg_cat, $dwg_id);
+//        if ($dwg->category == 'works') $file = DrawingWorksFile::getOne($file_id, null, self::STATUS_ACTIVE);
+//        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->updateNote($dwg, $file_id)) {
+//            return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+//        } 
+//        //debug($form, false);
+//        return $this->render('note_form', compact('form', 'obj', 'dwg', 'file'));
+//    }
 
 }

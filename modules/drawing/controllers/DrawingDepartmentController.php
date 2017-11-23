@@ -32,11 +32,10 @@ class DrawingDepartmentController extends BaseController
     public function actionForm($dwg_id = null, $obj_id = null) 
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, null, self::STATUS_ACTIVE);
-        $dwg->getFullNumber();
-        $obj_id = $obj_id ? $obj_id : $dwg->obj_id;
+        if ($dwg) $dwg->getFullNumber();
         $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
         if ($obj) $obj->getName();
-        $form = new DrawingDepartmentForm();
+        $form = new DrawingDepartmentForm($dwg, $obj);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
             if ($obj_id) return $this->redirect(['/object/drawing', 'obj_id' => $dwg->obj_id]);
             else return $this->redirect(['/drawing/department', 'dwg_id' => $dwg->id]);

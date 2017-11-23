@@ -2,6 +2,7 @@
 
 namespace app\modules\drawing\forms;
 
+use Yii;
 use app\forms\BaseForm;
 use yii\web\UploadedFile;
 use app\modules\drawing\models\DrawingDepartment;
@@ -14,6 +15,12 @@ class DrawingDepartmentForm extends DrawingForm
     public $designer;
     //public $service;
     //public $type;
+    public $id;
+    public $parent_id;
+    public $code;
+    public $number;
+    public $date;
+    public $status;
     public $note;
     public $file;
     public $obj_id;
@@ -21,6 +28,24 @@ class DrawingDepartmentForm extends DrawingForm
     public $file_cdw;
     //public $parent_id;
     //form
+    public $dwg;
+    public $obj;
+    public $noteDwg;
+    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg;
+    
+    public function _construct($dwg, $obj)
+    {
+        if ($dwg)  $this->dwg = $dwg;
+        if ($obj) $this->obj = $obj;
+//        else {
+//            $this->obj = new Objects;
+//            $this->obj->save();
+//            $this->obj->code = $this->obj->id.'_code';
+//            $this->obj->rus = 'Эскиз';
+//            $this->obj->save();
+//            $this->obj->getName();    
+//        }
+    }
     
     public function behaviors()
     {
@@ -32,29 +57,18 @@ class DrawingDepartmentForm extends DrawingForm
     {
         return [
             //['service', 'default', 'value' => 'mech'],
-            [['designer', 'note', 'name'], 'string'],
-            ['file', 'file', 'extensions' => ['pdf', 'tif', 'jpg']],
-            ['file_cdw', 'file', 'extensions' => ['cdw'], 'message' => \Yii::t('app', 'Только файлы программы Компас')],
+            [['designerDepartmentDwg', 'noteDwg', 'nameDepartmentDwg'], 'string'],
+            ['department_draft', 'file', 'extensions' => ['pdf', 'tif', 'jpg', 'jpeg']],
+            ['department_kompas', 'file', 'extensions' => ['cdw'], 'message' => Yii::t('app', 'Только файлы программы Компас')],
             [['obj_id'], 'integer'],
         ];
 
     }
 
 
-    public function save($dwg) 
+    public function save() 
     {
-        $dwg->designer = $this->designer;
-        $dwg->note = $this->note;
-        $dwg->obj_id = $this->obj_id;
-        $obj = Objects::getOne($this->obj_id, null, self::STATUS_ACTIVE);
-        if ($obj) $dwg->code = $obj->code;
-        $dwg->date = time();
-        $dwg->name = $this->name;
-        $file = UploadedFile::getInstance($this, 'file');
-        if ($file) $dwg->file = $this->uploadFile($dwg->id, $file, 'department', '_depart');
-        $file_cdw = UploadedFile::getInstance($this, 'file_cdw');
-        if ($file_cdw) $dwg->file_cdw = $this->uploadFile($dwg->id, $file_cdw, 'department/kompas', '_kompas');
-        return $dwg->save();
+        return DrawingDepartment::saveDwg($this, $this->obj, $this->dwg);
     }
      
 

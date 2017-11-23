@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use app\modules\objects\widgets\ObjectSelectMaterialWidget;
 
 $this->registerCssFile('/css/object.css');
 ?>
@@ -14,9 +15,11 @@ $this->registerCssFile('/css/object.css');
     <?= $f->field($form, 'rus')->textInput(['value' => $obj ? $obj->rus : ''])->label('Название объекта:') ?>
     
     <!-- names all change -->
-    <?= $f->field($form, 'all_name')->checkbox(['label' => 'Изменить название для всех']) ?>
+    <? if ($obj): ?>
+        <?= $f->field($form, 'all_name')->checkbox(['label' => 'Изменить название для всех']) ?>
+    <? endif; ?>
     
-    <div class="alias-order-name-wrp">
+    <div class="pos-relative">
         <!-- alias -->          
         <?= $f->field($form, 'alias')->textInput(['value' => $obj->alias, 'style' => 'width:250px'])->label('Короткое название объекта:')?>
     
@@ -24,32 +27,48 @@ $this->registerCssFile('/css/object.css');
         <?= $f->field($form, 'order_name')->textInput(['value' => $obj->order_name, 'style' => 'width:350px'])->label('Название объекта в заказах:')?>
     </div>
     
-    <? if ($obj): ?>
-        <!-- id object -->
-        <?=$f->field($form, 'id')->textInput(['value' => $obj ? $obj->id : '', 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>
-        
-        <!-- code -->          
-        <?=$f->field($form, 'code')->textInput(['value' => $obj ? $obj->code : '', 'style' => 'width:200px'])->label('Код объекта:'); ?>
-    <? endif; ?>
+    <!-- id object -->
+    <?//=$f->field($form, 'id')->textInput(['value' => $obj ? $obj->id : '', 'readonly' => 'readonly', 'style' => 'width:100px'])->label('ID object:')?>
     
-    <div class="weight-gty-item-parent-rating-wrp">
+    <div class="pos-relative">
+        <!-- code -->          
+        <?=$f->field($form, 'code')->textInput(['value' => $obj ? $obj->code : '', 'style' => 'width:200px'])->label('Код объекта:'); ?>    
+       
+        <!-- parent -->          
+        <?= $f->field($form, 'parent_id')->textInput(['value' => $obj ? $obj->parent_id : $parent_id, 'style' => 'width:100px'])->label('ID parent:') ?>
+        
+        <!-- item -->          
+        <?= $f->field($form, 'item')->textInput(['value' => $obj ? $obj->item : '', 'style' => 'width:100px'])->label('Позиция:') ?>
+        
+        <!-- rating -->          
+        <?= $f->field($form, 'rating')->textInput(['value' => $obj ? $obj->rating : '', 'style' => 'width:100px'])->label('Рейтинг:') ?>
+    </div>
+    
+
+    <div class="pos-relative">
         <!-- weight -->          
         <?=$f->field($form, 'weight')->textInput(['value' => $obj ? $obj->weight : '', 'style' => 'width:100px'])->label('Вес(кг):'); ?>
     
         <!-- qty -->          
         <?=$f->field($form, 'qty')->textInput(['value' => $obj ? $obj->qty : '1', 'style' => 'width:100px'])->label('Количество:'); ?>
     
-        <!-- item -->          
-        <?= $f->field($form, 'item')->textInput(['value' => $obj ? $obj->item : '', 'style' => 'width:100px'])->label('Позиция:') ?>
-        
-        <!-- parent -->          
-        <?= $f->field($form, 'parent_id')->textInput(['value' => $obj ? $obj->parent_id : $parent_id, 'style' => 'width:100px'])->label('ID parent:') ?>
+    </div> 
     
-        <!-- rating -->          
-        <?= $f->field($form, 'rating')->textInput(['value' => $obj ? $obj->rating : '', 'style' => 'width:100px'])->label('Рейтинг:') ?>
-    </div>    
+    <div class="pos-relative">
+        <!-- material -->          
+        <?=$f->field($form, 'material')->textInput(['value' => $obj->material, 'style' => 'width:150px'])->label('Материал:'); ?>
+    
+        <!-- select material -->
+        <?=ObjectSelectMaterialWidget::widget(['template' => 'material'])?>
+        
+        <!-- analog -->          
+        <?=$f->field($form, 'analog')->textInput(['value' => $obj->analog, 'style' => 'width:150px'])->label('Аналог материала:'); ?>
+    
+        <!-- select analog -->
+        <?=ObjectSelectMaterialWidget::widget(['template' => 'analog'])?>
+    </div>   
 
-    <div class="type-equipment-wrp">
+    <div class="pos-relative">
         <!-- type -->
         <?php
             $params = ['prompt' => 'Не выбран']; 

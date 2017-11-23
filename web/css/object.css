@@ -15,10 +15,6 @@
     background-color: transparent !important;
 }
 
-.alias-order-name-wrp, .weight-gty-item-parent-rating-wrp, .type-equipment-wrp {
-    position: relative;
-}
-
 .field-objectform-order_name {
     position: absolute;
     left: 310px;
@@ -57,4 +53,26 @@
 
 #objectform-equipment, #objectform-type {
     width: 200px;
+}
+
+.object-material-wrp {
+    position: absolute;
+    top: 0;
+    left: 180px;
+}
+
+.object-analog-wrp {
+    position: absolute;
+    top: 0;
+    left: 520px;   
+}
+
+.object-material, .object-analog {
+    width: 150px!important;
+}
+
+.field-objectform-analog {
+    position: absolute;
+    top: 0;
+    left: 350px;    
 }

@@ -45,7 +45,11 @@ $this->registerCssFile('/css/order.css');
         <tr>
             <td class="text-center">Номер заказа</td>
             <td>
-                <a href="<?=Url::to(['/order/content/list', 'order_id' => $act->order_id])?>"><?=$act->order->number?></a>
+                <? if ($act->order): ?>
+                    <a href="<?=Url::to(['/order/content/list', 'order_id' => $act->order_id])?>"><?=$act->order->number?></a>
+                <? else: ?>
+                    <?=$act->order_num?>
+                <? endif; ?>
             </td>
         </tr>
         

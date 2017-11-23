@@ -8,8 +8,6 @@ use app\modules\objects\models\Objects;
 use app\models\Tag;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
-use yii\web\UploadedFile;
-use app\modules\drawing\logic\DrawingLogic;
 
 class ObjectForm extends BaseForm
 {   
@@ -27,16 +25,18 @@ class ObjectForm extends BaseForm
     public $rating;
     public $item; //position object in specification
     public $order_name;
+    public $material;
+    public $analog;
     //drawing
     public $dwg;
     public $categoryDwg;
-    public $nameDwg;
-    public $fileDwg;
-    public $numberWorksDwg;
-    public $sheetWorksDwg;
-    public $designerDepartmentDwg;
-    public $fileDwgKompas;
     public $noteDwg;
+     //works dwg
+    public $numberWorksDwg; public $nameWorksDwg; 
+    public $works_dwg_1; public $works_dwg_2; public $works_dwg_3;
+    //department dwg
+    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg;
+    
     //form
     public $types;
     public $equipments;
@@ -54,15 +54,13 @@ class ObjectForm extends BaseForm
             [['type'], 'required', 'message' => 'Необходимо указать  тип объекта'],
             [['equipment'], 'required', 'message' => 'Необходимо указать оборудование объекта'],
             ['order_name', 'string', 'length' => [2, 40] ],
-            [['alias', 'code', 'weight', 'note', 'all_name'], 'string'],
+            [['alias', 'code', 'weight', 'note', 'all_name', 'material', 'analog'], 'string'],
             [['parent_id', 'item', 'rating'], 'default', 'value' => 0],
             ['qty', 'default', 'value' => 1],
             //drawing
-            [['categoryDwg', 'nameDwg', 'designerDepartmentDwg', 'noteDwg', 'numberWorksDwg'], 'string'],
-            ['sheetWorksDwg', 'integer'],
-            ['sheetWorksDwg', 'default', 'value' => 1],
-            ['fileDwg', 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
-            ['fileDwgKompas', 'file', 'extensions' => ['cdw']],
+            [['categoryDwg', 'nameDepartmentDwg', 'nameWorksDwg', 'designerDepartmentDwg', 'noteDwg', 'numberWorksDwg'], 'string'],
+            [['works_dwg_1', 'works_dwg_2', 'works_dwg_3', 'department_draft'], 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
+            ['department_kompas', 'file', 'extensions' => 'cdw'],
         ];
     }
     
@@ -80,7 +78,7 @@ class ObjectForm extends BaseForm
     
     public function save()
     {   
-        if (!$this->code) $this->obj->code = trim($this->code); 
+        $this->obj->code = trim($this->code); 
         $this->obj->parent_id = $this->parent_id;
         $this->obj->rus = $this->rus;
 		if ($this->all_name && $this->rus && $this->code != '') $this->changeNameAllObjects();
@@ -93,12 +91,15 @@ class ObjectForm extends BaseForm
         $this->obj->item = $this->item;
         $this->obj->rating = $this->rating;
         $this->obj->order_name = $this->order_name;
+        $this->obj->material = $this->material;
+        $this->obj->analog = $this->analog;
         $this->obj->save(); 
         if (!$this->obj->code) {
             $this->obj->code = $this->obj->id.'-code';
             $this->obj->save();    
         }  
         $this->saveDrawing();
+        $this->checkCode();
         return true;           
     }
 	
@@ -116,65 +117,9 @@ class ObjectForm extends BaseForm
     private function saveDrawing()
     {
         if (!$this->categoryDwg) return false;
-        else if ($this->categoryDwg == 'works') return $this->saveDwgWorks();
-        else if ($this->categoryDwg == 'department') return $this->saveDwgDepartment();
+        else if ($this->categoryDwg == 'works') return DrawingWorks::saveDwg($this, $this->obj);
+        else if ($this->categoryDwg == 'department') DrawingDepartment::saveDwg($this, $this->obj);
         else return false;
-    }
-    
-    private function saveDwgWorks()
-    {
-        $dwg = DrawingWorks::findOne(['number' => $this->numberWorksDwg, 'status' => DrawingWorks::STATUS_ACTIVE]);
-        $this->dwg = $dwg ? $dwg : new DrawingWorks();
-        $this->saveDwgDataTotal();
-        $this->dwg->number = $this->numberWorksDwg;
-        $this->dwg->parent_id = $this->obj->parent_id;
-        $this->dwg->save();
-        
-        $file = UploadedFile::getInstance($this, 'file');
-        if ($file) {
-            
-            $sheet = $this->sheetWorksDwg ? $this->sheetWorksDwg : 1;
-            $sufix = '_works_'.$sheet;
-            $filename = $this->uploadFile($this->dwg->id, $file, 'works', $sufix);
-            $this->dwg = DrawingLogic::saveFileWorks($this->dwg, $sheet, $filename);     
-        }
-        return $this->dwg->save();;   
-    }
-    
-    private function saveDwgDataTotal()
-    {
-        $this->dwg->obj_id = $this->obj->id;
-        $this->dwg->code = $this->obj->code;
-        if ($this->note) $this->dwg->note = $this->note; 
-        if ($this->nameDwg) $this->dwg->name = $this->nameDwg;
-        $this->dwg->date = time();    
-    }
-    
-    private function saveFile($folder, $sufix)
-    {
-        $file = UploadedFile::getInstance($this, 'fileDwg');
-        if (!$file) return false;
-        $this->dwg->file = $this->uploadFile($this->dwg->id, $file, $folder, $sufix);
-        return $this->dwg->save();
-    }
-    
-    private function saveFileKompas()
-    {
-        $file = UploadedFile::getInstance($this, 'fileDwgKompas');
-        if (!$file) return false;
-        $this->dwg->file_cdw = $this->uploadFile($this->dwg->id, $file, 'department/kompas', '_kompas');
-        return $this->dwg->save();
-    }
-    
-    private function saveDwgDepartment()
-    {
-        $this->dwg = new DrawingDepartment();
-        $this->saveDwgDataTotal();
-        $this->dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
-        $this->dwg->designer = $this->designerDepartmentDwg;
-        $this->dwg->save();
-        $this->saveFileKompas();
-        return $this->saveFile('department', '_depart');
     }
 
 }

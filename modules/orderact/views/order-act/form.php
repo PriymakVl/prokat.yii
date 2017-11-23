@@ -73,6 +73,14 @@ $this->registerCssFile('/css/orderact.css');
         <?=$f->field($form, 'year')->textInput(['value' => $act ? $act->year : date('Y'), 'style' => 'width:100px'])->label('Год:')?>
     </div>
     
+    <div class="act-form-order-wrp">
+        <!-- number of order -->          
+        <?=$f->field($form, 'order_num')->textInput(['value' => $act->order ? $act->order->number : $act->order_num, 'style' => 'width:120px'])->label('Номер заказа:')?>
+        
+        <!-- id of order -->          
+        <?=$f->field($form, 'order_id')->textInput(['value' => $act->order->id, 'style' => 'width:100px'])->label('ID заказа:')?>
+    </div>
+    
     <!-- data -->
     <div class="act-form-data-wrp">
         <!-- cost -->          

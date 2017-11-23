@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Url;
+use app\widgets\FlashMessageWidget;
 use app\widgets\MainMenuWidget;
 use app\modules\drawing\widgets\DrawingMenuWidget;
 use app\modules\drawing\widgets\DrawingMainMenuWidget;
@@ -13,8 +14,11 @@ $this->registerCssFile('/css/drawing.css');
     <!-- top nenu -->
     <?=DrawingWorksTopMenuWidget::widget(['dwg' => $dwg])?>
     
+    <!-- flash messge -->
+    <?=FlashMessageWidget::widget()?>
+    
     <!-- data orawing -->
-    <table class="dwg-data">
+    <table class="dwg-data margin-top-15">
         <tr>
             <th width="160">Наименование</th>
             <th width="560">Значение</th>
@@ -53,7 +57,7 @@ $this->registerCssFile('/css/drawing.css');
             <tr>
             <td>Лист 2</td>
             <td>
-                <?=$dwg->sheet_2?>
+                <a href="<?=Url::to(['/files/works/'.$dwg->sheet_2])?>"><?=$dwg->sheet_2?></a>
             </td>
         </tr>
         <? endif; ?>
@@ -63,16 +67,16 @@ $this->registerCssFile('/css/drawing.css');
             <tr>
             <td>Лист 2</td>
             <td>
-                <?=$dwg->sheet_3?>
+                <a href="<?=Url::to(['/files/works/'.$dwg->sheet_3])?>"><?=$dwg->sheet_3?></a>
             </td>
         </tr>
         <? endif; ?>
 
         <!-- design department -->
         <tr>
-            <td>Конструкторсий отдел</td>
+            <td>Констр-кий отдел</td>
             <td>
-                <?//=$dwg->department ? $dwg->department : 'Не указан'?>
+                <?=$dwg->department ? $dwg->department : 'Не указан'?>
             </td>
         </tr>
         
@@ -80,7 +84,7 @@ $this->registerCssFile('/css/drawing.css');
         <tr>
             <td>Конструктор</td>
             <td>
-                <?//=$dwg->designer ? $dwg->desinger : 'Не указан'?>
+                <?=$dwg->designer ? $dwg->desinger : 'Не указан'?>
             </td>
         </tr>
         

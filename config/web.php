@@ -171,6 +171,7 @@ $config = [
                 'object/drawing/form' => 'objects/object-drawing/form',
                 'object/drawing' => 'objects/object-drawing',
                 'object/drawing/vendor/update' => 'objects/object-drawing/update-vendor',
+                'object/drawing/code/update' => 'objects/object-drawing/set-code-object',
                 //object
                 'object' => 'objects/object',                                    
                 'object/form' => 'objects/object/form',                                    

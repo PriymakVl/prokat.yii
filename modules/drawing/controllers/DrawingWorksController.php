@@ -28,13 +28,16 @@ class DrawingWorksController extends BaseController
         return $this->render('list', compact('list', 'params', 'pages'));
     }
     
-    public function actionForm($dwg_id = null) 
+    public function actionForm($dwg_id = null, $obj_id = null) 
     { 
-        $dwg = (int)$dwg_id ? DrawingWorks::findOne($dwg_id) : null;
-        $form = new DrawingWorksForm();
-        $form->getServices($form);
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) { 
-            return $this->redirect(['/drawing/works', 'dwg_id' => $form->dwg_id]);
+        //debug(Yii::$app->request->referrer, false);
+        $dwg = DrawingWorks::getOne($dwg_id, null, self::STATUS_ACTIVE);
+        $form = new DrawingWorksForm($dwg);
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
+            Yii::$app->session->setFlash('success', $dwg ? 'Чертеж успешно создан' : 'Чертеж успешно отредактирован');
+            //return $this->redirect(Yii::$app->request->referrer);
+            if ($obj_id) return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+            else return $this->redirect(['drawing/works', 'dwg_id' => $form->dwg->id]);
         }   
         return $this->render('form', compact('dwg', 'form'));
     }

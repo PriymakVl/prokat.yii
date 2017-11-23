@@ -27,14 +27,14 @@ $this->registerCssFile('css/drawing.css');
             </td>
             <td class="text-center"> 
                 <? if ($dwg->file): ?>           
-                    <a target="_blank" href="<?=Url::to(['/files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->file?></a>                 
+                    <a target="_blank" href="<?=Url::to(['/files/department/'.$dwg->file])?>"><?=$dwg->file?></a>                 
                 <? else: ?>
                     <span style="color:red;">Не добавлен</span>
                 <? endif; ?>
             </td>
             <td class="text-center"> 
                 <? if ($dwg->file_cdw): ?>           
-                    <a target="_blank" href="<?=Url::to(['/files/'.$dwg->category.'/'.$dwg->file])?>"><?=$dwg->file_cdw?></a>                 
+                    <a target="_blank" href="<?=Url::to(['/files/department/kompas/'.$dwg->file_cdw])?>"><?=$dwg->file_cdw?></a>                 
                 <? else: ?>
                     <span style="color:red;">Не добавлен</span>
                 <? endif; ?>

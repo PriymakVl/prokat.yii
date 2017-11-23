@@ -12,7 +12,7 @@ $this->registerCssFile('/css/drawing.css');
     <!-- title -->
     <div class="title-box">
         <? if ($dwg): ?>
-            Редакирование чертежа ПКО    
+            Редакирование чертежа ПКО для объекта <?=$dwg->obj->name?>  
         <? else: ?>
             Добавление чертежа ПКО  
         <? endif; ?>
@@ -20,32 +20,31 @@ $this->registerCssFile('/css/drawing.css');
     <!-- form -->
     <div class="form-wrp">
         <? $f = ActiveForm::begin(['id' => 'form-works-dwg', 'options' => ['enctype'=>'multipart/form-data']]); ?>
-            <!-- name -->          
-            <?=$f->field($form, 'name')->textInput(['value' => $dwg->name])->label('Название чертежа:')?>
+            <div id="top-box-wrp">
+                 <!-- number dwg -->          
+                <?=$f->field($form, 'numberWorksDwg')->textInput(['value' => $dwg->number, 'maxlength'=>50, 'style' => 'width:200px'])->label('Номер чертежа:')?>
             
-            <!-- number -->          
-            <?=$f->field($form, 'number')->textInput(['value' => $dwg->number, 'maxlength'=>50, 'style' => 'width:200px'])->label('Номер чертежа:')?>
-            
-             <!-- item -->          
-            <?=$f->field($form, 'item')->textInput(['value' => $dwg->item ? $dwg->item : 1, 'maxlength'=>5, 'style' => 'width:100px'])->label('Позиция:')?>
-            
-             <!-- parent_id -->
-            <?= $f->field($form, 'parent_id')->textInput(['value' => $dwg->parent_id ? $dwg->parent_id : 0, 'maxlength'=>5, 'style' => 'width:100px'])->label('ID родителя:') ?>
-            
-            <!-- sheets -->
-            <?= $f->field($form, 'sheets')->textInput(['value' => $dwg->sheets ? $dwg->sheets : 1, 'maxlength'=>5, 'style' => 'width:100px'])->label('Кол-во листов:') ?>
-            
-            <!-- type -->
-            <?php 
-                $form->type = $dwg ? $dwg->type : 'drawing';
-                $types = ['drawing' => 'Чертеж', 'folder' => 'Папка', 'assembly' => 'Сборочный чертеж', 'specification' => 'Спецификация'];
-                echo $f->field($form, 'type')->dropDownList($types)->label('Тип:');
-            ?>
+                <!-- code object -->          
+                <?=$f->field($form, 'code')->textInput(['value' => $dwg->code, 'maxlength'=>50, 'style' => 'width:200px'])->label('Код объекта:')?>
+                
+            </div>
            
+            <!-- name dwg -->          
+            <?=$f->field($form, 'nameWorksDwg')->textInput(['value' => $dwg->name])->label('Название чертежа:')?>
+            
+            <!-- file sheet_1 -->
+            <?=$f->field($form, 'works_dwg_1')->fileInput()->label('Лист 1:')?> 
+
+            <!-- file sheet_2 -->
+            <?=$f->field($form, 'works_dwg_2')->fileInput()->label('Лист 2:')?>
+            
+            <!-- file sheet_3 -->
+            <?=$f->field($form, 'works_dwg_3')->fileInput()->label('Лист 3:')?>
+            
             <!-- note -->
             <?php
-                if ($dwg) $form->note = $dwg->note;
-                echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
+                if ($dwg) $form->noteDwg = $dwg->note;
+                echo $f->field($form, 'noteDwg')->textarea(['rows' => '4'])->label('Примечание:');
             ?>
             
             <!-- hidden drawing id -->

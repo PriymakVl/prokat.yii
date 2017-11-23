@@ -22,6 +22,18 @@
     text-align: center !important;    
 }
 
+.pos-relative {
+    position: relative;
+}
+
+.red {
+    color: red !important;
+}
+
+.green {
+    color: green !important;
+}
+
 /* info */
 .info-box {
 	padding:5px 0 5px 10px;

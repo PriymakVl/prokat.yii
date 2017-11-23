@@ -5,6 +5,7 @@
     $this->registerJsFile('/js/drawing/dwg_delete_object.js');
     //$this->registerJsFile('/js/drawing/dwg_note_object.js');
     $this->registerJsFile('/js/drawing/dwg_obj_update.js');
+    $this->registerJsFile('/js/drawing/dwg_code_update.js');
 ?>
 
 <div  class="sidebar-menu" id="dwg-list-menu">
@@ -17,7 +18,10 @@
                 <a href="#" onclick="return false;" id="dwg-delete-obj">Удалить чертеж</a>
             </li>
             <li>
-                <a href="#" onclick="return false;" id="dwg-update">Редактировать чертеж</a>
+                <a href="javascript:return false;" id="dwg-update">Редактировать чертеж</a>
+            </li>
+            <li>
+                <a href="javascript:return false;" id="code-update">Изменить код объекта</a>
             </li>
             <!--
             <li>

@@ -38,6 +38,7 @@ class OrderAct extends BaseModel
     
     public function getOrder()
     {
+        if (!$this->order_id) return $this;
         $this->order = Order::findOne($this->order_id);
         $this->order->getNumber()->getCustomerForPrint();
         return $this;

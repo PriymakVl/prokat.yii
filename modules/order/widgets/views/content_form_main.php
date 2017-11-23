@@ -47,16 +47,16 @@ $this->registerJsFile('/js/order/content_form_set_name.js');
     <?=$f->field($form, 'count')->textInput(['value' => $item->count ? $item->count : 1, 'maxlength'=>5, 'style' => 'width:100px'])->label('Количество:')?>
     
     <!-- material --> 
-        <div id="material-form-wrp">
-            <?=$f->field($form, 'material')->textInput(['value' => $item->material, 'maxlength'=>100, 'style' => 'width:300px'])->label('Материал:')?>
-        
+    <div id="material-form-wrp">
+        <?=$f->field($form, 'material')->textInput(['value' => $item->material, 'maxlength'=>100, 'style' => 'width:300px'])->label('Материал:')?>
+    
         <!-- select material -->
         <?=OrderContentFormComponentWidget::widget(['template' => 'material'])?>
     </div>  
     
     <!-- additional material --> 
-        <div id="material-add-form-wrp">
-            <?=$f->field($form, 'material_add')->textInput(['value' => $item->material_add, 'maxlength'=>100, 'style' => 'width:300px'])->label('Дополнительный материал:')?>
+    <div id="material-add-form-wrp">
+        <?=$f->field($form, 'material_add')->textInput(['value' => $item->material_add, 'maxlength'=>100, 'style' => 'width:300px'])->label('Дополнительный материал:')?>
         
         <!-- select additional material -->
         <?=OrderContentFormComponentWidget::widget(['template' => 'material'])?>

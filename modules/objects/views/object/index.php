@@ -89,13 +89,32 @@ $this->registerJsFile('/js/object/object_copy.js');
             </td>
         </tr>
         
-        <!-- count of objects -->
+        <!-- weight of objects -->
         <tr>
             <td>Вес</td>
             <td>
                 <?=$obj->weight ? $obj->weight.'кг' : 'Не указан'?>
             </td>
         </tr>
+        
+        <? if ($obj->type == 'detail'): ?>
+            <!-- material of object -->
+            <tr>
+                <td>Материал</td>
+                <td>
+                    <?=$obj->material ? $obj->material : 'Не указан'?>
+                </td>
+            </tr>
+            <? if ($obj->analog): ?>
+                 <!-- analog of object -->
+                <tr>
+                    <td>Аналог материала</td>
+                    <td>
+                        <?=$obj->analog?>
+                    </td>
+                </tr>
+            <? endif; ?>
+        <? endif; ?>
         
         <!-- orders -->
         <? if ($obj->orders): ?>

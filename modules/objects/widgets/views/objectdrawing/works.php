@@ -19,7 +19,7 @@ $this->registerCssFile('css/drawing.css');
                 <input type="radio" name="dwg" dwg_id="<?=$dwg->id?>" dwg_cat="<?=$dwg->category?>" obj_id="<?=$obj_id?>" />
             </td>
             <td class="text-center">
-                <?=$dwg->number?>  
+                <a href="<?=Url::to(['/drawing/works', 'dwg_id' => $dwg->id])?>" target="_blank"><?=$dwg->number?></a> 
             </td>
             <td class="text-center"> 
                 <? if ($dwg->sheet_1): ?>           
@@ -31,11 +31,12 @@ $this->registerCssFile('css/drawing.css');
                 <? if ($dwg->sheet_3): ?>           
                     <a target="_blank" href="<?=Url::to(['/files/'.$dwg->category.'/'.$dwg->sheet_3])?>">лист 3</a>                 
                 <? endif; ?> 
+                <? if (!$dwg->sheet_1 && !$dwg->sheet_2 && !$dwg->sheet_3): ?>
+                    <span class="red">Нет</span>
+                <? endif ?>
             </td>
             <td class="text-center"> 
-                <a href="<?=Url::to(['/drawing/'.$dwg->category, 'dwg_id' => $dwg->id])?>" target="_blank">
-                    <?=$dwg->name?>
-                </a> 
+                <?=$dwg->name ? $dwg->name : '<span style="color:red;">Не указано</span>'?>
             </td>
             <td>
                 <? if($dwg->cutNote): ?>

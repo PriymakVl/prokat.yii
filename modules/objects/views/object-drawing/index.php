@@ -2,6 +2,7 @@
     use \yii\web\JqueryAsset;
     use yii\widgets\ActiveForm;
     use app\widgets\MainMenuWidget; 
+    use app\widgets\FlashMessageWidget;
     use app\modules\objects\widgets\ObjectTopMenuWidget; 
     use app\modules\objects\widgets\ObjectSearchMenuWidget; 
     use app\modules\objects\widgets\ObjectDrawingWidget;
@@ -21,6 +22,9 @@
         <span>Название:</span>&laquo; <?=$obj->name?> &raquo;<br />
         <span>Код:</span>&laquo; <?=$obj->code ? $obj->code : 'Не указан'?> &raquo;
     </div>
+    
+    <!-- flash messge -->
+    <?=FlashMessageWidget::widget()?>
     
     <!-- full note-->
     <div class="note-full" style="display: none;">

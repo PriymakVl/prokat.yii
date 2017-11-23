@@ -15,13 +15,15 @@ use app\modules\drawing\logic\DrawingLogic;
 class ObjectDrawingForm extends BaseForm
 {   
     public $category;
-    //public $dwg_id;
     public $code;
-    public $file;
     public $dwg;
-    public $note;
-    public $numberWorksDwg; public $nameWorksDwg; public $sheetWorksDwg;
-    public $designerDepartmentDwg;
+    public $noteDwg;
+    //works
+    public $numberWorksDwg; public $nameWorksDwg; 
+    public $works_dwg_1; public $works_dwg_2; public $works_dwg_3;
+    //department
+    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg;
+    //danieli
     public $revisionDanieliDwg; public $sheetDanieliDwg;
     public $nameStandardDanieliDwg;
     //class
@@ -29,13 +31,14 @@ class ObjectDrawingForm extends BaseForm
     
     public function rules() {
         return [
-            //[['dwg_id'], 'required', 'message' => 'Необходимо указать ID чертежа'],
-            [['note', 'numberWorksDwg', 'nameWorksDwg', 'nameStandardDanieliDwg', 'revisionDanieliDwg'], 'string'],
-            [['designerDepartmentDwg'], 'string'],
-            [['sheetWorksDwg', 'sheetDanieliDwg'], 'integer'],
             [['category'], 'required', 'message' => 'Необходимо указать  где создан чертеж'],
-            //['numberDwg', 'checkNumberDwg',  'skipOnError' => false],
-            ['file', 'file', 'extensions' => ['tif', 'jpg', 'pdf']],
+            //['numberWorksDwg', 'checkNumberWorksDwg', 'skipOnEmpty' => false, 'skipOnError' => false],
+            ['numberWorksDwg', 'default', 'value' => ''],
+            [['noteDwg', 'nameWorksDwg', 'nameStandardDanieliDwg', 'revisionDanieliDwg'], 'string'],
+            [['designerDepartmentDwg', 'nameDepartmentDwg'], 'string'],
+            [['sheetDanieliDwg'], 'integer'],
+            [['works_dwg_1', 'works_dwg_2', 'works_dwg_3', 'department_draft'], 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
+            ['department_kompas', 'file', 'extensions' => 'cdw'],
         ];
     }
 
@@ -43,8 +46,8 @@ class ObjectDrawingForm extends BaseForm
     {
         $this->obj = $obj;
         switch($this->category) {
-            case 'department': return $this->saveDwgDepartment();
-            case 'works': return $this->saveDwgWorks();
+            case 'department': return DrawingDepartment::saveDwg($this, $obj);
+            case 'works': return DrawingWorks::saveDwg($this, $obj);
             case 'danieli': return $this->saveDwgDanieli();
             case 'standard': return new DrawingStandard();
             case 'standard_danieli': return $this->saveDwgStandardDanieli();
@@ -78,57 +81,11 @@ class ObjectDrawingForm extends BaseForm
         return $this->dwg->save();
     }
     
-    private function saveDwgDepartment()
-    {
-        $this->dwg = new DrawingDepartment();
-        $this->saveDwgDataTotal();
-        $this->dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
-        $this->dwg->designer = $this->designerDepartmentDwg;
-        $this->dwg->save();
-        return $this->saveFile('department', '_depart');
-    }
-    
-    private function saveDwgWorks()
-    {
-        $dwg = DrawingWorks::findOne(['number' => $this->numberWorksDwg, 'status' => DrawingWorks::STATUS_ACTIVE]);
-        $this->dwg = $dwg ? $dwg : new DrawingWorks();
-        $this->saveDwgDataTotal();
-        $this->dwg->number = $this->numberWorksDwg;
-        if ($this->nameWorksDwg) $this->dwg->name = $this->nameWorksDwg;
-        $this->dwg->parent_id = $this->obj->parent_id;
-        $this->dwg->save();
-        
-        $file = UploadedFile::getInstance($this, 'file');
-        if ($file) {
-            
-            $sheet = $this->sheetWorksDwg ? $this->sheetWorksDwg : 1;
-            $sufix = '_works_'.$sheet;
-            $filename = $this->uploadFile($this->dwg->id, $file, 'works', $sufix);
-            $this->dwg = DrawingLogic::saveFileWorks($this->dwg, $sheet, $filename);     
-        }
-        return $this->dwg->save();;   
-    }
-    
-    private function saveDwgDataTotal()
-    {
-        $this->dwg->obj_id = $this->obj->id;
-        $this->dwg->code = $this->obj->code;
-        if ($this->note) $this->dwg->note = $this->note; 
-        $this->dwg->date = time();    
-    }
-    
-    private function saveFile($folder, $sufix)
-    {
-        $file = UploadedFile::getInstance($this, 'file');
-        $this->dwg->file = $this->uploadFile($this->dwg->id, $file, $folder, $sufix);
-        return $this->dwg->save();
-    }
-    
-//    public function checkNumberDwg($attribute, $params)
+//    public function checkNumberWorksDwg($attribute, $params)
 //    {
-//        if ($this->category == 'works' && !$this->numberDwg) {
+//        if ($this->category == 'works' && !$this->numberWorksDwg) {
 //            $this->addError($attribute, 'Необходимо указать номер чертежа');
-//        }    
+//        }  
 //    }
     
     

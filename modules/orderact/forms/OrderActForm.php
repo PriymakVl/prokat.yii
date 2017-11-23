@@ -15,6 +15,7 @@ class OrderActForm extends BaseForm
     public $cost;
     public $working_hour;
     public $order_id;
+    public $order_num;
     public $note;
     public $department;
     public $month;
@@ -36,8 +37,8 @@ class OrderActForm extends BaseForm
         return [
             [['number'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['date_registr'], 'required', 'message' => 'Необходимо указать дату регистрации'],
-            [['cost', 'department', 'note'], 'string'],
-            [['working_hour', 'state', 'type', 'month', 'year'], 'integer'],
+            [['cost', 'department', 'note', 'order_num'], 'string'],
+            [['working_hour', 'state', 'type', 'month', 'year', 'order_id'], 'integer'],
             [['date_registr'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
         ];
 
@@ -56,6 +57,8 @@ class OrderActForm extends BaseForm
         $this->act->note = $this->note;
         $this->act->department = $this->department;
         $this->act->state = $this->state;
+        if ($this->order_id) $this->act->order_id = $this->order_id;
+        $this->act->order_num = $this->order_num;
         $this->act->date_registr = strtotime($this->prepareDateForConvert($this->date_registr));
         $this->act->year = $this->year ? $this->year : date('Y', $this->act->date_registr);
         $this->act->month = $this->month ? $this->month : date('m', $this->act->date_registr);

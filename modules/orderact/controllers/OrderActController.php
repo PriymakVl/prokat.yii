@@ -38,6 +38,7 @@ class OrderActController extends BaseController
     public function actionForm($act_id = null)
     {     
         $act = OrderAct::getOne($act_id, null, self::STATUS_ACTIVE);
+        if ($act) $act->getOrder();
         $order = $act ? Order::getOne($act->order_id, false, self::STATUS_ACTIVE) : null;
         //$content = OrderActContent::getContentByActId($act->id);       
         $form = new OrderActForm($act);

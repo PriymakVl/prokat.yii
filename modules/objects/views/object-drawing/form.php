@@ -14,7 +14,7 @@ $this->registerJsFile('/js/drawing/dwg_form_show_options.js');
     </div>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box  margin-top-15">
         <span>Название детали/узла:</span>&laquo; <?=$obj->name?> &raquo;<br />
         <span>Код детали/узла:</span>&laquo; <?=$obj->code ? $obj->code : 'Не указан'?> &raquo;<br />
     </div>
@@ -31,9 +31,6 @@ $this->registerJsFile('/js/drawing/dwg_form_show_options.js');
                 echo $f->field($form, 'category')->dropDownList($items, $params)->label('Где создан чертеж(эскиз):');
             ?>
             
-            <!-- file -->
-            <?=$f->field($form, 'file')->fileInput()->label('Выбрать файл:')?> 
-            
             <!-- dwg works options -->
             <div class="panel panel-default" id="dwg-works-options-wrp" style="display:none;">
                 <div class="panel-heading">Параметры чертежа ПКО</div>
@@ -41,11 +38,17 @@ $this->registerJsFile('/js/drawing/dwg_form_show_options.js');
                     <!-- number dwg -->
                     <?=$f->field($form, 'numberWorksDwg')->textInput()->label('Номер чертежа:')?>
                     
-                    <!-- sheet dwg -->
-                    <?=$f->field($form, 'sheetWorksDwg')->textInput()->label('Лист чертежа:')?>
+                    <!-- file sheet_1 -->
+                    <?=$f->field($form, 'works_dwg_1')->fileInput()->label('Лист 1:')?> 
+
+                    <!-- file sheet_2 -->
+                    <?=$f->field($form, 'works_dwg_2')->fileInput()->label('Лист 2:')?>
+                    
+                    <!-- file sheet_3 -->
+                    <?=$f->field($form, 'works_dwg_3')->fileInput()->label('Лист 3:')?>
                     
                     <!-- name dwg -->
-                    <?=$f->field($form, 'nameWorksDwg')->textInput()->label('Название чертежа:')?>
+                    <?=$f->field($form, 'nameWorksDwg')->textInput(['value' => $obj->name])->label('Название чертежа:')?>
                 </div>
             </div>
             
@@ -53,12 +56,20 @@ $this->registerJsFile('/js/drawing/dwg_form_show_options.js');
             <div class="panel panel-default" id="dwg-department-options-wrp" style="display:none;">
                 <div class="panel-heading">Параметры эскиза</div>
                 <div class="panel-body">
+                    <!-- file drawg -->
+                    <?=$f->field($form, 'department_draft')->fileInput()->label('Файл эскиза:')?>
+                    
+                    <!-- file kompas -->
+                    <?=$f->field($form, 'department_kompas')->fileInput()->label('Файл компас:')?>
+                    
                     <!-- desinger -->
                     <?php
                     $params = ['prompt' => 'Не выбран'];
                         $designers = ['Приймак В.Н.' => 'Приймак В.Н.', 'Немер А.Г.' => 'Немер А.Г.'];
                         echo $f->field($form, 'designerDepartmentDwg')->dropDownList($designers, $params)->label('Конструктор:');
                     ?>
+                    
+                    <?=$f->field($form, 'nameDepartmentDwg')->textInput(['value' => $obj->name])->label('Название эскиза:')?>
                 </div>
             </div>
             
@@ -83,14 +94,11 @@ $this->registerJsFile('/js/drawing/dwg_form_show_options.js');
                     <?=$f->field($form, 'nameStandardDanieliDwg')->textInput()->label('Наименование чертежа:')?>
                 </div>
             </div>
-            
-            
-            
-            
-            <!-- note -->
+
+            <!-- note dwg -->
             <?php
-                if ($dwg) $form->note = $dwg->note;
-                echo $f->field($form, 'note')->textarea(['rows' => '4'])->label('Примечание:');
+                if ($dwg) $form->note = $dwg->noteDwg;
+                echo $f->field($form, 'noteDwg')->textarea(['rows' => '4'])->label('Примечание:');
             ?>
                       
             <!-- button -->
