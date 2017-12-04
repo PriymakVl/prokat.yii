@@ -17,7 +17,6 @@ class ObjectSpecificationController extends BaseController
         $parent = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $parent->getName();
         $children = Objects::getChildren($parent->id, $sort);
-        //debug($children);
         return $this->render('index', ['parent' => $parent, 'children' => $children, 'sort' => $sort]);
     }
     

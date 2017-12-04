@@ -1,3 +1,6 @@
+.content table {
+    width: 730px!important;
+}
 .active-order {
     margin-top: 15px;
 }
@@ -149,12 +152,8 @@
 }
 
 /** top menu list **/
-#order-period, #order-customer, #order-type{
-    margin-right: 15px;
-}
-
-#order-period, #order-customer, #order-type, #order-state{
-    width: 100px;
+#order-period, #order-customer, #order-type, #order-state, #order-kind{
+    width: 80px;
 }
 
 /** content order tab dismission */

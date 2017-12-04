@@ -116,9 +116,9 @@ class BaseModel extends ActiveRecord implements ConfigApp
         return $this; 
     }
     
-    public function convertMonth()
+    public function convertMonth($lower = false)
     {
-        $this->month = self::convertMonth($this->month);
+        $this->month = self::getMonthString($this->month, $lower);
         return $this;
     }
     

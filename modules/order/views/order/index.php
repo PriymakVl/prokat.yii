@@ -15,7 +15,7 @@ $this->registerCssFile('/css/order.css');
 ?>
 <div class="content">
     <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
     
    <!-- info order is active -->
     <? if ($order->active): ?>
@@ -56,8 +56,14 @@ $this->registerCssFile('/css/order.css');
             <td class="text-center">Состояние заказа</td>
             <td><?=$order->state?></td>
         </tr>
+        
+        <!-- kind -->
+        <tr>
+            <td class="text-center">Вид заказа</td>
+            <td><?=$order->kind?></td>
+        </tr>
          	
-        <!-- state -->
+        <!-- period -->
         <tr>
             <td class="text-center">Период выдачи</td>
             <td><?=$order->period?></td>

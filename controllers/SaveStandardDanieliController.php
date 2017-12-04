@@ -12,11 +12,11 @@ use app\modules\drawing\models\DrawingDepartmentOld;
 use app\modules\drawing\models\DrawingDanieli;
 use app\models\InventoryNumber;
 
-class DatabaseController extends BaseController 
+class SaveStandardDanieliController extends BaseController 
 {
     public function actionIndex()
-    {
-        $text = file('files/standard/51.txt');
+    {;
+        //$text = file('files/standard/70.txt');
         foreach ($text as $str) {
             preg_match('/[0-9]{1}.[0-9]{6}.[A-Z]{1}/', $str, $matches); 
             if ($matches) $codes[] = $matches[0];   
@@ -27,7 +27,7 @@ class DatabaseController extends BaseController
             else {
                 $dwg = new DrawingStandardDanieli();
                 $dwg->code = $code;
-                $dwg->file = '1051_st_dan.pdf';
+                $dwg->file = '70_st_dan.pdf';
                 $dwg->save();
             }
         }
@@ -35,16 +35,6 @@ class DatabaseController extends BaseController
         exit('end');
         
     }
-    
-//    public function setData($data)
-//    {
-//        foreach ($data as $item) {
-//            $obj = new InventoryNumber();
-//            $obj->name = $item[2];
-//            $obj->number = $item[1];
-//            $obj->save();
-//        }
-//    }
     
 
     

@@ -8,6 +8,7 @@ use app\modules\order\models\Order;
 use app\modules\order\models\OrderContent;
 use app\modules\order\forms\OrderForm;
 use app\modules\order\logic\OrderLogic;
+use app\modules\orderact\models\OrderAct;
 
 class OrderController extends BaseController 
 {
@@ -16,13 +17,16 @@ class OrderController extends BaseController
     public function actionIndex($order_id) 
     {   
         $order = Order::get($order_id);
-        return $this->render('index', compact('order', 'session'));
+        $acts = OrderAct::getAllForOrder($order_id);
+        $count_acts = $acts ? count($acts) : 0;
+        return $this->render('index', compact('order', 'session', 'count_acts'));
     }
     
-    public function actionList($period = null, $customer = null, $section = null, $equipment = null, $unit = null, $type = null)
+    public function actionList($period = null, $customer = null, $section = null, $equipment = null, $unit = null, $type = null, $kind = null)
     {
         $state = Yii::$app->request->get('state');
-        $params = OrderLogic::getParams($period, $customer, $section, $equipment, $unit, $state, $type);
+        $params = OrderLogic::getParams($period, $customer, $section, $equipment, $unit, $state, $type, $kind);
+                //debug($params);
         $list = Order::getOrderList($params);
         $pages = Order::$pages;
         return $this->render('list', compact('list', 'params', 'pages', 'state'));
@@ -51,7 +55,9 @@ class OrderController extends BaseController
     {
         $order = Order::findOne($order_id);
         $order->getNumber()->getWork();
-        return $this->render('work', compact('order'));   
+        $acts = OrderAct::getAllForOrder($order_id);
+        $count_acts = $acts ? count($acts) : 0;
+        return $this->render('work', compact('order', 'count_acts'));   
     }
     
     public function actionDelete($order_id)
@@ -61,13 +67,13 @@ class OrderController extends BaseController
         $this->redirect('/order/list');   
     }
     
-//    public function actionContent($std_id = null) 
-//    { 
-//        $parent = Standard::findOne($std_id);
-//        if (!$parent) $this->showError(__METHOD__);
-//        $children = Standard::findAll(['status' => self::STATUS_ACTIVE, 'parent_id' => $std_id]);
-//        return $this->render('content', compact('parent', 'children'));
-//    }
+    public function actionActs($order_id) 
+    { 
+        $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
+        $acts = OrderAct::getAllForOrder($order_id);
+        $count_acts = $acts ? count($acts) : 0;
+        return $this->render('acts', compact('acts', 'order', 'count_acts'));    
+    }
 
     public function actionCopy($order_id, $number)
     {

@@ -114,6 +114,7 @@ $config = [
                 'order/list' => 'order/order/list',
                 'order/form' => 'order/order/form',                   
                 'order/work' => 'order/order/work',                   
+                'order/acts' => 'order/order/acts',                   
                 'order/form/area/equipment' => 'order/order/get-equipment-for-form',                   
                 'order/delete' => 'order/order/delete',
                 'order/list/file/save' => 'order/order-list-excel-create', 

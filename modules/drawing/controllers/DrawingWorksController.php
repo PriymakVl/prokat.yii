@@ -34,10 +34,10 @@ class DrawingWorksController extends BaseController
         $dwg = DrawingWorks::getOne($dwg_id, null, self::STATUS_ACTIVE);
         $form = new DrawingWorksForm($dwg);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
-            Yii::$app->session->setFlash('success', $dwg ? 'Чертеж успешно создан' : 'Чертеж успешно отредактирован');
+            Yii::$app->session->setFlash('success', $dwg ? 'Чертеж успешно отредактирован' : 'Чертеж успешно создан');
             //return $this->redirect(Yii::$app->request->referrer);
             if ($obj_id) return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
-            else return $this->redirect(['drawing/works', 'dwg_id' => $form->dwg->id]);
+            else return $this->redirect(['/drawing/works', 'dwg_id' => $form->dwg->id]);
         }   
         return $this->render('form', compact('dwg', 'form'));
     }

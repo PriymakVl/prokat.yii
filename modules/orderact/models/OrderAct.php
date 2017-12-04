@@ -13,6 +13,8 @@ class OrderAct extends BaseModel
     public $order;
     public $period;
     public $colorState;
+    public $countPosition;
+    public $countItems;
     
     const PAGE_SIZE = 15;
     
@@ -32,7 +34,7 @@ class OrderAct extends BaseModel
     
     public function getContent()
     {
-        $this->content = OrderActContent::findOne(['status' => self::STATUS_ACTIVE, 'act_id' => $this->id]);
+        $this->content = OrderActContent::findAll(['status' => self::STATUS_ACTIVE, 'act_id' => $this->id]);
         return $this;
     }
     
@@ -46,7 +48,7 @@ class OrderAct extends BaseModel
     
     public static function getActList($params)
     {
-        $list = self::findAll($params);
+        $list = self::find()->filterWhere($params)->orderBy(['number' => SORT_ASC])->all();
         return self::executeMethods($list, ['getOrder', 'getColorState']);
     }
     
@@ -87,6 +89,26 @@ class OrderAct extends BaseModel
         else if ($this->state == self::STATE_PASSED) $this->colorState = 'green';
         else $this->colorState = 'grey';
         return $this;
+    }
+    
+    public static function getAllForOrder($order_id)
+    {
+        $acts = self::find()->where(['order_id' => $order_id, 'status' => self::STATUS_ACTIVE])->all();
+        if (!$acts) return [];
+        return self::executeMethods($acts, ['getContent', 'convertMonth', 'countPosition', 'countItems']);
+    }
+    
+    public function countPosition()
+    {
+        $this->countPosition = count($this->content);
+        return $this;
+    }
+    
+    //count items for all position
+    public function countItems()
+    {
+        $this->countItems = OrderActLogic::countItemsAct($this->content);
+        return $this;    
     }
 
 }

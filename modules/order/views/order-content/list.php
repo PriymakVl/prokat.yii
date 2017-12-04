@@ -16,7 +16,7 @@ $this->registerJsFile('/js/order/content_list_pagination.js');
 ?>
 <div class="content">
     <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
     
     <!-- info -->
     <div class="info-box margin-top-15">

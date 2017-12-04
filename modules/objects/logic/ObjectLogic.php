@@ -136,7 +136,6 @@ class ObjectLogic extends BaseLogic
     
     public static function getEquipmentObject($obj)
     {
-        debug($obj);
         $parent = Objects::getOne($obj->parent_id, false, self::STATUS_ACTIVE);
         if (!$parent || $parent->parent_id == 0) return false;
         if ($parent->type == 'equipment') return $obj->equipment = $parent;

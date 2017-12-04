@@ -38,7 +38,7 @@ $this->registerCssFile('/css/order.css');
         <!-- state -->
         <tr>
             <td class="text-center">Состояние акта</td>
-            <td><?=$act->state?></td>
+            <td><?=$act->state?>&nbsp;<?=$act->date_pass ? date('d.m.y', $act->date_pass) : ''?></td>
         </tr>
         
         <!-- number of order -->

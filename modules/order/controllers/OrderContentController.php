@@ -10,6 +10,7 @@ use app\modules\order\models\Order;
 use app\modules\order\models\OrderContent;
 use app\modules\order\forms\OrderContentForm;
 use app\modules\order\logic\OrderLogic;
+use app\modules\orderact\models\OrderAct;
 
 class OrderContentController extends BaseController 
 {
@@ -29,7 +30,9 @@ class OrderContentController extends BaseController
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->getNumber()->checkActive('order-active');
         $content = OrderContent::getItemsOfOrder($order->id);
-        return $this->render('list', compact('order', 'content'));
+        $acts = OrderAct::getAllForOrder($order_id);
+        $count_acts = $acts ? count($acts) : 0;
+        return $this->render('list', compact('order', 'content', 'count_acts'));
     }
     
     public function actionForm($order_id, $item_id = null) 

@@ -75,7 +75,7 @@ trait CommonStaticMethods
 		}
 	}
     
-    public static function convertMonth($month, $lower = false)
+    public static function getMonthString($month, $lower)
     {
         switch($month) {
             case '1': return $lower ? 'январь' : 'Январь';

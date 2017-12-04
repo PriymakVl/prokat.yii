@@ -10,7 +10,7 @@ $this->registerCssFile('/css/order.css');
 ?>
 <div class="content">
     <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
     
     <!-- info -->
     <div class="info-box">

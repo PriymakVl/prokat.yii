@@ -24,7 +24,6 @@ class Objects extends BaseModel
     public $similar;
     public $reserve;
     public $department;
-    public $equipment;
     
     const MAIN_PARENTS = 0;
     
@@ -101,8 +100,11 @@ class Objects extends BaseModel
     public static function searchCode($code)
     {
         $objects = self::find()->where(['status' => self::STATUS_ACTIVE])->andWhere(['like', 'code', $code])->all();
-        if (count($objects) > 1) return self::executeMethods($objects, ['getName', 'getParent', 'getAlias', 'getEquipment']);
-        else if ($objects) return $objects[0]->getName()->getParent()->getAlias()->getEquipment()->getDepartment();
+        if (count($objects) > 1) return self::executeMethods($objects, ['getName', 'getParent', 'getAlias']);//, 'getEquipment'
+        else if ($objects) {
+            $objects[0]->getName()->getParent()->getAlias()->getEquipment()->getDepartment();
+            return $objects;    
+        }
         return [];
     }
     
@@ -182,7 +184,7 @@ class Objects extends BaseModel
     
     public function getEquipment()
     {
-        $this->equipment = ObjectLogic::getEquipmentObject($this);
+        //$this->equipment = ObjectLogic::getEquipmentObject($this);
         return $this;
     }
     

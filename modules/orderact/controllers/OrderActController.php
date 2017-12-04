@@ -28,7 +28,7 @@ class OrderActController extends BaseController
     {
         $params = OrderActLogic::getParams($month, $year, $state);
         $list = OrderAct::getActList($params);
-        $month_selected = self::convertMonth($month ? $month : date('m'), true);
+        $month_selected = self::getMonthString($month ? $month : date('m'), true);
         $year_selected = $year ? $year : date('Y').'г.';
         $period = $month_selected.' '.$year_selected; 
         $costs = OrderActLogic::countCostMonth($month, $year);

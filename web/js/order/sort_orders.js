@@ -42,6 +42,14 @@ $(document).ready(function() {
         else location.href = 'http://' + location.host + '/order/list';    
     });
     
+    $('#order-kind').change(function() {
+        var kind = $(this).find('option:selected').val();
+        var gets = buidGetString('kind', kind);
+        if (kind == 2) location.href = 'http://' + location.host + '/order/list?kind=2&period=all';
+        else if (kind) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';    
+    });
+    
     $('#order-state').change(function() {
         var state = $(this).find('option:selected').val();
         var gets = buidGetString('state', state);

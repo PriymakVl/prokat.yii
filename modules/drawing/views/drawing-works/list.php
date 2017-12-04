@@ -39,13 +39,13 @@ $this->registerCssFile('/css/drawing.css');
                         <? if ($dwg->sheet_2 || $dwg->sheet_3): ?>
 							<a href="<?=Url::to(['/drawing/works', 'dwg_id' => $dwg->id])?>"><?=$dwg->number?></a>
                         <? elseif ($dwg->sheet_1): ?>
-                            <a href="<?=Url::to(['/files/works'.$dwg->sheet_1])?>" target="_blank"><?=$dwg->number?></a>
+                            <a href="<?=Url::to(['/files/works/'.$dwg->sheet_1])?>" target="_blank"><?=$dwg->number?></a>
                         <? else: ?>
                             <?=$dwg->number?>
                         <? endif; ?>
                     </td>
                     <td>
-                        <?= Html::a($dwg->name, ['/drawing/works', 'dwg_id' => $dwg->id]) ?>
+                        <a href="<?=Url::to(['/drawing/works', 'dwg_id' => $dwg->id])?>"><?=$dwg->name?></a>
                     </td>
                 </tr>
             <? endforeach; ?>

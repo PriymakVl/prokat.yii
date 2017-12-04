@@ -52,7 +52,7 @@ class OrderActLogic extends BaseLogic
     public static function getPeriod($act)
     {
         if (!$act->month) return false;
-        $month = self::convertMonth($act->month, true);
+        $month = self::getMonthString($act->month, true);
         return $month.' '.$act->year.'г.'; 
     }
     
@@ -61,6 +61,7 @@ class OrderActLogic extends BaseLogic
         $acts = OrderAct::findAll(explode(',', $ids));
         foreach ($acts as $act) {
             $act->state = OrderAct::STATE_PASSED;
+            $act->date_pass = time();
             $act->save();
         }
         \Yii::$app->session->setFlash('success', 'Состояние актов успешно отредактировано');
@@ -111,6 +112,17 @@ class OrderActLogic extends BaseLogic
             if ($act->cost) $total_cost += $act->cost;   
         } 
         return $total_cost;   
+    }
+    
+    //count items for all position act (acts for one order)
+    public static function countItemsAct($content)
+    {
+        $count = 0;
+        if (!$content) return $count;
+        foreach ($content as $position) {
+            $count += $position->count;
+        }
+        return $count;
     }
     
 }

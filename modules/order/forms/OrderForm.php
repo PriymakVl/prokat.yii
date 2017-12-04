@@ -28,6 +28,7 @@ class OrderForm extends BaseForm
     public $equipment;
     public $unit;
     public $inventory; //inventory number
+    public $kind;
     //form
     public $sections;
     public $equipments;
@@ -48,7 +49,7 @@ class OrderForm extends BaseForm
         return [
             [['name', 'type', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['name', 'note', 'issuer', 'customer', 'work', 'weight', 'service', 'description'],  'string'],
-            [['unit', 'equipment', 'inventory'], 'string'],
+            [['unit', 'equipment', 'inventory', 'kind'], 'string'],
             [['section', 'state'], 'integer'],
             ['number','checkNumber'],
             [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
@@ -66,6 +67,7 @@ class OrderForm extends BaseForm
     public function save() 
     {
         $this->order->type = $this->type;
+        $this->order->kind = $this->kind;
         $this->order->name = $this->name;
         $this->order->issuer = $this->getIssuer();
         $this->order->customer = $this->getCustomer();

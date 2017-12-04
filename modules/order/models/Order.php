@@ -17,11 +17,14 @@ class Order extends BaseModel
     public $unitName;
     
     const PAGE_SIZE = 15;
+    
     const STATE_DRAFT = 1;
     const STATE_ACTIVE = 2;
     const STATE_CLOSED = 3;
     const STATE_NOT_ACCEPTED = 4;
-    const STATE_PERMANENT = 5;
+    
+    const KIND_CURRENT = 1;
+    const KIND_PERMANENT = 2;
     
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
@@ -42,7 +45,8 @@ class Order extends BaseModel
     {
         $order = self::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
-                ->getFullCustomer()->getFullIssuer()->convertLocation()->convertState()->convertPeriod()->checkActive('order-active');
+                ->getFullCustomer()->getFullIssuer()->convertLocation()->convertState()->convertPeriod()->checkActive('order-active')
+                ->convertKind();
         return $order;   
     }
     
@@ -63,7 +67,7 @@ class Order extends BaseModel
         //if ($params['state'] == self::STATE_DRAFT) $query = self::find()->where($params);
         //else if ($params['state'] == self::STATE_PERMANENT) $query = self::find()->where($params);
         //else $query = self::find()->where($params)->andWhere(['!=', 'state', self::STATE_DRAFT]);
-        $query = self::find()->where($params);
+        $query = self::find()->filterWhere($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['number' => SORT_DESC])->all();
         return self::executeMethods($list, ['getNumber', 'getShortCustomer', 'getContent']);
@@ -80,6 +84,12 @@ class Order extends BaseModel
     public function convertType()
     {
         $this->type = OrderLogic::convertType($this->type);
+        return $this;
+    }
+    
+    public function convertKind()
+    {
+        $this->kind = OrderLogic::convertKind($this->kind);
         return $this;
     }
     

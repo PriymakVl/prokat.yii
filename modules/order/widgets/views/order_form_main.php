@@ -29,11 +29,18 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
             <select id="state"  name="OrderForm[state]" class="form-control">
     			<option value="<?=Order::STATE_ACTIVE?>" <? if ($order->state == Order::STATE_ACTIVE) echo 'selected'; ?>>Выдан</option>
     			<option value="<?=Order::STATE_DRAFT?>" <? if ($order->state == Order::STATE_DRAFT) echo 'selected'; ?>>Черновик</option>
-    			<option value="<?=Order::STATE_PERMANENT?>" <? if ($order->state == Order::STATE_PERMANENT) echo 'selected'; ?>>Постоянный</option>
     			<option value="<?=Order::STATE_CLOSED?>" <? if ($order->state == Order::STATE_CLOSED) echo 'selected'; ?>>Закрыт</option>
                 <option value="<?=Order::STATE_NOT_ACCEPTED?>" <? if ($order->state == Order::STATE_NOT_ACCEPTED) echo 'selected'; ?>>Непринят</option>
             </select>
         </div>
+        
+        <!-- kind -->
+        <?php 
+            $form->kind = $order ? $order->kind : Order::KIND_CURRENT;
+            $kinds = [Order::KIND_CURRENT => 'Разовый', Order::KIND_PERMANENT => 'Постоянный'];
+            $params = ['style' => 'width: 120px'];
+            echo $f->field($form, 'kind')->dropDownList($kinds, $params)->label('Вид заказа:');
+        ?>
     	
     	<!-- type -->
         <?php 

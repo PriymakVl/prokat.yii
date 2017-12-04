@@ -39,6 +39,14 @@
         <option value="<?=Orderlogic::TYPE_ENHANCEMENT?>" <? if ($params['type'] == Orderlogic::TYPE_ENHANCEMENT) echo 'selected'; ?>>Улучшение</option>
     </select>
     
+    <!-- kind -->
+    <label>Вид:</label>
+    <select id="order-kind">
+        <option value="all" <? if (empty($params['kind'])) echo 'selected'; ?>>Все</option>
+        <option value="<?=Order::KIND_CURRENT?>" <? if ($params['kind'] == Order::KIND_CURRENT) echo 'selected'; ?>>Разовые</option>
+        <option value="<?=Order::KIND_PERMANENT?>" <? if ($params['kind'] == Order::KIND_PERMANENT) echo 'selected'; ?>>Постоянные</option>
+    </select>
+    
     <!-- state -->
     <label>Состояние:</label>
     <select id="order-state">
@@ -47,7 +55,6 @@
         <option value="<?=Order::STATE_DRAFT?>" <? if ($params['state'] == Order::STATE_DRAFT) echo 'selected'; ?>>Черновики</option>
         <option value="<?=Order::STATE_CLOSED?>" <? if ($params['state'] == Order::STATE_CLOSED) echo 'selected'; ?>>Закрытые</option>
 		<option value="<?=Order::STATE_NOT_ACCEPTED?>" <? if ($params['state'] == Order::STATE_NOT_ACCEPTED) echo 'selected'; ?>>Не приняты</option>
-        <option value="<?=Order::STATE_PERMANENT?>" <? if ($params['state'] == Order::STATE_PERMANENT) echo 'selected'; ?>>Постоянные</option>
     </select>
         
 </div>

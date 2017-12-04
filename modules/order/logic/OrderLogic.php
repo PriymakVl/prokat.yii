@@ -24,18 +24,19 @@ class OrderLogic extends BaseLogic
     const TYPE_CAPITAL_REPAIR = 6; // капитальный ремонт
     
 
-    public static function getParams($period, $customer, $section = null, $equipment = null, $unit = null, $state = null, $type = null)
+    public static function getParams($period, $customer, $section = null, $equipment = null, $unit = null, $state = null, $type = null, $kind = null)
     {
         $parans = [];
         $params['status'] = self::STATUS_ACTIVE;
         if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
         if ($state == Order::STATE_DRAFT) $params['state'] = $state;
-        if ($state != 'all') $params['state'] = $state ? $state : Order::STATE_ACTIVE;
+        else if ($stata && $state != 'all') $params['state'] = $state ? $state : Order::STATE_ACTIVE;
         if ($customer && $customer != 'all') $params['customer'] = $customer;
         if ($section) $params['section'] = $section;
         if ($equipment) $params['equipment'] = $equipment;
         if ($unit) $params['unit'] = $unit;
-        if ($type) $params['type'] = $type;
+        if ($type && $kind != 'all') $params['type'] = $type;
+        if ($kind && $kind != 'all') $params['kind'] = $kind;
         //if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
         return $params;   
     }
@@ -47,6 +48,15 @@ class OrderLogic extends BaseLogic
             case self::TYPE_MAKING : return 'Изготовление'; break;
             case self::TYPE_MAINTENANCE : return 'Текущий ремонт'; break;
             case self::TYPE_CAPITAL_REPAIR : return 'Капитальный ремонт'; break;
+        }
+    }
+    
+    public static function convertKind($kind)
+    {
+        switch($kind) {
+            case Order::KIND_CURRENT : return 'Разовый'; break;
+            case Order::KIND_CURRENT : return 'Постоянно действующий'; break;
+            default : return 'Не определен';
         }
     }
     
@@ -252,6 +262,8 @@ class OrderLogic extends BaseLogic
     
     public static function removeZerosFromWeight($weight)
     {
+        $pos = stripos($weight, ',');
+        if (!$pos) return $weight;
         $letter = substr($weight, -1);
         if ($letter === '0') $weight = substr($weight, 0, -1);
         $letter = substr($weight, -1);
