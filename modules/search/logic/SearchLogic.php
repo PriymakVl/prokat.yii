@@ -18,16 +18,19 @@ use app\modules\equipments\models\Equipment;
 class SearchLogic extends BaseLogic
 {
     
-    public static function searchOrders($order = null, $dwg = null, $code = null)
+    public static function searchOrders($order_num = null, $dwg = null, $code = null)
     {
-        if ($order) return Order::findAll(['number' => $order, 'status' => self::STATUS_ACTIVE]);
-        $column = $dwg ? 'drawing' : 'code';
-        $result = OrderContent::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', $column, $dwg ? $dwg : $code])->all();
-        if (empty($result)) return [];
-        if (count($result) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
-        else $orders = OrderLogic::getArrayOrders($result);
-        self::executeMethods($orders, ['getNumber']);
-        return $orders;
+        if ($order_num) {
+            $orders = Order::findAll(['number' => $order_num, 'status' => self::STATUS_ACTIVE]);    
+        }
+        else {
+            $column = $dwg ? 'drawing' : 'code';
+            $content = OrderContent::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', $column, $dwg ? $dwg : $code])->all();
+            if (count($content) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
+            else if ($content) $orders = OrderLogic::getArrayOrders($content);   
+        }
+        if (empty($orders)) return false;
+        return self::executeMethods($orders, ['getNumber', 'convertPeriod', 'getShortCustomer']);
     }
     
     public static function searchOrderActs($act, $dwg, $code)

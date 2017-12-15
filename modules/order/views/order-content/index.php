@@ -146,9 +146,16 @@ $this->registerCssFile('/css/order.css');
                 <?=$item->note ? $item->note : 'Не указано'?>
             </td>
         </tr>
-        
-        <?=OrderContentObjectWidget::widget(['item' => $item])?>
-        
+        <tr>
+            <td class="text-center">Код детали</td>
+            <td>
+                <? if ($item->code): ?>
+                    <a href="<?=Url::to(['/search', 'code' => $item->code])?>"><?=$item->code?></a>
+                <? else: ?>
+                    <span class="red">Не указан</span>
+            <? endif; ?>
+            </td>
+        </tr>
         <!--  rating -->
         <tr>
             <td class="text-center">Рейтинг</td>

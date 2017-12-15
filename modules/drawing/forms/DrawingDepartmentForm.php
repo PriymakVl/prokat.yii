@@ -11,42 +11,36 @@ use app\modules\objects\models\Objects;
 
 class DrawingDepartmentForm extends DrawingForm
 {   
-    //public $name;
     public $designer;
-    //public $service;
-    //public $type;
-    public $id;
-    public $parent_id;
     public $code;
     public $number;
     public $date;
     public $status;
     public $note;
-    public $file;
-    public $obj_id;
+    public $draft;
+    public $kompas;
     public $name;
-    public $file_cdw;
-    //public $parent_id;
-    //form
+    
     public $dwg;
+    public $dwg_id;
     public $obj;
-    public $noteDwg;
-    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg;
     
-    public function _construct($dwg, $obj)
+    public function __construct($dwg, $obj)
     {
-        if ($dwg)  $this->dwg = $dwg;
-        if ($obj) $this->obj = $obj;
-//        else {
-//            $this->obj = new Objects;
-//            $this->obj->save();
-//            $this->obj->code = $this->obj->id.'_code';
-//            $this->obj->rus = 'Эскиз';
-//            $this->obj->save();
-//            $this->obj->getName();    
-//        }
+        if (!$dwg) {
+            $dwg = new DrawingDepartment(); 
+            $dwg->number = DrawingLogic::getNewNumberDepartmentDwg(); 
+            if ($obj) {
+                $dwg->name = $obj->name;
+                $dwg->code = $obj->code;
+            } 
+            $dwg->save(); 
+        }
+        $dwg->getFullNumber();
+        $this->dwg = $dwg;
+        $this->obj = $obj;
     }
-    
+     
     public function behaviors()
     {
     	return ['drawing-logic' => ['class' => DrawingLogic::className()]];
@@ -56,19 +50,37 @@ class DrawingDepartmentForm extends DrawingForm
     public function rules() 
     {
         return [
-            //['service', 'default', 'value' => 'mech'],
-            [['designerDepartmentDwg', 'noteDwg', 'nameDepartmentDwg'], 'string'],
-            ['department_draft', 'file', 'extensions' => ['pdf', 'tif', 'jpg', 'jpeg']],
-            ['department_kompas', 'file', 'extensions' => ['cdw'], 'message' => Yii::t('app', 'Только файлы программы Компас')],
-            [['obj_id'], 'integer'],
+            ['name', 'required', 'message' => 'Необходимо заполнить поле'],
+            [['designer', 'note', 'code'], 'string'],
+            ['draft', 'file', 'extensions' => ['pdf', 'tif', 'jpg', 'jpeg']],
+            ['kompas', 'file', 'extensions' => ['cdw']],
         ];
 
     }
 
 
     public function save() 
+    {  
+        $this->dwg->designer = $this->designer;
+        $this->dwg->date = time();
+        $this->dwg->name = $this->name;
+        $this->dwg->code = $this->code;
+        $this->dwg->note = $this->note;
+        $this->uploadFileDraft();
+        $this->uploadFileKompas();
+        return $this->dwg->save();    
+    }
+    
+    private function uploadFileDraft() 
     {
-        return DrawingDepartment::saveDwg($this, $this->obj, $this->dwg);
+        $file = UploadedFile::getInstance($this, 'draft');
+        if ($file) $this->dwg->file = $this->uploadFile($this->dwg->id, $file, 'department', '_draft' ); 
+    }
+     
+    private function uploadFileKompas() 
+    {
+        $file = UploadedFile::getInstance($this, 'kompas');
+        if ($file)  $this->dwg->file_cdw = $this->uploadFile($this->dwg->id, $file, 'department/kompas', '_kompas' ); 
     }
      
 

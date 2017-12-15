@@ -58,7 +58,7 @@ class OrderAct extends BaseModel
         return $this;
     }
     
-    public function registration($number, $order_id)
+    public static function registration($number, $order_id)
     {
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $data_registr = time();

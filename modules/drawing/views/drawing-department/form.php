@@ -8,7 +8,7 @@ use app\modules\drawing\widgets\DrawingListMenuWidget;
 use app\modules\drawing\widgets\DepartmentFormTopMenuWidget;
 use app\modules\drawing\widgets\DrawingFormTabWidget;
 
-$this->registerCssFile('/css/drawign.css');
+$this->registerCssFile('/css/drawing.css');
 $this->registerCssFile('/css/object.css');
 $this->registerJsFile('/js/drawing/dwg_form_show_tab.js');
 
@@ -25,34 +25,31 @@ $this->registerJsFile('/js/drawing/dwg_form_show_tab.js');
     <!-- form -->
     <div class="form-wrp">
          <? $f = ActiveForm::begin(['id' => 'form-department-dwg', 'options' => ['enctype'=>'multipart/form-data']]); ?>
-        
-            <!-- id object -->
-            <?=$f->field($form, 'obj_id')->textInput(['value' => $obj ? $obj->id : '', 'style' => 'width:100px'])->label('ID обекта:')?>
-           
-           <? if ($obj): ?>
-               <!-- name object -->
-               <div class="form-group">
-                    <label class="control-label">Название объекта</label>
-                    <?= Html::input('text', '', $obj->name, ['class' => 'form-control', 'disabled' => 'disabled']) ?>    
-               </div>
-            <? endif; ?>
-           
-           <!-- number dwg -->
-           <div class="form-group">
-                <label class="control-label">Номер эскиза</label>
-                <?= Html::input('text', '', $dwg->fullNumber, ['class' => 'form-control', 'style' => 'width:150px', 'disabled' => 'disabled']) ?>    
-           </div>
-           
-            <!-- name dwgt -->
-            <?=$f->field($form, 'name')->textInput(['value' => $dwg->name])->label('Название чертежа:')?>
+            
+            <div class="form-box-top-wrp">
+                <!-- code -->
+                <?=$f->field($form, 'code')->textInput(['value' => $dwg->code, 'style' => 'width:200px'])->label('Код детали:')?>
+                
+                <!-- number dwg -->
+                <?=$f->field($form, 'number')->textInput(['value' => $dwg ? $dwg->fullNumber : $form->dwg->fullNumber, 'style' => 'width:120px', 'disabled' => 'disabled'])->label('Номер эскиза:')?>
+            </div>
+
+            <!-- name dwg -->
+            <?=$f->field($form, 'name')->textInput(['value' => $dwg->name])->label('Название эскиза:')?>
            
             <!-- flle -->
             <div id="dwg-file-input-wrp">
                 <!-- file with extension tif, jpeg, pdf --> 
-                <?= $f->field($form, 'file')->fileInput()->label('Файл эскиза:') ?>
+                <?
+                    $label = 'Файл эскиза: <span style="color:green">'.$dwg->file.'</span>';
+                    echo $f->field($form, 'draft')->fileInput()->label($label);
+                ?> 
                 
                 <!-- file with extension cdw compas-->
-                <?= $f->field($form, 'file_cdw')->fileInput()->label('Файл чертежа в компасе:') ?>
+                <?
+                    $label = 'Файл чертежа в компасе: <span style="color:green">'.$dwg->file_cdw.'</span>';
+                    echo $f->field($form, 'kompas')->fileInput()->label($label);
+                ?>
             </div> 
             
             <!-- service -->

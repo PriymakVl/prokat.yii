@@ -46,7 +46,7 @@ class ObjectDrawingForm extends BaseForm
     {
         $this->obj = $obj;
         switch($this->category) {
-            case 'department': return DrawingDepartment::saveDwg($this, $obj);
+            case 'department': return $this->saveDwgDepartment();
             case 'works': return DrawingWorks::saveDwg($this, $obj);
             case 'danieli': return $this->saveDwgDanieli();
             case 'standard': return new DrawingStandard();
@@ -79,6 +79,34 @@ class ObjectDrawingForm extends BaseForm
         $this->dwg->file = $file->name;
         $this->dwg->note = $this->note;
         return $this->dwg->save();
+    }
+    
+    private function saveDwgDepartment()
+    {
+        $dwg = new DrawingDepartment(); 
+        $dwg->number = DrawingLogic::getNewNumberDepartmentDwg(); 
+        $dwg->save(); 
+
+        $dwg->designer = $this->designerDepartmentDwg;
+        $dwg->date = time();
+        $dwg->name = $this->nameDepartmentDwg;
+        $dwg->code = $this->obj->code;
+        $dwg->note = $this->noteDwg;
+        $this->uploadFileDraft($dwg);
+        $this->uploadFileKompas($dwg);
+        return $dwg->save();    
+    }
+    
+    private function uploadFileDraft($dwg) 
+    {
+        $file = UploadedFile::getInstance($this, 'department_draft');
+        if ($file) $dwg->file = $this->uploadFile($dwg->id, $file, 'department', '_draft' ); 
+    }
+     
+    private function uploadFileKompas($dwg) 
+    {
+        $file = UploadedFile::getInstance($this, 'department_kompas');
+        if ($file)  $dwg->file_cdw = $this->uploadFile($dwg->id, $file, 'department/kompas', '_kompas' ); 
     }
     
 //    public function checkNumberWorksDwg($attribute, $params)

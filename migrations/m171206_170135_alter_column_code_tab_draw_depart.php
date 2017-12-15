@@ -2,16 +2,16 @@
 
 use yii\db\Migration;
 
-class m171128_192551_add_column_kind_tab_orders extends Migration
+class m171206_170135_alter_column_code_tab_draw_depart extends Migration
 {
     public function up()
     {
-        $this->addColumn('orders', 'kind', 'varchar(50) default 1 AFTER type');
+        $this->alterColumn('drawings_department', 'code', 'varchar(50) default null');
     }
 
     public function down()
     {
-        echo "m171128_192551_add_column_kind_tab_orders cannot be reverted.\n";
+        echo "m171206_170135_alter_column_code_tab_draw_depart cannot be reverted.\n";
 
         return false;
     }

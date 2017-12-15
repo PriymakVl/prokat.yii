@@ -40,19 +40,17 @@ class OrderActContentController extends BaseController
     
     public function actionForm($act_id, $item_id = null)
     {     
-        $item = OrderActContent::getOne($item_id, null, self::STATUS_ACTIVE); 
-        if (!$item) {
-            $item = new OrderActContent();
-            $item->act_id = $act_id;
-            $item->save();    
-        }  
-        $item->getItemOrder();   
+        $item = OrderActContent::getOne($item_id, null, self::STATUS_ACTIVE);   
+        if ($item) $item->getItemOrder();  
+        $act = OrderAct::getOne($act_id, false, self::STATUS_ACTIVE); 
+        $act->getOrder();
         $form = new OrderActContentForm($item);
+        
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             Yii::$app->session->setFlash('success', 'Элемент акта успешно '.($item ? 'отредактирован' : 'создан'));
             return $this->redirect(['/order/act', 'act_id' => $form->item->act_id]);
         }        
-        else return $this->render('form', compact('form', 'item'));    
+        else return $this->render('form', compact('form', 'item', 'act'));    
     }
     
    public function actionDelete($item_id)

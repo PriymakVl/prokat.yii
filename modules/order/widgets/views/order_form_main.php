@@ -34,6 +34,14 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
             </select>
         </div>
         
+        <!-- type -->
+        <?php 
+            $form->type = $order ? $order->type : '4';
+            $types = [Orderlogic::TYPE_MAKING => 'Изготовление (4)', Orderlogic::TYPE_MAINTENANCE => 'Тек. ремонт (5)', 
+            Orderlogic::TYPE_CAPITAL_REPAIR => 'Кап. ремонт (6)',  Orderlogic::TYPE_ENHANCEMENT=> 'Улучшение (1)'];
+            echo $f->field($form, 'type')->dropDownList($types)->label('Статья затрат:');
+        ?>
+        
         <!-- kind -->
         <?php 
             $form->kind = $order ? $order->kind : Order::KIND_CURRENT;
@@ -42,13 +50,9 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
             echo $f->field($form, 'kind')->dropDownList($kinds, $params)->label('Вид заказа:');
         ?>
     	
-    	<!-- type -->
-        <?php 
-            $form->type = $order ? $order->type : '4';
-            $types = [Orderlogic::TYPE_MAKING => 'Изготовление (4)', Orderlogic::TYPE_MAINTENANCE => 'Тек. ремонт (5)', 
-            Orderlogic::TYPE_CAPITAL_REPAIR => 'Кап. ремонт (6)',  Orderlogic::TYPE_ENHANCEMENT=> 'Улучшение (1)'];
-            echo $f->field($form, 'type')->dropDownList($types)->label('Статья затрат:');
-        ?>
+        <!-- inventory -->          
+        <?=$f->field($form, 'inventory')->textInput(['value' => $order->inventory, 'style' => 'width:200px'])->label('Инвентарный номер:')?>
+    
     </div><!-- /top-box -->
     
     
@@ -96,15 +100,18 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
         
     </div><!-- /middle box -->
     
-    <div class="equipment-invetory-box">
+    <div class="equipment-unit-box">
         <!-- equipment -->          
-        <?=$f->field($form, 'equipment')->textInput(['value' => $order->equipmentName, 'style' => 'width:425px'])->label('Агрегат, механизм:')?>
+        <?=$f->field($form, 'equipment')->textInput(['value' => $order->equipmentName, 'style' => 'width:200px'])->label('Агрегат (сортировка):')?>
+        
+        <!-- equipment blank-->          
+        <?=$f->field($form, 'equipment_blank')->textInput(['value' => $order->equipmentBlank, 'style' => 'width:465px'])->label('Агрегат, механизм (бланк заказа):')?>
     
         <!-- unit -->          
-        <?=$f->field($form, 'unit')->textInput(['value' => $order->unitName])->label('Узел:')?>
+        <?=$f->field($form, 'unit')->textInput(['value' => $order->unitName, 'style' => 'width:200px'])->label('Узел (сортировка):')?>
         
-        <!-- inventory -->          
-        <?=$f->field($form, 'inventory')->textInput(['value' => $order->inventory, 'style' => 'width:200px'])->label('Инвентарный номер:')?>
+        <!-- unit blank -->          
+        <?=$f->field($form, 'unit_blank')->textInput(['value' => $order->unitBlank, 'style' => 'width:465px'])->label('Узел (бланк заказа):')?>  
     </div>
     
 	

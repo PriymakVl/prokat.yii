@@ -83,6 +83,8 @@
 
 .top-box {
     position: relative;
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
 }
 
 .field-orderform-date {
@@ -90,13 +92,6 @@
     left: 150px;
     top: 0;
 }
-
-/**
- * .field-orderform-number {
- *     position: absolute;
- *     left: 300px;    
- * }
- */
 
 #state-wrp {
     position: absolute;
@@ -156,31 +151,6 @@
     width: 80px;
 }
 
-/** content order tab dismission */
-/**
- * #nut-dimensions-wrp {
- *     border: solid 1px black;
- *     padding-left: 25px;
- * }
- */
-
-/**
- * #ordercontentform-nut_thead, #ordercontentform-nut_pitch {
- *     width: 100px;
- * }
-
- * .field-ordercontentform-nut_pitch {
- *     position: absolute;
- *     left: 200px;
- *     top: 50px;
- * }
-
- * .field-ordercontentform-nut_pitch label {
- *     position: absolute;
- *     bottom: 40px;
- * }
- */
-
 #bolt-dimensions-wrp {
     position: relative;
 }
@@ -231,12 +201,26 @@
     top: 5px;
 }
 
-.equipment-invetory-box {
+.equipment-unit-box {
     position: relative;
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
 }
 
 .field-orderform-inventory {
     position: absolute;
+    top: 65px;
+    left: 150px;
+}
+
+.field-orderform-equipment_blank {
+    position: absolute;
     top: 0;
-    left: 450px;
+    left: 220px;
+}
+
+.field-orderform-unit_blank {
+    position: absolute;
+    top: 65px;
+    left: 220px;
 }

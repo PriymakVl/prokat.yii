@@ -1,5 +1,7 @@
 .top-box, .act-form-date-wrp, .act-form-data-wrp, .act-form-order-wrp {
     position: relative;
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
 }
 
 .field-orderactform-department {
@@ -41,7 +43,7 @@
 .field-orderactform-order_id {
     position: absolute;
     top: 0;
-    left: 200px;  
+    left: 150px;  
 }
 
 .title-box a {
@@ -56,4 +58,49 @@
 .title-box a:hover {
     color: #000 !important;
     text-decoration: none;
+}
+
+.standing-orders-wrp {
+    position: absolute;
+    left: 300px;
+    top: 0;
+}
+
+#standing-orders {
+    width: 220px;
+}
+
+/* form content act */
+
+.content-act-form-value-wrp, .content-act-form-order-content-id-wrp {
+    position: relative;
+    border-bottom: 2px solid #B49A6A;
+}
+
+.content-act-form-order-content-id-wrp, .field-orderactcontentform-note {
+    margin-top: 10px;
+}
+
+.field-orderactcontentform-weight {
+    position: absolute;
+    top: 0;
+    left: 150px;
+}
+
+.field-orderactcontentform-act_id {
+    position: absolute;
+    top: 0;
+    left: 200px;
+}
+
+.field-orderactcontentform-drawing {
+    position: absolute;
+    top: 0;
+    left: 300px;
+}
+
+.field-orderactcontentform-code {
+    position: absolute;
+    top: 0;
+    left: 480px;
 }

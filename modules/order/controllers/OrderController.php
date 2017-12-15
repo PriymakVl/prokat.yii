@@ -81,11 +81,12 @@ class OrderController extends BaseController
         $this->redirect(['/order', 'order_id' => $new_id]);  
     }
     
-//    public function actionSetActive($order_id)
-//    {
-//        OrderLogic::setActive($order_id, 'order-active');
-//        $this->redirect(['/order', 'order_id' => $order_id]); 
-//    }
+    //set active order without create
+    public function actionSetActive($order_id)
+    {
+        OrderLogic::setActive($order_id, 'order-active');
+        $this->redirect(['/order', 'order_id' => $order_id]); 
+    }
     
 //    public function actionGetActive()
 //    {

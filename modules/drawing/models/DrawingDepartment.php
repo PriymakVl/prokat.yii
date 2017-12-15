@@ -14,7 +14,7 @@ class DrawingDepartment extends BaseModel
     public $fullNumber;
     public $catName = 'Цех';
     public $category = 'department';
-    public $obj;
+    public $objects;
 
     public $services;
     
@@ -35,12 +35,12 @@ class DrawingDepartment extends BaseModel
         $query = self::find()->where($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $page_size]);
         $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all(); 
-        return self::executeMethods($list, ['getFullNumber', 'getObject']);
+        return self::executeMethods($list, ['getFullNumber', 'getObjects']);
     }
 
     public function getFullNumber()
     {
-        $year = date('y', $this->date);
+        $year = date('y', $this->date ? $this->date : time());
         $this->fullNumber = '27.'.$year.'.'.$this->number;
         return $this;
     }
@@ -58,42 +58,43 @@ class DrawingDepartment extends BaseModel
         else return null; 
     }
 
-    public function getObject()
+    public function getObjects()
     {
-        $this->obj = Objects::findOne($this->obj_id, null, self::STATUS_ACTIVE);
-        if ($this->obj) $this->obj->getName()->getParent();
+        if (!$this->code) return false;
+        $this->objects = Objects::findAll(['code' => $this->code, 'status' => self::STATUS_ACTIVE]);
+        if ($this->objects) $this->objects[0]->getName();
         return $this;
     }
     
-    public static function saveDwg($form, $obj, $dwg = null)
-    {
-        if (isset($form->dwg_id) && !$dwg) $dwg = self::findOne($form->dwg_id);
-        else if (!$dwg) $dwg = new DrawingDepartment(); 
-        if (!$dwg->number) $dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
-        if (isset($form->numberDepartmentDwg)) $dwg->number = $form->numberDepartmentDwg;
-        $dwg->designer = $form->designerDepartmentDwg;
-        $dwg->obj_id = $obj->id;
-        $dwg->code = $obj->code;
-        $dwg->date = time();
-        $dwg->name = $form->nameDepartmentDwg;
-        if ($form->noteDwg) $dwg->note = $form->noteDwg;
-        $dwg->save();
-        self::uploadFileDraft($form, $dwg, 'draft');
-        self::uploadFileDraft($form, $dwg, 'kompas');
-        return true;
-    }
+    //public static function saveDwg($form, $obj, $dwg = null)
+//    {
+//        if (isset($form->dwg_id) && !$dwg) $dwg = self::findOne($form->dwg_id);
+//        else if (!$dwg) $dwg = new DrawingDepartment(); 
+//        if (!$dwg->number) $dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
+//        if (isset($form->numberDepartmentDwg)) $dwg->number = $form->numberDepartmentDwg;
+//        $dwg->designer = $form->designerDepartmentDwg;
+//        $dwg->obj_id = $obj->id;
+//        $dwg->code = $obj->code;
+//        $dwg->date = time();
+//        $dwg->name = $form->nameDepartmentDwg;
+//        if ($form->noteDwg) $dwg->note = $form->noteDwg;
+//        $dwg->save();
+//        self::uploadFileDraft($form, $dwg, 'draft');
+//        self::uploadFileDraft($form, $dwg, 'kompas');
+//        return true;
+//    }
     
-    private static function uploadFileDraft($form, $dwg, $prefix) 
-    {
-        $draft = UploadedFile::getInstance($form, 'department_'.$prefix);
-        if (!$draft) return false;
-        $filename = $dwg->id.'_'.$prefix.'.'.$draft->extension;
-        $path = $prefix == 'kompas' ? 'files/department/kompas/'.$filename : 'files/department/'.$filename;
-        $draft->saveAs($path); 
-        if ($prefix == 'kompas') $dwg->file_cdw = $filename; 
-        else $dwg->file = $filename;
-        return $dwg->save();  
-     }
+    //private static function uploadFileDraft($form, $dwg, $prefix) 
+//    {
+//        $draft = UploadedFile::getInstance($form, 'department_'.$prefix);
+//        if (!$draft) return false;
+//        $filename = $dwg->id.'_'.$prefix.'.'.$draft->extension;
+//        $path = $prefix == 'kompas' ? 'files/department/kompas/'.$filename : 'files/department/'.$filename;
+//        $draft->saveAs($path); 
+//        if ($prefix == 'kompas') $dwg->file_cdw = $filename; 
+//        else $dwg->file = $filename;
+//        return $dwg->save();  
+//     }
     
     
 

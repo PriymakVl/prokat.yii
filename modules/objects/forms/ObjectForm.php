@@ -99,7 +99,6 @@ class ObjectForm extends BaseForm
             $this->obj->save();    
         }  
         $this->saveDrawing();
-        $this->checkCode();
         return true;           
     }
 	

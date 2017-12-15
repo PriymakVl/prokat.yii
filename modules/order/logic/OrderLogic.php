@@ -55,7 +55,7 @@ class OrderLogic extends BaseLogic
     {
         switch($kind) {
             case Order::KIND_CURRENT : return 'Разовый'; break;
-            case Order::KIND_CURRENT : return 'Постоянно действующий'; break;
+            case Order::KIND_PERMANENT : return 'Постоянно действующий'; break;
             default : return 'Не определен';
         }
     }
@@ -300,7 +300,7 @@ class OrderLogic extends BaseLogic
     {
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->id = null;
-        $order->number = $number;
+        $order->number = $number ? $number : self::getNumberOfFutureOrder();
         $order->setIsNewRecord(true);
         $order->save(false); 
         self::copyContentOrder($order_id, $order->id);

@@ -20,31 +20,45 @@ $this->registerCssFile('/css/orderact.css');
     
     <!-- info -->
     <div class="info-box margin-top-15" >
-        Название: <strong><?=$item->item->name?></strong><br />
-        Код: <strong><?=$item->item->code?></strong>
+        № акта: <strong><?=$act->number?></strong><br />
+        № заказа: <strong><?=$act->order->number?></strong><br />
+        Назв-ние заказа: <strong><?=$act->order->name?></strong>
     </div>
     
     <!-- form -->
     <div class="form-wrp">
         <? $f = ActiveForm::begin(['id' => 'form-order-act-content']);?>
         
-        <!-- count -->          
-        <?=$f->field($form, 'count')->textInput(['value' => $item ? $item->count : '', 'maxlength'=>4, 'style' => 'width:120px'])->label('Количество:')?>
+        <!-- name -->
+        <?=$f->field($form, 'name')->textInput(['value' => $item ? $item->name : ''])->label('Наименование:')?>
         
-        <!-- weight --> 
-        <? 
-            $weight = '';
-            if ($item) $weight = $item->weight;
-            if (!$weight && $item->item) $weight = $item->item->weight;
-        ?>         
-        <?=$f->field($form, 'weight')->textInput(['value' => $weight, 'style' => 'width:120px'])->label('Вес:')?>
+        <div class="content-act-form-value-wrp">
+            <!-- count -->          
+            <?=$f->field($form, 'count')->textInput(['value' => $item ? $item->count : '', 'maxlength'=>4, 'style' => 'width:120px'])->label('Количество:')?>
         
-        <!-- order act item id -->          
-        <?=$f->field($form, 'item_id')->textInput(['value' => $item ? $item->item_id : '', 'style' => 'width:120px'])->label('ID элемента заказа:')?>
+            <!-- weight --> 
+            <? 
+                $weight = '';
+                if ($item) $weight = $item->weight;
+                if (!$weight && $item->item) $weight = $item->item->weight;
+            ?>         
+            <?=$f->field($form, 'weight')->textInput(['value' => $weight, 'style' => 'width:120px'])->label('Вес:')?>
+            
+            <!-- drawing -->
+            <?=$f->field($form, 'drawing')->textInput(['value' => $item ? $item->drawing : '', 'style' => 'width:150px'])->label('Чертеж:')?>
+            
+            <!-- code -->
+            <?=$f->field($form, 'code')->textInput(['value' => $item ? $item->code : '', 'style' => 'width:150px'])->label('Код детали:')?>
+        </div>
         
-        <!-- order act id -->          
-        <?=$f->field($form, 'act_id')->textInput(['value' => $item ? $item->act_id : '', 'style' => 'width:120px'])->label('ID заказа:')?>
-       
+        <div class="content-act-form-order-content-id-wrp">
+            <!-- order act item id -->          
+            <?=$f->field($form, 'item_id')->textInput(['value' => $item ? $item->item_id : '', 'style' => 'width:120px'])->label('ID элемента заказа:')?>
+            
+            <!-- order act id -->          
+            <?=$f->field($form, 'act_id')->textInput(['value' => $item ? $item->act_id : '', 'style' => 'width:120px'])->label('ID заказа:')?>
+        </div>
+        
         <!-- note -->
         <?=$f->field($form, 'note')->textarea(['rows' => '1', 'value' => $item->note])->label('Примечание:')?>
         

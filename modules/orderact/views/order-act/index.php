@@ -131,33 +131,36 @@ $this->registerCssFile('/css/order.css');
         <table class="margin-top-15">
             <tr>
                 <th width="30"><input type="radio" name="order-act-item" id="checked-all" disabled="disabled" /></th>
-                <th width="100">Чертеж</th>
+                <th width="130">Чертеж</th>
+                <th width="130">Код</th>
                 <th>Наименование</th>
                 <th width="70">Кол-во</th>
-                <th width="70">Вес акт</th>
-                <th width="80">Вес заказ</th>
+                <th width="70">Вес</th>
             </tr>
             <? foreach ($content as $item): ?>
                 <tr>
                     <td><input type="radio" name="order-act-item" item_id="<?=$item->id?>" act_id="<?=$item->act_id?>"/></td>
                     <td class="text-center">
                         <? if ($item->item->pathDrawing): ?>
-                            <a target="_blank" href="<?=Url::to([$item->item->pathDrawing])?>"><?=$item->item->drawing?></a>
+                            <a target="_blank" href="<?=Url::to([$item->item->pathDrawing])?>"><?=$item->drawing?></a>
+                        <? elseif ($item->drawing): ?>
+                            <?=$item->drawing?>
                         <? else: ?>
-                            <?=$item->item->drawing?>
+                            <span class="red">Не указан</span>
+                        <? endif; ?>
+                    </td>
+                    <td class="text-center">
+                        <? if ($item->code): ?>
+                            <a href="<?=Url::to(['/search', 'code' => $item->code])?>"><?=$item->code?></a>
+                        <? else: ?>
+                            <span class="red">Не указан</span>
                         <? endif; ?>
                     </td>
                     <td>
-                        <? if ($item->item->code): ?>
-                            <a target="_blank" href="<?=Url::to(['/product', 'code' => $item->item->code])?>"><?=$item->item->name?></a>
-                        <? else: ?>
-                            <?=$item->item->name?>
-                        <? endif; ?>
+                        <a  href="<?=Url::to(['/order/act/content', 'item_id' => $item->id])?>"><?=$item->name ? $item->name : $item->item->name?></a>
                     </td>
                     <td class="text-center"><?=$item->count?></td>
-                    <? if ($item->weight && $item->item->weight && ($item->weight > $item->item->weight)) $highlite_weight = true ?>
-                    <td class="text-center" <? if ($highlite_weight) echo 'style="color:red;"';?>><?=$item->weight?></td>
-                    <td class="text-center"><?=$item->item->weight?></td>
+                    <td class="text-center"><?=$item->weight?></td>
                 </tr>
             <? endforeach; ?>
         </table>

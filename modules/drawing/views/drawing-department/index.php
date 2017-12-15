@@ -28,31 +28,29 @@ $this->registerCssFile('/css/drawing.css');
         
         <!-- number dwg -->
         <tr>
-            <td class="text-center">
-                Номер эскиза
-            </td>
+            <td class="text-center">Номер эскиза</td>
             <td>
                 <?=$dwg->fullNumber?>
             </td>
         </tr>
         
         <!-- name dwg -->
-        <? if ($dwg->name): ?>
-            <tr>
-                <td class="text-center">
-                    Название эскиза
-                </td>
-                <td>
+        <tr>
+            <td class="text-center">Название эскиза</td>
+            <td>
+                <? if ($dwg->name): ?>
                     <?=$dwg->name?>
-                </td>
-            </tr>
-        <? endif; ?>
+                <? elseif ($dwg->objects): ?>
+                    <?=$dwg->objects[0]->name?>
+                <? else: ?>
+                    <?='Эскиз '.$dwg->fullNumber?>
+                <? endif; ?>   
+            </td>
+        </tr>
         
         <!-- file -->
         <tr>
-            <td class="text-center">
-                Файл чертежа
-            </td>
+            <td class="text-center">Файл чертежа</td>
             <td>
                 <? if ($dwg->file): ?>
                    <a href="<?=Url::to('/files/department/'.$dwg->file)?>" target="_blank"><?=$dwg->file?></a>
@@ -64,9 +62,7 @@ $this->registerCssFile('/css/drawing.css');
         
         <!-- file kompas-->
         <tr>
-            <td class="text-center">
-                Файл в формате компас
-            </td>
+            <td class="text-center">Файл в формате компас</td>
             <td>
                 <? if ($dwg->file_cdw): ?>
                    <a href="<?=Url::to('/files/department/kompas/'.$dwg->file_cdw)?>" target="_blank"><?=$dwg->file_cdw?></a>
@@ -78,15 +74,13 @@ $this->registerCssFile('/css/drawing.css');
         
         <!-- name object -->
         <tr>
-            <td class="text-center">
-                Название объекта
-            </td>
+            <td class="text-center">Код</td>
             <td>
-                <? if ($dwg->obj): ?>
-                    <?= Html::a($dwg->obj->name, ['/object', 'obj_id' => $dwg->obj->id], ['targer' => '_blank']) ?>
+                <? if ($dwg->code): ?>
+                    <a href="<?=Url::to(['/search', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
                 <? else: ?>
                     <span>Не указан</span>
-                <? endif; ?>    
+                <? endif; ?>   
             </td>
         </tr>
         
@@ -117,5 +111,5 @@ $this->registerCssFile('/css/drawing.css');
     
     <?=DrawingMenuWidget::widget(['dwg_id' => $dwg->id])?>
     
-    <?=DrawingMainMenuWidget::widget()?>
+    <?//=DrawingMainMenuWidget::widget()?>
 </div>

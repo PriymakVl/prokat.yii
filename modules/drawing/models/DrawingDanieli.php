@@ -20,7 +20,6 @@ class DrawingDanieli extends BaseModel
            $code = self::getCodeWithoutDash($obj->code); 
            $drawings = self::find()->where(['code' => $code, 'status' => self::STATUS_ACTIVE])
                 ->orderBy(['revision' => SORT_DESC, 'sheet' => SORT_ASC])->all();  
-                //debug($drawings);
         return DrawingLogic::cutNotes($drawings);  
     }
     

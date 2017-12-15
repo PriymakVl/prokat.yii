@@ -64,7 +64,7 @@ class OrderActContent extends BaseModel
     public function getAct()
     {
         $this->act = OrderAct::findOne($this->act_id);
-        $this->act->month = OrderActLogic::convertMonth($this->act->month, true);
+        $this->act->month = OrderActLogic::getMonthString($this->act->month, true);
         return $this;    
     }
     
@@ -74,7 +74,7 @@ class OrderActContent extends BaseModel
         return $this;
     }
     
-    public static function getList($params)
+    public static function getContent($params)
     {
         $list = self::find()->filterWhere($params)->all();
         return self::executeMethods($list, ['getAct', 'getOrder', 'getItemOrder']);

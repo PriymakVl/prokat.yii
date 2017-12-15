@@ -2,16 +2,16 @@
 
 use yii\db\Migration;
 
-class m171026_190434_add_column_price_tab_order_act_content extends Migration
+class m171206_170350_alter_column_name_tab_dwg_depart extends Migration
 {
     public function up()
     {
-        $this->addColumn('order_act_content', 'price', 'varchar(50) default null AFTER weight');
+        $this->alterColumn('drawings_department', 'name', 'varchar(50) default null');
     }
 
     public function down()
     {
-        echo "m171026_190434_add_column_price_tab_order_act_content cannot be reverted.\n";
+        echo "m171206_170350_alter_column_name_tab_dwg_depart cannot be reverted.\n";
 
         return false;
     }

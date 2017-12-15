@@ -9,7 +9,7 @@ use app\modules\orderact\widgets\OrderActFormTabWidget;
 use app\modules\order\logic\OrderLogic;
 
 $this->registerCssFile('/css/orderact.css');
-
+$this->registerJsFile('/js/orderact/select_standing_order.js');
 ?>
 <div class="content">
     <!-- title -->
@@ -79,6 +79,16 @@ $this->registerCssFile('/css/orderact.css');
         
         <!-- id of order -->          
         <?=$f->field($form, 'order_id')->textInput(['value' => $act->order->id, 'style' => 'width:100px'])->label('ID заказа:')?>
+        
+        <!-- standing orders -->
+        <div class="form-group standing-orders-wrp" >
+            <label class="control-label">Постоянные заказы:</label>
+            <select id="standing-orders" class="form-control">
+                <option value="" order_num="">Не выбран</option>
+                <option value="409" order_num="041">041 РМЦ - изготовление</option>
+                <option value="" order_num="038">038 ОРМО - изготовление</option>
+            </select>
+        </div>
     </div>
     
     <!-- data -->

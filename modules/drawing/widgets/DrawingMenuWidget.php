@@ -11,10 +11,10 @@ class DrawingMenuWidget extends Widget
 
     public function run()
     {
-        if (Yii::$app->controller->id == 'drawing-works') $type = 'works';
-        else if (Yii::$app->controller->id == 'drawing-department') $type = 'department';
+        if (Yii::$app->controller->id == 'drawing-works') $tempate = 'dwg_works_menu';
+        else if (Yii::$app->controller->id == 'drawing-department') $template = 'dwg_draft_menu';
 
-        return $this->render('drawing', ['type' => $type, 'dwg_id' => $this->dwg_id]);
+        return $this->render($template, ['dwg_id' => $this->dwg_id]);
     }
 
 }

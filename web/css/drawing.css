@@ -61,4 +61,15 @@
     left: 540px;
 }
 
-/* object drawings */
+/* department drawing form */
+.form-box-top-wrp {
+    position: relative;
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
+}
+
+.field-drawingdepartmentform-number {
+    position: absolute;
+    top: 0;
+    left: 300px;
+}

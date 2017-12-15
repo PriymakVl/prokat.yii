@@ -25,18 +25,18 @@ $this->registerCssFile('/css/drawing.css');
     <table id="department-dwg-all" class="margin-top-15">
         <tr>
             <th width="30">
-                <input type="checkbox" disabled="disabled" />
+                <input type="radio" disabled="disabled" />
             </th>
             <th width="90">№ эскиза</th>
-            <th width="250">Наименование</th>
-            <th width="150">Объект</th>
-            <th width="200">Узел</th>
+            <th width="300">Наименование</th>
+            <th width="100">Код</th>
+            <th width="200">Примечание</th>
         </tr>
         <? if ($list): ?>
             <? foreach ($list as $dwg): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" name="drawing" dwg_id="<?=$dwg->id?>" />
+                        <input type="radio" name="drawing" dwg_id="<?=$dwg->id?>" />
                     </td>
                     <td class="text-center">
                         <? if($dwg->file): ?>
@@ -46,25 +46,23 @@ $this->registerCssFile('/css/drawing.css');
                         <? endif; ?>
                     </td>
                     <td>
-                        <? if ($dwg->obj): ?>
-                            <?= Html::a($dwg->obj->name, ['/drawing/department', 'dwg_id' => $dwg->id]) ?>
-                        <? elseif ($dwg->name): ?>
-                            <?= Html::a($dwg->name, ['/drawing/department', 'dwg_id' => $dwg->id]) ?> 
+                        <? if ($dwg->name): ?>
+                            <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?=$dwg->name?></a>
+                        <? elseif ($dwg->objects): ?>
+                            <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?=$dwg->objects[0]->name?></a>
                         <? else: ?>
-                            <?= Html::a('Не указано', ['/drawing/department', 'dwg_id' => $dwg->id]) ?>
+                            <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?='Эскиз '.$dwg->fullNumber?></a>
                         <? endif; ?>   
                     </td>
                     <td class="text-center">
-                        <? if ($dwg->obj): ?>
-                            <?= Html::a($dwg->obj->code, ['/object', 'obj_id' => $dwg->obj->id], ['targer' => '_blank']) ?>
+                        <? if ($dwg->code): ?>
+                            <a href="<?=Url::to(['/search', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
                         <? else: ?>
                             <span>Не указан</span>
                         <? endif; ?>
                     </td>
-                    <td class="text-center">
-                       <? if ($dwg->obj && $dwg->obj->parent): ?>
-                            <?= Html::a($dwg->obj->parent->name, ['/object/', 'obj_id' => $dwg->obj->parent->id], ['targer' => '_blank']) ?>
-                        <? endif; ?>
+                    <td>
+                        <?=$dwg->note?>
                     </td>
                 </tr>
             <? endforeach; ?>
@@ -85,7 +83,7 @@ $this->registerCssFile('/css/drawing.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?//=DrawingListMenuWidget::widget()?>
+    <?=DrawingListMenuWidget::widget()?>
     <?//=DrawingMenuWidget::widget()?>
-    <?=DrawingMainMenuWidget::widget()?>
+    <?//=DrawingMainMenuWidget::widget()?>
 </div>

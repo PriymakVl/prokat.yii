@@ -4,8 +4,8 @@ $(document).ready(function() {
         if (!section_id) {
             $('#section-equipments').html('<option value="">Не выбран</option>').prop('disabled', true);
             $('#equipment-units').html('<option value="">Не выбран</option>').prop('disabled', true);
-            $('#orderform-equipment').val(''); 
-            $('#orderform-unit').val('');
+            $('#orderform-equipment, #orderform-equipment_blank').val('');  
+            $('#orderform-unit, #orderform-unit_blank').val('');
             $('#orderform-inventory').val('');
             return;    
         }
@@ -19,12 +19,11 @@ $(document).ready(function() {
         
         if (!name || !equipment_id) {
             $('#equipment-units').html('<option value="">Не выбран</option>').prop('disabled', true); 
-            $('#orderform-unit').val('');
-            $('#orderform-inventory').val('');
+            $('#orderform-unit, #orderform-unit_blank, #orderform-inventory').val('');
             return;    
         }
         else {
-            $('#orderform-equipment').val(name);
+            $('#orderform-equipment, #orderform-equipment_blank').val(name);
             if (inventory != 'null') $('#orderform-inventory').val(inventory);
             $.get('/equipment/data/get', {equipment_id: equipment_id}, addUnits);    
         }     
@@ -32,7 +31,7 @@ $(document).ready(function() {
     
     $('#equipment-units').change(function() {
         var name = $('option:selected', this).attr('name_unit');
-        $('#orderform-unit').val(name);     
+        $('#orderform-unit, #orderform-unit_blank').val(name);     
     }); 
      
 });

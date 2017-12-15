@@ -220,10 +220,10 @@ class OrderTitleSheetCreateController extends BaseController
     {
         $this->activeSheet->setCellValue('A2','РСЦ РМЦ');
         //equipment
-        $equipment = $this->order->equipmentName ? $this->order->equipmentName : '';
+        $equipment = $this->order->equ_blank ? $this->order->equ_blank : '';
         $this->activeSheet->setCellValue('A4', $equipment);
         //unit
-        $unit = $this->order->unitName ?  $this->order->unitName : '';
+        $unit = $this->order->unit_blank ?  $this->order->unit_blank : '';
         $this->activeSheet->setCellValue('J4', $unit);
         $this->activeSheet->setCellValue('A11', $this->order->description); 
         $this->activeSheet->setCellValue('S2', $this->order->type);
