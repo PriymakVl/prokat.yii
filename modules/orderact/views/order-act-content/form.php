@@ -30,7 +30,7 @@ $this->registerCssFile('/css/orderact.css');
         <? $f = ActiveForm::begin(['id' => 'form-order-act-content']);?>
         
         <!-- name -->
-        <?=$f->field($form, 'name')->textInput(['value' => $item ? $item->name : ''])->label('Наименование:')?>
+        <?=$f->field($form, 'name')->textInput(['value' => $item->name])->label('Наименование:')?>
         
         <div class="content-act-form-value-wrp">
             <!-- count -->          

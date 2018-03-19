@@ -21,16 +21,16 @@ class SearchLogic extends BaseLogic
     public static function searchOrders($order_num = null, $dwg = null, $code = null)
     {
         if ($order_num) {
-            $orders = Order::findAll(['number' => $order_num, 'status' => self::STATUS_ACTIVE]);    
+            $orders = Order::find()->where(['number' => $order_num, 'status' => self::STATUS_ACTIVE])->orderBy(['period' => SORT_DESC])->all();
         }
         else {
             $column = $dwg ? 'drawing' : 'code';
             $content = OrderContent::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', $column, $dwg ? $dwg : $code])->all();
-            if (count($content) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
+            if (count($content) == 1) $orders = Order::findAll(['id' => $content[0]->order_id]);
             else if ($content) $orders = OrderLogic::getArrayOrders($content);   
         }
         if (empty($orders)) return false;
-        return self::executeMethods($orders, ['getNumber', 'convertPeriod', 'getShortCustomer']);
+        return self::executeMethods($orders, ['getNumber', 'convertPeriod', 'getShortCustomer', 'getContent']);
     }
     
     public static function searchOrderActs($act, $dwg, $code)

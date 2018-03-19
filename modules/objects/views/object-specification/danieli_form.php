@@ -11,7 +11,7 @@ use yii\helpers\Html;
     <div class="title-box">Добавление объектов из файла Excel (Danieli)</div>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название родителя:</span>&laquo; <?=$parent->name?> &raquo;
         <? if ($parent->code): ?>
             <br />

@@ -14,7 +14,7 @@
         ?>
         
         <!-- type dwg -->
-        <?=$f->field($form, 'type_dwg')->checkbox(['value' => 'new', 'label' => 'Новый чертеж:', 'department_number' => $form->newFullNumberDepartmentDwg])?>
+        <?//=$f->field($form, 'type_dwg')->checkbox(['value' => 'new', 'label' => 'Новый чертеж:', 'department_number' => $form->newFullNumberDepartmentDwg])?>
         
          <!-- drawing name of file -->          
         <?=$f->field($form, 'filename')->textInput(['value' => $item->file, 'style' => 'width:200px;'])->label('Файл чертежа:')?>
@@ -27,8 +27,8 @@
     <!-- rating -->          
     <?=$f->field($form, 'rating')->textInput(['value' => $item->rating])->label('Рейтинг:')?>
     
-    <!-- object id -->          
-    <?=$f->field($form, 'obj_id')->textInput(['value' => $item->obj_id])->label('Id объекта:')?>
+    <!-- code of object -->
+    <?=$f->field($form, 'code')->textInput(['value' => $item->code])->label('Код объекта:')?>
    
    
    <!-- note -->

@@ -8,57 +8,60 @@ use app\widgets\FlashMessageWidget;
 use app\modules\orderact\models\OrderAct;
 use app\modules\orderact\widgets\OrderActListMenuWidget;
 use app\modules\orderact\widgets\OrderActTopListMenuWidget;
+
 //use app\modules\orderlist\widgets\ListMenuWidget;
 
 //$this->registerCssFile('/css/standard.css');
+//$this->registerJsFile('/js/orderact/show_filters_box.js');
 
 ?>
 <div class="content">
     <!-- title -->
     <div class="title-box">
-        <a href="<?=Url::to(['/order/act/content/list'])?>">Детали</a>
+        <a href="<?=Url::to('/order/act/show/filters')?>" id="show-filters">Фильтры</a>
         <span>Перечень актов за </span>
-        <strong><?=$period?></strong>
+        <strong><?= $period ?></strong>
     </div>
-    
+
     <!-- top nenu -->
-    <?=OrderActTopListMenuWidget::widget(['params' => $params])?>
-    
+    <?= OrderActTopListMenuWidget::widget(['params' => $params]) ?>
+
     <!-- info message -->
-    <?=FlashMessageWidget::widget()?>
-    
+    <?= FlashMessageWidget::widget() ?>
+
     <!-- list akt orders -->
     <table class="margin-top-15">
         <tr>
             <th width="30">
-                <input type="checkbox" name="order" id="checked-all" />
+                <input type="checkbox" name="order" id="checked-all"/>
             </th>
             <th width="60">№ акта</th>
             <th width="80">№ заказа</th>
-            <th width="355">Наименование заказа</th>
-            <th width="80">Себ-ть</th>
-            <th width="120">Принявший</th>
+            <th width="345">Наименование заказа</th>
+            <th width="90">Стоимость</th>
+            <th width="120">Заказал</th>
         </tr>
         <? if ($list): ?>
             <? foreach ($list as $act): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" name="order-act" act_id="<?=$act->id?>" />
+                        <input type="checkbox" name="order-act" act_id="<?= $act->id ?>"/>
                     </td>
                     <td class="text-center">
-                        <a  style="color:<?=$act->colorState?>" href="<?=Url::to(['/order/act', 'act_id' =>$act->id])?>"><?=$act->number?></a>
+                        <a style="color:<?= $act->colorState ?>"
+                           href="<?= Url::to(['/order/act', 'act_id' => $act->id]) ?>"><?= $act->number ?></a>
                     </td>
                     <td class="text-center">
-                         <a href="<?=Url::to(['/order/content/list', 'order_id' => $act->order->id])?>"><?=$act->order->number?></a>    
+                        <a href="<?= Url::to(['/order/content/list', 'order_id' => $act->order->id]) ?>"><?= $act->order->number ?></a>
                     </td>
                     <td>
-                        <a href="<?=Url::to(['/order', 'order_id' => $act->order->id])?>"><?=$act->order->name?></a> 
+                        <a href="<?= Url::to(['/order', 'order_id' => $act->order->id]) ?>"><?= $act->order->name ?></a>
                     </td>
                     <td class="text-center">
-                        <?= $act->cost ? $act->cost.'грн.' : 'Не указана'?>
+                        <?= $act->cost ? $act->cost . 'грн.' : '<span class="red">Нет</span>' ?>
                     </td>
                     <td>
-                        <?=$act->order->customer ? $act->order->customer : 'Не указан'?>
+                        <?= $act->order->customer ? $act->order->customer : 'Не указан' ?>
                     </td>
                 </tr>
             <? endforeach; ?>
@@ -68,47 +71,53 @@ use app\modules\orderact\widgets\OrderActTopListMenuWidget;
             </tr>
         <? endif; ?>
     </table>
-    
-    <!-- month cost -->
-    <? if ($costs): ?>
+
+    <? if ($count): ?>
         <table class="margin-top-15">
             <tr>
-                <td width="300">Общая себестоимость</td>
-                <td><?=$costs['all'].'грн'?></td>
+                <td width="300">Количество актов</td>
+                <td><?= $count ?></td>
             </tr>
-            <? if ($costs['make']): ?>
+            <!-- month cost -->
+            <? if ($costs): ?>
                 <tr>
-                    <td width="300">Cебестоимость изготовления</td>
-                    <td><?=$costs['make'].'грн'?></td>
+                    <td width="300">Общая себестоимость</td>
+                    <td><?= $costs['all'] . 'грн' ?></td>
                 </tr>
+                <? if ($costs['make']): ?>
+                    <tr>
+                        <td width="300">Cебестоимость изготовления</td>
+                        <td><?= $costs['make'] . 'грн' ?></td>
+                    </tr>
+                <? endif; ?>
+                <? if ($costs['current']): ?>
+                    <tr>
+                        <td width="300">Cебестоимость текущего ремонта</td>
+                        <td><?= $costs['current'] . 'грн' ?></td>
+                    </tr>
+                <? endif; ?>
+                <? if ($costs['capital']): ?>
+                    <tr>
+                        <td width="300">Cебестоимость кап. ремонта</td>
+                        <td><?= $costs['capital'] . 'грн' ?></td>
+                    </tr>
+                <? endif; ?>
+                <? if ($costs['enhancement']): ?>
+                    <tr>
+                        <td width="300">Cебестоимость улучшения</td>
+                        <td><?= $costs['enhancement'] . 'грн' ?></td>
+                    </tr>
+                <? endif; ?>
             <? endif; ?>
-            <? if ($costs['current']): ?>
-                <tr>
-                    <td width="300">Cебестоимость текущего ремонта</td>
-                    <td><?=$costs['current'].'грн'?></td>
-                </tr>
-            <? endif; ?>
-           <? if ($costs['capital']): ?>
-                <tr>
-                    <td width="300">Cебестоимость кап. ремонта</td>
-                    <td><?=$costs['capital'].'грн'?></td>
-                </tr>
-            <? endif; ?> 
-            <? if ($costs['enhancement']): ?>
-                <tr>
-                    <td width="300">Cебестоимость улучшения</td>
-                    <td><?=$costs['enhancement'].'грн'?></td>
-                </tr>
-            <? endif; ?> 
         </table>
     <? endif; ?>
-    
+
 </div><!-- class content -->
 
 <!-- menu -->
 <div class="sidebar-wrp">
-    <?=MainMenuWidget::widget()?>
-    <?=OrderActListMenuWidget::widget()?>
-    <?//=OrderActiveMenuWidget::widget()?>
-    <?//=ListMenuWidget::widget()?>
+    <?= MainMenuWidget::widget() ?>
+    <?= OrderActListMenuWidget::widget() ?>
+    <? //=OrderActiveMenuWidget::widget()?>
+    <? //=ListMenuWidget::widget()?>
 </div>

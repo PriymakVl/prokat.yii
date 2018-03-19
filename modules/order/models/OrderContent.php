@@ -119,6 +119,15 @@ class OrderContent extends BaseModel
         }
         return $this;
     }
+
+    //for show result search orders by code or drawing
+    public function getSearchItem($code, $drawing)
+    {
+        $pos_code = stripos($this->code, $code);
+        $pos_dwg = stripos($this->drawing, $drawing);
+        if ($pos_code === false && $pos_dwg === false) return false;
+        else return ['code' => $this->code, 'drawing' => $this->drawing];
+    }
      
 }
 

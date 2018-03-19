@@ -36,7 +36,7 @@ $this->registerJsFile('/js/drawing/dwg_form_show_options.js');
                 <div class="panel-heading">Параметры чертежа ПКО</div>
                 <div class="panel-body">
                     <!-- number dwg -->
-                    <?=$f->field($form, 'numberWorksDwg')->textInput()->label('Номер чертежа:')?>
+                    <?=$f->field($form, 'numberWorksDwg')->textInput(['value' => $obj->code])->label('Номер чертежа:')?>
                     
                     <!-- file sheet_1 -->
                     <?=$f->field($form, 'works_dwg_1')->fileInput()->label('Лист 1:')?> 

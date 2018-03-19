@@ -3,11 +3,12 @@
 namespace app\modules\objects\forms;
 
 use app\forms\BaseForm;
-use app\models\BaseModel;
 use app\modules\objects\models\Objects;
 use app\models\Tag;
 use app\modules\drawing\models\DrawingDepartment;
 use app\modules\drawing\models\DrawingWorks;
+use yii\web\UploadedFile;
+use app\modules\drawing\logic\DrawingLogic;
 
 class ObjectForm extends BaseForm
 {   
@@ -116,9 +117,71 @@ class ObjectForm extends BaseForm
     private function saveDrawing()
     {
         if (!$this->categoryDwg) return false;
-        else if ($this->categoryDwg == 'works') return DrawingWorks::saveDwg($this, $this->obj);
-        else if ($this->categoryDwg == 'department') DrawingDepartment::saveDwg($this, $this->obj);
+        else if ($this->categoryDwg == 'works') return $this->saveDwgWorks();
+        else if ($this->categoryDwg == 'department') return $this->saveDwgDepartment();
         else return false;
+    }
+
+    public function saveDwgWorks()
+    {
+        $dwg = new DrawingWorks();
+        $dwg->code = $this->obj->code;
+        $dwg->parent_id = 0;
+        $dwg->note = $this->noteDwg;
+        $dwg->date = time();
+        $dwg->number = $this->numberWorksDwg;
+        $dwg->name = $this->nameWorksDwg;
+        $dwg->save();
+        $sheet_1 = $this->uploadFileWorks(1, $dwg);
+        $sheet_2 = $this->uploadFileWorks(2, $dwg);
+        $sheet_3 = $this->uploadFileWorks(3, $dwg);
+        if ($sheet_1) $dwg->sheet_1 = $sheet_1;
+        if ($sheet_2) $dwg->sheet_2 = $sheet_2;
+        if ($sheet_3) $dwg->sheet_3 = $sheet_3;
+        return $dwg->save();
+    }
+
+    private function uploadFileWorks($number, $dwg)
+    {
+        $file = UploadedFile::getInstance($this, 'works_dwg_'.$number);
+        if (!$file) return null;
+        $filename = $dwg->id.'_works_'.$number.'.'.$file->extension;
+        $file->saveAs('files/works/'.$filename);
+        return $filename;
+    }
+
+    public function saveDwgDepartment()
+    {
+        $dwg = new DrawingDepartment();
+        $dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
+        $dwg->designer = $this->designerDepartmentDwg;
+        $dwg->date = time();
+        $dwg->year = date('Y');
+        $dwg->name = $this->nameDepartmentDwg;
+        $dwg->code = $this->obj->code;
+        $dwg->note = $this->noteDwg;
+        $dwg->save();
+        $dwg->file = $this->uploadFileDraft($dwg);
+        $dwg->file_cdw = $this->uploadFileKompas($dwg);
+        return $dwg->save();
+    }
+
+    private function uploadFileDraft($dwg)
+    {
+        $file = UploadedFile::getInstance($this, 'department_draft');
+        if (!$file) return null;
+        $filename = $dwg->id.'_draft.'.$file->extension;
+        $file->saveAs('files/department/'.$filename);
+        return $filename;
+    }
+
+    private function uploadFileKompas($dwg)
+    {
+        $file = UploadedFile::getInstance($this, 'department_kompas');
+        if (!$file) return null;
+        $filename = $dwg->id.'_kompas.'.$file->extension;
+        $file->saveAs('files/department/kompas/'.$filename);
+        return $filename;
     }
 
 }

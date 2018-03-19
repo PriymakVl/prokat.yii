@@ -43,7 +43,7 @@ class OrderContentController extends BaseController
         if ($item) $item->dimensions = unserialize($item->dimensions);
 
         $form = new OrderContentForm($item);
-        $form->getNewNumberDepartmentDwg()->getArrayDetailNames();
+        $form->getArrayDetailNames();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
             Yii::$app->session->setFlash('success', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));

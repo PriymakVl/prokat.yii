@@ -57,7 +57,7 @@ class DrawingWorksController extends BaseController
         return $this->render('files', compact('dwg'));
     }
     
-    public function actionDelete($dwg_id = null) 
+    public function actionDelete($dwg_id)
     {
         $dwg = DrawingWorks::getOne($dwg_id, false, self::STATUS_ACTIVE);
         $dwg->deleteOne();

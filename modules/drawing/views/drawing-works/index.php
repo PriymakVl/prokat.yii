@@ -11,13 +11,18 @@ $this->registerCssFile('/css/drawing.css');
 
 ?>
 <div class="content">
-    <!-- top nenu -->
+    <!-- info -->
+    <div class="info-box margin-bottom-15" style="text-align: center; font-size: 16px; color:#000;">
+        Чертеж ПКО комбината
+    </div>
+    
+    <!-- top menu -->
     <?=DrawingWorksTopMenuWidget::widget(['dwg' => $dwg])?>
     
     <!-- flash messge -->
     <?=FlashMessageWidget::widget()?>
     
-    <!-- data orawing -->
+    <!-- data drawing -->
     <table class="dwg-data margin-top-15">
         <tr>
             <th width="160">Наименование</th>
@@ -26,7 +31,7 @@ $this->registerCssFile('/css/drawing.css');
         
         <!-- name -->
         <tr>
-            <td>Название</td>
+            <td>Название чертежа</td>
             <td>
                 <?=$dwg->name?>           
             </td>
@@ -34,9 +39,21 @@ $this->registerCssFile('/css/drawing.css');
         
         <!-- number -->
         <tr>    
-            <td>Номер</td>
+            <td>Номер чертежа</td>
             <td>
                 <?=$dwg->number?>
+            </td>
+        </tr>
+
+        <!-- code -->
+        <tr>
+            <td>Код</td>
+            <td>
+                <? if ($dwg->code): ?>
+                    <a href="<?=Url::to(['/search', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
+                <? else: ?>
+                    '<span class="red">Не указан</span>'
+                <? endif; ?>
             </td>
         </tr>
         
@@ -45,7 +62,7 @@ $this->registerCssFile('/css/drawing.css');
             <td>Лист 1</td>
             <td>
                 <? if ($dwg->sheet_1): ?>
-                    <a href="<?=Url::to(['/files/works/'.$dwg->sheet_1])?>"><?=$dwg->sheet_1?></a>
+                    <a href="<?=Url::to(['/files/works/'.$dwg->sheet_1])?>" target="_blank"><?=$dwg->sheet_1?></a>
                 <? else: ?>
                 <span>Нет файла</span>
                 <? endif; ?>
@@ -57,7 +74,7 @@ $this->registerCssFile('/css/drawing.css');
             <tr>
             <td>Лист 2</td>
             <td>
-                <a href="<?=Url::to(['/files/works/'.$dwg->sheet_2])?>"><?=$dwg->sheet_2?></a>
+                <a href="<?=Url::to(['/files/works/'.$dwg->sheet_2])?>" target="_blank"><?=$dwg->sheet_2?></a>
             </td>
         </tr>
         <? endif; ?>
@@ -65,16 +82,16 @@ $this->registerCssFile('/css/drawing.css');
         <!-- sheet 3 -->
         <? if ($dwg->sheet_3): ?>
             <tr>
-            <td>Лист 2</td>
+            <td>Лист 3</td>
             <td>
-                <a href="<?=Url::to(['/files/works/'.$dwg->sheet_3])?>"><?=$dwg->sheet_3?></a>
+                <a href="<?=Url::to(['/files/works/'.$dwg->sheet_3])?>" target="_blank"><?=$dwg->sheet_3?></a>
             </td>
         </tr>
         <? endif; ?>
 
         <!-- design department -->
         <tr>
-            <td>Констр-кий отдел</td>
+            <td>Конструктор. отдел</td>
             <td>
                 <?=$dwg->department ? $dwg->department : 'Не указан'?>
             </td>
@@ -111,5 +128,5 @@ $this->registerCssFile('/css/drawing.css');
     
     <?=DrawingMenuWidget::widget(['dwg_id' => $dwg->id])?>
     
-    <?=DrawingMainMenuWidget::widget()?>
+    <?//=DrawingMainMenuWidget::widget()?>
 </div>

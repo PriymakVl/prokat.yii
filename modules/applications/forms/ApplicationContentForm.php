@@ -9,7 +9,7 @@ use app\modules\objects\models\Objects;
 use app\modules\objects\logic\ObjectLogic;
 use app\modules\drawing\logic\DrawingLogic;
 
-class OrderContentForm extends BaseForm
+class ApplicationContentForm extends BaseForm
 {   
     const STATUS_DRAFT = 2;
     
@@ -23,7 +23,6 @@ class OrderContentForm extends BaseForm
     public $material;
     public $order_id;
     public $code;
-    public $obj_id;
     public $cat_dwg;
     public $equipment;
     public $file;
@@ -35,20 +34,10 @@ class OrderContentForm extends BaseForm
     public function rules() 
     {
         return [
-            [['name'], 'string',],
-            ['drawing', 'string'],
-            ['count', 'default', 'value' => 0],
-            ['weight', 'string'],
-            ['note', 'string',],
-            ['item', 'default', 'value' => 0],
-            ['material', 'string'],
-            ['rating', 'default', 'value' => 0],
+            [['name', 'drawing', 'weight', 'note', 'material', 'code', 'equipment', 'cat_dwg', 'file'], 'string',],
+            [['count', 'item', 'rating', 'obj_id'], 'default', 'value' => 0],
             ['order_id', 'integer'],
-            ['code', 'string'],
-            ['obj_id', 'default', 'value' => 0],
-            ['equipment', 'string'],
-            ['cat_dwg', 'string'],
-            ['file', 'string'],
+            ['name', 'default', 'value' => 'деталь'],
             ['sheet', 'default', 'value' => 1],
         ];
 
@@ -62,6 +51,7 @@ class OrderContentForm extends BaseForm
 
     public function save($item)
     {
+        if (!$item) $item = new OrderContent();
         $obj = $this->getObject();
         if ($obj) {
 			$item = OrderLogic::saveParamsFromObject($obj, $this->order_id);
@@ -70,14 +60,16 @@ class OrderContentForm extends BaseForm
 			if ($this->name) $item->name = $this->name;
 		}
         else {
-			if (!$item) $item = new OrderContent();
+
             $item->name = $this->name ? $this->name : 'деталь';
             $item->drawing = $this->drawing;  
             $item->cat_dwg = $this->cat_dwg;
             $item->file = $this->file; 
 			$item->weight = $this->weight;
-            $item->sheet = $this->sheet;     
-        } 
+            $item->sheet = $this->sheet;
+        }
+        $item->name = $this->name;
+        $item->code = $this->code;
         $item->note = $this->note;
         $item->count = $this->count;
         $item->rating = $this->rating;

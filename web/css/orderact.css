@@ -2,47 +2,52 @@
     position: relative;
     border-bottom: 2px solid #B49A6A;
     margin-bottom: 10px;
+    padding: 20px 0;
 }
 
 .field-orderactform-department {
     position: absolute;
-    top: 0;
-    left: 130px;
+    top: 20px;
+    left: 140px;
+}
+
+.field-orderactform-department select {
+    width: 270px!important;
 }
 
 #state-wrp {
     position: absolute;
-    top: 0;
-    left: 340px;   
+    top: 20px;
+    left: 450px;
 }
 
 .field-orderactform-type {
     position: absolute;
-    top: 0;
-    left: 520px;    
+    top: 20px;
+    left: 430px;
 }
 
 .field-orderactform-year {
     position: absolute;
-    top: 0;
+    top: 20px;
     left: 335px;    
 }
 
 .field-orderactform-month {
     position: absolute;
-    top: 0;
+    top: 20px;
     left: 150px;    
 }
 
 .field-orderactform-working_hour {
     position: absolute;
-    top: 0;
+    top: 20px;
     left: 200px;  
 }
 
 .field-orderactform-order_id {
     position: absolute;
-    top: 0;
+    top: 20px;
     left: 150px;  
 }
 
@@ -63,7 +68,7 @@
 .standing-orders-wrp {
     position: absolute;
     left: 300px;
-    top: 0;
+    top: 20px;
 }
 
 #standing-orders {
@@ -103,4 +108,21 @@
     position: absolute;
     top: 0;
     left: 480px;
+}
+
+.count-item {
+    width: 50px;
+    height: 20px!important;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+}
+
+.td-count-field {
+    position: relative;
+}
+
+.content-order-act {
+    width: 725px!important;
+    margin: -6px 0 0 -21px;
 }

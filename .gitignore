@@ -33,3 +33,7 @@ web/files/*
 
 *.zip
 *.sql
+
+/arhiv
+/web/files
+

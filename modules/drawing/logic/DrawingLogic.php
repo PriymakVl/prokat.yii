@@ -36,21 +36,15 @@ class DrawingLogic extends BaseLogic
     
     public static function getParamsDepartment()
     {
-        $params = [];
-        if (self::in_get('year')) {
-            $params['year'] = Yii::$app->request->get('year');
-            $params['type'] = 'file';    
-        }
-        $params['parent_id'] = 0;
+
+        $params['year'] = Yii::$app->request->get('year');
         $params['status'] = self::STATUS_ACTIVE;
         return $params;
     }
     
     public static function getParamsWorks(){
-        $params = [];
-        if (self::in_get('department')) $params['departemt'] = Yii::$app->request->get('department');
-        if (self::in_get('$desinger')) $params['$desinger'] = Yii::$app->request->get('$desinger');
-        $params['parent_id'] = 0;
+        $params['departemt'] = Yii::$app->request->get('department');
+        $params['$desinger'] = Yii::$app->request->get('$desinger');
         $params['status'] = self::STATUS_ACTIVE;
         return $params;
     }
@@ -93,11 +87,7 @@ class DrawingLogic extends BaseLogic
     public static function getNewNumberDepartmentDwg()
     {
         $current_year = date('Y');
-        $new_year = $current_year.'-01-01';
-        $new_year_time = strtotime($new_year);
-        $drafts = DrawingDepartment::find()->where(['status' => DrawingDepartment::STATUS_ACTIVE])
-            ->andWhere(['>', 'date', $new_year_time])
-            ->orderBy(['number' => SORT_DESC])->all();
+        $drafts = DrawingDepartment::find()->where(['year' => $current_year, 'status' => DrawingDepartment::STATUS_ACTIVE])->orderBy(['number' => SORT_DESC])->all();
         return $drafts ? ($drafts[0]->number + 1) : 1;
     }
     

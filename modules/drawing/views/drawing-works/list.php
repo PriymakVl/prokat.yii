@@ -21,19 +21,21 @@ $this->registerCssFile('/css/drawing.css');
      <?=DrawingListTopMenuWidget::widget(['params' => $params])?>
      
     <!-- list dwg -->
-    <table id="department-dwg-all">
+    <table id="dwg-works-all" class="margin-top-15">
         <tr>
             <th width="30">
-                <input type="checkbox" disabled="disabled" />
+                <input type="radio" disabled="disabled" />
             </th>
-            <th width="230">№ чертежа</th>
-            <th width="460">Наименование</th>
+            <th width="100">№ чертежа</th>
+            <th width="300">Наименование</th>
+            <th width="100">Код</th>
+            <th width="185">Примечание</th>
         </tr>
         <? if ($list): ?>
             <? foreach ($list as $dwg): ?>
                 <tr>
                     <td>
-                        <input type="checkbox" name="drawing" dwg_id="<?=$dwg->id?>" />
+                        <input type="radio" name="drawing" dwg_id="<?=$dwg->id?>" />
                     </td>
                     <td class="text-center">
                         <? if ($dwg->sheet_2 || $dwg->sheet_3): ?>
@@ -46,6 +48,16 @@ $this->registerCssFile('/css/drawing.css');
                     </td>
                     <td>
                         <a href="<?=Url::to(['/drawing/works', 'dwg_id' => $dwg->id])?>"><?=$dwg->name?></a>
+                    </td>
+                    <td class="text-center">
+                        <? if ($dwg->code): ?>
+                            <a href="<?=Url::to(['/search/object/code', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
+                        <? else: ?>
+                            <span>Не указан</span>
+                        <? endif; ?>
+                    </td>
+                    <td>
+                        <?=$dwg->note?>
                     </td>
                 </tr>
             <? endforeach; ?>
@@ -66,9 +78,9 @@ $this->registerCssFile('/css/drawing.css');
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     
-    <?//=DrawingListMenuWidget::widget()?>
+    <?=DrawingListMenuWidget::widget()?>
     
     <?//=DrawingMenuWidget::widget()?>
     
-    <?=DrawingMainMenuWidget::widget()?>
+    <?//=DrawingMainMenuWidget::widget()?>
 </div>

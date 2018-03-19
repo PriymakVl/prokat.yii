@@ -92,14 +92,14 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
     private function getSubMenu($parent) 
     {
         $submenu = '<ul class="dropdown-menu">';
-        $objects = Objects::findAll(['parent_id' => $parent->id, 'status' => Objects::STATUS_ACTIVE]);
+        $objects = Objects::find()->where(['parent_id' => $parent->id, 'status' => Objects::STATUS_ACTIVE])->orderBy('item', SORT_DESC)->all();
         for ($i = 0; $i < count($objects); $i++) {
             if (!$objects[$i] || $i > 20) break;
             if ($objects[$i]->item > 99 && $objects[$i]->item < 300) continue;
 			$objects[$i]->getName()->getAlias();
             $submenu .= '<li>';
             $item = $objects[$i]->item ?  $objects[$i]->item.' ' : '';
-            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$item.$objects[$i]->alias.'</a>';
+            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$item.') '.$objects[$i]->alias.'</a>';
             $submenu .= '</li>';   
         } 
         return $submenu .= '</ul>';  
@@ -113,7 +113,7 @@ class ObjectBreadcrumbsHeaderWidget extends Widget
 			$objects[$i]->getName()->getAlias();
             $submenu .= '<li>';
             $item = $objects[$i]->item ?  $objects[$i]->item.' ' : '';
-            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$item.$objects[$i]->alias.'</a>';
+            $submenu .= '<a href="/object/specification?obj_id='.$objects[$i]->id.'">'.$item.') '.$objects[$i]->alias.'</a>';
             $submenu .= '</li>';   
         } 
         return $submenu .= '</ul>';  

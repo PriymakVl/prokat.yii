@@ -21,8 +21,7 @@ class OrderContentSheetCreateController extends BaseController
     public $page;
     
     public function actionIndex($order_id, $ids, $page) 
-    { 
-        debug($order_id);
+    {
         $this->page = $page;
         $this->order = Order::findOne($order_id);
         $this->order->getWork(false);

@@ -45,24 +45,22 @@ class ObjectDrawingController extends BaseController
         $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
         debug(explode('-', $obj->code)[0]);
         if (explode('-', $obj->code) != $obj->id) {
-           Yii::$app->session->setFlash('error', 'Êîä ýòîãî îáúåêòà ìîæíî èçìåíèòü òîëüêî â ôîðìå');
+           Yii::$app->session->setFlash('error', 'Ð¾ÑˆÐ¸Ð±ÐºÐ°');
            return $this->redirect(['/object/drawing', 'obj_id' => $obj->id]); 
         }
         $dwg = DrawingLogic::getDrawingObject($dwg_cat, $dwg_id);
         $obj->code = $dwg->number;
         $obj->save();
-        Yii::$app->session->setFlash('success', 'Êîä îáúåêòà óñïåøíî èçìåíåí');
+        Yii::$app->session->setFlash('success', 'ÑƒÑÐ¿ÐµÑ…');
         return $this->redirect(['/object', 'obj_id' => $obj->id]); 
     }
     
     public function actionDelete($dwg_id, $dwg_cat, $obj_id) 
     {
         $dwg = DrawingLogic::getDrawingObject($dwg_cat, $dwg_id);
-        if ($dwg) {
-            $dwg->obj_id = null;
-            $dwg->code = null;
-            $dwg->save(); 
-        }
+        if ($dwg) $result = $dwg->deleteOne();
+        if (isset($result)) Yii::$app->session->setFlash('success', 'Ð§ÐµÑ€Ñ‚ÐµÐ¶ ÑƒÑÐ¿ÐµÑˆÐ½Ð¾ ÑƒÐ´Ð°Ð»ÐµÐ½');
+        else Yii::$app->session->setFlash('error', 'ÐžÑˆÐ¸Ð±ÐºÐ° Ð¿Ñ€Ð¸ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ð¸ Ñ‡ÐµÑ€Ñ‚ÐµÐ¶Ð°');
         $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
     }
         

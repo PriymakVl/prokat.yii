@@ -23,10 +23,6 @@
     font-weight: bold;   
 }
 
-.form-wrp {
-    position: relative;
-}
-
 /*note drawign works*/
 .note-dwg-works-wrp {  
     margin-top: 15px;  
@@ -41,32 +37,40 @@
     padding: 5px;   
 }
 
-/* drawing works form */
-
-.field-drawingworksform-item {
-    position: absolute;
-    top: 70px;
-    left: 260px;
-}
-
-.field-drawingworksform-sheets {
-    position: absolute;
-    top: 70px;
-    left: 400px;
-}
-
-.field-drawingworksform-parent_id {
-    position: absolute;
-    top: 70px;
-    left: 540px;
-}
-
-/* department drawing form */
+/* form */
 .form-box-top-wrp {
     position: relative;
     border-bottom: 2px solid #B49A6A;
     margin-bottom: 10px;
 }
+
+/* drawing works form */
+
+/*.field-drawingworksform-item {*/
+    /*position: absolute;*/
+    /*top: 70px;*/
+    /*left: 260px;*/
+/*}*/
+
+/*.field-drawingworksform-sheets {*/
+    /*position: absolute;*/
+    /*top: 70px;*/
+    /*left: 400px;*/
+/*}*/
+
+.field-drawingworksform-code {
+    position: absolute;
+    top: 0;
+    left: 230px;
+}
+
+.field-drawingworksform-parent_id {
+    position: absolute;
+    top: 0;
+    left: 410px;
+}
+
+/* department drawing form */
 
 .field-drawingdepartmentform-number {
     position: absolute;

@@ -2,6 +2,7 @@
 
 namespace app\modules\objects\controllers;
 
+use Yii;
 use app\controllers\BaseController;
 use app\modules\objects\models\Objects;
 use app\modules\objects\logic\ObjectLogic;
@@ -12,8 +13,9 @@ class ObjectSpecificationController extends BaseController
 {
     public $layout = "@app/views/layouts/base";
     
-    public function actionIndex($obj_id, $sort = null) 
-    {    
+    public function actionIndex($obj_id)
+    {
+        $sort = Yii::$app->request->get('sort', 'unit');
         $parent = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $parent->getName();
         $children = Objects::getChildren($parent->id, $sort);

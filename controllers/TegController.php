@@ -14,19 +14,19 @@ use app\models\forms\ListContentForm;
 use app\models\forms\ListTypeForm;
 
 
-class ListtypeController extends BaseController 
+class TagController extends BaseController
 {
     public $layout = 'base';
     
      public function actionIndex()
     {     
-        $types = ListType::find()->where(['status' => BaseModel::STATUS_ACTIVE])->all(); 
+        $types = Tag::find()->where(['status' => BaseModel::STATUS_ACTIVE])->all();
         return $this->render('index', ['form' => $form, 'list' => $list, 'types' => $types]);    
     }
     
     public function actionDelete($id = NULL) 
     {
-        if ((int)$id) $type = ListType::findOne($id); 
+        if ((int)$id) $type = Tag::findOne($id);
         else exit('error method delete'); 
 
         $type->status = BaseModel::STATUS_INACTIVE;        
@@ -37,7 +37,7 @@ class ListtypeController extends BaseController
     
     public function actionForm($id = NULL) 
     {
-        if ((int)$id) $type = ListType::findOne($id); 
+        if ((int)$id) $type = Tag::findOne($id);
         else $type = NULL; 
         
         $form = new ListTypeForm();
@@ -53,7 +53,7 @@ class ListtypeController extends BaseController
     
     public function saveType($form, $type)
     {   
-        if (!$type) $type = new ListType();
+        if (!$type) $type = new Tag();
         $type->name = $form->name;
         $type->value = $form->value;
         $type->save();

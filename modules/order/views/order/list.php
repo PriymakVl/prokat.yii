@@ -9,7 +9,7 @@ use app\modules\order\models\Order;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\order\widgets\OrderListMenuWidget;
-use app\modules\order\widgets\OrderTopListMenuWidget;
+use app\modules\order\widgets\OrderTopListFiltersWidget;
 //use app\modules\orderlist\widgets\OrderListListMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
 //use app\modules\orderact\widgets\OrderActListMenuWidget;
@@ -23,7 +23,7 @@ $this->registerCssFile('/css/standard.css');
     <div class="title-box">Перечень заказов сортопрокатного стана</div>
     
     <!-- top nenu -->
-    <?=OrderTopListMenuWidget::widget(['params' => $params])?>
+    <?=OrderTopListFiltersWidget::widget(['params' => $params])?>
 
     <!-- flash messge -->
     <?=FlashMessageWidget::widget()?>

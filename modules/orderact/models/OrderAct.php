@@ -61,12 +61,13 @@ class OrderAct extends BaseModel
     public static function registration($number, $order_id)
     {
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
+        $order->customer;
         $data_registr = time();
-        $month = date('n');
+        $month = date('m');
         $year = date('Y');
         $state = OrderAct::STATE_PROCESSED;
-        $sql = "INSERT INTO `".self::tableName()."` (`number`, `order_id`, `date_registr`, `month`, `year`, `state`, `type`) 
-                VALUES ($number, $order_id, $data_registr, $month, $year, $state, $order->type)";
+        $sql = "INSERT INTO `".self::tableName()."` (`number`, `order_id`, `date_registr`, `month`, `year`, `state`, `type`, `customer`) 
+                VALUES ($number, $order_id, $data_registr, $month, $year, $state, $order->type, '{$order->customer}')";
         \Yii::$app->db->createCommand($sql)->execute();
         return \Yii::$app->db->getLastInsertID();
     }
@@ -93,7 +94,7 @@ class OrderAct extends BaseModel
     
     public static function getAllForOrder($order_id)
     {
-        $acts = self::find()->where(['order_id' => $order_id, 'status' => self::STATUS_ACTIVE])->all();
+        $acts = self::find()->where(['order_id' => $order_id, 'status' => self::STATUS_ACTIVE])->orderBy(['date_registr' => SORT_DESC])->all();
         if (!$acts) return [];
         return self::executeMethods($acts, ['getContent', 'convertMonth', 'countPosition', 'countItems']);
     }
@@ -110,6 +111,19 @@ class OrderAct extends BaseModel
         $this->countItems = OrderActLogic::countItemsAct($this->content);
         return $this;    
     }
+
+    public static function getListForFileSave($ids)
+    {
+        $ids = explode(',', $ids);
+        foreach ($ids as $id) {
+            $act = self::FindOne($id);
+            if ($act) $list[] = $act;
+        }
+        return self::executeMethods($list, ['getContent', 'convertDepartment', 'getShortCustomer']);
+    }
+
+
+
 
 }
 

@@ -13,7 +13,7 @@ $this->registerCssFile('/css/order.css');
     <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название заказа:</span>&laquo; <?=$order->name?> &raquo;<br />
         <span>Номер заказа:</span>&laquo; <?=$order->number?> &raquo;
     </div>

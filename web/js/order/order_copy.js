@@ -1,14 +1,12 @@
 $(document).ready(function() {
 
     $('#order-copy').click(function() { 
-    
-        var order_num = prompt('Укажите номер заказа');
-  
+
         var get = getObjectGetParams();
         var order_id = get.order_id;
 
-        if (!order_id) alert('Error not order_id'); 
-        else location.href = 'http://' + location.host + '/order/copy?order_id=' + order_id + '&number=' + order_num;
+        if (order_id) location.href = 'http://' + location.host + '/order/copy?order_id=' + order_id;
+        else alert('Произошла ошибка!');
     });  
     
     function getObjectGetParams()

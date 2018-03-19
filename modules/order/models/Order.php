@@ -21,11 +21,23 @@ class Order extends BaseModel
     const STATE_DRAFT = 1;
     const STATE_ACTIVE = 2;
     const STATE_CLOSED = 3;
-    const STATE_NOT_ACCEPTED = 4;
+    const STATE_NOT_ACCEPTED = 4;//не принят
+    const STATE_PERFORMED = 5;   //заказ выполнен
     
     const KIND_CURRENT = 1;
     const KIND_PERMANENT = 2;
-    
+    const KIND_ANNUAL = 3;//годовой
+
+    const PERIOD_UNDEFINED = 1;
+    const PERIOD_2010_2015 = 2;
+    const PERIOD_2015_2017 = 3;
+    const CURRENT_PERIOD = 4;
+
+    const TYPE_ENHANCEMENT = 1; //улучшение
+    const TYPE_MAKING = 4; //изготовление
+    const TYPE_MAINTENANCE = 5; //текущий ремонт
+    const TYPE_CAPITAL_REPAIR = 6; // капитальный ремонт
+
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
     

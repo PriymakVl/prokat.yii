@@ -40,11 +40,11 @@ class OrderActContentController extends BaseController
     
     public function actionForm($act_id, $item_id = null)
     {     
-        $item = OrderActContent::getOne($item_id, null, self::STATUS_ACTIVE);   
-        if ($item) $item->getItemOrder();  
+        $item = OrderActContent::getOne($item_id, null, self::STATUS_ACTIVE);
+        if ($item) $item->getItemOrder()->getName();
         $act = OrderAct::getOne($act_id, false, self::STATUS_ACTIVE); 
         $act->getOrder();
-        $form = new OrderActContentForm($item);
+        $form = new OrderActContentForm($item, $act);
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             Yii::$app->session->setFlash('success', 'Элемент акта успешно '.($item ? 'отредактирован' : 'создан'));

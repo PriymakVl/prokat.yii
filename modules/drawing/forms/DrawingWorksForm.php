@@ -9,16 +9,17 @@ use app\modules\drawing\logic\DrawingLogic;
 use app\modules\objects\models\Objects;
 
 class DrawingWorksForm extends BaseForm
-{   
-    //public $name;
-//    public $number;
+{
     public $designer;
     public $department;
     public $code;
-    public $numberWorksDwg; public $nameWorksDwg; 
+    public $number;
+    public $name;
+    public $sheet_1, $sheet_2, $sheet_3;
+    public $parent_id;
+    //form
     public $dwg;
-    public $works_dwg_1, $works_dwg_2, $works_dwg_3;
-    public $noteDwg;
+
     
     public function __construct($dwg)
     {
@@ -29,8 +30,10 @@ class DrawingWorksForm extends BaseForm
     public function rules() 
     {
         return [
-            [['nameWorksDwg', 'designer', 'department', 'noteDwg', 'numberWorksDwg'], 'string'],
-            [['works_dwg_1', 'works_dwg_2', 'works_dwg_3'], 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
+            [['name', 'designer', 'department', 'note', 'number', 'code'], 'string'],
+            [['sheet_1', 'sheet_2', 'sheet_3'], 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
+            ['parent_id', 'integer'],
+            ['parent_id', 'default', 'value' => 0]
         ];
 
     }
@@ -39,16 +42,32 @@ class DrawingWorksForm extends BaseForm
     {
     	return ['drawing-logic' => ['class' => DrawingLogic::className()]];
     }
-    
-    public function save() 
+
+    public function save()
     {
-        if ($this->dwg->obj_id) $obj = Objects::getOne($this->dwg->obj_id, false, Objects::STATUS_ACTIVE);
-        else if ($this->code) $obj = Object::findOne(['code'=> $this->code, 'status' => Objects::STATUS_ACTIVE]);
-        if (!$obj) $obj = new Objects();
-        if (!$obj->name) $obj->rus = 'Не указано';
-        if (!$obj->parent_id) $obj->parent_id = 0;
-        $obj->save();
-        return DrawingWorks::saveDwg($this, $obj, $this->dwg); 
+        $this->dwg->code = $this->code;
+        $this->dwg->parent_id = $this->parent_id;
+        $this->dwg->note = $this->note;
+        if (!$this->dwg->date) $this->dwg->date = time();
+        $this->dwg->number = $this->number;
+        $this->dwg->name = $this->name;
+        $this->dwg->save();
+        $sheet_1 = $this->uploadFileWorks(1);
+        $sheet_2 = $this->uploadFileWorks(2);
+        $sheet_3 = $this->uploadFileWorks(3);
+        if ($sheet_1) $this->dwg->sheet_1 = $sheet_1;
+        if ($sheet_2) $this->dwg->sheet_2 = $sheet_2;
+        if ($sheet_3) $this->dwg->sheet_3 = $sheet_3;
+        return $this->dwg->save();
+    }
+
+    private function uploadFileWorks($number)
+    {
+        $file = UploadedFile::getInstance($this, 'sheet_'.$number);
+        if (!$file) return null;
+        $filename = $this->dwg->id.'_works_'.$number.'.'.$file->extension;
+        $file->saveAs('files/works/'.$filename);
+        return $filename;
     }
 
 

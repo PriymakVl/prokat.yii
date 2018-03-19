@@ -26,5 +26,6 @@ $this->registerJsFile('/js/order/form_add_inventory.js');
         <option value="pinch-roll">Трайб-аппараты</option>
         <option value="shear">Ножницы</option>
         <option value="sliting">Слитинг</option>
+        <option value="building">Здания</option>
     </select>
 </div>

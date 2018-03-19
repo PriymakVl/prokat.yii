@@ -18,11 +18,13 @@ $this->registerCssFile('/css/specification.css');
     <!-- specification -->
     <table>
         <tr>
-            <th width="550">Наименование</th>
+            <th width="40">№</th>
+            <th width="510">Наименование</th>
             <th width="170">Код</th>
         </tr>
             <? foreach ($objects as $obj): ?>
                 <tr>
+                    <td align="center"><?=$obj->item?></td>
                     <td>
                         <a href="<?=Url::to(['/object/specification', 'obj_id' => $obj->id])?>"><?=$obj->name?></a>
                     </td>

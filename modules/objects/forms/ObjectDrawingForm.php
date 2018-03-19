@@ -33,7 +33,7 @@ class ObjectDrawingForm extends BaseForm
         return [
             [['category'], 'required', 'message' => 'Необходимо указать  где создан чертеж'],
             //['numberWorksDwg', 'checkNumberWorksDwg', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['numberWorksDwg', 'default', 'value' => ''],
+            ['numberWorksDwg', 'string'],
             [['noteDwg', 'nameWorksDwg', 'nameStandardDanieliDwg', 'revisionDanieliDwg'], 'string'],
             [['designerDepartmentDwg', 'nameDepartmentDwg'], 'string'],
             [['sheetDanieliDwg'], 'integer'],
@@ -47,7 +47,7 @@ class ObjectDrawingForm extends BaseForm
         $this->obj = $obj;
         switch($this->category) {
             case 'department': return $this->saveDwgDepartment();
-            case 'works': return DrawingWorks::saveDwg($this, $obj);
+            case 'works': return $this->saveDwgWorks();
             case 'danieli': return $this->saveDwgDanieli();
             case 'standard': return new DrawingStandard();
             case 'standard_danieli': return $this->saveDwgStandardDanieli();
@@ -61,7 +61,7 @@ class ObjectDrawingForm extends BaseForm
         $this->dwg = new DrawingDanieli();
         $this->dwg->code = $this->dwg->getCodeWithoutVariant($this->obj->code);
         $this->dwg->sheet = $this->sheetDanieliDwg;
-        $this->dwg->note = $this->note; 
+        $this->dwg->note = $this->noteDwg; 
         $this->dwg->revision = $this->revisionDanieliDwg;
         $file = UploadedFile::getInstance($this, 'file');
         $file->saveAs('files/vendor/danieli/'.$file->name);
@@ -89,6 +89,7 @@ class ObjectDrawingForm extends BaseForm
 
         $dwg->designer = $this->designerDepartmentDwg;
         $dwg->date = time();
+        $dwg->year = date('Y');
         $dwg->name = $this->nameDepartmentDwg;
         $dwg->code = $this->obj->code;
         $dwg->note = $this->noteDwg;
@@ -109,12 +110,33 @@ class ObjectDrawingForm extends BaseForm
         if ($file)  $dwg->file_cdw = $this->uploadFile($dwg->id, $file, 'department/kompas', '_kompas' ); 
     }
     
-//    public function checkNumberWorksDwg($attribute, $params)
-//    {
-//        if ($this->category == 'works' && !$this->numberWorksDwg) {
-//            $this->addError($attribute, 'Необходимо указать номер чертежа');
-//        }  
-//    }
+        
+    public function saveDwgWorks()
+    {
+        $this->dwg = new DrawingWorks();
+        $this->dwg->code = $this->obj->code;
+        $this->dwg->note = $this->noteDwg; 
+        $this->dwg->date = time();
+        $this->dwg->number = $this->numberWorksDwg;
+        $this->dwg->name = $this->nameWorksDwg;
+        $this->dwg->save();
+        $this->dwg->sheet_1 = self::uploadSheet(1); 
+        $this->dwg->sheet_2 = self::uploadSheet(2); 
+        $this->dwg->sheet_3 = self::uploadSheet(3);
+        $this->dwg->save();
+        return true; 
+    }
+    
+    private function uploadSheet($number) 
+    {
+        $sheet = UploadedFile::getInstance($this, 'works_dwg_'.$number);
+        if (!$sheet) return false;
+        $filename = $this->dwg->id.'_works_'.$number.'.'.$sheet->extension;
+        $sheet->saveAs('files/works/'.$filename); 
+        return $filename;   
+    }
+    
+
     
     
     

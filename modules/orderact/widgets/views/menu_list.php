@@ -4,6 +4,7 @@ use \yii\helpers\Url;
 
 $this->registerJsFile('/js/orderact/act_edit_state.js');
 $this->registerJsFile('/js/orderact/act_list_delete.js');
+$this->registerJsFile('/js/orderact/act_list_print.js');
 
 ?>
 <div  class="sidebar-menu">
@@ -21,10 +22,10 @@ $this->registerJsFile('/js/orderact/act_list_delete.js');
             <a href="#" onclick="return false;" id="order-acts-delete">Удалить акты</a>
         </li>
         <li>
-            <a href="#" onclick="return false;" id="order-act-passed">Переданы в ЦРМО</a>    
+            <a href="#" onclick="return false;" id="order-act-passed">Оформлены</a>
         </li>
         <li>
-            <a href="#" onclick="return false;" id="order-act-print">Распечатать перечень</a>    
+            <a href="#" onclick="return false;" id="act-list-print">Распечатать перечень</a>
         </li> 
     </ul>
 </div>

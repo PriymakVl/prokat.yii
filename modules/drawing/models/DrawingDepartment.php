@@ -32,10 +32,10 @@ class DrawingDepartment extends BaseModel
     
     public static function getListDepartment($params)
     {
-        $query = self::find()->where($params);
-        self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $page_size]);
-        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all(); 
-        return self::executeMethods($list, ['getFullNumber', 'getObjects']);
+        $query = self::find()->filterWhere($params);
+        self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
+        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all();
+        return self::executeMethods($list, ['getFullNumber']);
     }
 
     public function getFullNumber()
@@ -58,13 +58,13 @@ class DrawingDepartment extends BaseModel
         else return null; 
     }
 
-    public function getObjects()
-    {
-        if (!$this->code) return false;
-        $this->objects = Objects::findAll(['code' => $this->code, 'status' => self::STATUS_ACTIVE]);
-        if ($this->objects) $this->objects[0]->getName();
-        return $this;
-    }
+//    public function getObjects()
+//    {
+//        if (!$this->code) return false;
+//        $this->objects = Objects::findAll(['code' => $this->code, 'status' => self::STATUS_ACTIVE]);
+//        if ($this->objects) $this->objects[0]->getName();
+//        return $this;
+//    }
     
     //public static function saveDwg($form, $obj, $dwg = null)
 //    {

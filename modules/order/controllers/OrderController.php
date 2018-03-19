@@ -22,14 +22,12 @@ class OrderController extends BaseController
         return $this->render('index', compact('order', 'session', 'count_acts'));
     }
     
-    public function actionList($period = null, $customer = null, $section = null, $equipment = null, $unit = null, $type = null, $kind = null)
+    public function actionList()
     {
-        $state = Yii::$app->request->get('state');
-        $params = OrderLogic::getParams($period, $customer, $section, $equipment, $unit, $state, $type, $kind);
-                //debug($params);
+        $params = OrderLogic::getParams();
         $list = Order::getOrderList($params);
         $pages = Order::$pages;
-        return $this->render('list', compact('list', 'params', 'pages', 'state'));
+        return $this->render('list', compact('list', 'params', 'pages'));
     }
     
     public function actionForm($order_id = null) 
@@ -75,16 +73,16 @@ class OrderController extends BaseController
         return $this->render('acts', compact('acts', 'order', 'count_acts'));    
     }
 
-    public function actionCopy($order_id, $number)
+    public function actionCopy($order_id)
     {
-        $new_id = OrderLogic::copyOrder($order_id, $number);
+        $new_id = OrderLogic::copyOrder($order_id);
         $this->redirect(['/order', 'order_id' => $new_id]);  
     }
     
     //set active order without create
     public function actionSetActive($order_id)
     {
-        OrderLogic::setActive($order_id, 'order-active');
+        OrderLogic::setAcftive($order_id, 'order-active');
         $this->redirect(['/order', 'order_id' => $order_id]); 
     }
     

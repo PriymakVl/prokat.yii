@@ -24,31 +24,37 @@ class OrderActController extends BaseController
         return $this->render('index', compact('act', 'content'));
     }
     
-    public function actionList($month = null, $year = null, $state = null)
+    public function actionList()
     {
-        $params = OrderActLogic::getParams($month, $year, $state);
+        $params = OrderActLogic::getParams();
+//        debug($params);
         $list = OrderAct::getActList($params);
-        $month_selected = self::getMonthString($month ? $month : date('m'), true);
-        $year_selected = $year ? $year : date('Y').'г.';
+        $month_selected = self::getMonthString($params['month'] ? $params['month'] : date('m'), true);
+        $year_selected = $params['year'] ? $params['year'].'г.' : date('Y').'г.';
         $period = $month_selected.' '.$year_selected; 
         $costs = OrderActLogic::countCostMonth($month, $year);
-        return $this->render('list', compact('list', 'params', 'period', 'costs'));
+        $count = count($list);
+        $session = Yii::$app->session;
+        return $this->render('list', compact('list', 'params', 'period', 'costs', 'count'));
     }
     
     public function actionForm($act_id = null)
     {     
         $act = OrderAct::getOne($act_id, null, self::STATUS_ACTIVE);
-        if ($act) $act->getOrder();
+        if ($act) {
+            $act->getOrder();
+            $content = OrderActContent::getContentByActId($act->id);
+        }
         $order = $act ? Order::getOne($act->order_id, false, self::STATUS_ACTIVE) : null;
-        //$content = OrderActContent::getContentByActId($act->id);       
-        $form = new OrderActForm($act);
+
+        $form = new OrderActForm($act, $content);
         $form->getMonths();
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
             $message = $act_id ? 'Акт успешно отредактирован' : 'Акт успешно создан';
             Yii::$app->session->setFlash('success', $message);
             return $this->redirect(['/order/act', 'act_id' => $form->act->id]);
         }        
-        else return $this->render('form', compact('form', 'act', 'order'));    
+        else return $this->render('form', compact('form', 'act', 'order', 'content'));
     }
     
     public function actionRegistration($ids, $order_id, $number)
@@ -97,4 +103,13 @@ class OrderActController extends BaseController
         OrderActLogic::setActive($act_id, 'order-act-active');
         $this->redirect(['/order-act', 'act_id' => $act_id]); 
     }
+
+    public function actionShowFilters()
+    {
+        $session = Yii::$app->session;
+        $session->get('act-filters') ? $session->remove('act-filters') : $session->set('act-filters', true);
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+
 }

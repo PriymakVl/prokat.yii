@@ -1,27 +1,1 @@
-$(document).ready(function() {
-    
-    $('#year-create-dwg').change(function() { 
-
-        var year = $(this).val();
-        year = year ? year : 0;
-        
-        var url = 'http://' + location.host + '/drawing/department/list';
-        
-        location.href = url + '?year=' + year;
-    });
-  
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$(document).ready(function() {    $('#year-create-dwg').change(function() {         var year, url;        year = $(this).val();        url = 'http://' + location.host + '/drawing/department/list';        if (year)  location.href = url + '?year=' + year;        else location.href = url;    });  })

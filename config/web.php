@@ -23,6 +23,8 @@ $config = [
         'orderlist' => ['class' => 'app\modules\orderlist\Module',],
         'orderact' => ['class' => 'app\modules\orderact\Module',],
         'product' => ['class' => 'app\modules\product\Module',],
+        'inventory' => ['class' => 'app\modules\inventory\Module',],
+        'chain' => ['class' => 'app\modules\chain\Module',],
     ],
     'components' => [
         'request' => [
@@ -64,13 +66,16 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                //moduels
+                'modules/list' => 'list-modules/list',
                 //search
                 'search/drawing/works' => 'search/search/drawing-works',
                 'search/drawing/department' => 'search/search/drawing-department',
                 'search/order' => 'search/search/order',
                 'search/order/act' => 'search/search/order-act',
                 'search/application' => 'search/search/application',
-                'search' => 'search/search/code',
+                'search/object/name' => 'search/search/object-name',
+                'search/object/code' => 'search/search/object-code',
                 //list
                 'lists/update' => 'lists/list/update-all',
                 'lists' => 'lists/list/all',
@@ -152,7 +157,9 @@ $config = [
                 'order/act/registr' => 'orderact/order-act/registration',
                 'order/act/edit/state' => 'orderact/order-act/edit-state',
                 'order/act/active/set' => 'orderact/order-act/set-active',
-                'order/act' => 'orderact/order-act', 
+                'order/act' => 'orderact/order-act',
+                'orderact/list/file/save' => 'orderact/order-act-list-excel',
+                'order/act/show/filters' => 'orderact/order-act/show-filters',
                 //order-act-content
                 'order/act/content/delete' => 'orderact/order-act-content/delete',               
                 'order/act/content/form' => 'orderact/order-act-content/form',                              
@@ -200,7 +207,15 @@ $config = [
                 'product/manufactured' => 'product/product/manufactured',
                 'product/list' => 'product/product/list',
                 'product' => 'product/product',
-								
+                //inventory
+                'inventory/list' => 'inventory/inventory/list',
+                'inventory/delete' => 'inventory/inventory/delete',
+                'inventory/form' => 'inventory/inventory/form',
+                'inventory' => 'inventory/inventory',
+                //chains
+                'chain/list' => 'chain/chain/list',
+                'chain/iso/list' => 'chain/chain-iso/list',
+                'chain' => 'chain/chain',
             ],
         ],  
     ],

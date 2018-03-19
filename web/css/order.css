@@ -148,7 +148,8 @@
 
 /** top menu list **/
 #order-period, #order-customer, #order-type, #order-state, #order-kind{
-    width: 80px;
+    width: 130px;
+    margin-right: 15px;
 }
 
 #bolt-dimensions-wrp {
@@ -210,7 +211,7 @@
 .field-orderform-inventory {
     position: absolute;
     top: 65px;
-    left: 150px;
+    left: 230px;
 }
 
 .field-orderform-equipment_blank {

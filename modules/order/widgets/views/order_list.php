@@ -3,7 +3,7 @@
 use \yii\helpers\Url;
 use app\modules\order\models\Order;
 
-$this->registerJsFile('js/order/order_list_print.js');
+$this->registerJsFile('/js/order/order_list_print.js');
 
 ?>
 <div  class="sidebar-menu">
@@ -20,7 +20,7 @@ $this->registerJsFile('js/order/order_list_print.js');
             <? endif; ?>
         </li> 
         <li>
-            <a href="<?=Url::to(['/order/list', 'state' => Order::KIND_PERMANENT])?>">Постоянно действ.</a>
+            <a href="<?=Url::to(['/order/list', 'kind' => Order::KIND_PERMANENT, 'period' => 'all'])?>">Постоянно действующ.</a>
         </li>
         <li>
             <a href="#" onclick="return false;" id="order-list-print">Распечатать перечень</a>    

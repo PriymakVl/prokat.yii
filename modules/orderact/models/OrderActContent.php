@@ -40,7 +40,14 @@ class OrderActContent extends BaseModel
         $this->drawing = $item->drawing;
         $this->month_receipt = date('m');
         $this->year_receipt = date('Y');
+        $this->name = $item->name;
         $this->state = self::STATE_RECEIVED;
+        return $this;
+    }
+    //if not is save where registration act
+    public function getName()
+    {
+        if (!$this->name) $this->name = $this->item->name;
         return $this;
     }
 

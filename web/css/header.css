@@ -7,6 +7,10 @@
 	margin-bottom: 15px;
 }
 
+.label-header-search {
+    margin-left: 40px;
+}
+
 .link-home, .link-back {
     margin: 0 60px 0 15px;
     line-height: 40px;

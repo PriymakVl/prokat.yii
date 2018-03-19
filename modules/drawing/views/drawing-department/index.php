@@ -16,6 +16,7 @@ $this->registerCssFile('/css/drawing.css');
     <div class="info-box margin-bottom-15" style="text-align: center; font-size: 16px; color:#000;">
         Эскиз детали
     </div>
+    
     <!-- top menu -->
     <?=DrawingDepartmentTopMenuWidget::widget()?>
     
@@ -37,15 +38,7 @@ $this->registerCssFile('/css/drawing.css');
         <!-- name dwg -->
         <tr>
             <td class="text-center">Название эскиза</td>
-            <td>
-                <? if ($dwg->name): ?>
-                    <?=$dwg->name?>
-                <? elseif ($dwg->objects): ?>
-                    <?=$dwg->objects[0]->name?>
-                <? else: ?>
-                    <?='Эскиз '.$dwg->fullNumber?>
-                <? endif; ?>   
-            </td>
+            <td><?=$dwg->name?></td>
         </tr>
         
         <!-- file -->

@@ -140,26 +140,21 @@ $this->registerCssFile('/css/order.css');
             <td colspan="2" class="text-center" style="color: green;">Дополнительная информация</td>
         </tr>
         <!-- note -->
-        <tr>
-            <td class="text-center">Примечание</td>
-            <td>
-                <?=$item->note ? $item->note : 'Не указано'?>
-            </td>
-        </tr>
+        <? if ($item->note): ?>
+            <tr>
+                <td class="text-center">Примечание</td>
+                <td><?=$item->note?></td>
+            </tr>
+        <? endif; ?>
         <tr>
             <td class="text-center">Код детали</td>
             <td>
                 <? if ($item->code): ?>
-                    <a href="<?=Url::to(['/search', 'code' => $item->code])?>"><?=$item->code?></a>
+                    <a href="<?=Url::to(['/search/object/code', 'code' => $item->code])?>"><?=$item->code?></a>
                 <? else: ?>
                     <span class="red">Не указан</span>
             <? endif; ?>
             </td>
-        </tr>
-        <!--  rating -->
-        <tr>
-            <td class="text-center">Рейтинг</td>
-            <td><?=$item->rating?></td>
         </tr>
     </table>
 </div>

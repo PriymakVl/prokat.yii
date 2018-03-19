@@ -78,7 +78,15 @@ class BaseLogic  extends Behavior implements ConfigApp
         $session = Yii::$app->session;
         return $session->get($session_name);    
     }
-    
+
+    public static function isInObjects($value, $name, $array)
+    {
+        foreach ($array as $obj) {
+            if ($value == $obj->$name) return true;
+        }
+        return false;
+    }
+
 }
 
 

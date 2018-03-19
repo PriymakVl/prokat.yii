@@ -13,9 +13,11 @@ class OrderActTopListMenuWidget extends Widget
 
     public function run()
     {
+        $session = Yii::$app->session;
+        $filters = $session->get('act-filters');
         $months = BaseLogic::getArrayMonths();
         $template = $this->acts ? 'top_list_acts' : 'top_list_content'; 
-        return $this->render($template, ['params' => $this->params, 'months' => $months]);
+        return $this->render($template, ['params' => $this->params, 'months' => $months, 'filters' => $filters]);
     }
 
 }

@@ -12,8 +12,12 @@ class ObjectListChildrenWidget extends Widget
 
     public function run()
     {
+        if ($this->type == 'standard') $id_box = 'id="standards-box"';
+        else if ($this->type == 'unit') $id_box = 'id="units-box"';
+        else if ($this->type == 'category') $id_box = 'id="categories-box"';
+
         $color = $this->color ? $this->color : '#000';
-        return $this->render('object/object_children', ['children' => $this->children, 'color' => $color, 'type' => $this->type]);
+        return $this->render('object/object_children', ['children' => $this->children, 'color' => $color, 'type' => $this->type, 'id_box' => $id_box]);
     }
 
 }

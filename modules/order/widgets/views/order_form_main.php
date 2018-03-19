@@ -37,16 +37,16 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
         <!-- type -->
         <?php 
             $form->type = $order ? $order->type : '4';
-            $types = [Orderlogic::TYPE_MAKING => 'Изготовление (4)', Orderlogic::TYPE_MAINTENANCE => 'Тек. ремонт (5)', 
-            Orderlogic::TYPE_CAPITAL_REPAIR => 'Кап. ремонт (6)',  Orderlogic::TYPE_ENHANCEMENT=> 'Улучшение (1)'];
+            $types = [Order::TYPE_MAKING => 'Изготовление (4)', Order::TYPE_MAINTENANCE => 'Тек. ремонт (5)',
+            Order::TYPE_CAPITAL_REPAIR => 'Кап. ремонт (6)',  Order::TYPE_ENHANCEMENT=> 'Улучшение (1)'];
             echo $f->field($form, 'type')->dropDownList($types)->label('Статья затрат:');
         ?>
         
         <!-- kind -->
         <?php 
             $form->kind = $order ? $order->kind : Order::KIND_CURRENT;
-            $kinds = [Order::KIND_CURRENT => 'Разовый', Order::KIND_PERMANENT => 'Постоянный'];
-            $params = ['style' => 'width: 120px'];
+            $kinds = [Order::KIND_CURRENT => 'Разовый', Order::KIND_PERMANENT => 'Постоянный', Order::KIND_ANNUAL => 'Годовой'];
+            $params = ['style' => 'width: 200px'];
             echo $f->field($form, 'kind')->dropDownList($kinds, $params)->label('Вид заказа:');
         ?>
     	
@@ -105,13 +105,13 @@ $this->registerJsFile('/js/order/form_set_customer_issuer.js');
         <?=$f->field($form, 'equipment')->textInput(['value' => $order->equipmentName, 'style' => 'width:200px'])->label('Агрегат (сортировка):')?>
         
         <!-- equipment blank-->          
-        <?=$f->field($form, 'equipment_blank')->textInput(['value' => $order->equipmentBlank, 'style' => 'width:465px'])->label('Агрегат, механизм (бланк заказа):')?>
+        <?=$f->field($form, 'equipment_blank')->textInput(['value' => $order->equ_blank, 'style' => 'width:465px'])->label('Агрегат, механизм (бланк заказа):')?>
     
         <!-- unit -->          
         <?=$f->field($form, 'unit')->textInput(['value' => $order->unitName, 'style' => 'width:200px'])->label('Узел (сортировка):')?>
         
         <!-- unit blank -->          
-        <?=$f->field($form, 'unit_blank')->textInput(['value' => $order->unitBlank, 'style' => 'width:465px'])->label('Узел (бланк заказа):')?>  
+        <?=$f->field($form, 'unit_blank')->textInput(['value' => $order->unit_blank, 'style' => 'width:465px'])->label('Узел (бланк заказа):')?>
     </div>
     
 	

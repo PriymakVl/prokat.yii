@@ -19,11 +19,18 @@ class SearchController extends BaseController
 {
     public $layout = "@app/views/layouts/base";
     
-    public function actionCode($code) 
-    { 
+    public function actionObjectCode($code)
+    {
         $objects = Objects::searchCode($code);
         if (count($objects) == 1) return $this->redirect(['/object', 'obj_id' => $objects[0]->id]);
-        else return $this->render('code', ['objects' => $objects, 'code' => $code]);
+        else return $this->render('object_code', ['objects' => $objects, 'code' => $code]);
+    }
+
+    public function actionObjectName($name)
+    {
+        $objects = Objects::searchName($name);
+        if (count($objects) == 1) return $this->redirect(['/object', 'obj_id' => $objects[0]->id]);
+        else return $this->render('object_name', ['objects' => $objects, 'name' => $name]);
     }
     
     public function actionDrawingDepartment($number)
@@ -53,7 +60,7 @@ class SearchController extends BaseController
             return $this->redirect(Yii::$app->request->referrer);  
         }
         if (count($orders) == 1) return $this->redirect(['/order', 'order_id' => $orders[0]->id]);
-        else return $this->render('orders', ['orders' => $orders, 'number' => $order_num, 'drawing' => $dwg_num]);
+        else return $this->render('orders', ['orders' => $orders, 'number' => $order_num, 'drawing' => $dwg_num, 'code' => $code]);
     }
     
     public function actionOrderAct($act_num = null, $dwg_num = null, $code = null)

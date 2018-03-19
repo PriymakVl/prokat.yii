@@ -1,7 +1,7 @@
 <?php
     use app\modules\search\widgets\SearchObjectBreadcrumbsWidget;
     
-    $this->registerCssFile('css/search.css');
+    $this->registerCssFile('/css/search.css');
 ?>
 <div class="content">
     <h2 class="title-search">Результаты поиска</h2>
@@ -11,11 +11,17 @@
     </div>
 <? if ($objects): ?>
     <? $number = 1; ?>
-    <? foreach ($objects as $object): ?>
-        <?=SearchObjectBreadcrumbsWidget::widget(['object' => $object, 'number' => $number])?>
-    <? $number++; ?>
-    <? endforeach; ?>
-    
+    <table class="table-search-code">
+        <tr>
+            <th width="40">№</th>
+            <th width="130">Код</th>
+            <th width="765">Расположение</th>
+        </tr>
+        <? foreach ($objects as $object): ?>
+            <?=SearchObjectBreadcrumbsWidget::widget(['object' => $object, 'number' => $number])?>
+            <? $number++; ?>
+        <? endforeach; ?>
+    </table>
 <? else: ?>
     <p class="not-result">Поиск не дал результатов</p>
 <? endif; ?>

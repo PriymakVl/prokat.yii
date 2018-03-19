@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\modules\objects\models\Objects;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\StringHelper;
@@ -9,6 +10,8 @@ use yii\web\ForbiddenHttpException;
 use yii\data\Pagination;
 use app\classes\interfaces\ConfigApp; 
 use app\classes\traits\CommonStaticMethods;
+use app\modules\employees\logic\EmployeeLogic;
+use app\modules\employees\models\Employee;
 use app\models\Tag;
 
 class BaseModel extends ActiveRecord implements ConfigApp
@@ -40,7 +43,7 @@ class BaseModel extends ActiveRecord implements ConfigApp
     
     public static function getList($params = [], $page_size)
     {
-        $query = self::find()->where($params);
+        $query = self::find()->filterWhere($params);
         self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => $page_size]);
         return $query->offset(self::$pages->offset)->limit(self::$pages->limit)->all();    
     }
@@ -54,6 +57,14 @@ class BaseModel extends ActiveRecord implements ConfigApp
     public function getCodeWithoutVariant($code)
     {
         return self::codeWithoutVariant($code);      
+    }
+
+    public function getObject()
+    {
+        if (isset($this->obj)) return false;
+        if (empty($this->obj_id)) return false;
+        $this->obj = Objects::findOne(['id' => $this->obj_id, 'status' => self::STATUS_ACTIVE]);
+        return $this;
     }
     
     public function getAlias($length = 15, $suffix = '')
@@ -75,35 +86,35 @@ class BaseModel extends ActiveRecord implements ConfigApp
     
      public function getFullCustomer()
     {
-        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Íå óêàçàí</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer));
+        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½</span>';
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getFullName(Employee::getOne($this->customer, null));
         return $this;
     }
     
     public function getShortCustomer()
     {
-        if ((int)$this->customer === 0) $this->customer = '<span style="color:red;">Íå óêàçàí</span>';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer));
+        if (empty($this->customer)) $this->customer = 'ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½';
+        else if ((int)$this->customer !== 0) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer, null, self::STATUS_ACTIVE));
         return $this;
     }
     
     public function getCustomerForPrint()
     {
-        if ((int)$this->customer === 0) $this->customer = 'Íå óêàçàí';
-        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer));
+        if ((int)$this->customer === 0) $this->customer = 'ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½';
+        else if ((int)$this->customer) $this->customer = EmployeeLogic::getShortName(Employee::getOne($this->customer, null));
         return $this;  
     }
     
     public function getFullIssuer()
     {
-        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Íå óêàçàí</span>';
-        else if ((int)$this->issuer) $this->issuer = EmployeeLogic::getFullName(Employee::getOne($this->issuer));
+        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½</span>';
+        else if ((int)$this->issuer) $this->issuer = EmployeeLogicr::getFullName(Employee::getOne($this->issuer));
         return $this;
     }
     
     public function getShortIssuer()
     {
-        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;">Íå óêàçàí</span>';
+        if ((int)$this->issuer === 0) $this->issuer = '<span style="color:red;ÐÐµ ÑƒÐºÐ°Ð·Ð°Ð½</span>';
         else if ((int)$this->customer) $this->issuer = EmployeeLogic::getShortName(Employee::getOne($this->issuer));
         return $this;
     }
@@ -119,6 +130,12 @@ class BaseModel extends ActiveRecord implements ConfigApp
     public function convertMonth($lower = false)
     {
         $this->month = self::getMonthString($this->month, $lower);
+        return $this;
+    }
+
+    public function convertDate()
+    {
+        if ($this->date) $this->date = date('d.m.y', $this->date);
         return $this;
     }
     

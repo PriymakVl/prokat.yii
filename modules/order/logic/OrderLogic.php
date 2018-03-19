@@ -14,40 +14,42 @@ use app\modules\equipments\models\Equipment;
 
 class OrderLogic extends BaseLogic
 {
-    
-    const CURRENT_PERIOD = 4;
-	const UNDEFINED_PERIOD = 1;
-    
-    const TYPE_ENHANCEMENT = 1; //улучшение
-    const TYPE_MAKING = 4; //изготовление
-    const TYPE_MAINTENANCE = 5; //текущий ремонт
-    const TYPE_CAPITAL_REPAIR = 6; // капитальный ремонт
-    
 
-    public static function getParams($period, $customer, $section = null, $equipment = null, $unit = null, $state = null, $type = null, $kind = null)
+    public static function getParams()
     {
-        $parans = [];
+        if (Yii::$app->request->get('state') == 'all') $params['state'] = null;
+        else $params['state'] = Yii::$app->request->get('state');
+        //status
         $params['status'] = self::STATUS_ACTIVE;
-        if ($period != 'all') $params['period'] = $period ? $period : self::CURRENT_PERIOD;
-        if ($state == Order::STATE_DRAFT) $params['state'] = $state;
-        else if ($stata && $state != 'all') $params['state'] = $state ? $state : Order::STATE_ACTIVE;
-        if ($customer && $customer != 'all') $params['customer'] = $customer;
-        if ($section) $params['section'] = $section;
-        if ($equipment) $params['equipment'] = $equipment;
-        if ($unit) $params['unit'] = $unit;
-        if ($type && $kind != 'all') $params['type'] = $type;
-        if ($kind && $kind != 'all') $params['kind'] = $kind;
-        //if (self::in_get('service')) $params['year'] = Yii::$app->request->get('service');
+        //period
+        $params['period'] = (Yii::$app->request->get('period') == 'all') ? null : Yii::$app->request->get('period', Order::CURRENT_PERIOD);
+        //customer
+        if (Yii::$app->request->get('customer') == 'all') $params['customer'] = null;
+        else $params['customer'] = Yii::$app->request->get('customer');
+        //type
+        if (Yii::$app->request->get('type') == 'all') $params['type'] = null;
+        else $params['type'] = Yii::$app->request->get('type');
+        //kind
+        $kind = Yii::$app->request->get('kind');
+        if ($kind == 'all') $params['kind'] = null;
+        else if ($kind == Order::KIND_ANNUAL || $kind == Order::KIND_PERMANENT) {
+            $params['kind'] = $kind;
+            $params['state'] = Order::STATE_ACTIVE;
+        }
+        //other
+        $params['section'] = Yii::$app->request->get('section');
+        $params['equipment'] = Yii::$app->request->get('equipment');
+        $params['unit'] = Yii::$app->request->get('unit');
         return $params;   
     }
     
     public static function convertType($type)
     {
         switch($type) {
-            case self::TYPE_ENHANCEMENT : return 'Улучшение'; break;
-            case self::TYPE_MAKING : return 'Изготовление'; break;
-            case self::TYPE_MAINTENANCE : return 'Текущий ремонт'; break;
-            case self::TYPE_CAPITAL_REPAIR : return 'Капитальный ремонт'; break;
+            case Order::TYPE_ENHANCEMENT : return 'Улучшение'; break;
+            case Order::TYPE_MAKING : return 'Изготовление'; break;
+            case Order::TYPE_MAINTENANCE : return 'Текущий ремонт'; break;
+            case Order::TYPE_CAPITAL_REPAIR : return 'Капитальный ремонт'; break;
         }
     }
     
@@ -56,6 +58,7 @@ class OrderLogic extends BaseLogic
         switch($kind) {
             case Order::KIND_CURRENT : return 'Разовый'; break;
             case Order::KIND_PERMANENT : return 'Постоянно действующий'; break;
+            case Order::KIND_ANNUAL : return 'Годовой'; break;
             default : return 'Не определен';
         }
     }
@@ -147,10 +150,7 @@ class OrderLogic extends BaseLogic
     {
         $item->cat_dwg = 'works';
         $item->drawing = $dwg->number;
-        if (!$item->file) {
-            $file = $dwg->getFiles(); 
-            if (count($file) == 1) $item->file = $file[0]->file;   
-        }
+        $item->file = $dwg->sheet_1;
         return $item;
     }
     
@@ -219,10 +219,10 @@ class OrderLogic extends BaseLogic
 	
 	public static function getPeriod($date)
 	{
-		if (!$date) return self::UNDEFINED_PERIOD;
-		if ($date > 1491253100) return self::CURRENT_PERIOD;
-		else if ($date < 1487048400 && $date > 1420434000) return 3; //2015 - 2017
-		else if ($date < 1420434000 )return 2;//2010 - 2015
+		if (!$date) return Order::PERIOD_UNDEFIND;
+		if ($date > 1491253100) return Order::CURRENT_PERIOD;
+		else if ($date < 1487048400 && $date > 1420434000) return Order::PERIOD_2015_2017; //2015 - 2017
+		else if ($date < 1420434000 )return Order::PERIOD_2010_2015;//2010 - 2015
 	}
     
     public static function convertPeriod($period)
@@ -287,22 +287,24 @@ class OrderLogic extends BaseLogic
         
         if ($order_ids) {
             $orders = Order::findAll($order_ids);
-            $sql = 'SELECT * FROM '.Order::tableName().' WHERE `id` IN ('.implode(',', $order_ids).') AND state !='.Order::STATE_DRAFT.' AND status='.Order::STATUS_ACTIVE;
-            $orders = Order::findBySql($sql)->all();
+            //$sql = 'SELECT * FROM '.Order::tableName().' WHERE `id` IN ('.implode(',', $order_ids).') AND state !='.Order::STATE_DRAFT.' AND status='.Order::STATUS_ACTIVE;
+            //$orders = Order::findBySql($sql)->all();
             if (!$orders) return [];
-            $orders = self::executeMethodsOfObjects($orders, ['getNumber', 'convertState']); 
+            $orders = self::executeMethodsOfObjects($orders, ['getNumber']);
             return array_reverse($orders);  
         }
         return [];    
     }
     
-    public static function copyOrder($order_id, $number) 
+    public static function copyOrder($order_id)
     {
         $order = Order::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->id = null;
-        $order->number = $number ? $number : self::getNumberOfFutureOrder();
+        $order->number = self::getNumberOfFutureOrder();
+        $order->date = time();
         $order->setIsNewRecord(true);
-        $order->save(false); 
+        $order->save(false);
+        self::deleteNumberFromWhiteList($order->number);
         self::copyContentOrder($order_id, $order->id);
         return $order->id;
     }
@@ -338,12 +340,20 @@ class OrderLogic extends BaseLogic
         if (!$dimen) return '';
         $dimen = unserialize($dimen);
         switch($dimen['type']) {
-            case 'bush': return 'Ø'.$dimen['out_diam'].'/Ø'.$dimen['in_diam'].'; H='.$dimen['height'].';';
+            case 'bush': return self::convertDimensionsBush($dimen);
             case 'shaft': return 'Ø'.$dimen['diam'].'; L='.$dimen['length'].';';
             case 'bar': return $dimen['height'].'x'.$dimen['width'].'x'.$dimen['length'].';';
             case 'nut': return self::convertDimensionsNut($dimen);
             case 'bolt': return self::convertDimensionsBolt($dimen);
         }
+    }
+
+    private static function convertDimensionsBush($dimen)
+    {
+        $out = $dimen['in_diam'] ? 'Ø'.$dimen['out_diam'] : 'Ø'.$dimen['out_diam'].';';
+        $inner = $dimen['in_diam'] ? '/Ø'.$dimen['in_diam'].';' : ' ';
+        $height = $dimen['height'] ? 'H='.$dimen['height'].';' : '';
+        return $out.$inner.$height;
     }
     
     private static function convertDimensionsBolt($dimen)
@@ -394,7 +404,7 @@ class OrderLogic extends BaseLogic
         $path = '../web/params/order_numbers.txt';
         $numbers = file($path);
         if (!$numbers) return false;
-        if (trim($numbers[0]) != $number) return false;
+        if (trim($numbers[0]) != trim($number)) return false;
         unset($numbers[0]);
         return file_put_contents($path, implode('', $numbers));    
     }

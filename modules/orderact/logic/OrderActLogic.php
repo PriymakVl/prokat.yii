@@ -12,13 +12,16 @@ use app\modules\order\models\Order;
 class OrderActLogic extends BaseLogic
 {
 
-    public static function getParams($month, $year, $state)
+    public static function getParams()
     {
         $params['status'] = self::STATUS_ACTIVE;
-        $params['month'] = $month ? $month : date('n');
-        $params['year'] = $year ? $year : date('Y');
-        if ($state) $params['state'] = $state;
-        return $params;   
+        $params['month'] = Yii::$app->request->get('month', date('m'));
+        $params['year'] = Yii::$app->request->get('year', date('Y'));
+        $params['state'] = Yii::$app->request->get('state');
+        $params['type'] = Yii::$app->request->get('type');
+        $params['customer'] = Yii::$app->request->get('customer');
+        $params['department'] = Yii::$app->request->get('department');
+        return $params;
     }
     
     public static function getParamsContent($month, $year, $customer)
@@ -44,7 +47,10 @@ class OrderActLogic extends BaseLogic
         switch ($department) {
             case 'rem': return 'РМЦ';
             case 'ormo': return 'ОРМО';
-            case 'instr': return 'Инструментальное отделение'; 
+            case 'instr': return 'Инструментальное отделение';
+            case 'smk': return 'Участок металлоконструкций';
+            case 'foundry': return 'Литейное отделение';
+            case 'hammer': return 'Кузнечное отделение';
             default: return $department;
         }    
     }
@@ -94,10 +100,10 @@ class OrderActLogic extends BaseLogic
         if (!$year) $year = date('Y');
         $acts_all = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE])->all();
         if (!$acts_all) return false;
-        $acts_make = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Orderlogic::TYPE_MAKING])->all();
-        $acts_current = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Orderlogic::TYPE_MAINTENANCE])->all();
-        $acts_capital = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Orderlogic::TYPE_CAPITAL_REPAIR])->all();
-        $acts_enhancement = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Orderlogic::TYPE_ENHANCEMENT])->all();
+        $acts_make = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Order::TYPE_MAKING])->all();
+        $acts_current = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Order::TYPE_MAINTENANCE])->all();
+        $acts_capital = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Order::TYPE_CAPITAL_REPAIR])->all();
+        $acts_enhancement = OrderAct::find()->filterWhere(['month' => $month, 'year' => $year, 'status' => self::STATUS_ACTIVE, 'type' => Order::TYPE_ENHANCEMENT])->all();
         $costs['all'] = self::countCost($acts_all);
         $costs['make'] = self::countCost($acts_make);
         $costs['current'] = self::countCost($acts_current);

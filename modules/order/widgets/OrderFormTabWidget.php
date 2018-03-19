@@ -4,7 +4,7 @@ namespace app\modules\order\widgets;
 
 use yii\base\Widget;
 use app\modules\drawing\logic\DrawingLogic;
-use app\models\InventoryNumber;
+use app\modules\inventory\models\Inventory;
 
 class OrderFormTabWidget extends Widget 
 {
@@ -18,7 +18,7 @@ class OrderFormTabWidget extends Widget
     public function run()
     {
         $inventories = [];
-        if ($this->nameTab == 'inventory') $inventories = InventoryNumber::find()->where(['status' => InventoryNumber::STATUS_ACTIVE])->orderBy(['rating' => SORT_DESC])->all();
+        if ($this->nameTab == 'inventory') $inventories = Inventory::find()->where(['status' => Inventory::STATUS_ACTIVE])->orderBy(['rating' => SORT_DESC])->all();
         $template = $this->getTemplate();
         return $this->render($template, ['form' => $this->form, 'f' => $this->f, 'order' => $this->order, 'item' => $this->item, 
                 'object' => $this->object, 'inventories' => $inventories]);

@@ -2,6 +2,7 @@
 
 namespace app\modules\orderact\forms;
 
+use app\modules\orderact\models\OrderActContent;
 use Yii;
 use app\forms\BaseForm;
 use app\modules\orderact\logic\OrderActLogic;
@@ -22,20 +23,23 @@ class OrderActForm extends BaseForm
     public $year;
     public $state;
     public $type;
+    public $items_num;
     //form
     public $act;
+    public $content;
     public $months;
     
-    public function __construct($act)
+    public function __construct($act, $content)
     {
         if ($act) $this->act = $act;
         else $this->act = new OrderAct();
+        $this->content = $content;
     }
     
     public function rules() 
     {
         return [
-            [['number'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['number', 'department', 'items_num'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['date_registr'], 'required', 'message' => 'Необходимо указать дату регистрации'],
             [['cost', 'department', 'note', 'order_num'], 'string'],
             [['working_hour', 'state', 'type', 'month', 'year', 'order_id'], 'integer'],
@@ -53,6 +57,7 @@ class OrderActForm extends BaseForm
     
     public function save() 
     {
+        //debug($this);
         $this->act->number = $this->number;
         $this->act->note = $this->note;
         $this->act->department = $this->department;
@@ -66,6 +71,7 @@ class OrderActForm extends BaseForm
         $this->act->working_hour = $this->working_hour;
         $this->act->cost = $this->cost;
         $this->act->type = $this->type;
+        $this->saveContent();
         return $this->act->save();   
     }
     
@@ -74,6 +80,16 @@ class OrderActForm extends BaseForm
         $this->months = self::getArrayMonths();
         return $this;
     }
+
+    public function saveContent()
+    {
+        foreach ($this->items_num as $id => $count) {
+            $item = OrderActContent::findOne($id);
+            $item->count = $count;
+            $item->save();
+        }
+    }
+
     
 }
 

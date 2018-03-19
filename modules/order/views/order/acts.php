@@ -1,12 +1,11 @@
 <?php
 
 use yii\helpers\Url;
-use yii\widgets\LinkPager;
 use app\widgets\MainMenuWidget;
 use app\widgets\FlashMessageWidget;
 use app\modules\order\widgets\OrderMenuWidget;
-use app\modules\orderact\models\OrderAct;
-use app\modules\orderact\widgets\OrderActListMenuWidget;
+use app\modules\order\models\Order;
+//use app\modules\orderact\widgets\OrderActListMenuWidget;
 use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 
@@ -32,7 +31,9 @@ $this->registerCssFile('/css/order.css');
             <th width="90">позиций</th>
             <th width="60">кол-во</th>
             <th width="90">цена</th>
-            <th >примечание</th>
+            <th >
+                <?=$order->kind == Order::KIND_PERMANENT ? 'заказал' : 'примечание'?>
+            </th>
         </tr>
         <? if ($acts): ?>
             <? foreach ($acts as $act): ?>
@@ -58,7 +59,13 @@ $this->registerCssFile('/css/order.css');
                     <td class="text-center">
                         <?= $act->cost ? $act->cost.'грн.' : 'Не указана'?>
                     </td>
-                    <td>примечание какоето</td>
+                    <td>
+                        <? if ($order->kind == Order::KIND_PERMANENT): ?>
+                            <?=$act->customer ? $act->customer : 'Не указан' ?>
+                        <? else: ?>
+                            <?=$act->note?>
+                        <? endif; ?>
+                    </td>
                 </tr>
             <? endforeach; ?>
         <? else: ?>

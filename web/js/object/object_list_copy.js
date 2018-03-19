@@ -1,8 +1,8 @@
 $(document).ready(function() {
-    
-    $('#obj-list-copy').click(function() { 
+
+    $('#obj-list-copy').click(function() {
         var obj_id, ids = '';
-        
+
         $('table input:checked').each(function() {
             obj_id = $(this).attr('obj_id');
             if (obj_id) ids += obj_id + ',';

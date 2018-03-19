@@ -46,17 +46,11 @@ $this->registerCssFile('/css/drawing.css');
                         <? endif; ?>
                     </td>
                     <td>
-                        <? if ($dwg->name): ?>
-                            <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?=$dwg->name?></a>
-                        <? elseif ($dwg->objects): ?>
-                            <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?=$dwg->objects[0]->name?></a>
-                        <? else: ?>
-                            <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?='Эскиз '.$dwg->fullNumber?></a>
-                        <? endif; ?>   
+                        <a href="<?=Url::to(['/drawing/department', 'dwg_id' => $dwg->id])?>"><?=$dwg->name?></a>
                     </td>
                     <td class="text-center">
                         <? if ($dwg->code): ?>
-                            <a href="<?=Url::to(['/search', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
+                            <a href="<?=Url::to(['/search/object/code', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
                         <? else: ?>
                             <span>Не указан</span>
                         <? endif; ?>

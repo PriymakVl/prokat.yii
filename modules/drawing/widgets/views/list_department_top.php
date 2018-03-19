@@ -6,8 +6,9 @@
     <label>Год:</label>
     <select id="year-create-dwg">
         <option value="">Все</option>
+        <option <? if ($params['year'] == '2018') echo 'selected'; ?>>2018</option>
         <option <? if ($params['year'] == '2017') echo 'selected'; ?>>2017</option>
-        <option <? if ($params['year'] == 2016) echo 'selected'; ?>>2016</option>
+        <option <? if ($params['year'] == '2016') echo 'selected'; ?>>2016</option>
     </select>
     <!--
     <label>Служба:</label>

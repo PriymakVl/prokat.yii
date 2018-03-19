@@ -18,9 +18,28 @@ $(document).ready(function() {
         var gets = buidGetString('year', year);
         if (year) location.href = 'http://' + location.host + '/order/act/list?' + gets;  
         else location.href = 'http://' + location.host + '/order/act/list';  
-    }); 
-    
-    
+    });
+
+    $('#sort-act-customer').change(function() {
+        var customer = $(this).find('option:selected').val();
+        var gets = buidGetString('customer', customer);
+        if (customer) location.href = 'http://' + location.host + '/order/act/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/act/list';
+    });
+
+    $('#sort-act-department').change(function() {
+        var department = $(this).find('option:selected').val();
+        var gets = buidGetString('department', department);
+        if (department) location.href = 'http://' + location.host + '/order/act/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/act/list';
+    });
+
+    $('#sort-act-type').change(function() {
+        var type = $(this).find('option:selected').val();
+        var gets = buidGetString('type', type);
+        if (type) location.href = 'http://' + location.host + '/order/act/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/act/list';
+    });
  
 });
 

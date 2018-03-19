@@ -27,7 +27,7 @@
             <a href="/product/category">Товары</a>
         </li>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['object/form'])?>">Создать объект</a>
+            <a href="/modules/list">Модули</a>
         </li>
     </ul>
 </div>

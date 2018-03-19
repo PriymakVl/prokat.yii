@@ -12,6 +12,7 @@ use app\modules\objects\widgets\ObjectSearchMenuWidget;
 
 $this->registerCssFile('/css/order.css');
 $this->registerJsFile('/js/order/content_list_pagination.js');
+$this->registerJsFile('/js/order/order_item_edit.js');
 
 ?>
 <div class="content">
@@ -61,7 +62,7 @@ $this->registerJsFile('/js/order/content_list_pagination.js');
             <? foreach ($content as $item): ?>
                 <tr <? if ($item->children) echo 'class="item-parent"'; ?>>
                     <td>
-                        <input type="checkbox" name="content" item_id="<?=$item->id?>" number="<?=$number?>" />
+                        <input type="checkbox" name="content" item_id="<?=$item->id?>" number="<?=$number?>" order_id="<?=$order_id?>"/>
                     </td>
                     <!-- drawing -->
                     <td class="text-center">

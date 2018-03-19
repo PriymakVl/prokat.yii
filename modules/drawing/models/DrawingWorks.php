@@ -4,9 +4,9 @@ namespace app\modules\drawing\models;
 
 use yii\web\UploadedFile;
 use app\models\BaseModel;
-use app\modules\drawing\models\DrawingWorksFile;
 use app\modules\drawing\logic\DrawingLogic;
 use app\modules\objects\models\Objects;
+use yii\data\Pagination;
 
 class DrawingWorks extends BaseModel
 {
@@ -34,8 +34,11 @@ class DrawingWorks extends BaseModel
     
     
     public static function getListWorks($params)
-    {       
-        $list = parent::getList($params, self::PAGE_SIZE);
+    {
+        //$list = parent::getList($params, self::PAGE_SIZE);
+        $query = self::find()->filterWhere($params);
+        self::$pages = new Pagination(['totalCount' => $query->count(), 'pageSize' => self::PAGE_SIZE]);
+        $list = $query->offset(self::$pages->offset)->limit(self::$pages->limit)->orderBy(['id' => SORT_DESC])->all();
         return self::executeMethods($list, ['getObject', 'getName']);
     }
     
@@ -63,37 +66,6 @@ class DrawingWorks extends BaseModel
     {
         return self::find()->where(['code' => $obj->code, 'status' => self::STATUS_ACTIVE])->all();
     }
-    
-    public static function saveDwg($form, $obj, $dwg = null)
-    {
-        if ($form->numberWorksDwg) $dwg = self::findOne(['number' => $form->numberWorksDwg, 'status' => self::STATUS_ACTIVE]);
-        if (!$dwg) $dwg = new DrawingWorks();
-        $dwg->obj_id = $obj->id;
-        $dwg->code = $obj->code;
-        $dwg->parent_id = $obj->parent_id;
-        if ($form->noteDwg) $dwg->note = $form->noteDwg; 
-        $dwg->date = time();
-        $dwg->number = $form->numberWorksDwg ? $form->numberWorksDwg : $obj->code;
-        $dwg->name = $form->nameWorksDwg;
-        self::uploadSheet($form, $dwg, 1); 
-        self::uploadSheet($form, $dwg, 2); 
-        self::uploadSheet($form, $dwg, 3);
-        $dwg->save();
-        return true; 
-    }
-    
-    private static function uploadSheet($form, $dwg, $number) 
-    {
-        $sheet = UploadedFile::getInstance($form, 'works_dwg_'.$number);
-        if (!$sheet) return false;
-        $filename = $dwg->id.'_works_'.$number.'.'.$sheet->extension;
-        $sheet->saveAs('files/works/'.$filename); 
-        if ($number == 1) $dwg->sheet_1 = $filename;   
-        else if ($number == 2) $dwg->sheet_2 = $filename;   
-        else if ($number == 3) $dwg->sheet_3 = $filename;    
-    }
-    
-
 }
 
 

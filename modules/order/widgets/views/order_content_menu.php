@@ -7,6 +7,7 @@ $this->registerJsFile('/js/order/item_list_set_parent.js');
 $this->registerJsFile('/js/order/form_add_object.js');
 $this->registerJsFile('/js/orderact/order_act_registr.js');
 $this->registerJsFile('/js/order/content_items_managment.js');
+$this->registerJsFile('/js/order/order_item_edit.js');
 ?>
 <div  class="sidebar-menu">
     <h5><?=$action == 'index' ? 'Элемент заказа' : 'Элементы заказа'?></h5>   
@@ -29,13 +30,16 @@ $this->registerJsFile('/js/order/content_items_managment.js');
             </li>
             <? if ($controller == 'order-content'): ?>
                 <li>
-                    <a href="#" id="order-items-delete">Удалить элементы</a>
+                    <a href="#" onclick="return false;" id="order-items-delete">Удалить элементы</a>
                 </li>
                 <li>
-                    <a href="#" id="order-items-set-parent">Создать сборочный</a>
+                    <a href="#" onclick="return false;" id="order-item-update">Редактировать элемент</a>
                 </li>
                 <li>
-                    <a href="#" onclick="return false" id="order-items-managment">Удалить(добавить) поз.</a>
+                    <a href="#" onclick="return false;" id="order-items-set-parent">Создать сборочный</a>
+                </li>
+                <li>
+                    <a href="#" onclick="return false;" id="order-items-managment">Удалить(добавить) поз.</a>
                 </li>
                 <li>
                     <a href="#" onclick="return false;" id="order-act-registr">Зарегистрировать акт</a>

@@ -6,14 +6,14 @@
 ?>
 
 <? if ($children): ?>
-    <tbody class="obj-children">
+    <tbody class="obj-children" <? if ($type == 'standard') echo 'style="display:none;"' ?> <?=$id_box?>>
         <? foreach ($children as $obj): ?>
             <tr <? if ($obj->color == 1) echo 'style="background: #FFFF00;"'; ?>>
                 <td>    
                     <input type="checkbox"  name="object" obj_id="<?=$obj->id?>" />
                 </td>
                 <td class="text-center">
-					<? if ($type == 'standard' || !$obj->child): ?>
+					<? if (!$obj->child): ?>
 						<?=$obj->item?>
 					<? else:?>
 						<a href="<?=Url::to(['/object/specification', 'obj_id' => $obj->id])?>"><?=$obj->item?></a>
@@ -36,4 +36,4 @@
             </tr>
         <? endforeach; ?>
     </tbody>
- <? endif; ?>
+<? endif; ?>

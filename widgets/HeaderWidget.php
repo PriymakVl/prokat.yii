@@ -23,9 +23,9 @@ class HeaderWidget extends Widget {
     private function getTemplate()
     {
         switch(Yii::$app->controller->id) {
-            case 'main': return 'search_code'; break;
-            case 'list': return 'search_code'; break;
-            case 'default': return 'search_code'; break;
+            case 'main': return 'search_object'; break;
+            case 'list': return 'search_object'; break;
+            case 'default': return 'search_object'; break;
             case 'drawing-department': return $this->getTemplateForActionDrawingDepartmentController(); break;
             case 'drawing-object': return 'breadcrumbs'; break;
             case 'drawing-works': return $this->getTemplateForActionDrawingworksController(); break;
@@ -44,7 +44,7 @@ class HeaderWidget extends Widget {
     private function getTemplateForActionObjectController() 
     {
         switch(Yii::$app->controller->action->id) {
-            case 'form': return 'search_code'; break;
+            case 'form': return 'search_object'; break;
             case 'index': return 'obj_breadcrumbs'; break;
             case 'orders': return 'obj_breadcrumbs'; break;
             default: return 'empty';
@@ -54,7 +54,8 @@ class HeaderWidget extends Widget {
     private function getTemplateForActionSearchController() 
     {
         switch(Yii::$app->controller->action->id) {
-            case 'code': return 'search_code'; break;
+            case 'object-code': return 'search_object'; break;
+            case 'object-name': return 'search_object'; break;
             case 'order': return 'search_order'; break;
             default: return 'empty';
         }    
@@ -91,7 +92,7 @@ class HeaderWidget extends Widget {
     private function getTemplateForActionSpecificationController() 
     {
         switch(Yii::$app->controller->action->id) {
-            case 'main': return 'search_code'; break;
+            case 'main': return 'search_object'; break;
             case 'index': return 'obj_breadcrumbs'; break;
             default: return 'empty';
         }    

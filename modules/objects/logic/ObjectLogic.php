@@ -2,7 +2,6 @@
 
 namespace app\modules\objects\logic;
 
-use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\ForbiddenHttpException;
 use app\logic\BaseLogic;
@@ -22,8 +21,8 @@ class ObjectLogic extends BaseLogic
         foreach ($children as $child) {
             $child->getName()->checkChild();
 			if ($child->equipment == 'danieli') {
-				if ($child->item === 0) $sort['category'][] = $child;
-				else if ($child->item < 300) $sort['standard'][] = $child;
+				if ($child->item < 100) $sort['category'][] = $child;
+				else if ($child->item < 300 && $child->item > 99) $sort['standard'][] = $child;
 				else $sort['unit'][] = $child; 
 			}
 			else $sort['unit'][] = $child;
@@ -148,6 +147,26 @@ class ObjectLogic extends BaseLogic
         if (!$parent) return false;
         if ($parent->parent_id == 0) return $parent;
         else self::getDepartmentObject($parent->parent_id);
+    }
+
+    public static function getUnits($array)
+    {
+        $units = [];
+        if (!$array) return $units;
+        foreach ($array as $obj)
+        {
+            $obj->checkChild();
+            if ($obj->child) $units[] = $obj;
+        }
+        return $units;
+    }
+
+    public static function copyChildren($children, $parent_id)
+    {
+        if (!$children) return false;
+        foreach ($children as $child) {
+            $child->copy($parent_id);
+        }
     }
 
 

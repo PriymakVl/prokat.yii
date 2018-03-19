@@ -20,15 +20,20 @@ class OrderActContentForm extends BaseForm
     //form
     public $item;
     
-    public function __construct($item)
+    public function __construct($item, $act)
     {
-        $this->item = $item;
+        if ($item) $this->item = $item;
+        else {
+            $this->item = new OrderActContent();
+            $this->item->act_id = $act->id;
+            $this->item->order_id = $act->order_id;
+        }
     }
     
     public function rules() 
     {
         return [
-            ['name', 'required', 'message' => 'Íåîáõîäèìî çàïîëíèòü ïîëå'],
+            ['name', 'required', 'message' => 'ĞĞµĞ¾Ğ±Ñ…Ğ¾Ğ´Ğ¸Ğ¼Ğ¾ Ğ·Ğ°Ğ¿Ğ¾Ğ»Ğ½Ğ¸Ñ‚ÑŒ Ğ¿Ğ¾Ğ»Ğµ'],
             [['weight', 'note', 'name', 'drawing', 'code'], 'string'],
             [['count', 'item_id', 'order_id'], 'integer'],
         ];
@@ -42,6 +47,7 @@ class OrderActContentForm extends BaseForm
     
     public function save() 
     {
+
         $this->item->name = $this->name;
         $this->item->count = $this->count;
         $this->item->note = $this->note;
@@ -50,6 +56,7 @@ class OrderActContentForm extends BaseForm
         $this->item->item_id = $this->item_id;
         $this->item->order_id = $this->order_id;
         $this->item->weight = $this->weight;
+//        debug($this->item);
         return $this->item->save();   
     }
     

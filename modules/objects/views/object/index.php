@@ -7,6 +7,7 @@ use app\modules\objects\widgets\ObjectMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
 use app\modules\objects\widgets\ObjectTopMenuWidget;
 use app\modules\lists\widgets\ListItemMenuWidget;
+use app\modules\order\models\Order;
     
 $this->registerCssFile('/css/object.css');
 $this->registerJsFile('/js/object/object_copy.js');
@@ -126,11 +127,12 @@ $this->registerJsFile('/js/object/object_copy.js');
                     <?
                         $limit = 1;
                         foreach ($obj->orders as $order) {
+                            if ($order->state == Order::STATE_CLOSED) continue;
                             if ($limit > 6) {
                                 echo '<a href="#">Все заказы</a>';
                                 break;
                             }
-                            $color = $order->type == 4 ? 'green' : 'orange';
+                            $color = $order->state == Order::STATE_PERFORMED ? 'orange' : 'black';
                             echo '<a style="color:'.$color.'" href="'.Url::to(['/order/content/list', 'order_id' =>$order->id]).'" target="_blank">№'.$order->number.'</a>&nbsp;&nbsp;';
                             $limit++;
                         }
@@ -149,42 +151,19 @@ $this->registerJsFile('/js/object/object_copy.js');
         </table>
         
         <!-- note -->
-        <div class="note-wrp">
-            <h3>Примечание</h3>
-            <p><?= $obj->note ? $obj->note : 'записей нет'?></p>
-        </div>
-        
-        <!-- option data -->
-        <table>
-            <!-- order name -->
-            <tr>
-                <td width="150">Название в заказах</td>
-                <td>
-                    <?=$obj->order_name ? $obj->order_name : 'Не указано'?>
-                </td>
-            </tr>
-            
-            <!-- id object -->
-            <tr>
-                <td width="150">ID объекта</td>
-                <td id="obj-id" data-id="<?=$obj->id?>">
-                    <?=$obj->id?>
-                </td>
-            </tr>
-            <!-- rating -->
-            <tr>
-                <td width="150">Рейтинг объекта</td>
-                <td>
-                    <?=$obj->rating?>
-                </td>
-            </tr>
-        </table>
+        <? if ($obj->note): ?>
+            <div class="note-wrp">
+                <h3>Примечание</h3>
+                <p><?=$obj->note?></p>
+            </div>
+        <? endif; ?>
+
 </div>
 
 <!-- menu -->
 <div class="sidebar-wrp">
 <?=MainMenuWidget::widget()?>
 <?=ObjectSearchMenuWidget::widget()?>
-<?=ObjectMenuWidget::widget(['obj_id' => $obj->id])?>
+<?=ObjectMenuWidget::widget(['obj' => $obj])?>
 <?=ListItemMenuWidget::widget(['obj_id' => $obj->id])?>
 </div> 

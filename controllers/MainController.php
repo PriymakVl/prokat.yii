@@ -15,7 +15,7 @@ class MainController extends BaseController
     public $children;
           
     public function actionIndex() 
-    {   
+    {
         $objects = Objects::getMainParent();
         return $this->render('index', compact('objects'));
     }

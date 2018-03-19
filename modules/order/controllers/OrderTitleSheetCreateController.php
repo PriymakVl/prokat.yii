@@ -100,8 +100,9 @@ class OrderTitleSheetCreateController extends BaseController
         $this->activeSheet->setCellValue('A1','ДМК');
         $this->activeSheet->setCellValue('E1','Дата получения заказа');
         $this->activeSheet->setCellValue('G1','Дата открытия заказа');
-        $this->activeSheet->setCellValue('I1','Дата закрытия заказа');    
-        $this->activeSheet->setCellValue('K1','Заказ');    
+        $this->activeSheet->setCellValue('I1','Дата закрытия заказа');
+        $this->activeSheet->setCellValue('K1', 'Заказ');
+        //$this->activeSheet->setCellValue('K1', ($this->order->kind == Order::KIND_ADDITIONAL) ? 'Заказ дополнительный' : 'Заказ');
         $this->activeSheet->setCellValue('S1','Статья затрат'); 
         $this->activeSheet->setCellValue('U1','Заказчик'); 
         $this->activeSheet->setCellValue('X1','№ заказа'); 

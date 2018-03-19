@@ -17,7 +17,7 @@ class DrawingDepartmentController extends BaseController
     public function actionIndex($dwg_id) 
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
-        $dwg->convertDate($dwg)->getFullNumber()->getObjects();
+        $dwg->getFullNumber()->convertDate();
         return $this->render('index', compact('dwg'));
     }
     
@@ -32,34 +32,28 @@ class DrawingDepartmentController extends BaseController
     public function actionForm($dwg_id = null, $obj_id = null) 
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, null, self::STATUS_ACTIVE);
-        if ($dwg) $dwg->getFullNumber()->getObjects();
+        if ($dwg) $dwg->getFullNumber();
+        else $number_new = '27.'.date('y').'.'.DrawingLogic::getNewNumberDepartmentDwg();
         $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
         if ($obj) $obj->getName();
-        $form = new DrawingDepartmentForm($dwg, $obj);
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
+        $form = new DrawingDepartmentForm();
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) {
             if ($obj_id) return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
             else return $this->redirect(['/drawing/department', 'dwg_id' => $form->dwg->id]);
         }   
-        return $this->render('form', compact('dwg', 'form', 'obj'));
+        return $this->render('form', compact('dwg', 'form', 'obj', 'number_new'));
     }
-    
-//    public function actionFolder($dwg_id = null) 
-//    { 
-//        $folder = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
-//        $folder->getContentOfFolder();
-//        return $this->render('folder', compact('folder'));
-//    }
-    
+
     public function actionDelete($dwg_id) 
     {
         $dwg = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
         if ($dwg->deleteOne()) return $this->redirect(['/drawing/department/list']); 
     }
     
-    public function actionSetParent($ids, $parent_id)
-    {
-		DrawingDepartment::setParentForList($ids, $parent_id);
-		return $this->redirect('/drawing/department/list');
-    }
+//    public function actionSetParent($ids, $parent_id)
+//    {
+//		DrawingDepartment::setParentForList($ids, $parent_id);
+//		return $this->redirect('/drawing/department/list');
+//    }
     
 }

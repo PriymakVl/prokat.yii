@@ -6,11 +6,11 @@ use yii\base\Widget;
 
 class ObjectMenuWidget extends Widget 
 {
-    public $obj_id;
+    public $obj;
 
     public function run()
     {
-        return $this->render('menu/object', ['obj_id' => $this->obj_id]);
+        return $this->render('menu/object', ['obj' => $this->obj]);
     }
 
 }

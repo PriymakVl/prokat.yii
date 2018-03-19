@@ -39,7 +39,7 @@ class Objects extends BaseModel
     
     public static function getMainParent()
     {
-        $objects = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::MAIN_PARENTS])->orderBy(['rating' => SORT_DESC])->all();
+        $objects = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::MAIN_PARENTS])->orderBy('item')->all();
         return self::executeMethods($objects, ['getName']);
     }
 
@@ -58,14 +58,20 @@ class Objects extends BaseModel
 
     public static function getChildren($parent_id, $sort)
     {
-        if ($sort == 'standard') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['<', 'item', 300])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        else if ($sort == 'unit') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['>', 'item', 299])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        //else if ($sort == 'app')
-        else if ($sort == 'highlight') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id, 'color' => 1])->orderBy(['item' => SORT_ASC])->all();
-        else $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+        $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['item' => SORT_ASC])->all();
         $children = self::executeMethods($children, ['getOrders', 'getNumberOfDrawings', ['convertDimensions', ['dimensions']]]);
-        if ($sort == 'order') $children = ObjectLogic::selectObjectsWithOrder($children);
-        return ObjectLogic::prepareChildren($children); 
+        return ObjectLogic::prepareChildren($children);
+//        if ($sort == 'standard') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->where(['between', 'item', 99, 300])->orderBy(['item' => SORT_ASC])->all();
+//        else if ($sort == 'unit') {
+//            $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->andWhere(['>', 'item', 299])->orderBy(['item' => SORT_ASC])->all();
+//        }
+//        //else if ($sort == 'app')
+//        else if ($sort == 'highlight') $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id, 'color' => 1])->orderBy(['item' => SORT_ASC])->all();
+//        else $children = self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
+//        $children = self::executeMethods($children, ['getOrders', 'getNumberOfDrawings', ['convertDimensions', ['dimensions']]]);
+//        if ($sort == 'order') $children = ObjectLogic::selectObjectsWithOrder($children);
+//        debug($children);
+//        return ObjectLogic::prepareChildren($children);
     }
 
     public function checkChild()
@@ -94,16 +100,30 @@ class Objects extends BaseModel
         $this->id = null;
         $this->parent_id = $parent_id;
         $this->setIsNewRecord(true);
-        if (!$this->save(false)) throw new ForbiddenHttpException('error '.__METHOD__); 
+        if (!$this->save(false)) throw new ForbiddenHttpException('error '.__METHOD__);
+        return $this->id;
     }
     
     public static function searchCode($code)
     {
+        $code = trim($code);
         $objects = self::find()->where(['status' => self::STATUS_ACTIVE])->andWhere(['like', 'code', $code])->all();
         if (count($objects) > 1) return self::executeMethods($objects, ['getName', 'getParent', 'getAlias']);//, 'getEquipment'
         else if ($objects) {
             $objects[0]->getName()->getParent()->getAlias()->getEquipment()->getDepartment();
             return $objects;    
+        }
+        return [];
+    }
+
+    public static function searchName($name)
+    {
+        $name = trim($name);
+        $objects = self::find()->where(['status' => self::STATUS_ACTIVE])->andWhere(['like', 'eng', $name])->all();
+        if (count($objects) > 1) return self::executeMethods($objects, ['getName', 'getParent', 'getAlias']);//, 'getEquipment'
+        else if ($objects) {
+            $objects[0]->getName()->getParent()->getAlias()->getEquipment()->getDepartment();
+            return $objects;
         }
         return [];
     }
@@ -121,10 +141,17 @@ class Objects extends BaseModel
         $children = self::find()->select('code')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->column();
 		$ids = explode(',', $ids);
 		$objects = Objects::findAll($ids);
+		//find units for copy their children
+		$units = ObjectLogic::deleteExistingObjects(ObjectLogic::getUnits($objects), $children);
         $objects = ObjectLogic::deleteExistingObjects($objects, $children);
         if (!$objects) return;
         foreach ($objects as $obj) {
+            if (ObjectLogic::isInObjects($obj->code, 'code', $units))  $unit_id = $obj->id;
             $obj->copy($parent_id);
+            if ($unit_id) {
+                $children = self::find()->where(['parent_id' => $unit_id, 'status' => self::STATUS_ACTIVE])->all();
+                ObjectLogic::copyChildren($children, $obj->id);
+            }
         } 
     }
     
