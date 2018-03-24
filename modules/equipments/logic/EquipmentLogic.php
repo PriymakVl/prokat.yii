@@ -6,7 +6,7 @@ use Yii;
 use app\logic\BaseLogic;
 use yii\web\ForbiddenHttpException;
 
-class EquipmentsLogic extends BaseLogic
+class EquipmentLogic extends BaseLogic
 {
     
 

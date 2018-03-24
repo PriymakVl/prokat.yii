@@ -34,7 +34,6 @@ class OrderActController extends BaseController
         $period = $month_selected.' '.$year_selected; 
         $costs = OrderActLogic::countCostMonth($month, $year);
         $count = count($list);
-        $session = Yii::$app->session;
         return $this->render('list', compact('list', 'params', 'period', 'costs', 'count'));
     }
     

@@ -127,7 +127,8 @@ $config = [
                 'order/content/sheet/print' => 'order/order-content-sheet-create', 
                 'order/blank/print' => 'order/order-blank-sheet-create', 
                 'order/active/set' => 'order/order/set-active',
-                'order/active/get' => 'order/order/get-active',                
+                'order/active/get' => 'order/order/get-active',
+                'order/show/filters' => 'order/order/show-filters',
                 'order' => 'order/order', 
                 'order/copy' => 'order/order/copy',
                 //order content

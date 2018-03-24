@@ -1,7 +1,7 @@
 <?php
 
+use yii\base\View;
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 use app\widgets\MainMenuWidget;
 use app\modules\order\widgets\OrderFormTopMenuWidget;
 use app\modules\order\widgets\OrderContentFormComponentWidget;
@@ -25,23 +25,27 @@ $this->registerCssFile('/css/order.css');
     <?=OrderFormTopMenuWidget::widget()?>
     
     <!-- inventory menu -->
-    <?=OrderFormInventoryMenuWidget::widget()?>
+    <?//=OrderFormInventoryMenuWidget::widget()?>
     
     <!-- form -->
     <div class="form-wrp">
         <? $f = ActiveForm::begin(['id' => 'form-order-item']);?>
         
             <!-- main tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'main', 'f' => $f, 'form' => $form, 'order' => $order])?>
+            <?=View::render('formtab/main', ['f' => $f, 'order' => $order, 'form' => $form]);?>
             
             <!-- other tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'other', 'f' => $f, 'form' => $form, 'order' => $order])?>
+            <?=View::render('formtab/other', ['f' => $f, 'order' => $order, 'form' => $form]);?>
             
             <!-- work tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'work', 'f' => $f, 'form' => $form, 'order' => $order])?>
-            
+            <?=View::render('formtab/work', ['f' => $f, 'order' => $order, 'form' => $form]);?>
+
+            <!-- filters tab -->
+            <?=View::render('formtab/filters', ['f' => $f, 'order' => $order, 'form' => $form]);?>
+
             <!-- inventory tab -->
-            <?=OrderFormTabWidget::widget(['nameTab' => 'inventory', 'f' => $f, 'form' => $form, 'order' => $order])?>
+            <?//=View::render('formtab/inventory', ['f' => $f, 'order' => $order, 'form' => $form]);?>
+            <?//=OrderFormTabWidget::widget(['nameTab' => 'inventory', 'f' => $f, 'form' => $form, 'order' => $order])?>
             
             <!-- hidden order id -->
             <?=$f->field($form, 'order_id')->hiddenInput(['value' => $order ? $order->id : false])->label(false) ?>

@@ -7,6 +7,7 @@ use app\forms\BaseForm;
 use app\modules\order\logic\OrderLogic;
 use app\modules\order\models\Order;
 use app\modules\equipments\models\Equipment;
+use app\modules\equipments\models\EquipmentGroup;
 
 class OrderForm extends BaseForm
 {   
@@ -31,13 +32,21 @@ class OrderForm extends BaseForm
     public $equipment_blank;
     public $inventory; //inventory number
     public $kind;
+    public $group;
+    public $subgroup;
+    public $unit_subgroup;
     //form
+    public $order;
+    public $newNumber;
+    //form sections of equipments
     public $sections;
     public $equipments;
     public $units;
-    public $order;
-    //public $areaAll;
-    public $newNumber;
+    //form groups of equipments
+    public $groups;
+    public $subgroups;
+    public $unitsSubgroup;
+
     
     public function __construct($order) 
     {
@@ -51,7 +60,7 @@ class OrderForm extends BaseForm
         return [
             [['name', 'type', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
             [['name', 'note', 'issuer', 'customer', 'work', 'weight', 'service', 'description'],  'string'],
-            [['unit', 'equipment', 'inventory', 'kind', 'equipment_blank', 'unit_blank'], 'string'],
+            [['unit', 'equipment', 'inventory', 'kind', 'equipment_blank', 'unit_blank', 'group', 'subgroup', 'unit_subgroup'], 'string'],
             [['section', 'state'], 'integer'],
             ['number','checkNumber'],
             [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
@@ -86,6 +95,10 @@ class OrderForm extends BaseForm
         $this->order->unit = $this->getIdUnit();
         $this->order->equ_blank = $this->equipment_blank;
         $this->order->unit_blank = $this->unit_blank;
+
+        $this->order->group = $this->group;
+        $this->order->subgroup = $this->subgroup;
+        $this->order->unit_subgroup = $this->unitSubgroup;
         
         $this->order->description = $this->description;
         $this->order->number = $this->number;
@@ -204,6 +217,25 @@ class OrderForm extends BaseForm
         if ($result) $this->unit = $result->name;
         return $this;
     }
+
+    public function getGroups()
+    {
+        $this->groups = EquipmentGroup::getGroups();
+        return $this;
+    }
+
+    public function getSubgroups()
+    {
+        if ($this->order->group) $this->subgroups = EquipmentGroup::getSubgroups($this->order->group);
+        return $this;
+    }
+
+    public function getUnitsSubgroup()
+    {
+        if ($this->order->subgroup) $this->unitsSubgroup = EquipmentGroup::getUnitsSubgroup($this->order->subgroup);
+        return $this;
+    }
+
       
 }
 

@@ -81,6 +81,7 @@ class BaseLogic  extends Behavior implements ConfigApp
 
     public static function isInObjects($value, $name, $array)
     {
+        if(empty($array)) return false;
         foreach ($array as $obj) {
             if ($value == $obj->$name) return true;
         }

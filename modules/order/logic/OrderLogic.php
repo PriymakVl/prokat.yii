@@ -36,10 +36,14 @@ class OrderLogic extends BaseLogic
             $params['kind'] = $kind;
             $params['state'] = Order::STATE_ACTIVE;
         }
-        //other
+        //section
         $params['section'] = Yii::$app->request->get('section');
         $params['equipment'] = Yii::$app->request->get('equipment');
         $params['unit'] = Yii::$app->request->get('unit');
+        //group
+        $params['group'] = Yii::$app->request->get('group');
+        $params['subgroup'] = Yii::$app->request->get('subgroup');
+        $params['unit_group'] = Yii::$app->request->get('unit_group');
         return $params;   
     }
     

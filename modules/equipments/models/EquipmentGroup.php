@@ -7,15 +7,16 @@ use yii\data\Pagination;
 use app\models\BaseModel;
 use app\modules\equipments\logic\EquipmentLogic;
 
-class Equipment extends BaseModel
+class EquipmentGroup extends BaseModel
 {
     
     const PAGE_SIZE = 15;
     const PARENT_ID_INITIAL_AREA = 0;
     
+    
     public static function tableName()
     {
-        return 'equipments';
+        return 'equipment_groups';
     }
     
     public function behaviors()
@@ -23,19 +24,19 @@ class Equipment extends BaseModel
     	return ['equipment-logic' => ['class' => EquipmentLogic::className()]];
     }
     
-    public static function getSections()
+    public static function getGroups()
     {
         return self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::PARENT_ID_INITIAL_AREA])->orderBy(['rating' => SORT_DESC])->all();
     }
     
-    public static function getEquipments($section_id)
+    public static function getSubgroup($group_id)
     {
-        return self::find()->select('id, name, alias, inventory')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $section_id])->asArray()->all();
+        return self::find()->select('id, name, alias, inventory')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $group_id])->asArray()->all();
     }
     
-    public static function getUnits($equipment_id)
+    public static function getUnits($subgroup_id)
     {
-        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $equipment_id])->asArray()->all();
+        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $subgroup_id])->asArray()->all();
     }
 
     

@@ -5,6 +5,7 @@ namespace app\modules\order\widgets;
 use Yii;
 use yii\base\Widget;
 use app\modules\equipments\models\Equipment;
+use app\modules\equipments\models\EquipmentGroup;
 
 class OrderTopListFiltersWidget extends Widget
 {
@@ -13,15 +14,26 @@ class OrderTopListFiltersWidget extends Widget
     public function run()
     {
         $params = $this->params;
-        $section_id = Yii::$app->request->get('section');
-        $equipment_id = Yii::$app->request->get('equipment');
-        $unit_id = Yii::$app->request->get('unit');
-        //$types = Tag::findAll(['status' => Tag::STATUS_ACTIVE, 'type' => 'list']);
-        $sections = Equipment::getSections();
-        if ($section_id) $equipments = Equipment::findAll(['parent_id' => $section_id, 'status' => Equipment::STATUS_ACTIVE]);
-        if ($equipment_id) $units = Equipment::findAll(['parent_id' => $equipment_id, 'status' => Equipment::STATUS_ACTIVE]);
+        $sections = $this->getSections();
+        $groups = $this->getGroups();
 
-        return $this->render('top_list', compact('params', 'sections', 'equipments', 'units', 'section_id', 'equipment_id', 'unit_id'));
+        return $this->render('top_list', compact('params', 'sections', 'groups'));
+    }
+
+    private function getSections()
+    {
+        $sections['sections'] = Equipment::getSections();
+        if ($this->params['section']) $sections['equipments'] = Equipment::findAll(['parent_id' => $this->params['section'], 'status' => Equipment::STATUS_ACTIVE]);
+        if ($this->params['equipment']) $sections['units'] = Equipment::findAll(['parent_id' => $this->params['equipment'], 'status' => Equipment::STATUS_ACTIVE]);
+        return $sections;
+    }
+
+    private function getGroups()
+    {
+        $groups['groups'] = EquipmentGroup::getGroups();
+        if ($this->params['group']) $groups['sub'] = EquipmentGroup::findAll(['parent_id' => $this->params['group'], 'status' => EquipmentGroup::STATUS_ACTIVE]);
+        if ($this->params['subgroup']) $groups['units'] = EquipmentGroup::findAll(['parent_id' => $this->params['subgroup'], 'status' => EquipmentGroup::STATUS_ACTIVE]);
+        return $groups;
     }
 
 }

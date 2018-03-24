@@ -36,8 +36,7 @@ class OrderController extends BaseController
         if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer()->convertLocation();
         //debug($order);
         $form = new OrderForm($order);
-        $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()
-            ->getUnits()->getNameEquipment()->getNameUnit();
+        $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()->getUnits()->getNameEquipment()->getNameUnit()->getGroups();
         //debug($form->unit);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             Yii::$app->session->setFlash('success', 'Заказ успешно '.($order ? 'отредактирован' : 'создан'));
@@ -98,6 +97,13 @@ class OrderController extends BaseController
         $equipment = Equipment::getEquipmentOfArea($area_id);
         if (empty($equipment)) return 'error';
         return json_encode($equipment);
+    }
+
+    public function actionShowFilters()
+    {
+        $session = Yii::$app->session;
+        $session->get('order-filters') ? $session->remove('order-filters') : $session->set('order-filters', true);
+        return $this->redirect(Yii::$app->request->referrer);
     }
     
 }

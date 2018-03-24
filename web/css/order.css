@@ -10,6 +10,21 @@
     margin: 15px 0 0 0;
     color: #000;
 }
+
+.title-box a {
+    color: #000;
+    font-size: 15px;
+    position: absolute;
+    top: 2px;
+    left: 15px;
+    text-decoration: underline;
+}
+
+.title-box a:hover {
+    color: #000 !important;
+    text-decoration: none;
+}
+
 .item-parent {
     background: #E8E8E8;
 }
@@ -95,14 +110,20 @@
 
 #state-wrp {
     position: absolute;
-    left: 305px;  
-    top: 0;  
+    left: 245px;
+    top: 5px;
 }
 
 .field-orderform-type {
   position: absolute;
-  left: 470px;  
+  left: 300px;
   top: 0;
+}
+
+.field-orderform-service {
+    position: absolute;
+    left: 230px;
+    top: 65px;
 }
 
 #state {
@@ -113,7 +134,7 @@
     width: 165px;
 }
 
-#section-equipments, #equipment-units, #orderform-sections{
+#section-equipments, #equipment-units, #orderform-sections, #orderform-groups, #orderform-subgroups, #orderform-subgroup-units{
     width: 200px;
 }
 
@@ -125,15 +146,21 @@
     margin: 35px 0 20px;
 }
 
-#sections-wrp, #section-equipments-wrp, #equipment-units-wrp {
-    position: relative;
-    float: left;
-    margin-right: 25px;
+#section-equipments-wrp {
+    position: absolute;
+    top: 5px;
+    left: 250px
 }
 
-#section-equipments-wrp label,  #equipment-units-wrp label, #sections-wrp label{
+#equipment-units-wrp {
     position: absolute;
-    top: -20px;       
+    top: 5px;
+    left: 480px;
+}
+
+.issuer-customer-wrp {
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
 }
 
 .customer-box, .issuer-box {
@@ -208,20 +235,51 @@
     margin-bottom: 10px;
 }
 
-.field-orderform-inventory {
-    position: absolute;
-    top: 65px;
-    left: 230px;
+.field-orderform-equipment {
+    margin-top: 15px;
 }
 
-.field-orderform-equipment_blank {
+.field-orderform-unit {
     position: absolute;
-    top: 0;
-    left: 220px;
+    top: 70px;
+    left: 345px;
 }
 
 .field-orderform-unit_blank {
     position: absolute;
+    top: 0;
+    left: 315px;
+}
+
+.sections-equipment-wrp {
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
+}
+
+.groups-subgroups-wrp {
+    position: relative;
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 10px;
+}
+
+#subgroups-wrp {
+    position: absolute;
+    top: 0;
+    left: 230px;
+}
+
+#subgroup-units-wrp {
+    position: absolute;
+    top: 0;
+    left: 460px;
+}
+
+.field-orderform-unit_subgroup {
+    position: absolute;
     top: 65px;
-    left: 220px;
+    left: 315px;
+}
+
+.field-orderform-subgroup {
+    margin-top: 15px;
 }

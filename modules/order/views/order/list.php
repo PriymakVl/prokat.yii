@@ -20,7 +20,10 @@ $this->registerCssFile('/css/standard.css');
 ?>
 <div class="content">
     <!-- title -->
-    <div class="title-box">Перечень заказов сортопрокатного стана</div>
+    <div class="title-box">
+        <a href="<?=Url::to('/order/show/filters')?>" id="show-filters">Фильтры</a>
+        <span>Перечень заказов сортопрокатного стана</span>.
+    </div>
     
     <!-- top nenu -->
     <?=OrderTopListFiltersWidget::widget(['params' => $params])?>
@@ -81,7 +84,7 @@ $this->registerCssFile('/css/standard.css');
     <?=OrderListMenuWidget::widget(['state' => $state])?>
     <? if ($order->active) echo OrderActiveMenuWidget::widget(); ?>
     <?=ObjectSearchMenuWidget::widget()?>
-    <?=OrderSortEquipmentMenuWidget::widget()?>
+    <?//=OrderSortEquipmentMenuWidget::widget()?>
      <?=OrderActiveMenuWidget::widget()?>
     <?//=OrderListListMenuWidget::widget()?>
     <?//=OrderActListMenuWidget::widget()?>

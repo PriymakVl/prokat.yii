@@ -56,6 +56,27 @@ $(document).ready(function() {
         if (state) location.href = 'http://' + location.host + '/order/list?' + gets;
         else location.href = 'http://' + location.host + '/order/list';    
     });
+
+    $('#order-group').change(function() {
+        var group = $(this).find('option:selected').val();
+        var gets = buidGetString('group', group);
+        if (group) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';
+    });
+
+    $('#order-subgroup').change(function() {
+        var sub = $(this).find('option:selected').val();
+        var gets = buidGetString('subgroup', sub);
+        if (sub) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';
+    });
+
+    $('#order-group-unit').change(function() {
+        var unit = $(this).find('option:selected').val();
+        var gets = buidGetString('unitgroup', unit);
+        if (unit) location.href = 'http://' + location.host + '/order/list?' + gets;
+        else location.href = 'http://' + location.host + '/order/list';
+    });
     
  
 });

@@ -2,13 +2,7 @@
 
 use yii\base\View;
 use yii\widgets\ActiveForm;
-use yii\helpers\Html;
 use app\widgets\MainMenuWidget;
-use app\modules\orderact\models\OrderAct;
-use app\modules\orderact\widgets\OrderActFormTopMenuWidget;
-use app\modules\orderact\widgets\OrderActFormTabWidget;
-use app\modules\order\logic\OrderLogic;
-use app\modules\order\models\Order;
 
 $this->registerCssFile('/css/orderact.css');
 $this->registerJsFile('/js/orderact/select_standing_order.js');
