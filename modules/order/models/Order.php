@@ -6,6 +6,7 @@ use yii\web\ForbiddenHttpException;
 use yii\data\Pagination;
 use app\models\BaseModel;
 use app\modules\order\logic\OrderLogic;
+use app\modules\order\logic\ConvertDataOrder;
 use app\modules\employees\logic\EmployeeLogic;
 use app\modules\employees\models\Employee;
 
@@ -15,6 +16,11 @@ class Order extends BaseModel
     public $sectionName;
     public $equipmentName;
     public $unitName;
+    public $location;
+    public $groupName;
+    public $subgroupName;
+    public $unitSubgroupName;
+    public $locationGroup;
     
     const PAGE_SIZE = 15;
     
@@ -57,7 +63,7 @@ class Order extends BaseModel
     {
         $order = self::getOne($order_id, false, self::STATUS_ACTIVE);
         $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder()
-                ->getFullCustomer()->getFullIssuer()->convertLocation()->convertState()->convertPeriod()->checkActive('order-active')
+                ->getFullCustomer()->getFullIssuer()->getLocation()->getLocationGroup()->convertState()->convertPeriod()->checkActive('order-active')
                 ->convertKind();
         return $order;   
     }
@@ -95,13 +101,13 @@ class Order extends BaseModel
     
     public function convertType()
     {
-        $this->type = OrderLogic::convertType($this->type);
+        $this->type = ConvertDataOrder::convertType($this->type);
         return $this;
     }
     
     public function convertKind()
     {
-        $this->kind = OrderLogic::convertKind($this->kind);
+        $this->kind = ConvertDataOrder::convertKind($this->kind);
         return $this;
     }
     
@@ -180,15 +186,41 @@ class Order extends BaseModel
     
     public function convertPeriod()
     {
-        $this->period = OrderLogic::convertPeriod($this->period);
+        $this->period = ConvertDataOrder::convertPeriod($this->period);
         return $this;
     }
     
     public function convertLocation()
     {
-        $this->sectionName = OrderLogic::convertLocation($this->section);
-        $this->equipmentName = OrderLogic::convertLocation($this->equipment);
-        $this->unitName = OrderLogic::convertLocation($this->unit);
+        $this->sectionName = ConvertDataOrder::convertLocation($this->section);
+        $this->equipmentName = ConvertDataOrder::convertLocation($this->equipment);
+        $this->unitName = ConvertDataOrder::convertLocation($this->unit);
+        return $this;
+    }
+
+    public function getLocation()
+    {
+        $this->convertLocation();
+        if ($this->unitName) $this->location = $this->sectionName.' / '.$this->equipmentName.' / '.$this->unitName;
+        else if ($this->equipmentName) $this->location = $this->sectionName.' / '.$this->equipmentName;
+        else if ($this->sectionName) $this->location = $this->sectionName;
+        return $this;
+    }
+
+    public function convertLocationGroup()
+    {
+        $this->groupName = ConvertDataOrder::convertGroup($this->group);
+        $this->subgroupName = ConvertDataOrder::convertGroup($this->subgroup);
+        $this->unitSubgroupName = ConvertDataOrder::convertGroup($this->unit_subgroup);
+        return $this;
+    }
+
+    public function getLocationGroup()
+    {
+        $this->convertLocationGroup();
+        if ($this->unitSubgroupName) $this->locationGroup = $this->groupName.' / '.$this->subgroupName.' / '.$this->unitSubgroupName;
+        else if ($this->subgroupName) $this->locationGroup = $this->groupName.' / '.$this->subgroupName;
+        else if ($this->groupName) $this->locationGroup = $this->groupName;
         return $this;
     }
     

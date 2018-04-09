@@ -99,7 +99,7 @@ class OrderActController extends BaseController
     
     public function actionSetActive($act_id)
     {
-        OrderActLogic::setActive($act_id, 'order-act-active');
+        OrderActLogic::setSession($act_id, 'order-act-active');
         $this->redirect(['/order-act', 'act_id' => $act_id]); 
     }
 

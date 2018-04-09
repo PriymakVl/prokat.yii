@@ -23,16 +23,22 @@ use app\widgets\FlashMessageWidget;
         </tr>
         <tr>
             <td class="text-center">1</td>
-            <td>
-                <a href="<?=Url::to(['/inventory/list'])?>">Инвентарные номера</a>
-            </td>
+            <td><a href="<?=Url::to(['/inventory/list'])?>">Инвентарные номера</a></td>
             <td></td>
         </tr>
         <tr>
             <td class="text-center">2</td>
-            <td>
-                <a href="<?=Url::to(['/chain/list'])?>">Цепи</a>
-            </td>
+            <td><a href="<?=Url::to(['/chain/list'])?>">Цепи</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="text-center">2</td>
+            <td><a href="<?=Url::to(['/equipment/list'])?>">Оборудование</a></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="text-center">2</td>
+            <td><a href="<?=Url::to(['/equipment/group/list'])?>">Группы оборудования</a></td>
             <td></td>
         </tr>
     </table>

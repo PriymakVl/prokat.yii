@@ -28,16 +28,13 @@ class EquipmentGroup extends BaseModel
     {
         return self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::PARENT_ID_INITIAL_AREA])->orderBy(['rating' => SORT_DESC])->all();
     }
-    
-    public static function getSubgroup($group_id)
+
+    //get array for select html
+    public static function getArrayByParentId($parent_id)
     {
-        return self::find()->select('id, name, alias, inventory')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $group_id])->asArray()->all();
+        return self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC])->asArray()->all();
     }
-    
-    public static function getUnits($subgroup_id)
-    {
-        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $subgroup_id])->asArray()->all();
-    }
+
 
     
     

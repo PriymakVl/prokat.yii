@@ -34,7 +34,7 @@ class OrderForm extends BaseForm
     public $kind;
     public $group;
     public $subgroup;
-    public $unit_subgroup;
+    public $unitSubgroup;
     //form
     public $order;
     public $newNumber;
@@ -58,9 +58,9 @@ class OrderForm extends BaseForm
     public function rules() 
     {
         return [
-            [['name', 'type', 'description'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['name', 'type', 'description', 'equipment_blank', 'unit_blank',], 'required', 'message' => 'Необходимо заполнить поле'],
             [['name', 'note', 'issuer', 'customer', 'work', 'weight', 'service', 'description'],  'string'],
-            [['unit', 'equipment', 'inventory', 'kind', 'equipment_blank', 'unit_blank', 'group', 'subgroup', 'unit_subgroup'], 'string'],
+            [['unit', 'equipment', 'inventory', 'kind', 'equipment_blank', 'unit_blank', 'group', 'subgroup', 'unitSubgroup'], 'string'],
             [['section', 'state'], 'integer'],
             ['number','checkNumber'],
             [['date'],'date', 'format' => 'php:d.m.y', 'message' => 'Неправильный формат даты'],
@@ -91,11 +91,11 @@ class OrderForm extends BaseForm
         $this->order->weight = $this->weight;
         
         $this->order->section = $this->section;
-        $this->order->equipment = $this->getIdEquipment();
-        $this->order->unit = $this->getIdUnit();
+        $this->order->equipment = $this->equipment;
+        $this->saveInventoryForEquipment();
+        $this->order->unit = $this->unit;
         $this->order->equ_blank = $this->equipment_blank;
         $this->order->unit_blank = $this->unit_blank;
-
         $this->order->group = $this->group;
         $this->order->subgroup = $this->subgroup;
         $this->order->unit_subgroup = $this->unitSubgroup;
@@ -116,46 +116,24 @@ class OrderForm extends BaseForm
     
     public function getEquipments()  
     {
-        if ($this->order->section) $this->equipments = Equipment::getEquipments($this->order->section);
+        if ($this->order->section) $this->equipments = Equipment::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->order->section])->orderBy(['rating' => SORT_DESC])->all();
         return $this;
     }
     
     public function getUnits()
     {
-        if ($this->order->equipment) $this->units = Equipment::getUnits($this->order->equipment);
+        if ($this->order->equipment) $this->units = Equipment::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->order->equipment])->orderBy(['rating' => SORT_DESC])->all();
         return $this; 
     }
     
-    private function getIdEquipment()
+    private function saveInventoryForEquipment()
     {
-        if (!$this->equipment) return null;
-        $equipment = Equipment::find()->where(['name' => $this->equipment, 'parent_id' => $this->section])->one();
+        if (!$this->equipment || !$this->inventory) return;
+        $equipment = Equipment::findOne($this->equipment);
         if ($equipment) {
-            if ($this->inventory) $equipment->inventory = $this->inventory;
+            $equipment->inventory = $this->inventory;
             $equipment->save();
         }
-        else {
-            $equipment = new Equipment();
-            $equipment->name = $this->equipment;
-            $equipment->alias = $this->equipment;
-            $equipment->parent_id = $this->section;
-            $equipment->inventory = $this->inventory;
-            $equipment->save();    
-        }
-        return $equipment->id;
-    }
-    
-    private function getIdUnit()
-    {
-        if (!$this->unit || !$this->order->equipment) return null;
-        $result = Equipment::find()->select('id')->where(['name' => $this->unit, 'parent_id' => $this->order->equipment])->column();
-        if ($result) return $result[0];
-        $object = new Equipment();
-        $object->name = $this->unit;
-        $object->alias = $this->unit;
-        $object->parent_id = $this->order->equipment;
-        $object->save();
-        return $object->id;
     }
     
     public function setWork()
@@ -204,19 +182,19 @@ class OrderForm extends BaseForm
         return $this;
     }
     
-    public function getNameEquipment()
-    {
-        if ($this->order->equipment) $result = Equipment::findOne(['id' => $this->order->equipment, 'status' => Equipment::STATUS_ACTIVE]);
-        if ($result) $this->equipment = $result->name;
-        return $this;
-    }
+//    public function getNameEquipment()
+//    {
+//        if ($this->order->equipment) $result = Equipment::findOne(['id' => $this->order->equipment, 'status' => Equipment::STATUS_ACTIVE]);
+//        if ($result) $this->equipment = $result->name;
+//        return $this;
+//    }
     
-    public function getNameUnit()
-    {
-        if ($this->order->unit) $result = Equipment::findOne(['id' => $this->order->unit, 'status' => Equipment::STATUS_ACTIVE]);
-        if ($result) $this->unit = $result->name;
-        return $this;
-    }
+//    public function getNameUnit()
+//    {
+//        if ($this->order->unit) $result = Equipment::findOne(['id' => $this->order->unit, 'status' => Equipment::STATUS_ACTIVE]);
+//        if ($result) $this->unit = $result->name;
+//        return $this;
+//    }
 
     public function getGroups()
     {
@@ -226,13 +204,13 @@ class OrderForm extends BaseForm
 
     public function getSubgroups()
     {
-        if ($this->order->group) $this->subgroups = EquipmentGroup::getSubgroups($this->order->group);
+        if ($this->order->group) $this->subgroups = EquipmentGroup::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->order->group])->orderBy(['rating' => SORT_DESC])->all();
         return $this;
     }
 
     public function getUnitsSubgroup()
     {
-        if ($this->order->subgroup) $this->unitsSubgroup = EquipmentGroup::getUnitsSubgroup($this->order->subgroup);
+        if ($this->order->subgroup) $this->unitsSubgroup = EquipmentGroup::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->order->subgroup])->orderBy(['rating' => SORT_DESC])->all();;
         return $this;
     }
 

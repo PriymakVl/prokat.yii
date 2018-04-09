@@ -47,7 +47,7 @@ class OrderContentController extends BaseController
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
             Yii::$app->session->setFlash('success', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
-            OrderLogic::setActive($order->id, 'order-active');
+            OrderLogic::setSession($order->id, 'order-active');
             return $this->redirect(['/order/content/item', 'item_id' => $form->element->id]);
         }   
         return $this->render('form', compact('item', 'form', 'order'));

@@ -53,6 +53,17 @@ class BaseModel extends ActiveRecord implements ConfigApp
         $this->status = self::STATUS_INACTIVE;
         return $this->save();
     }
+
+    public function deleteWithHeirs()
+    {
+        $heirs = self::findAll(['parent_id' => $this->id]);
+        if (empty($heirs)) return $this->deleteOne();
+        foreach ($heirs as $heir) {
+            $heir->status = self::STATUS_INACTIVE;
+            $heir->save();
+        }
+        return $this->deleteOne();
+    }
     
     public function getCodeWithoutVariant($code)
     {
@@ -138,11 +149,6 @@ class BaseModel extends ActiveRecord implements ConfigApp
         if ($this->date) $this->date = date('d.m.y', $this->date);
         return $this;
     }
-    
-//    public function getTagObjects($key)
-//    {
-//        return Tag::getObjects($key);
-//    }
     
 }
 

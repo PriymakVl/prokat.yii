@@ -49,7 +49,7 @@ class OrderListController extends BaseController
     
     public function actionSetActive($list_id)
     {
-        OrderListLogic::setActive($list_id, 'order-list-active');
+        OrderListLogic::setSession($list_id, 'order-list-active');
         $this->redirect(['/order-list', 'list_id' => $list_id]); 
     }
 }

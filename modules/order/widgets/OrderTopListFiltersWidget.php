@@ -16,6 +16,7 @@ class OrderTopListFiltersWidget extends Widget
         $params = $this->params;
         $sections = $this->getSections();
         $groups = $this->getGroups();
+        //debug($groups['sub']);
 
         return $this->render('top_list', compact('params', 'sections', 'groups'));
     }

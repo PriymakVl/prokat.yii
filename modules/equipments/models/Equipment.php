@@ -27,17 +27,12 @@ class Equipment extends BaseModel
     {
         return self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => self::PARENT_ID_INITIAL_AREA])->orderBy(['rating' => SORT_DESC])->all();
     }
-    
-    public static function getEquipments($section_id)
-    {
-        return self::find()->select('id, name, alias, inventory')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $section_id])->asArray()->all();
-    }
-    
-    public static function getUnits($equipment_id)
-    {
-        return self::find()->select('id, name, alias')->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $equipment_id])->asArray()->all();
-    }
 
+    //get array for select html
+    public static function getArrayByParentId($parent_id)
+    {
+        return self::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC])->asArray()->all();
+    }
     
     
     

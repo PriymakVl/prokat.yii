@@ -15,7 +15,7 @@ class OrderController extends BaseController
     public $layout = "@app/views/layouts/base";
     
     public function actionIndex($order_id) 
-    {   
+    {
         $order = Order::get($order_id);
         $acts = OrderAct::getAllForOrder($order_id);
         $count_acts = $acts ? count($acts) : 0;
@@ -36,11 +36,11 @@ class OrderController extends BaseController
         if ($order) $order->convertDate($order, false)->getWork()->getShortCustomer()->getShortIssuer()->convertLocation();
         //debug($order);
         $form = new OrderForm($order);
-        $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()->getUnits()->getNameEquipment()->getNameUnit()->getGroups();
+        $form->getNumberOfFutureOrder()->getServices($form)->getSections()->getEquipments()->getUnits()->getGroups()->getSubgroups()->getUnitsSubgroup();
         //debug($form->unit);
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
             Yii::$app->session->setFlash('success', 'Заказ успешно '.($order ? 'отредактирован' : 'создан'));
-            OrderLogic::setActive($form->order->id, 'order-active');
+            OrderLogic::setSession($form->order->id, 'order-active');
             $this->redirect(['/order', 'order_id' => $form->order->id]);
         }   
         //Debug($order);
@@ -81,7 +81,7 @@ class OrderController extends BaseController
     //set active order without create
     public function actionSetActive($order_id)
     {
-        OrderLogic::setAcftive($order_id, 'order-active');
+        OrderLogic::setSession($order_id, 'order-active');
         $this->redirect(['/order', 'order_id' => $order_id]); 
     }
     

@@ -203,7 +203,17 @@ $config = [
 				'application/content/form' => 'applications/application-content/form', 
                 'application/content/item' => 'applications/application-content', 
                 //equipment
-                'equipment/data/get' => 'equipments/equipment/get-data-ajax',  
+                'equipment/list' => 'equipments/equipment/list',
+                'equipment/form' => 'equipments/equipment/form',
+                'equipment/delete' => 'equipments/equipment/delete',
+                'equipment/equipments/get/ajax' => 'equipments/equipment/get-equipments-ajax',
+                'equipment/unitsequipment/get/ajax' => 'equipments/equipment/get-units-equipment-ajax',
+                //equipment group
+                'equipment/group/list' => 'equipments/equipment-group/list',
+                'equipment/group/subgroups/get/ajax' => 'equipments/equipment-group/get-subgroups-ajax',
+                'equipment/group/subgroupunits/get/ajax' => 'equipments/equipment-group/get-subgroup-units-ajax',
+                'equipment/group/form' => 'equipments/equipment-group/form',
+                'equipment/group/delete' => 'equipments/equipment-group/delete',
                 //product
                 'product/manufactured' => 'product/product/manufactured',
                 'product/list' => 'product/product/list',

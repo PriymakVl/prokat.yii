@@ -27,7 +27,7 @@
             <a href="/product/category">Товары</a>
         </li>
         <li>
-            <a href="/modules/list">Модули</a>
+            <a href="/modules/list" target="_blank">Модули</a>
         </li>
     </ul>
 </div>

@@ -11,56 +11,48 @@ use app\modules\equipments\logic\EquipmentLogic;
 class EquipmentController extends BaseController 
 {
     public $layout = "@app/views/layouts/base";
-    /**
-    public function actionIndex($order_id) 
-    { 
-        $order = Order::findOne($order_id);
-        $order->getNumber()->convertDate($order)->convertService($order)->convertType()->countWeightOrder();
-        $state = OrderLogic::checkState($order_id);
-        return $this->render('index', compact('order', 'state'));
-    }
-    
-    public function actionList($period = null)
+
+    public function actionForm($item_id = null, $parent_id = null)
     {
-        $params = OrderLogic::getParams($period);
-        $list = Order::getOrderList($params);
-        $pages = Order::$pages;
-        return $this->render('list', compact('list', 'params', 'pages'));
+        $item = Equipment::getOne($item_id, null, self::STATUS_ACTIVE);
+        if ($item) $parent_id = $item->parent_id;
+        $form = new EquipmentForm();
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($item)) {
+            $this->redirect(['/equipment/list', 'parent_id' => $parent_id]);
+        }
+        return $this->render('form', compact('item', 'parent_id', 'form'));
     }
-    
-    public function actionForm($order_id = null) 
-    { 
-        $order = (int)$order_id ? Order::findOne($order_id) : null;
-        if ($order) $order->convertDate($order, false);
-        $form = new OrderForm();
-        $form->getServices($form);
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($order)) { 
-            if ((int)$form->number) $this->redirect(['/order', 'order_id' => $form->order_id]);
-            else $this->redirect(['/order/draft', 'order_id' => $form->order_id]);
-        }   
-        return $this->render('form', compact('order', 'form'));
-    }
-	**/
-	public function actionAdd($name, $parent_id, $type)
-	{
-		$equipnment = new Equipment();
-		$equipment->name = $name;
-		$eqipment->parent_id = $parent_id;
-		$equipment->type = $type;
-		return $equipment->save();
-		exit;
-	}
-    
-    public function actionGetDataAjax()
+
+    public function actionDelete($item_id)
     {
-        $section_id = \Yii::$app->request->get('section_id');
-        $equipment_id = \Yii::$app->request->get('equipment_id');
-        $id = $equipment_id ? $equipment_id : $section_id;
-        $items = Equipment::getEquipments($id);
-        if ($items) return json_encode($items);
-        else if ($section_id) return 'equipments_not';
-        else return 'units_not';
-        exit();  
+        $item = Equipment::findOne($item_id);
+        $item->deleteWithHeirs();
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionList($parent_id = null)
+    {
+        
+        if ($parent_id) $items = Equipment::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $parent_id])->orderBy(['rating' => SORT_DESC])->all();
+        else $items = Equipment::getSections();
+        $breadcrumbs = EquipmentLogic::getBreadcrumbsSection($parent_id);
+        return $this->render('list', compact('items', 'breadcrumbs'));
+    }
+
+    public function actionGetEquipmentsAjax()
+    {
+        $parent_id = \Yii::$app->request->get('section_id');
+        $equipments = Equipment::getArrayByParentId($parent_id);
+        if (empty($equipments)) return false;
+        return json_encode($equipments);
+    }
+
+    public function actionGetUnitsEquipmentAjax()
+    {
+        $parent_id = \Yii::$app->request->get('equipment_id');
+        $units = Equipment::getArrayByParentId($parent_id);
+        if (empty($units)) return false;
+        return json_encode($units);
     }
     
    

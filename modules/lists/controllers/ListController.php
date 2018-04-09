@@ -66,7 +66,7 @@ class ListController extends BaseController
     //do list active
     public function actionSetActive($list_id)
     {
-        ListLogic::setActive($list_id, 'list-active');
+        ListLogic::setSession($list_id, 'list-active');
         $this->redirect('/list/active');       
     }
 }

@@ -14,7 +14,7 @@ class ListLogic extends BaseLogic
 
     public static function getActiveList()
     {
-        $active_id = self::getActive('list-active');
+        $active_id = self::getSession('list-active');
         return $active_id ? $active_id : self::DEFAULT_ACTIVE_LIST; 
     }
     
@@ -43,7 +43,7 @@ class ListLogic extends BaseLogic
     {
         $session = Yii::$app->session;
         $list_id = $session->get('list_id');
-        if (!$list_id) throw new ForbiddenHttpException('не выбран активный список '.__METHOD__);
+        if (!$list_id) throw new ForbiddenHttpException('пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ '.__METHOD__);
         return $list_id;
     }
     

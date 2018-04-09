@@ -254,12 +254,13 @@
 .sections-equipment-wrp {
     border-bottom: 2px solid #B49A6A;
     margin-bottom: 10px;
+    padding-bottom: 20px;
 }
 
 .groups-subgroups-wrp {
     position: relative;
     border-bottom: 2px solid #B49A6A;
-    margin-bottom: 10px;
+    padding-bottom: 20px;
 }
 
 #subgroups-wrp {
@@ -274,7 +275,7 @@
     left: 460px;
 }
 
-.field-orderform-unit_subgroup {
+.field-orderform-unitsubgroup {
     position: absolute;
     top: 65px;
     left: 315px;

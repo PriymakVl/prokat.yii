@@ -43,34 +43,8 @@ class OrderLogic extends BaseLogic
         //group
         $params['group'] = Yii::$app->request->get('group');
         $params['subgroup'] = Yii::$app->request->get('subgroup');
-        $params['unit_group'] = Yii::$app->request->get('unit_group');
+        $params['unit_subgroup'] = Yii::$app->request->get('unit_subgroup');
         return $params;   
-    }
-    
-    public static function convertType($type)
-    {
-        switch($type) {
-            case Order::TYPE_ENHANCEMENT : return 'Улучшение'; break;
-            case Order::TYPE_MAKING : return 'Изготовление'; break;
-            case Order::TYPE_MAINTENANCE : return 'Текущий ремонт'; break;
-            case Order::TYPE_CAPITAL_REPAIR : return 'Капитальный ремонт'; break;
-        }
-    }
-    
-    public static function convertKind($kind)
-    {
-        switch($kind) {
-            case Order::KIND_CURRENT : return 'Разовый'; break;
-            case Order::KIND_PERMANENT : return 'Постоянно действующий'; break;
-            case Order::KIND_ANNUAL : return 'Годовой'; break;
-            default : return 'Не определен';
-        }
-    }
-    
-    public static function setSessionActiveOrder($order_id)
-    {
-        $session = Yii::$app->session;
-        $session->set('order_id', $order_id);
     }
     
     public static function countWeightOfAll($weight, $count)
@@ -228,17 +202,7 @@ class OrderLogic extends BaseLogic
 		else if ($date < 1487048400 && $date > 1420434000) return Order::PERIOD_2015_2017; //2015 - 2017
 		else if ($date < 1420434000 )return Order::PERIOD_2010_2015;//2010 - 2015
 	}
-    
-    public static function convertPeriod($period)
-    {
-        switch ($period) {
-            case 1: return 'Не известно';
-            case 2: return '2011-2015';
-            case 3: return '2015-2017';
-            case 4: return 'Текущий';
-            default: return 'Не известно';
-        }   
-    }
+
     //by order_id 
     public static function getArrayOrders($array)
     {
@@ -248,20 +212,6 @@ class OrderLogic extends BaseLogic
             if ($order) $orders[] = $order; 
         }
         return $orders;
-    }
-    
-    public static function convertWork($work, $html)
-    {
-        if (!$work) return false;
-        $work = unserialize($work);
-        if (!$html || !is_array($work)) return $work;
-        else {
-            $str = '<ol>';
-            foreach ($work as $item) {
-                $str .= '<li>'.$item.'</li>';
-            }
-            return $str .= '</ol>';
-        }  
     }
     
     public static function removeZerosFromWeight($weight)
@@ -275,14 +225,6 @@ class OrderLogic extends BaseLogic
         $letter = substr($weight, -1);
         if ($letter === ',') $weight = substr($weight, 0, -1);
         return $weight;
-    }
-    
-    public static function convertLocation($id)
-    {
-        if (!$id) return null;
-        $item = Equipment::getOne($id, null, self::STATUS_ACTIVE);
-        if ($item) return $item->name;
-        else return null;
     }
     
     public static function getOrdersByCode($code)
@@ -415,7 +357,7 @@ class OrderLogic extends BaseLogic
     
     public static function getIdAciveOrder($message)
     {
-        $order_id = self::getActive('order-active');
+        $order_id = self::getSession('order-active');
         if ($order_id) return $order_id;
         \Yii::$app->session->setFlash('error', $message);
         return false;    

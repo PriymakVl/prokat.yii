@@ -6,7 +6,7 @@ use app\modules\order\models\Order;
 <!-- filters four line -->
 <div class="top-menu top-menu-margin">
     <!-- groups select-->
-    <label>Участкок:</label>
+    <label>Участок:</label>
     <select id="order-section">
         <option value="">Не выбран</option>
         <? foreach ($sections['sections'] as $section): ?>

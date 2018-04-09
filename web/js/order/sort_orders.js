@@ -73,7 +73,7 @@ $(document).ready(function() {
 
     $('#order-group-unit').change(function() {
         var unit = $(this).find('option:selected').val();
-        var gets = buidGetString('unitgroup', unit);
+        var gets = buidGetString('unit_subgroup', unit);
         if (unit) location.href = 'http://' + location.host + '/order/list?' + gets;
         else location.href = 'http://' + location.host + '/order/list';
     });

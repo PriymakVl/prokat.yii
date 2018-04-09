@@ -1,25 +1,29 @@
-<div id="order-form-filters" ><!-- filters-tab -->
+<?php
+$this->registerJsFile('/js/order/form_order_get_equipment.js');
+$this->registerJsFile('/js/order/form_order_get_group_equ.js');
+?>
+<div id="order-form-filters" style="display: none;"><!-- filters-tab -->
 
     <div class="sections-equipment-wrp">
         <!-- sections -->
         <div id="sections-wrp">
-            <label>Участки:</label>
+            <label>Участок:</label>
             <select id="orderform-sections" name="OrderForm[section]" class="form-control">
                 <option value="" selected="selected">Не выбран</option>
                 <? foreach ($form->sections as $section): ?>
-                    <option value="<?=$section->id?>" <? if ($section->id == $order->section) echo 'selected'; ?> alias="<?=$section->alias?>"><?=$section->name?></option>
+                    <option value="<?=$section->id?>" <? if ($section->id == $order->section) echo 'selected'; ?> ><?=$section->alias ? $section-> alias : $section->name?></option>
                 <? endforeach; ?>
             </select>
         </div>
 
         <!-- equipments -->
         <div id="section-equipments-wrp">
-            <label>Агрегаты, механизмы:</label>
-            <select id="section-equipments" <? if (!$form->equipments) echo 'disabled="disabled"'; ?> class="form-control">
+            <label>Агрегат, механизм:</label>
+            <select id="section-equipments" <? if (!$form->equipments) echo 'disabled="disabled"'; ?> name="OrderForm[equipment]" class="form-control">
                 <option name_equ="">Не выбран</option>
                 <? if ($form->equipments): ?>
                     <? foreach ($form->equipments as $equipment): ?>
-                        <option value="<?=$equipment['alias']?>" <? if ($equipment['id'] == $order->equipment) echo 'selected'; ?> inventory="<?=$equpment['inventory']?>" name_equ="<?=$equpment['name']?>" equipment_id="<?=$equipment['id']?>"><?=$equipment['name']?></option>
+                        <option value="<?=$equipment->id?>" <? if ($equipment->id == $order->equipment) echo 'selected'; ?>  ><?=$equipment->alias ? $equipment->alias : $equipment->name?></option>
                     <? endforeach; ?>
                 <? endif; ?>
             </select>
@@ -27,44 +31,38 @@
 
         <!-- units of equipment -->
         <div id="equipment-units-wrp">
-            <label>Узлы:</label>
-            <select id="equipment-units" <? if (!$form->units) echo 'disabled="disabled"'; ?> class="form-control">
+            <label>Узел:</label>
+            <select id="equipment-units" <? if (!$form->units) echo 'disabled="disabled"'; ?> name="OrderForm[unit]" class="form-control">
                 <option name_unit="">Не выбран</option>
                 <? if ($form->units): ?>
                     <? foreach ($form->units as $unit): ?>
-                        <option value="<?=$unit['alias']?>" <? if ($unit['id'] == $order->unit) echo 'selected'; ?> name_unit="<?=$unit['name']?>" unit_id="<?=$unit['id']?>"><?=$unit['name']?></option>
+                        <option value="<?=$unit->id?>" <? if ($unit->id == $order->unit) echo 'selected'; ?>><?=$unit->alias ? $unit->alias : $unit->name?></option>
                     <? endforeach; ?>
                 <? endif; ?>
             </select>
         </div>
-
-        <!-- equipment field-->
-        <?=$f->field($form, 'equipment')->textInput(['value' => $order->equipmentName, 'style' => 'width:300px'])->label('Агрегат (сортировка):')?>
-
-        <!-- unit equipment field-->
-    <?=$f->field($form, 'unit')->textInput(['value' => $order->unitName, 'style' => 'width:300px'])->label('Узел (сортировка):')?>
     </div><!-- sections-equipments-wrp -->
 
     <div class="groups-subgroups-wrp">
         <!-- sections -->
         <div id="groups-wrp">
-            <label>Группы:</label>
+            <label>Группа:</label>
             <select id="orderform-groups" name="OrderForm[group]" class="form-control">
                 <option value="" selected="selected">Не выбрана</option>
                 <? foreach ($form->groups as $group): ?>
-                    <option value="<?=$group->id?>" <? if ($group->id == $order->group) echo 'selected'; ?> alias="<?=$group->alias?>"><?=$group->name?></option>
+                    <option value="<?=$group->id?>" <? if ($group->id == $order->group) echo 'selected'; ?>><?=$group->alias ? $group->alias : $group->name?></option>
                 <? endforeach; ?>
             </select>
         </div>
 
         <!-- subgroups -->
         <div id="subgroups-wrp">
-            <label>Подгруппы:</label>
-            <select id="orderform-subgroups" <? if (!$form->subgroups) echo 'disabled="disabled"'; ?> class="form-control">
+            <label>Подгруппа:</label>
+            <select id="orderform-subgroups" <? if (!$form->subgroups) echo 'disabled="disabled"'; ?> name="OrderForm[subgroup]" class="form-control">
                 <option value="">Не выбрана</option>
                 <? if ($form->subgroups): ?>
                     <? foreach ($form->subgroups as $subgroup): ?>
-                        <option value="<?=$subgroup['alias']?>" <? if ($subgroup['id'] == $order->subgroup) echo 'selected'; ?> name_subgroup="<?=$subgroup['name']?>" subgroup_id="<?=$subgroup['id']?>"><?=$subgroup['name']?></option>
+                        <option value="<?=$subgroup->id?>" <? if ($subgroup->id == $order->subgroup) echo 'selected'; ?>><?=$subgroup->alias ? $subgroup->alias : $subgroup->name?></option>
                     <? endforeach; ?>
                 <? endif; ?>
             </select>
@@ -72,21 +70,16 @@
 
         <!-- units of groups -->
         <div id="subgroup-units-wrp">
-            <label>Узлы подгруппы:</label>
-            <select id="orderform-subgroup-units" <? if (!$form->units) echo 'disabled="disabled"'; ?> class="form-control">
+            <label>Элемент подгруппы:</label>
+            <select id="orderform-subgroup-units" <? if (!$form->units) echo 'disabled="disabled"'; ?> name="OrderForm[unitSubgroup]" class="form-control">
                 <option name_unit="">Не выбраны</option>
                 <? if ($form->unitsSubgroup): ?>
                     <? foreach ($form->unitsSubgroup as $unit): ?>
-                        <option value="<?=$unit['alias']?>" <? if ($unit['id'] == $order->unit_subgroup) echo 'selected'; ?> name_unit_subgroup="<?=$unit['name']?>" unit_group_id="<?=$unit['id']?>"><?=$unit['name']?></option>
+                        <option value="<?=$unit->id?>" <? if ($unit->id == $order->unit_subgroup) echo 'selected'; ?>><?=$unit->alias ? $unit->alias : $unit->name?></option>
                     <? endforeach; ?>
                 <? endif; ?>
             </select>
         </div>
 
-        <!-- equipment field-->
-        <?=$f->field($form, 'subgroup')->textInput(['value' => $order->subgroup, 'style' => 'width:300px'])->label('Подгруппа:')?>
-
-        <!-- unit equipment field-->
-        <?=$f->field($form, 'unit_subgroup')->textInput(['value' => $order->unit_subgroup, 'style' => 'width:300px'])->label('Узел подгруппы:')?>
-    </div><!-- sections-equipments-wrp -->
+    </div>
 </div><!-- filters tab end -->

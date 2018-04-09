@@ -1,0 +1,15 @@
+.breadcrumbs-wrp {
+    border:1px solid #B49A6A;
+    padding: 5px;
+}
+
+.breadcrumbs-wrp a {
+    text-decoration: underline;
+    color: #000;
+    text-transform: lowercase;
+}
+
+.breadcrumbs-wrp span {
+    color: #000;
+    text-transform: lowercase;
+}

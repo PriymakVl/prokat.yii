@@ -2,11 +2,11 @@
 use yii\jui\DatePicker;
 use app\modules\order\models\Order;
 
-$this->registerJsFile('/js/order/form_order_get_equipment.js');
 $this->registerJsFile('/js/order/form_set_customer_issuer.js');
+
 ?>
 
-<div id="order-form-main" class="hidden">
+<div id="order-form-main">
     <div class="top-box">
         <!-- number -->          
         <?=$f->field($form, 'number')->textInput(['value' => $order ? $order->number : $form->newNumber, 'maxlength'=>3, 'style' => 'width:120px'])->label('Номер заказа:')?>

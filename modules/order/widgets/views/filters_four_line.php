@@ -16,7 +16,7 @@ use app\modules\order\models\Order;
 
     <!-- equipments select -->
         <label style="margin-left: 15px;">Подгруппа:</label>
-        <select id="order-subgroup" style="width: 180px;" <?if (!$equipments) echo 'disabled';?>>
+        <select id="order-subgroup" style="width: 180px;" <?if (empty($groups['sub'])) echo 'disabled';?>>
             <option value="">Не выбран</option>
             <? if ($groups['sub']): ?>
                 <? foreach ($groups['sub'] as $subgroup): ?>
@@ -27,12 +27,12 @@ use app\modules\order\models\Order;
 
     <!-- unit select -->
 
-        <label style="margin-left: 15px;">Узел:</label>
-        <select id="order-group-unit" style="width: 180px;" <?if (!$units) echo 'disabled';?>>
+        <label style="margin-left: 15px;">Элемент:</label>
+        <select id="order-group-unit" style="width: 180px;" <?if (empty($groups['units'])) echo 'disabled';?>>
             <option value="">Не выбран</option>
             <? if ($groups['units']): ?>
                 <? foreach ($groups['units'] as $unit): ?>
-                    <option value="<?=$unit->id?>" <?if($unit->id == $params['unit_group']) echo'selected';?>><?=$unit->alias?></option>
+                    <option value="<?=$unit->id?>" <?if($unit->id == $params['unit_subgroup']) echo'selected';?>><?=$unit->alias?></option>
                 <? endforeach; ?>
             <? endif; ?>
         </select>

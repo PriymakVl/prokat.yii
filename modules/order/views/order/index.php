@@ -77,29 +77,19 @@ $this->registerCssFile('/css/order.css');
             </td>
         </tr>
 	
-        <!-- section -->
-        <? if ($order->sectionName): ?>
+        <!-- location (section + equipment + unit) -->
+        <? if ($order->location): ?>
             <tr>
-                <td class="text-center">Участок</td>
-                <td><?=$order->sectionName?></td>
+                <td class="text-center">Оборудование</td>
+                <td><?=$order->location?></td>
             </tr>
         <? endif; ?>
 
-        <!-- equipment -->
+        <!-- Group equipmens -->
+        <? if ($order->locationGroup): ?>
             <tr>
-                <td class="text-center">Агрегат, механизм</td>
-                <td>
-                    <?=$order->equipmentName ? $order->equipmentName : '<span style="color:red;">Не указан</span>'?>
-                </td>
-            </tr>
-        
-        <!-- unit -->
-        <? if ($order->unitName): ?>
-            <tr>
-                <td class="text-center">Узел</td>
-                <td>
-                    <?=$order->unitName?>
-                </td>
+                <td class="text-center">Группа оборудования</td>
+                <td><?=$order->locationGroup?></td>
             </tr>
         <? endif; ?>
         
