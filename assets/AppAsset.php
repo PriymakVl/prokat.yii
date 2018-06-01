@@ -34,6 +34,7 @@ class AppAsset extends AssetBundle
         'js/total/menu_toggle.js',
         'js/total/table_checked_all.js',
         'js/total/first_input_form_focus.js',
+        'js/total/message_remove.js'
     ];
     
     public $depends = [

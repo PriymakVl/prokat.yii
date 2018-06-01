@@ -25,7 +25,7 @@ class ExcelDanieliFileForm extends BaseForm
         $this->file = UploadedFile::getInstance($this, 'file');
         if (!$this->file) return false;
         $data = $this->getDataFromFileExcel();
-        if ($data[1][2] != $parent->code) throw new ForbiddenHttpException('error diffrent parent '.__METHOD__);//choose file for another parent
+        if ($data[1][2] != $parent->code) throw new ForbiddenHttpException('ролитель в файле и у объекта отличаютмя');//choose file for another parent
         return $this->addObjectsToParent($data, $parent);  
     }
     
@@ -44,7 +44,10 @@ class ExcelDanieliFileForm extends BaseForm
                 if(in_array($data[$i][3], $children)) continue;    
             }
             $obj = Objects::findOne(['status' => self::STATUS_ACTIVE, 'code' => $data[$i][3]]);
-            if (!$obj) continue;
+            if (!$obj) {
+				$this->createNewObject($data[$i], $parent->id);
+				continue;
+			}
             $obj->copy($parent->id);
             $objNew = Objects::findOne($obj->id);
             $objNew->item = $data[$i][4]; //change item old 
@@ -52,6 +55,19 @@ class ExcelDanieliFileForm extends BaseForm
         }
         return true;
     }
+	
+	private function createNewObject($data, $parent_id)
+	{
+		$obj = new Objects();
+		$obj->code = trim($data[3]); 
+        $obj->parent_id = $parent_id;
+        $obj->eng = trim($data[20]);
+		//$obj->weight = $this->weight;
+		//$obj->qty = $this->qty;
+        $obj->equipment = 'danieli';
+        $obj->item = trim($data[4]);
+        return $obj->save();            
+	}
 
 
 

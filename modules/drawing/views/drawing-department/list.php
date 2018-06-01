@@ -27,10 +27,10 @@ $this->registerCssFile('/css/drawing.css');
             <th width="30">
                 <input type="radio" disabled="disabled" />
             </th>
-            <th width="90">№ эскиза</th>
+            <th width="140">№ эскиза</th>
             <th width="300">Наименование</th>
             <th width="100">Код</th>
-            <th width="200">Примечание</th>
+            <th width="150">Примечание</th>
         </tr>
         <? if ($list): ?>
             <? foreach ($list as $dwg): ?>
@@ -40,9 +40,9 @@ $this->registerCssFile('/css/drawing.css');
                     </td>
                     <td class="text-center">
                         <? if($dwg->file): ?>
-                            <?= Html::a($dwg->fullNumber, ['/files/department/'.$dwg->file], ['target' => '_blank']) ?>
+                            <a href="<?=Url::to(['/files/department/'.$dwg->file])?>" target="_blank"><?=$dwg->number?></a>
                         <? else: ?>
-                            <?=$dwg->fullNumber?>
+                            <?=$dwg->number?>
                         <? endif; ?>
                     </td>
                     <td>

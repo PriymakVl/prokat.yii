@@ -1,10 +1,9 @@
 <?php
 
-use \yii\web\JqueryAsset;
+use yii\helpers\Url;
 
-$this->registerJsFile('js/list/list_delete.js',  ['depends' => [JqueryAsset::className()]]);
-$this->registerJsFile('js/list/list_active.js',  ['depends' => [JqueryAsset::className()]]);
-
+if ($action == 'all') $this->registerJsFile('js/list/list_manager_all.js');
+else $this->registerJsFile('/js/list/list_manager_index.js');
 ?>
 
 <div  class="sidebar-menu">
@@ -13,26 +12,35 @@ $this->registerJsFile('js/list/list_active.js',  ['depends' => [JqueryAsset::cla
     <ul id="all-list-menu">
         <? if ($action == 'all'): ?>
             <li>
-                <a href="#" onclick="return false;" id="list-active">Сделать активным</a>
+                <a href="#" id="list-active">Сделать активным</a>
             </li>
-        <? endif; ?>
+        <? else: ?>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['/list/form'])?>">Создать список</a>
-        </li>
-        <? if ($action == 'index'): ?>
-            <li>
-                <a href="<?=Yii::$app->urlManager->createUrl(['list/form', 'list_id' => $list_id])?>">Редактировать список</a>
-            </li>
-            <li>
-                <a href="#" onclick="return false;" id="list-delete">Удалить список</a>
-            </li>  
-        <? endif; ?>
-        <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['lists'])?>">Все списки</a>
+            <a href="<?=Url::to(['/list/set-active', 'list_id' => $list_id])?>">Сделать активным</a>
         </li>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['lists/update'])?>">Обновить все списки</a>
-        </li>    
+            <a href="<?=Url::to(['/lists'])?>">Все списки</a>
+        </li>
+        <? endif; ?>
+
+        <!-- create list -->
+        <li>
+            <a href="<?=Url::to(['/list/form'])?>">Создать список</a>
+        </li>
+
+        <? if ($action == 'index' || $action == 'list-content'): ?>
+            <li>
+                <a href="<?=Url::to(['/list/form', 'list_id' => $list_id])?>">Редактировать список</a>
+            </li>
+        <? else: ?>
+            <li>
+                <a href="#" id="list-update">Редактировать список</a>
+            </li>
+        <? endif; ?>
+
+        <li>
+            <a href="#" id="list-delete">Удалить список</a>
+        </li>
     </ul>
 </div>
 

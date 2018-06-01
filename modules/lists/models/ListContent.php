@@ -24,7 +24,7 @@ class ListContent extends BaseModel
     
     public static function deleteListContent($list_id)
     {
-        $content = self::getBylistId($list->id);
+        $content = self::getBylistId($list_id);
         if (!$content) return true;
         foreach ($content as $item) {
             $obj = self::findOne($item->id);

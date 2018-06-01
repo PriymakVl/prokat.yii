@@ -4,20 +4,18 @@ use yii\helpers\Url;
 use app\widgets\MainMenuWidget;
 use app\widgets\FlashMessageWidget;
 use app\modules\order\widgets\OrderMenuWidget;
-use app\modules\order\widgets\OrderTopMenuWidget;
-use app\modules\order\widgets\OrderContentMenuWidget;
-use app\modules\order\widgets\OrderItemChildrenWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 use app\modules\objects\widgets\ObjectSearchMenuWidget;
+use app\widgets\ShowNoteWidget;
 
 $this->registerCssFile('/css/order.css');
-$this->registerJsFile('/js/order/content_list_pagination.js');
-$this->registerJsFile('/js/order/order_item_edit.js');
+$this->registerJsFile('/js/order/content/content_list_pagination.js');
+$this->registerJsFile('/js/order/content/change_dwg_on_object.js');
 
 ?>
 <div class="content">
     <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
+    <?=OrderMenuWidget::widget(['type' => 'top-order', 'order_id' => $order->id])?>
     
     <!-- info -->
     <div class="info-box margin-top-15">
@@ -28,7 +26,10 @@ $this->registerJsFile('/js/order/order_item_edit.js');
     
     <!-- info state of order -->
     <? if ($order->active): ?>
-        <div class="alert alert-success margin-top-15">Активный заказ</div>
+        <div class="alert alert-success margin-top-15 message-wrp">
+            <span>Активный заказ</span>
+            <span class="glyphicon glyphicon-remove" title="Закрыть"></span>
+        </div>
     <? endif; ?>
     
     <!-- flash messge -->
@@ -36,14 +37,14 @@ $this->registerJsFile('/js/order/order_item_edit.js');
     
     <!-- page box -->
     <? if (count($content) > 10): ?>
-        <div id="page-content-wrp" class="margin-top-15">
-            <a id="page-all" class="top-menu-active-link" href="#" onclick="return false;">Показать все</a>
-            <a id="page-1" href="#" page="1" onclick="return false;">Страница 1</a>
-            <a id="page-2" href="#" page="2" onclick="return false;">Страница 2</a>
-            <? if (count($content) > 20) echo '<a id="page-3" href="#" page="3" onclick="return false;">Страница 3</a>'?>
-            <? if (count($content) > 30) echo '<a id="page-4" href="#" page="4" onclick="return false;">Страница 4</a>'?>
-            <? if (count($content) > 40) echo '<a id="page-5" href="#" page="5" onclick="return false;">Страница 5</a>'?>
-            <? if (count($content) > 50) echo '<a id="page-6" href="#" page="5" onclick="return false;">Страница 6</a>'?>
+        <div id="page-content-wrp" class="margin-top-15 info-box">
+            <a id="page-all" class="top-menu-active-link" href="#" onclick="return false;">Показать все</a><span>|</span>
+            <a id="page-1" href="#" page="1" onclick="return false;">Страница 1</a><span>|</span>
+            <a id="page-2" href="#" page="2" onclick="return false;">Страница 2</a><span>|</span>
+            <? if (count($content) > 20) echo '<a id="page-3" href="#" page="3" onclick="return false;">Страница 3</a><span>|</span>'?>
+            <? if (count($content) > 30) echo '<a id="page-4" href="#" page="4" onclick="return false;">Страница 4</a><span>|</span>'?>
+            <? if (count($content) > 40) echo '<a id="page-5" href="#" page="5" onclick="return false;">Страница 5</a><span>|</span>'?>
+            <? if (count($content) > 50) echo '<a id="page-6" href="#" page="5" onclick="return false;">Страница 6</a><span>|</span>'?>
         </div>
     <? endif; ?>
     
@@ -51,10 +52,13 @@ $this->registerJsFile('/js/order/order_item_edit.js');
     <table class="margin-top-15">
         <tr>
             <th width="30"><input type="checkbox" name="content" id="checked-all"/></th>
-            <th width="150">Чертеж</th>
+            <th width="150">
+                <a href="#" id="change-dwg-object">Чертеж</a>
+            </th>
             <th width="50">Поз.</th>
-            <th width="355">Наименование</th>
-            <th width="50">Колич.</th>
+            <th width="305">Наименование</th>
+            <th width="50">Заказ.</th>
+            <th width="50">Получ.</th>
             <th width="85">Матер.</th>
         </tr>
         <? if ($content): ?>
@@ -62,17 +66,27 @@ $this->registerJsFile('/js/order/order_item_edit.js');
             <? foreach ($content as $item): ?>
                 <tr <? if ($item->children) echo 'class="item-parent"'; ?>>
                     <td>
-                        <input type="checkbox" name="content" item_id="<?=$item->id?>" number="<?=$number?>" order_id="<?=$order_id?>"/>
+                        <input type="checkbox" name="content" item_id="<?=$item->id?>" number="<?=$number?>" order_id="<?=$order->id?>"/>
                     </td>
                     <!-- drawing -->
                     <td class="text-center">
-                        <? if ($item->pathDrawing): ?>
-                            <a target="_blank" href="<?=Url::to([$item->pathDrawing])?>"><?=$item->drawing?></a>
-                        <? elseif ($item->drawing): ?>
-                            <?=$item->drawing?>
-                        <? else: ?>
-                            <span style="color:red;">Не указан</span>
-                        <? endif; ?>
+                        <span class="drawing-wrp">
+                            <? if ($item->pathDrawing): ?>
+                                <a target="_blank" href="<?=Url::to([$item->pathDrawing])?>"><?=$item->drawing?></a>
+                            <? elseif ($item->drawing): ?>
+                                <?=$item->drawing?>
+                            <? else: ?>
+                                <span style="color:red;">Не указан</span>
+                            <? endif; ?>
+                        </span>
+                        <span class="object-wrp" style="display: none">
+                            <? if ($item->code): ?>
+                                <a href="<?=Url::to(['/search/object/code', 'code' => $item->code])?>"><?=$item->code?></a>
+                            <? else: ?>
+                                <span class="red">Не указан</span>
+                            <? endif; ?>
+                        </span>
+
                     </td>
                     
                     <!-- item -->
@@ -86,14 +100,22 @@ $this->registerJsFile('/js/order/order_item_edit.js');
                     
                     <!-- name -->
                     <td>
-                        <a href="<?=Url::to(['/order/content/item', 'item_id' => $item->id])?>"><?=$item->name?></a>
+                        <a href="<?=Url::to(['/order/content/index', 'item_id' => $item->id])?>"><?=$item->name?></a>
                         <?=$item->delivery ? '<span> (Доставляет заказчик)</span>' : '' ?>
+                        <? if ($item->note && !$item->delivery): ?>
+                            <?=ShowNoteWidget::widget(['note' => $item->note, 'lengthMax' => 25, 'suffix' => ''])?>
+                        <? endif; ?>
                         <br /><span><?=$item->dimensions?></span>
                     </td>
-                    
-                    <!-- count -->
+
+                    <!-- number of ordered -->
                     <td class="text-center">
                         <?=$item->count ? $item->count : '<span style="color:red;">Нет</span>'?>
+                    </td>
+
+                    <!-- number of received -->
+                    <td class="text-center">
+                        <?=$item->numberReceived?>
                     </td>
                     
                     <!-- material -->
@@ -128,8 +150,8 @@ $this->registerJsFile('/js/order/order_item_edit.js');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?=OrderContentMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderMenuWidget::widget(['type' => 'order-content', 'order_id' => $order->id])?>
      <?=ObjectSearchMenuWidget::widget()?>
-    <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
-    <? if (!$order->active) echo OrderActiveMenuWidget::widget(['order_id' => $order->id]); ?>
+    <?=OrderMenuWidget::widget(['type' => 'order', 'order_id' => $order->id])?>
+    <? //if (!$order->active) echo OrderActiveMenuWidget::widget(['order_id' => $order->id]); ?>
 </div>

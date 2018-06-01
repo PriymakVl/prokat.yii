@@ -14,12 +14,15 @@ $this->registerCssFile('/css/order.css');
 
 ?>
 <div class="content">
-    <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
+    <!-- top nenu -->>
+    <?=OrderMenuWidget::widget(['type' => 'top-order', 'order_id' => $order->id])?>
     
    <!-- info order is active -->
     <? if ($order->active): ?>
-        <div class="alert alert-success margin-top-15">Активный заказ</div>
+        <div class="alert alert-success margin-top-15 message-wrp">
+            <span>Активный заказ</span>
+            <span class="glyphicon glyphicon-remove" title="Закрыть"></span>
+        </div>
     <? endif; ?>
     
     <!-- flash messge -->
@@ -156,8 +159,9 @@ $this->registerCssFile('/css/order.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?=OrderContentMenuWidget::widget(['item_id' => $item->id, 'order_id' => $order->id])?>
+    <?//=OrderContentMenuWidget::widget(['item_id' => $item->id, 'order_id' => $order->id])?>
+    <?=OrderMenuWidget::widget(['type' => 'order-content', 'order_id' => $order->id, 'item_id' => $item->id])?>
     <?=ObjectSearchMenuWidget::widget()?>
-    <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
-    <?=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderMenuWidget::widget(['type' => 'order', 'order_id' => $order->id])?>
+    <?//=OrderActiveMenuWidget::widget(['order_id' => $order->id])?>
 </div>

@@ -15,7 +15,7 @@ $this->registerCssFile('css/specification.css');
     <?=ObjectTopMenuWidget::widget(['obj_id' => $obj->id])?>
     
     <!-- info -->
-    <div class="info-box">
+    <div class="info-box margin-top-15">
         <span>Название:</span>&laquo; <?=$obj->name?> &raquo;
         <? if ($obj->code): ?>
             <br />
@@ -24,7 +24,7 @@ $this->registerCssFile('css/specification.css');
     </div>
     
     <!-- specification -->
-    <table>
+    <table class="margin-top-15">
         <tr>
             <th width="80">Номер</th>
             <th width="550">Наименование</th>

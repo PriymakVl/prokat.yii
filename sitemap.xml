@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+<url>
+  <loc>http://seo.geleos.net/</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglsspecialists</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglschecktypes</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglschecks</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglscheckres</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglssites</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglscheckparam</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=site%2Fcheckpost</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=site%2Findex</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=site%2Fabout</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=site%2Fcontact</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=site%2Flogin</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglsspecialists%2Fcreate</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglsspecialists%2Findex&amp;sort=id</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglsspecialists%2Findex&amp;sort=spec_name</loc>
+</url>
+<url>
+  <loc>http://seo.geleos.net/web/index.php?r=seo%2Fglsspecialists%2Findex&amp;sort=spec_name_en</loc>
+</url>
+</urlset>

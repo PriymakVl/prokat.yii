@@ -22,11 +22,11 @@ class ObjectSpecificationController extends BaseController
         return $this->render('index', ['parent' => $parent, 'children' => $children, 'sort' => $sort]);
     }
     
-    public function actionMain() 
-    {    
-        $objects = Objects::getMainParent();
-        return $this->render('main', ['objects' => $objects]);
-    }
+//    public function actionMain()
+//    {
+//        $objects = Objects::getMainParent();
+//        return $this->render('main', ['objects' => $objects]);
+//    }
     
     public function actionCopyList($ids, $parent_id)
     {

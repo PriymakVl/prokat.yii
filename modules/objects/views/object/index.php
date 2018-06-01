@@ -8,6 +8,7 @@ use app\modules\objects\widgets\ObjectSearchMenuWidget;
 use app\modules\objects\widgets\ObjectTopMenuWidget;
 use app\modules\lists\widgets\ListItemMenuWidget;
 use app\modules\order\models\Order;
+use app\widgets\FlashMessageWidget;
     
 $this->registerCssFile('/css/object.css');
 $this->registerJsFile('/js/object/object_copy.js');
@@ -16,6 +17,9 @@ $this->registerJsFile('/js/object/object_copy.js');
 <div class="content">
     <!-- top nenu -->
     <?=ObjectTopMenuWidget::widget(['obj_id' => $obj->id])?>
+
+    <!-- flash messge -->
+    <?=FlashMessageWidget::widget()?>
     
     <!-- data object -->
     <table class="object-data margin-top-15">
@@ -133,7 +137,7 @@ $this->registerJsFile('/js/object/object_copy.js');
                                 break;
                             }
                             $color = $order->state == Order::STATE_PERFORMED ? 'orange' : 'black';
-                            echo '<a style="color:'.$color.'" href="'.Url::to(['/order/content/list', 'order_id' =>$order->id]).'" target="_blank">№'.$order->number.'</a>&nbsp;&nbsp;';
+                            echo '<a style="color:'.$color.'" href="'.Url::to(['/order/content/list', 'order_id' =>$order->id]).'" title="'.$order->name.'" target="_blank">№'.$order->number.'</a>&nbsp;&nbsp;';
                             $limit++;
                         }
                     ?>
@@ -165,5 +169,4 @@ $this->registerJsFile('/js/object/object_copy.js');
 <?=MainMenuWidget::widget()?>
 <?=ObjectSearchMenuWidget::widget()?>
 <?=ObjectMenuWidget::widget(['obj' => $obj])?>
-<?=ListItemMenuWidget::widget(['obj_id' => $obj->id])?>
 </div> 

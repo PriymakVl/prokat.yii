@@ -22,8 +22,9 @@ class BaseAsset extends AssetBundle
         //'js/vendor/jquery.cookie.js',
         //'js/vendor/jquery.accordion.js',
         //'js/total/list_department_accordion.js',
-        'js/total/menu_toggle.js',
-        'js/total/table_checked_all.js'
+//        'js/total/menu_toggle.js',
+//        'js/total/table_checked_all.js',
+//        'js/total/message_remove.js'
     ];
     
     public $depends = [

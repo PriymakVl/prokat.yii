@@ -22,7 +22,7 @@ class OrderLogic extends BaseLogic
         //status
         $params['status'] = self::STATUS_ACTIVE;
         //period
-        $params['period'] = (Yii::$app->request->get('period') == 'all') ? null : Yii::$app->request->get('period', Order::CURRENT_PERIOD);
+        $params['period'] = (Yii::$app->request->get('period') == 'all') ? null : Yii::$app->request->get('period', Order::PERIOD_CURRENT);
         //customer
         if (Yii::$app->request->get('customer') == 'all') $params['customer'] = null;
         else $params['customer'] = Yii::$app->request->get('customer');
@@ -73,6 +73,19 @@ class OrderLogic extends BaseLogic
         $item->drawing = self::codeWithoutVariant($object->code);
         if ($item->drawing != $item->code) $item->variant = explode('/', $object->code)[1];
         $item = self::setDrawing($object, $item);
+        $item->save();
+        return $item;
+    }
+
+    public static function saveParamsFromDraft($draft, $order_id)
+    {
+        $item = new OrderContent();
+        $item->order_id = $order_id;
+        $item->name = $draft->name;
+        $item->drawing = $draft->number;
+        $item->file = $draft->file;
+        $item->cat_dwg = 'department';
+        $item->count = 1;
         $item->save();
         return $item;
     }
@@ -198,7 +211,7 @@ class OrderLogic extends BaseLogic
 	public static function getPeriod($date)
 	{
 		if (!$date) return Order::PERIOD_UNDEFIND;
-		if ($date > 1491253100) return Order::CURRENT_PERIOD;
+		if ($date > 1491253100) return Order::PERIOD_CURRENT;
 		else if ($date < 1487048400 && $date > 1420434000) return Order::PERIOD_2015_2017; //2015 - 2017
 		else if ($date < 1420434000 )return Order::PERIOD_2010_2015;//2010 - 2015
 	}

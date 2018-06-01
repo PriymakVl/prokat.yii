@@ -17,31 +17,37 @@ class DrawingDepartmentController extends BaseController
     public function actionIndex($dwg_id) 
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, false, self::STATUS_ACTIVE);
-        $dwg->getFullNumber()->convertDate();
+        $dwg->convertDate();
         return $this->render('index', compact('dwg'));
     }
     
     public function actionList()
     {
         $params = DrawingLogic::getParamsDepartment();
-        $list = DrawingDepartment::getListDepartment($params);
+        $list = DrawingDepartment::getList($params);
         $pages = DrawingDepartment::$pages;
         return $this->render('list', compact('list', 'params', 'pages'));
     }
     
-    public function actionForm($dwg_id = null, $obj_id = null) 
+    public function actionForm($dwg_id = null, $obj_id = null)
     { 
         $dwg = DrawingDepartment::getOne($dwg_id, null, self::STATUS_ACTIVE);
-        if ($dwg) $dwg->getFullNumber();
-        else $number_new = '27.'.date('y').'.'.DrawingLogic::getNewNumberDepartmentDwg();
+
         $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
-        if ($obj) $obj->getName();
+
         $form = new DrawingDepartmentForm();
+        $form->getNewNumber();
+        $this->loadDrawing($form, $dwg, $obj);
+
+        return $this->render('form', compact('dwg', 'form', 'obj'));
+    }
+
+    private function loadDrawing($form, $dwg, $obj)
+    {
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($dwg)) {
-            if ($obj_id) return $this->redirect(['/object/drawing', 'obj_id' => $obj_id]);
+            if ($obj->id) return $this->redirect(['/object/drawing', 'obj_id' => $obj->id]);
             else return $this->redirect(['/drawing/department', 'dwg_id' => $form->dwg->id]);
-        }   
-        return $this->render('form', compact('dwg', 'form', 'obj', 'number_new'));
+        }
     }
 
     public function actionDelete($dwg_id) 

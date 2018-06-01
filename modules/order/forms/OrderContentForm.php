@@ -150,36 +150,5 @@ class OrderContentForm extends BaseForm
         }       
     }
 
-//    private function saveObject()
-//    {
-//        $obj = new Objects();
-//        $obj->rus = $this->name;
-//        $obj->alias = $this->name;
-//        $obj->order_name = $this->name;
-//        $obj->parent_id = 22821;
-//        $obj->weight = $this->weight;
-//        $obj->dimensions = $this->dimensions;
-//        $obj->save();
-//        $obj->code = $obj->id.'-code';
-//        $obj->save();
-//        $this->element->obj_id = $obj->id;
-//        $this->element->code = $obj->code;
-//        return $obj;
-//    }
-    
-//    public function getNewNumberDepartmentDwg()
-//    {
-//        $this->newNumberDepartmentDwg = DrawingLogic::getNewNumberDepartmentDwg();
-//        $year = date('y');
-//        $this->newFullNumberDepartmentDwg = '27.'.$year.'.'.$this->newNumberDepartmentDwg;
-//        return $this;
-//    }
-
-    public function getArrayDetailNames()
-    {
-        $this->detailNames = \Yii::$app->params['detailNames'];
-        return $this;
-    }
-
 }
 

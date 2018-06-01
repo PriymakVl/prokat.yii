@@ -29,5 +29,8 @@ $this->registerJsFile('/js/object/object_update.js');
         <li>
             <a target="_blank" href="<?=Url::to(['/order/content/item/add', 'obj_id' => $obj->id])?>">Добавить в заказ</a>
         </li>
+        <li>
+            <a href="<?=Url::to(['/list/item/add', 'obj_id' => $obj->id])?>">Добавить в список</a>
+        </li>
     </ul>   
 </div>

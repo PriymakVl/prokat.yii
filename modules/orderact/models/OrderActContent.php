@@ -86,6 +86,17 @@ class OrderActContent extends BaseModel
         $list = self::find()->filterWhere($params)->all();
         return self::executeMethods($list, ['getAct', 'getOrder', 'getItemOrder']);
     }
+
+    public static function getNumberReceivedForItemByOrder($item_id, $order_id)
+    {
+        $count = 0;
+        $items = self::findAll(['item_id' => $item_id, 'order_id' => $order_id, 'status' => self::STATUS_ACTIVE]);
+        if (empty($items)) return $count;
+        foreach ($items as $item) {
+            $count += $item->count;
+        }
+        return $count;
+    }
 }
 
 

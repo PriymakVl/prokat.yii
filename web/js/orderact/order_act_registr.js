@@ -27,7 +27,7 @@ $(document).ready(function() {
         }
         ids = ids.slice(0, -1);
         
-        location.href = 'http://' + location.host + '/order/act/registr?ids=' + ids + '&order_id=' + order_id + '&number=' + number; 
+        location.href = 'http://' + location.host + '/order/act/registr?ids=' + ids + '&order_id=' + order_id + '&number=' + number;
     });
     
 });

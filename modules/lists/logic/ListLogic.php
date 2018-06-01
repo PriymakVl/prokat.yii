@@ -33,17 +33,11 @@ class ListLogic extends BaseLogic
         $session->set('list_id', $list_id);
     }
     
-    public static function deleteListFromSession()
-    {
-        $session = Yii::$app->session;
-        $session->remove('list_id');
-    }
-    
     public static function getActiveListId()
     {
         $session = Yii::$app->session;
         $list_id = $session->get('list_id');
-        if (!$list_id) throw new ForbiddenHttpException('�� ������ �������� ������ '.__METHOD__);
+        if (!$list_id) return false;
         return $list_id;
     }
     

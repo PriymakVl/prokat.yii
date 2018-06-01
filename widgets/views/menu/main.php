@@ -2,10 +2,8 @@
     <h5>Главное меню</h5>
     <ul>
         <li>
-            <a href="<?=Yii::$app->urlManager->createUrl(['/'])?>">Главная</a>
-            <span>&nbsp;|</span>
-            <a href="<?=Yii::$app->urlManager->createUrl(['object/specification/main'])?>">Участки</a>
-            
+            <a href="/">Главная</a><span>&nbsp;&#124;</span>
+            <a href="/modules/list" target="_blank">Модули</a>
         </li>
         <li>
             <a href="<?=Yii::$app->urlManager->createUrl(['lists'])?>">Списки</a>
@@ -18,16 +16,13 @@
             <a href="<?=Yii::$app->urlManager->createUrl(['drawing/works/list'])?>">ПКО</a>
         </li>
         <li>
-            <a href="/order/list">Заказы</a><span>&nbsp;&#124;</span>
-            <a href="/order-list/list">Списки</a><span>&nbsp;&#124;</span>
+            <a href="/orders">Заказы</a><span>&nbsp;&#124;</span>
             <a href="/order/act/list">Акты</a>
         </li>
         <li>
             <a href="/application/list">Заявки</a><span>&nbsp;&#124;</span>
             <a href="/product/category">Товары</a>
         </li>
-        <li>
-            <a href="/modules/list" target="_blank">Модули</a>
-        </li>
+
     </ul>
 </div>

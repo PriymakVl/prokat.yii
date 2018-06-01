@@ -1,6 +1,6 @@
 <?php
 
-$this->registerJsFile('/js/order/change_search_order.js'); 
+$this->registerJsFile('/js/order/order/change_search_order.js');
 ?>
 <div class="header search-box search-order">
     <a href="/" class="link-home">Главная</a>

@@ -2,6 +2,7 @@
 
 namespace app\modules\order\controllers;
 
+use app\modules\drawing\models\DrawingDepartment;
 use Yii;
 use yii\web\ForbiddenHttpException;
 use app\controllers\BaseController;
@@ -43,14 +44,13 @@ class OrderContentController extends BaseController
         if ($item) $item->dimensions = unserialize($item->dimensions);
 
         $form = new OrderContentForm($item);
-        $form->getArrayDetailNames();
         
         if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) { 
             Yii::$app->session->setFlash('success', 'Элемент заказа успешно '.($item ? 'отредактирован' : 'создан'));
             OrderLogic::setSession($order->id, 'order-active');
-            return $this->redirect(['/order/content/item', 'item_id' => $form->element->id]);
+            return $this->redirect(['/order/content/list', 'order_id' => $order_id]);
         }   
-        return $this->render('form', compact('item', 'form', 'order'));
+        return $this->render('form/index', compact('item', 'form', 'order'));
     }
     
     public function actionDeleteOne($item_id) 
@@ -68,7 +68,7 @@ class OrderContentController extends BaseController
         
     }
     
-    public function actionItemsManagment($ids, $order_id) 
+    public function actionDeleteOrAddItemForContent($ids, $order_id)
     {
         OrderLogic::deleteOrAddItemContent($ids);
         return $this->redirect(['/order/content/list', 'order_id' => $order_id]);
@@ -102,6 +102,18 @@ class OrderContentController extends BaseController
         $item_id = OrderLogic::addFileOfItemOrder($file, $cat_dwg, $object);
         if ($item_id) $this->redirect(['/order/content/item', 'item_id' => $item_id]);
         else throw new ForbiddenHttpException('error '.__METHOD__);
+    }
+
+    public function actionAddDraft($dwg_id)
+    {
+        $draft = DrawingDepartment::findOne($dwg_id);
+        $order_id = OrderLogic::getSession('order-active');
+        if (!$order_id) {
+            Yii::$app->session->setFlash('danger', 'Эскиз недобавлен в заказ. Нет активного заказа');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        $item = OrderLogic::saveParamsFromDraft($draft, $order_id);
+        $this->redirect(['/order/content/list', 'order_id' => $order_id]);
     }
     
     public function actionSetParent($ids, $parent_id, $order_id)

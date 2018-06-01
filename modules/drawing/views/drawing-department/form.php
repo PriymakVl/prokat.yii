@@ -31,7 +31,7 @@ $this->registerJsFile('/js/drawing/dwg_form_show_tab.js');
                 <?=$f->field($form, 'code')->textInput(['value' => $dwg->code, 'style' => 'width:200px'])->label('Код детали:')?>
                 
                 <!-- number dwg -->
-                <?=$f->field($form, 'number')->textInput(['value' => $dwg ? $dwg->fullNumber : $number_new, 'style' => 'width:120px', 'disabled' => 'disabled'])->label('Номер эскиза:')?>
+                <?=$f->field($form, 'number')->textInput(['value' => $dwg ? $dwg->number : $form->newNumber, 'style' => 'width:200px'])->label('Номер эскиза:')?>
             </div>
 
             <!-- name dwg -->

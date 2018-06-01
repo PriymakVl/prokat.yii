@@ -1,8 +1,9 @@
 <?php
     use yii\helpers\Url;
     
-    $this->registerJsFile('/js/drawing/dwg_draft_update.js');
-    $this->registerJsFile('/js/drawing/dwg_draft_delete.js');
+    $this->registerJsFile('/js/drawing/draft/draft_update.js');
+    $this->registerJsFile('/js/drawing/draft/draft_delete.js');
+    $this->registerJsFile('/js/drawing/draft/draft_add_order.js');
     $this->registerJsFile('/js/drawing/works/dwg_works_delete.js');
     $this->registerJsFile('/js/drawing/works/dwg_works_update.js');
 ?>
@@ -16,6 +17,7 @@
             <li><a href="<?=Url::to('/drawing/department/form')?>" >Добавить эскиз</a></li>
             <li><a href="#" onclick="return false;" id="draft-update">Редактировать эскиз</a></li>
             <li><a href="#" onclick="return false;" id="draft-delete" >Удалить эскиз</a></li>
+            <li><a href="#" onclick="return false;" id="draft-add-order" >Добавить в заказ</a></li>
         <? elseif ($category == 'works'): ?>
             <li><a href="<?=Url::to('/drawing/works/form')?>" >Добавить чертеж</a></li>
             <li><a href="#" onclick="return false;" id="dwg-works-update">Редактировать чертеж</a></li>

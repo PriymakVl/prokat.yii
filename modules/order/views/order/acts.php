@@ -5,8 +5,6 @@ use app\widgets\MainMenuWidget;
 use app\widgets\FlashMessageWidget;
 use app\modules\order\widgets\OrderMenuWidget;
 use app\modules\order\models\Order;
-//use app\modules\orderact\widgets\OrderActListMenuWidget;
-use app\modules\order\widgets\OrderTopMenuWidget;
 use app\modules\order\widgets\OrderActiveMenuWidget;
 
 $this->registerCssFile('/css/order.css');
@@ -14,13 +12,13 @@ $this->registerCssFile('/css/order.css');
 ?>
 <div class="content">
     <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
+    <?=OrderMenuWidget::widget(['type' => 'top-order', 'order_id' => $order->id])?>
     
     <!-- info message -->
     <?=FlashMessageWidget::widget()?>
     
     <!-- list acts order -->
-    <table class="margin-top-15">
+    <table class="margin-top-15" id="table-order-acts">
         <tr>
             <th width="30">
                 <input type="checkbox" name="order" id="checked-all" />
@@ -30,7 +28,7 @@ $this->registerCssFile('/css/order.css');
             <th width="90">месяц</th>
             <th width="90">позиций</th>
             <th width="60">кол-во</th>
-            <th width="90">цена</th>
+            <th width="95">цена</th>
             <th >
                 <?=$order->kind == Order::KIND_PERMANENT ? 'заказал' : 'примечание'?>
             </th>
@@ -80,7 +78,6 @@ $this->registerCssFile('/css/order.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?=OrderMenuWidget::widget()?>
-    <?=OrderActiveMenuWidget::widget()?>
-    <?//=ListMenuWidget::widget()?>
+    <?=OrderMenuWidget::widget(['type' => 'order', 'order_id' => $order->id])?>
+    <?//=OrderActiveMenuWidget::widget()?>
 </div>

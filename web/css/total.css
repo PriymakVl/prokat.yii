@@ -116,6 +116,7 @@ table input[type="checkbox"] {
 /* title box */
 .content .title-box {
 	border:1px solid #B49A6A;
+    font-weight: bold;
 	text-align: center; 
     font-size: 18px;  
     position: relative;  
@@ -190,6 +191,20 @@ table input[type="checkbox"] {
     padding: 5px !important;
 }
 
+/*message*/
+.message-wrp {
+    position: relative;
+}
+
+.message-wrp .glyphicon {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+}
+
+.message-wrp .glyphicon:hover {
+    cursor: pointer;
+}
     
 
 

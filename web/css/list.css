@@ -1,61 +1,1 @@
-.info-list {
-    position: relative;
-    margin-top: 0 !important;
-}
-
-#list-description-show {
-    position: absolute;
-    top: 4px;
-    right: 8px;
-    color: #000;
-    text-decoration: underline;
-}
-
-.info-list a:hover {
-    text-decoration: none;
-}
-
-/* list description */
-#list-description {
-    margin-top: 10px;
-    position: relative;
-}
-
-#list-description h3 {
-    font-size: 14px;
-    margin: 0 0 2px;
-    color: #000;
-}
-
-#list-description div {
-    padding:5px 10px;
-	border:1px solid #B49A6A;
-	text-align: left;  
-}
-
-#list-description-hide {
-    position: absolute;
-    top: -2px;
-    right: 8px;
-    color: #000;
-    text-decoration: underline;   
-}
-
-#list-description hr {
-    margin: 5px 0;
-}
-
-#list-description div span {
-    color: #000;
-}
-
-
-
-
-
-
-
-
-
-
-  
+.info-list {    position: relative;    margin-top: 0 !important;}#list-description-show {    position: absolute;    top: 4px;    right: 8px;    color: #000;    text-decoration: underline;}.title-box a {    color: #000;    font-size: 15px;    position: absolute;    top: 2px;    left: 15px;    text-decoration: underline;    font-weight: normal;}.info-list a:hover {    text-decoration: none;}/* list description */#list-description {    margin-top: 10px;    position: relative;}#list-description h3 {    font-size: 14px;    margin: 0 0 2px;    color: #000;}#list-description div {    padding:5px 10px;	border:1px solid #B49A6A;	text-align: left;}#list-description-hide {    position: absolute;    top: -2px;    right: 8px;    color: #000;    text-decoration: underline;}#list-description hr {    margin: 5px 0;}#list-description div span {    color: #000;}  

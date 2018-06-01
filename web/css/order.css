@@ -1,6 +1,3 @@
-.content table {
-    width: 730px!important;
-}
 .active-order {
     margin-top: 15px;
 }
@@ -283,4 +280,16 @@
 
 .field-orderform-subgroup {
     margin-top: 15px;
+}
+
+#table-order-acts {
+    width: 725px;
+}
+
+#short-note {
+    color: #0f0f0f;
+}
+
+#change-dwg-object {
+    color: #494949;
 }

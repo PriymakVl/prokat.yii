@@ -24,7 +24,8 @@ class Objects extends BaseModel
     public $similar;
     public $reserve;
     public $department;
-    
+    public $breadcrumbsForMainPage;
+
     const MAIN_PARENTS = 0;
     
     public function behaviors()

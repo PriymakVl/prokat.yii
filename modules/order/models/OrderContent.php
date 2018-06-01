@@ -2,6 +2,7 @@
 
 namespace app\modules\order\models;
 
+use app\modules\orderact\models\OrderActContent;
 use yii\web\ForbiddenHttpException;
 use app\models\BaseModel;
 use app\modules\order\logic\OrderLogic;
@@ -15,6 +16,7 @@ class OrderContent extends BaseModel
     public $weightAll;
     public $pathDrawing;
     public $children;
+    public $numberReceived;
     
     public static function tableName()
     {
@@ -30,7 +32,7 @@ class OrderContent extends BaseModel
     {
         $content = self::find()->where(['status' => self::STATUS_ACTIVE, 'order_id' => $order_id, 'parent_id' => self::MAIN_PARENT])
                     ->orderBy(['rating' => SORT_DESC, 'item' => SORT_ASC])->all();
-        $content = self::executeMethods($content, ['countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
+        $content = self::executeMethods($content, ['getNumberOfReceived', 'countWeightAll', 'getWeight', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
         return OrderLogic::arrangingContent($content);
     }
     
@@ -70,16 +72,6 @@ class OrderContent extends BaseModel
         $this->children = self::executeMethods($children, ['countWeightAll', 'getPathDrawing', 'getChildren', ['getDimensions', ['dimensions']]]);
         return $this;
     }
-
-     //public static function searchByCode($code)
-//    {
-//        $result = self::find()->where(['status' => STATUS_ACTIVE])->filterWhere(['like', 'code', $code])->all();
-//        if (empty($result)) return [];
-//        if (count($result) == 1) $orders = Order::findAll(['id' => $result[0]->order_id]);
-//        else $orders = OrderLogic::getArrayOrders($result);
-//        self::executeMethods($orders, ['getNumber']);
-//        return $orders;
-//    }
     
     public function getWeight()
     {
@@ -127,6 +119,12 @@ class OrderContent extends BaseModel
         $pos_dwg = stripos($this->drawing, $drawing);
         if ($pos_code === false && $pos_dwg === false) return false;
         else return ['code' => $this->code, 'drawing' => $this->drawing];
+    }
+
+    public function getNumberOfReceived()
+    {
+        $this->numberReceived = OrderActContent::getNumberReceivedForItemByOrder($this->id, $this->order_id);
+        return $this;
     }
      
 }

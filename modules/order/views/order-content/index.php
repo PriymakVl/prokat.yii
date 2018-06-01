@@ -13,8 +13,8 @@ $this->registerCssFile('/css/order.css');
 
 ?>
 <div class="content">
-    <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id])?>
+    <!-- top menu -->
+    <?=OrderMenuWidget::widget(['type' => 'top-order', 'order_id' => $order->id])?>
     
    <!-- info order is active -->
     <? if ($order->active): ?>
@@ -153,7 +153,7 @@ $this->registerCssFile('/css/order.css');
                     <a href="<?=Url::to(['/search/object/code', 'code' => $item->code])?>"><?=$item->code?></a>
                 <? else: ?>
                     <span class="red">Не указан</span>
-            <? endif; ?>
+                <? endif; ?>
             </td>
         </tr>
     </table>
@@ -161,7 +161,7 @@ $this->registerCssFile('/css/order.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    <?=OrderContentMenuWidget::widget(['item_id' => $item->id, 'order_id' => $order->id])?>
+    <?=OrderMenuWidget::widget(['type' => 'order-content', 'item_id' => $item->id, 'order_id' => $order->id])?>
     <?=ObjectSearchMenuWidget::widget()?>
-    <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderMenuWidget::widget(['type' => 'ordert', 'order_id' => $order->id])?>
 </div>

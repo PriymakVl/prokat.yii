@@ -16,9 +16,9 @@ $this->registerCssFile('/css/list.css');
     <div class="form-wrp">
         <? $f = ActiveForm::begin(['id' => 'form-item-list']); ?>
             <!-- name -->          
-            <?=$f->field($form, 'name')->textInput(['value' => $item->name, 'disabled' => 'disabled'])->label('Название элемента:')?>
+            <?=$f->field($form, 'name')->textInput(['value' => $item->name])->label('Название элемента:')?>
             <!-- code -->          
-            <?=$f->field($form, 'code')->textInput(['value' => $item->code ? $item->code : 'Не указан', 'disabled' => 'disabled'])->label('Код элемента:')?>
+            <?=$f->field($form, 'code')->textInput(['value' => $item->code])->label('Код элемента:')?>
             <!-- rating -->          
             <?=$f->field($form, 'rating')->textInput(['value' => $item->rating])->label('Рейтинг элемента:')->hint('Влияет на позицию элемента в списке')?>
             <!-- description -->

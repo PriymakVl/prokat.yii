@@ -79,6 +79,12 @@ class BaseLogic  extends Behavior implements ConfigApp
         return $session->get($session_name);    
     }
 
+    public static function deleteSession($session_name)
+    {
+        $session = Yii::$app->session;
+        return $session->remove($session_name);
+    }
+
     public static function isInObjects($value, $name, $array)
     {
         if(empty($array)) return false;

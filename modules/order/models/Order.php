@@ -6,7 +6,7 @@ use yii\web\ForbiddenHttpException;
 use yii\data\Pagination;
 use app\models\BaseModel;
 use app\modules\order\logic\OrderLogic;
-use app\modules\order\logic\ConvertDataOrder;
+use app\modules\order\logic\OrderConvert;
 use app\modules\employees\logic\EmployeeLogic;
 use app\modules\employees\models\Employee;
 
@@ -37,12 +37,14 @@ class Order extends BaseModel
     const PERIOD_UNDEFINED = 1;
     const PERIOD_2010_2015 = 2;
     const PERIOD_2015_2017 = 3;
-    const CURRENT_PERIOD = 4;
+    const PERIOD_CURRENT = 4;
+    const PERIOD_ALL = 'all';
 
     const TYPE_ENHANCEMENT = 1; //улучшение
     const TYPE_MAKING = 4; //изготовление
     const TYPE_MAINTENANCE = 5; //текущий ремонт
     const TYPE_CAPITAL_REPAIR = 6; // капитальный ремонт
+    const TYPE_INTERCHANGE = 3;  //сменное оборудование
 
     //const ORDER_STATE_PART_MANUFACTURED = 4;
     //const ORDER_STATE_MANUFACTURED = 5;
@@ -101,13 +103,13 @@ class Order extends BaseModel
     
     public function convertType()
     {
-        $this->type = ConvertDataOrder::convertType($this->type);
+        $this->type = OrderConvert::convertType($this->type);
         return $this;
     }
     
     public function convertKind()
     {
-        $this->kind = ConvertDataOrder::convertKind($this->kind);
+        $this->kind = OrderConvert::convertKind($this->kind);
         return $this;
     }
     
@@ -174,7 +176,7 @@ class Order extends BaseModel
     
     public function getWork($html = true)
     {
-        if ($this->work) $this->work = OrderLogic::convertWork($this->work, $html);
+        if ($this->work) $this->work = OrderConvert::convertWork($this->work, $html);
         return $this;
     }
     
@@ -186,15 +188,15 @@ class Order extends BaseModel
     
     public function convertPeriod()
     {
-        $this->period = ConvertDataOrder::convertPeriod($this->period);
+        $this->period = OrderConvert::convertPeriod($this->period);
         return $this;
     }
     
     public function convertLocation()
     {
-        $this->sectionName = ConvertDataOrder::convertLocation($this->section);
-        $this->equipmentName = ConvertDataOrder::convertLocation($this->equipment);
-        $this->unitName = ConvertDataOrder::convertLocation($this->unit);
+        $this->sectionName = OrderConvert::convertLocation($this->section);
+        $this->equipmentName = OrderConvert::convertLocation($this->equipment);
+        $this->unitName = OrderConvert::convertLocation($this->unit);
         return $this;
     }
 
@@ -209,9 +211,9 @@ class Order extends BaseModel
 
     public function convertLocationGroup()
     {
-        $this->groupName = ConvertDataOrder::convertGroup($this->group);
-        $this->subgroupName = ConvertDataOrder::convertGroup($this->subgroup);
-        $this->unitSubgroupName = ConvertDataOrder::convertGroup($this->unit_subgroup);
+        $this->groupName = OrderConvert::convertGroup($this->group);
+        $this->subgroupName = OrderConvert::convertGroup($this->subgroup);
+        $this->unitSubgroupName = OrderConvert::convertGroup($this->unit_subgroup);
         return $this;
     }
 

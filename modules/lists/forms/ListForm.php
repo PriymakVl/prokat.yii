@@ -13,7 +13,13 @@ class ListForm extends BaseForm
     public $description;
     //form
     public $types;
-    public $list_id;
+    public $list;
+
+    public function __construct($list)
+    {
+        if ($list) $this->list = $list;
+        else $this->list = new Lists;
+    }
 
     public function rules() 
     {
@@ -25,16 +31,12 @@ class ListForm extends BaseForm
         ];
     }
     
-    public function save($list)
-    {   
-        if (!$list) $list = new Lists();
-        $list->name = $this->name;
-        $list->description = $this->description;
-        $list->type = $this->type;
-        $res = $list->save(); 
-        if (!$res) return false;
-        $this->list_id = $list->id;
-        return true;         
+    public function save()
+    {
+        $this->list->name = $this->name;
+        $this->list->description = $this->description;
+        //$this->list->type = $this->type;
+        return $this->list->save();
     }
     
     public function getTypes()

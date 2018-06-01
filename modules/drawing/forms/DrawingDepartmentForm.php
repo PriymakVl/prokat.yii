@@ -23,18 +23,18 @@ class DrawingDepartmentForm extends DrawingForm
     
     public $dwg;
     public $dwg_id;
+    public $newNumber;
 
     public function behaviors()
     {
     	return ['drawing-logic' => ['class' => DrawingLogic::className()]];
     }
 
-    
     public function rules() 
     {
         return [
-            ['name', 'required', 'message' => 'Необходимо заполнить поле'],
-            [['designer', 'note', 'code'], 'string'],
+            [['name', 'number'], 'required', 'message' => 'Необходимо заполнить поле'],
+            [['designer', 'note', 'code', 'number'], 'string'],
             ['draft', 'file', 'extensions' => ['pdf', 'tif', 'jpg', 'jpeg']],
             ['kompas', 'file', 'extensions' => ['cdw']],
         ];
@@ -44,14 +44,9 @@ class DrawingDepartmentForm extends DrawingForm
 
     public function save($dwg)
     {
-        if (!$dwg) {
-            $this->dwg = new DrawingDepartment();
-            $this->dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
-            //debug($this->dwg->number);
-            $this->dwg->year = date('Y');
-            $this->dwg->save();
-        }
-        else $this->dwg = $dwg;
+        $this->dwg = $this->getDwg($dwg);
+        $this->dwg->number = $this->number;
+        $this->dwg->year = date('Y');
         $this->dwg->designer = $this->designer;
         $this->dwg->date = time();
         $this->dwg->name = $this->name;
@@ -60,6 +55,14 @@ class DrawingDepartmentForm extends DrawingForm
         $this->uploadFileDraft();
         $this->uploadFileKompas();
         return $this->dwg->save();
+    }
+
+    private function getDwg($dwg)
+    {
+        if ($dwg) return $dwg;
+        $dwg = new DrawingDepartment();
+        $dwg->save();
+        return $dwg;
     }
 
     private function uploadFileDraft() 
@@ -75,7 +78,13 @@ class DrawingDepartmentForm extends DrawingForm
         $file = UploadedFile::getInstance($this, 'kompas');
         if ($file)  $this->dwg->file_cdw = $this->uploadFile($this->dwg->id, $file, 'department/kompas', '_kompas' ); 
     }
-     
+
+    public function getNewNumber()
+    {
+        $this->newNumber =  DrawingLogic::getNewNumberDepartmentDwg();
+        return $this;
+    }
+
 
 }
 

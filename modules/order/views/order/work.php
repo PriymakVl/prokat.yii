@@ -10,7 +10,7 @@ $this->registerCssFile('/css/order.css');
 ?>
 <div class="content">
     <!-- top nenu -->
-    <?=OrderTopMenuWidget::widget(['order_id' => $order->id, 'count_acts' => $count_acts])?>
+    <?=OrderMenuWidget::widget(['type' => 'top-order', 'order_id' => $order->id])?>
     
     <!-- info -->
     <div class="info-box margin-top-15">
@@ -33,6 +33,5 @@ $this->registerCssFile('/css/order.css');
 <!-- menu -->
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
-    
-    <?=OrderMenuWidget::widget(['order_id' => $order->id])?>
+    <?=OrderMenuWidget::widget(['type' => 'order', 'order_id' => $order->id])?>
 </div>

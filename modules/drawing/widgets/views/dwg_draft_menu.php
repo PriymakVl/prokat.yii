@@ -18,5 +18,8 @@
         <li>
             <a href="<?=Url::to(['/drawing/department/form', 'dwg_id' => $dwg_id])?>">Редактировать эскиз</a>
         </li>
+        <li>
+            <a href="<?=Url::to(['/order/content/add-draft', 'dwg_id' => $dwg_id])?>">Добавить в заказ</a>
+        </li>
     </ul>    
 </div>

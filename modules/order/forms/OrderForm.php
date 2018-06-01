@@ -8,6 +8,7 @@ use app\modules\order\logic\OrderLogic;
 use app\modules\order\models\Order;
 use app\modules\equipments\models\Equipment;
 use app\modules\equipments\models\EquipmentGroup;
+use app\modules\inventory\models\Inventory;
 
 class OrderForm extends BaseForm
 {   
@@ -38,6 +39,7 @@ class OrderForm extends BaseForm
     //form
     public $order;
     public $newNumber;
+    public $inventories;
     //form sections of equipments
     public $sections;
     public $equipments;
@@ -181,20 +183,6 @@ class OrderForm extends BaseForm
         $this->newNumber = OrderLogic::getNumberOfFutureOrder();
         return $this;
     }
-    
-//    public function getNameEquipment()
-//    {
-//        if ($this->order->equipment) $result = Equipment::findOne(['id' => $this->order->equipment, 'status' => Equipment::STATUS_ACTIVE]);
-//        if ($result) $this->equipment = $result->name;
-//        return $this;
-//    }
-    
-//    public function getNameUnit()
-//    {
-//        if ($this->order->unit) $result = Equipment::findOne(['id' => $this->order->unit, 'status' => Equipment::STATUS_ACTIVE]);
-//        if ($result) $this->unit = $result->name;
-//        return $this;
-//    }
 
     public function getGroups()
     {
@@ -211,6 +199,12 @@ class OrderForm extends BaseForm
     public function getUnitsSubgroup()
     {
         if ($this->order->subgroup) $this->unitsSubgroup = EquipmentGroup::find()->where(['status' => self::STATUS_ACTIVE, 'parent_id' => $this->order->subgroup])->orderBy(['rating' => SORT_DESC])->all();;
+        return $this;
+    }
+
+    public function getInventories()
+    {
+        $this->inventories = Inventory::find()->where(['status' => Inventory::STATUS_ACTIVE])->orderBy(['rating' => SORT_DESC])->all();
         return $this;
     }
 

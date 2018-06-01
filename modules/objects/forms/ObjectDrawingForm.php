@@ -13,29 +13,23 @@ use yii\web\UploadedFile;
 use app\modules\drawing\logic\DrawingLogic;
 
 class ObjectDrawingForm extends BaseForm
-{   
-    public $category;
-    public $code;
-    public $dwg;
-    public $noteDwg;
+{
+    //table database
+    public $category; public $code; public $dwg; public $noteDwg;
     //works
-    public $numberWorksDwg; public $nameWorksDwg; 
-    public $works_dwg_1; public $works_dwg_2; public $works_dwg_3;
+    public $numberWorksDwg; public $nameWorksDwg; public $works_dwg_1; public $works_dwg_2; public $works_dwg_3;
     //department
-    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg;
+    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg; public $numberDepartmentDwg; public $newNumberDepartmentDwg;
     //danieli
-    public $revisionDanieliDwg; public $sheetDanieliDwg;
-    public $nameStandardDanieliDwg;
+    public $revisionDanieliDwg; public $sheetDanieliDwg; public $nameStandardDanieliDwg;
     //class
     public $obj;
     
     public function rules() {
         return [
             [['category'], 'required', 'message' => 'Необходимо указать  где создан чертеж'],
-            //['numberWorksDwg', 'checkNumberWorksDwg', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['numberWorksDwg', 'string'],
-            [['noteDwg', 'nameWorksDwg', 'nameStandardDanieliDwg', 'revisionDanieliDwg'], 'string'],
-            [['designerDepartmentDwg', 'nameDepartmentDwg'], 'string'],
+            [['noteDwg', 'nameWorksDwg', 'nameStandardDanieliDwg', 'revisionDanieliDwg', 'numberWorksDwg'], 'string'],
+            [['designerDepartmentDwg', 'nameDepartmentDwg', 'numberDepartmentDwg'], 'string'],
             [['sheetDanieliDwg'], 'integer'],
             [['works_dwg_1', 'works_dwg_2', 'works_dwg_3', 'department_draft'], 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
             ['department_kompas', 'file', 'extensions' => 'cdw'],
@@ -134,6 +128,12 @@ class ObjectDrawingForm extends BaseForm
         $filename = $this->dwg->id.'_works_'.$number.'.'.$sheet->extension;
         $sheet->saveAs('files/works/'.$filename); 
         return $filename;   
+    }
+
+    public function getNewNumberDepartmentDwg()
+    {
+        $this->newNumberDepartmentDwg = DrawingLogic::getNewNumberDepartmentDwg();
+        return $this;
     }
     
 

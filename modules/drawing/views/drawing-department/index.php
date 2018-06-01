@@ -31,7 +31,7 @@ $this->registerCssFile('/css/drawing.css');
         <tr>
             <td class="text-center">Номер эскиза</td>
             <td>
-                <?=$dwg->fullNumber?>
+                <?=$dwg->number?>
             </td>
         </tr>
         
@@ -70,7 +70,7 @@ $this->registerCssFile('/css/drawing.css');
             <td class="text-center">Код</td>
             <td>
                 <? if ($dwg->code): ?>
-                    <a href="<?=Url::to(['/search', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
+                    <a href="<?=Url::to(['/search/object/code', 'code' => $dwg->code])?>"><?=$dwg->code?></a>
                 <? else: ?>
                     <span>Не указан</span>
                 <? endif; ?>   

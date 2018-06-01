@@ -11,37 +11,18 @@ use yii\web\UploadedFile;
 use app\modules\drawing\logic\DrawingLogic;
 
 class ObjectForm extends BaseForm
-{   
-    public $obj;
-    public $parent_id;
-    public $rus;
-    public $eng;
-    public $alias;
-    public $note;
-    public $type;
-    public $equipment;
-    public $weight;
-	public $qty; //count objects
-    public $code;
-    public $rating;
-    public $item; //position object in specification
-    public $order_name;
-    public $material;
-    public $analog;
+{
+    //table database
+    public $parent_id; public $rus; public $eng; public $alias; public $note; public $type; public $equipment; public $weight; public $code; public $rating;
+    public $order_name; public $material; public $analog;public $qty; public $item;
     //drawing
-    public $dwg;
-    public $categoryDwg;
-    public $noteDwg;
-     //works dwg
-    public $numberWorksDwg; public $nameWorksDwg; 
-    public $works_dwg_1; public $works_dwg_2; public $works_dwg_3;
-    //department dwg
-    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg;
-    
+    public $dwg; public $categoryDwg; public $noteDwg;
+     //drawing works
+    public $numberWorksDwg; public $nameWorksDwg; public $works_dwg_1; public $works_dwg_2; public $works_dwg_3;
+    //drawing department
+    public $designerDepartmentDwg; public $department_draft; public $department_kompas; public $nameDepartmentDwg; public $numberDepartmentDwg; public $newNumberDepartmentDwg;
     //form
-    public $types;
-    public $equipments;
-	public $all_name;
+    public $types; public $equipments; public $all_name; public $obj;
     
     public function __construct($obj)
     {
@@ -59,7 +40,7 @@ class ObjectForm extends BaseForm
             [['parent_id', 'item', 'rating'], 'default', 'value' => 0],
             ['qty', 'default', 'value' => 1],
             //drawing
-            [['categoryDwg', 'nameDepartmentDwg', 'nameWorksDwg', 'designerDepartmentDwg', 'noteDwg', 'numberWorksDwg'], 'string'],
+            [['categoryDwg', 'nameDepartmentDwg', 'nameWorksDwg', 'designerDepartmentDwg', 'noteDwg', 'numberWorksDwg', 'numberDepartmentDwg'], 'string'],
             [['works_dwg_1', 'works_dwg_2', 'works_dwg_3', 'department_draft'], 'file', 'extensions' => ['tif', 'jpg', 'jpeg', 'pdf']],
             ['department_kompas', 'file', 'extensions' => 'cdw'],
         ];
@@ -153,7 +134,7 @@ class ObjectForm extends BaseForm
     public function saveDwgDepartment()
     {
         $dwg = new DrawingDepartment();
-        $dwg->number = DrawingLogic::getNewNumberDepartmentDwg();
+        $dwg->number = $this->numberDepartmentDwg;
         $dwg->designer = $this->designerDepartmentDwg;
         $dwg->date = time();
         $dwg->year = date('Y');
@@ -182,6 +163,12 @@ class ObjectForm extends BaseForm
         $filename = $dwg->id.'_kompas.'.$file->extension;
         $file->saveAs('files/department/kompas/'.$filename);
         return $filename;
+    }
+
+    public function getNewNumberDepartmentDwg()
+    {
+        $this->newNumberDepartmentDwg = DrawingLogic::getNewNumberDepartmentDwg();
+        return $this;
     }
 
 }

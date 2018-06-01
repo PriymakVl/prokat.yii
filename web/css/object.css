@@ -22,34 +22,34 @@
     top: 0;
 }
 
-.field-objectform-qty {
-    position: absolute;
-    left: 130px;
-    top: 0;    
-}
-
 .field-objectform-item {
     position: absolute;
-    left: 260px;
+    left: 245px;
     top: 0;     
 }
 
 .field-objectform-parent_id {
     position: absolute;
-    left: 390px;
+    left: 560px;
     top: 0;     
 }
 
 .field-objectform-rating {
     position: absolute;
-    left: 520px;
+    left: 130px;
     top: 0;     
 }
 
 .field-objectform-equipment {
     position: absolute;
     left: 300px;
-    top: 0;     
+    top: 0;
+}
+
+.field-objectform-weight {
+    position: absolute;
+    left: 400px;
+    top: 0;
 }
 
 #objectform-equipment, #objectform-type {
@@ -76,4 +76,10 @@
     position: absolute;
     top: 0;
     left: 350px;    
+}
+
+.border-bottom {
+    border-bottom: 2px solid #B49A6A;
+    margin-bottom: 15px;
+    padding-bootom: 15px;
 }

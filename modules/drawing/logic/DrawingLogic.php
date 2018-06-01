@@ -87,8 +87,20 @@ class DrawingLogic extends BaseLogic
     public static function getNewNumberDepartmentDwg()
     {
         $current_year = date('Y');
-        $drafts = DrawingDepartment::find()->where(['year' => $current_year, 'status' => DrawingDepartment::STATUS_ACTIVE])->orderBy(['number' => SORT_DESC])->all();
-        return $drafts ? ($drafts[0]->number + 1) : 1;
+        $drafts = DrawingDepartment::find()->where(['year' => $current_year, 'status' => DrawingDepartment::STATUS_ACTIVE])->orderBy(['id' => SORT_DESC])->all();
+        if (empty($drafts)) return '27.'.$current_year.'.1';
+        $number = self::getLastNumber($drafts, $current_year);
+        return '27.'.date('y').'.'.++$number;
+    }
+
+    public static function getLastNumber($drafts, $year)
+    {
+        foreach ($drafts as $draft) {
+            $pattern = '/^27\.18\.([1-9]{1,3})$/';
+            preg_match($pattern, $draft->number, $matches);
+            if($matches) break;
+        }
+        return $matches[1];
     }
     
     

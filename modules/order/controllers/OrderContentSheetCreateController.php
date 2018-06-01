@@ -173,7 +173,7 @@ class OrderContentSheetCreateController extends BaseController
             $num = $i + $row_start;
             if ($this->content[$i]) {
                 $variant = $this->content[$i]->variant ? PHP_EOL.'вариант '.$this->content[$i]->variant : '';
-                $sheet = ($this->content[$i]->sheet != 1) ? PHP_EOL.'лист '.$this->content[$i]->sheet : '';
+                $sheet = $this->setNumberSheetsDrawing($i);
                 $this->activeSheet->setCellValue('A'.$num, $this->content[$i]->drawing.$variant.$sheet);
            	    $this->setItem($num, $this->content[$i]);
                 $dimensions = $this->content[$i]->dimensions ? PHP_EOL.$this->content[$i]->dimensions : '';
@@ -196,6 +196,13 @@ class OrderContentSheetCreateController extends BaseController
             $this->activeSheet->getStyle('C'.$num)->getAlignment()->setWrapText(true);
             $this->activeSheet->getRowDimension($num)->setRowHeight(50);
         }    
+    }
+
+    private function setNumberSheetsDrawing($i)
+    {
+        if ($this->content[$i]->sheet == 1) return '';
+        else if ($this->content[$i]->sheet > 4) return PHP_EOL.$this->content[$i]->sheet.' листов';
+        else return PHP_EOL.$this->content[$i]->sheet.' листа';
     }
     
     private function setWeight($num, $object)

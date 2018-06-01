@@ -28,14 +28,14 @@ class ObjectController extends BaseController
     public function actionForm($obj_id = null)
     {
         $parent_id = Yii::$app->request->get('parent_id');
-        $obj = $obj_id ? Objects::findOne($obj_id) : null;       
-        $form = new ObjectForm($obj);
-        $form->getTypes()->getEquipments(); 
+        $obj = Objects::getOne($obj_id, null, self::STATUS_ACTIVE);
+        if ($obj) $obj->getName();
 
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) {
-            return $this->redirect(['/object', 'obj_id' => $form->obj->id]);
-        }        
-        return $this->render('form', compact('form', 'obj', 'parent_id'));     
+        $form = new ObjectForm($obj);
+        $form->getTypes()->getEquipments()->getNewNumberDepartmentDwg();
+
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save()) return $this->redirect(['/object', 'obj_id' => $form->obj->id]);
+        return $this->render('/object/form/index', compact('form', 'obj', 'parent_id'));
     }
     
     public function actionCopy($obj_id, $parent_id)

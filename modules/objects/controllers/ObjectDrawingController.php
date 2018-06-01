@@ -30,12 +30,13 @@ class ObjectDrawingController extends BaseController
     {
         $obj = Objects::getOne($obj_id, false, self::STATUS_ACTIVE);
         $obj->getName();
+
         $form = new ObjectDrawingForm();
-        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) { 
-            //Yii::$app->response->format = Response::FORMAT_JSON;
+        $form->getNewNumberDepartmentDwg();
+        if($form->load(Yii::$app->request->post()) && $form->validate() && $form->save($obj)) {
             return $this->redirect(['/object/drawing', 'obj_id' => $obj->id]);
         }
-        return $this->render('form', compact('obj', 'form'));       
+        return $this->render('/object-drawing/form/index', compact('obj', 'form'));
     }
 	
     //set code object number dwg

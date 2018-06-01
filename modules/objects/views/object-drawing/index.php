@@ -1,12 +1,9 @@
 <?php 
-    use \yii\web\JqueryAsset;
-    use yii\widgets\ActiveForm;
+    use yii\web\View;
     use app\widgets\MainMenuWidget; 
     use app\widgets\FlashMessageWidget;
     use app\modules\objects\widgets\ObjectTopMenuWidget; 
-    use app\modules\objects\widgets\ObjectSearchMenuWidget; 
-    use app\modules\objects\widgets\ObjectDrawingWidget;
-    use app\modules\objects\widgets\ObjectDrawingMenuWidget;
+    use app\modules\objects\widgets\ObjectSearchMenuWidget;
     
     $this->registerCssFile('/css/drawing.css');
     $this->registerJsFile('/js/object/object_file_add_order.js');
@@ -38,27 +35,27 @@
         <? if ($drawings): ?>
             <!-- drawing Danieli -->
             <? if ($drawings['danieli']): ?>
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['danieli'], 'category' => 'danieli', 'obj_id' => $obj->id])?>
+                <?=View::render('tab/danieli', ['obj_id' => $obj->id, 'drawings' => $drawings['danieli']])?>
            <? endif; ?>
            
             <!-- drawing works -->
             <? if ($drawings['works']): ?>
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['works'], 'category' => 'works', 'obj_id' => $obj->id])?> 
+                <?=View::render('tab/works', ['obj_id' => $obj->id, 'drawings' => $drawings['works']])?>
             <? endif; ?>
             
             <!-- drawing department -->
             <? if ($drawings['department']): ?>
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['department'], 'category' => 'department', 'obj_id' => $obj->id])?>
+                <?=View::render('tab/department', ['obj_id' => $obj->id, 'drawings' => $drawings['department']])?>
             <? endif; ?>
             
             <!-- drawing standard danieli -->
             <? if ($drawings['standard_danieli']): ?>
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['standard_danieli'], 'category' => 'standard_danieli', 'obj_id' => $obj->id])?>
+                <?=View::render('tab/standard_danieli', ['obj_id' => $obj->id, 'drawings' => $drawings['standard_danieli']])?>
             <? endif; ?>
             
             <!-- drawing Sundbirsta -->
             <? if ($drawings['sundbirsta']): ?>
-                <?=ObjectDrawingWidget::widget(['drawings' => $drawings['sundbirsta'], 'category' => 'sundbirsta', 'obj_id' => $obj->id])?>
+                <?=View::render('tab/sundbirsta', ['obj_id' => $obj->id, 'drawings' => $drawings['sundbirsta']])?>
             <? endif; ?>
         <? else: ?>
             <div class="alert alert-danger margin-top-15">Чертежей нет</div>
@@ -70,5 +67,5 @@
 <div class="sidebar-wrp">
     <?=MainMenuWidget::widget()?>
     <?=ObjectSearchMenuWidget::widget()?>
-    <?=ObjectDrawingMenuWidget::widget(['obj_id' => $obj->id])?>
+    <?=View::render('menu', ['obj_id' => $obj->id])?>
 </div> 
